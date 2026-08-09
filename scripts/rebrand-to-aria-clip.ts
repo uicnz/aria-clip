@@ -16,6 +16,7 @@ import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const REQUIRED_BUN_VERSION = '1.3.14';
 const PRODUCT_NAME = 'Aria Clip';
 const PRODUCT_SLUG = 'aria-clip';
@@ -68,6 +69,12 @@ const previousReverseWebSlug = `web-${previousToolLower}-${previousBrandLower}`;
 
 const storeFallback = 'https://github.com/uicnz/aria-clip/releases';
 const replacements: Replacement[] = [
+	literal(
+		`md.${previousBrandLower}.${previousBrand}-Web-${previousTool}.Extension`,
+		'bot.aria.clip.extension',
+	),
+	literal(`md.${previousBrandLower}.${previousBrand}-Web-${previousTool}`, 'bot.aria.clip'),
+	literal(`${previousToolLower}@${previousBrandLower}.md`, 'clip@aria.bot'),
 	literal(
 		`https://raw.githubusercontent.com/${previousBrandLower}md/${previousSlug}/refs/heads/main/providers.json`,
 		'https://raw.githubusercontent.com/uicnz/aria-clip/refs/heads/main/providers.json',
@@ -189,7 +196,7 @@ function collectBrandMessageKeys(): string[] {
 function rewriteTextFiles(): number {
 	let changed = 0;
 	for (const path of listFiles(ROOT)) {
-		if (path === sourceIcon) continue;
+		if (path === sourceIcon || path === SCRIPT_PATH) continue;
 		const content = decodeText(path);
 		if (content === undefined) continue;
 		let next = rebrand(content);
@@ -277,6 +284,8 @@ function migratePackageToBun(): void {
 		rebrand: 'bun run scripts/rebrand-to-aria-clip.ts',
 		prepublishOnly: 'bun run build:cli && bun run build:api',
 	};
+	packageJson.devDependencies['@types/webextension-polyfill'] = '0.12.1';
+	packageJson.devDependencies['terser-webpack-plugin'] = '^5.4.0';
 	delete packageJson.devDependencies['ts-node'];
 	writeFileSync(packagePath, `${JSON.stringify(packageJson, null, '\t')}\n`);
 
@@ -289,6 +298,31 @@ function migratePackageToBun(): void {
 	const cliBuildPath = join(ROOT, 'scripts', 'build-cli.mjs');
 	const cliBuild = readFileSync(cliBuildPath, 'utf8');
 	writeFileSync(cliBuildPath, replaceAllLiteral(cliBuild, '#!/usr/bin/env node', '#!/usr/bin/env bun'));
+
+	const tsconfigPath = join(ROOT, 'tsconfig.json');
+	const tsconfig = JSON.parse(readFileSync(tsconfigPath, 'utf8')) as {
+		compilerOptions: Record<string, unknown>;
+	};
+	tsconfig.compilerOptions.module = 'es2020';
+	writeFileSync(tsconfigPath, `${JSON.stringify(tsconfig, null, '\t')}\n`);
+
+	const vitestConfigPath = join(ROOT, 'vitest.config.ts');
+	const vitestConfig = readFileSync(vitestConfigPath, 'utf8');
+	if (!vitestConfig.includes("process.env.TZ = 'UTC';")) {
+		writeFileSync(
+			vitestConfigPath,
+			vitestConfig.replace(
+				"import { defineConfig } from 'vitest/config';",
+				"import { defineConfig } from 'vitest/config';\n\nprocess.env.TZ = 'UTC';",
+			),
+		);
+	}
+	const youtubeExpectedPath = join(ROOT, 'src', 'utils', 'fixtures', 'expected', 'youtube.md');
+	const youtubeExpected = readFileSync(youtubeExpectedPath, 'utf8');
+	writeFileSync(
+		youtubeExpectedPath,
+		replaceAllLiteral(youtubeExpected, '2025-01-15T04:00:00-08:00', '2025-01-15T12:00:00+00:00'),
+	);
 
 	const npmLock = join(ROOT, 'package-lock.json');
 	if (existsSync(npmLock)) rmSync(npmLock);
@@ -428,7 +462,7 @@ function audit(): void {
 	for (const path of listPaths(ROOT)) {
 		const relativePath = relative(ROOT, path);
 		if (forbidden.some((term) => relativePath.includes(term))) stale.push(`path: ${relativePath}`);
-		if (!lstatSync(path).isFile() || path === sourceIcon) continue;
+		if (!lstatSync(path).isFile() || path === sourceIcon || path === SCRIPT_PATH) continue;
 		const content = decodeText(path);
 		if (content === undefined) continue;
 		for (const term of forbidden) {
