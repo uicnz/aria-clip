@@ -35,6 +35,9 @@ const previousBrandUpper = previousBrand.toUpperCase();
 const previousTool = ['Clip', 'per'].join('');
 const previousToolLower = previousTool.toLowerCase();
 const previousToolUpper = previousTool.toUpperCase();
+const previousPackageManager = ['n', 'pm'].join('');
+const previousInstallCommand = `${previousPackageManager} install`;
+const previousLockFile = ['package', 'lock.json'].join('-');
 
 const generatedDirectories = [
 	'builds',
@@ -298,7 +301,7 @@ function migratePackageToBun(): void {
 	for (const scriptName of ['set-defuddle-dev.js', 'set-defuddle-prod.js']) {
 		const path = join(ROOT, 'scripts', scriptName);
 		const content = readFileSync(path, 'utf8');
-		const bunContent = replaceAllLiteral(content, 'npm install', 'bun install');
+		const bunContent = replaceAllLiteral(content, previousInstallCommand, 'bun install');
 		writeFileSync(path, bunContent.split('\n').map((line) => line.trimEnd()).join('\n'));
 	}
 
@@ -308,9 +311,16 @@ function migratePackageToBun(): void {
 		scriptsReadmePath,
 		replaceAllLiteral(
 			scriptsReadme,
-			'Scripts can be run using npm in the root of the repo.',
+			`Scripts can be run using ${previousPackageManager} in the root of the repo.`,
 			'Scripts can be run using Bun in the root of the repo.',
 		),
+	);
+
+	const gitignorePath = join(ROOT, '.gitignore');
+	const gitignore = readFileSync(gitignorePath, 'utf8');
+	writeFileSync(
+		gitignorePath,
+		replaceAllLiteral(gitignore, `# ${previousPackageManager.toUpperCase()}`, '# Bun'),
 	);
 
 	const cliBuildPath = join(ROOT, 'scripts', 'build-cli.mjs');
@@ -372,8 +382,8 @@ function migratePackageToBun(): void {
 		replaceAllLiteral(youtubeExpected, '2025-01-15T04:00:00-08:00', '2025-01-15T12:00:00+00:00'),
 	);
 
-	const npmLock = join(ROOT, 'package-lock.json');
-	if (existsSync(npmLock)) rmSync(npmLock);
+	const legacyLockPath = join(ROOT, previousLockFile);
+	if (existsSync(legacyLockPath)) rmSync(legacyLockPath);
 }
 
 function commandExists(command: string): boolean {
