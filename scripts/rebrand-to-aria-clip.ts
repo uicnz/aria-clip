@@ -71,9 +71,10 @@ const storeFallback = 'https://github.com/uicnz/aria-clip/releases';
 const replacements: Replacement[] = [
 	literal(
 		`md.${previousBrandLower}.${previousBrand}-Web-${previousTool}.Extension`,
-		'bot.aria.clip.extension',
+		'nz.uic.aria.clip.extension',
 	),
-	literal(`md.${previousBrandLower}.${previousBrand}-Web-${previousTool}`, 'bot.aria.clip'),
+	literal(`md.${previousBrandLower}.${previousBrand}-Web-${previousTool}`, 'nz.uic.aria.clip'),
+	literal('DEVELOPMENT_TEAM = 6JSW4SJWN9;', 'DEVELOPMENT_TEAM = N68C9LUA5B;'),
 	literal(`${previousToolLower}@${previousBrandLower}.md`, 'clip@aria.bot'),
 	literal(
 		`https://raw.githubusercontent.com/${previousBrandLower}md/${previousSlug}/refs/heads/main/providers.json`,
