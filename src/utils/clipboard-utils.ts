@@ -1,4 +1,4 @@
-import browser from './browser-polyfill';
+import browser from './browser-polyfill.js';
 
 /**
  * Attempts to copy text to clipboard using multiple fallback methods.

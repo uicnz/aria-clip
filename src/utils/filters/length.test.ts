@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { length } from './length';
+import { length } from './length.js';
 
 describe('length filter', () => {
 	test('returns string length', () => {

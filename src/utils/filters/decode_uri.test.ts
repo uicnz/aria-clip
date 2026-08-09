@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { decode_uri } from './decode_uri';
+import { decode_uri } from './decode_uri.js';
 
 describe('decode_uri filter', () => {
 	test('decodes URL-encoded Chinese text', () => {

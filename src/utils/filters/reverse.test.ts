@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { reverse } from './reverse';
+import { reverse } from './reverse.js';
 
 describe('reverse filter', () => {
 	test('reverses array', () => {

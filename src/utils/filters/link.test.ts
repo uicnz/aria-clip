@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { link } from './link';
+import { link } from './link.js';
 
 describe('link filter', () => {
 	test('converts string to markdown link', () => {

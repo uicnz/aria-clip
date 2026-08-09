@@ -8,22 +8,22 @@ import {
 	templates,
 	cleanupTemplateStorage,
 	rebuildTemplateList
-} from '../managers/template-manager';
-import { updateTemplateList, showTemplateEditor, initializeAddPropertyButton, initializeTemplateValidation } from '../managers/template-ui';
-import { initializeGeneralSettings } from '../managers/general-settings';
-import { initializeInterpreterSettings } from '../managers/interpreter-settings';
-import { showSettingsSection, initializeSidebar } from '../managers/settings-section-ui';
-import { initializeReaderSettings } from '../managers/reader-settings';
-import { initializeAutoSave } from '../utils/auto-save';
-import { handleTemplateDrag, initializeDragAndDrop } from '../utils/drag-and-drop';
-import { exportTemplate, showTemplateImportModal, copyTemplateToClipboard } from '../utils/import-export';
+} from '../managers/template-manager.js';
+import { updateTemplateList, showTemplateEditor, initializeAddPropertyButton, initializeTemplateValidation } from '../managers/template-ui.js';
+import { initializeGeneralSettings } from '../managers/general-settings.js';
+import { initializeInterpreterSettings } from '../managers/interpreter-settings.js';
+import { showSettingsSection, initializeSidebar } from '../managers/settings-section-ui.js';
+import { initializeReaderSettings } from '../managers/reader-settings.js';
+import { initializeAutoSave } from '../utils/auto-save.js';
+import { handleTemplateDrag, initializeDragAndDrop } from '../utils/drag-and-drop.js';
+import { exportTemplate, showTemplateImportModal, copyTemplateToClipboard } from '../utils/import-export.js';
 import { createIcons } from 'lucide';
-import { icons } from '../icons/icons';
-import { updateUrl, getUrlParameters } from '../utils/routing';
-import { addBrowserClassToHtml } from '../utils/browser-detection';
-import { initializeMenu } from '../managers/menu';
-import { addMenuItemListener } from '../managers/menu';
-import { translatePage, getCurrentLanguage, setLanguage, getAvailableLanguages, getMessage, setupLanguageAndDirection } from '../utils/i18n';
+import { icons } from '../icons/icons.js';
+import { updateUrl, getUrlParameters } from '../utils/routing.js';
+import { addBrowserClassToHtml } from '../utils/browser-detection.js';
+import { initializeMenu } from '../managers/menu.js';
+import { addMenuItemListener } from '../managers/menu.js';
+import { translatePage, getCurrentLanguage, setLanguage, getAvailableLanguages, getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
 
 declare global {
 	interface Window {

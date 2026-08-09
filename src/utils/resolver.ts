@@ -3,8 +3,7 @@
 // Variables are stored with {{name}} as the key (e.g., variables["{{title}}"])
 // This module provides consistent lookup across all template processing
 
-import browser from './browser-polyfill';
-import { sendExtractContent } from './variables/selector';
+import { sendExtractContent } from './variables/selector.js';
 
 /**
  * Context for variable resolution, including optional tabId for selector support

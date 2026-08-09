@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { merge } from './merge';
+import { merge } from './merge.js';
 
 describe('merge filter', () => {
 	test('adds values to array', () => {

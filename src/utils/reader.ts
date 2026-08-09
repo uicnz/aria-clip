@@ -1,13 +1,12 @@
-import Defuddle from 'defuddle/full';
-import browser from './browser-polyfill';
-import { detectBrowser } from './browser-detection';
-import { flattenShadowDom as flattenShadowDomUtil } from './flatten-shadow-dom';
-import { getLocalStorage, setLocalStorage } from './storage-utils';
+import { DefuddleFull as Defuddle } from './defuddle.js';
+import browser from './browser-polyfill.js';
+import { detectBrowser } from './browser-detection.js';
+import { flattenShadowDom as flattenShadowDomUtil } from './flatten-shadow-dom.js';
 import hljs from 'highlight.js';
-import { getDomain } from './string-utils';
-import type { HighlighterAPI } from './highlighter';
-import * as localHighlighter from './highlighter';
-import { removeExistingHighlights as localRemoveExistingHighlights } from './highlighter-overlays';
+import { getDomain } from './string-utils.js';
+import type { HighlighterAPI } from './highlighter.js';
+import * as localHighlighter from './highlighter.js';
+import { removeExistingHighlights as localRemoveExistingHighlights } from './highlighter-overlays.js';
 
 // Bridge: on a live page with reader mode (case 2), content.js already loaded
 // and owns the highlighter module. reader-script.js delegates to it via this
@@ -23,20 +22,20 @@ function hl(): HighlighterAPI {
 		ensureHighlighterCSS: () => Reader.ensureHighlighterCSS(document),
 	};
 }
-import { copyToClipboard } from './clipboard-utils';
-import { getMessage, initializeI18n } from './i18n';
-import { getFontCss, isFontAvailable } from './font-utils';
+import { copyToClipboard } from './clipboard-utils.js';
+import { getMessage, initializeI18n } from './i18n.js';
+import { getFontCss, isFontAvailable } from './font-utils.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { saveFile } from './file-utils';
-import { parseForClip } from './clip-utils';
-import { updateSidebarWidth, addResizeHandle, cleanupResizeHandlers } from './iframe-resize';
-import { setElementHTML, setSVGChildren, serializeChildren } from './dom-utils';
+import { saveFile } from './file-utils.js';
+import { parseForClip } from './clip-utils.js';
+import { updateSidebarWidth, addResizeHandle, cleanupResizeHandlers } from './iframe-resize.js';
+import { setElementHTML, setSVGChildren, serializeChildren } from './dom-utils.js';
 
 // Mobile viewport settings
 const VIEWPORT = 'width=device-width, initial-scale=1, maximum-scale=1';
 
-import { ReaderSettings } from '../types/types';
-import { wireTranscript } from './reader-transcript';
+import { ReaderSettings } from '../types/types.js';
+import { wireTranscript } from './reader-transcript.js';
 
 interface ReaderContent {
 	content: string;
@@ -165,6 +164,11 @@ export class Reader {
 		highlightActiveLine: true,
 		customCss: ''
 	};
+	static {
+		void this.settingsBar;
+		void this.readerStyles;
+		void this.updateBlendImages;
+	}
 
 	private static async loadSettings(): Promise<void> {
 		const savedSettings = await browser.storage.sync.get('reader_settings')

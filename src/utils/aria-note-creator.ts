@@ -1,10 +1,10 @@
-import browser from './browser-polyfill';
-import { sanitizeFileName } from '../utils/string-utils';
-import { generateFrontmatter as generateFrontmatterCore } from './shared';
-import { Template, Property } from '../types/types';
-import { generalSettings, incrementStat } from './storage-utils';
-import { copyToClipboard } from './clipboard-utils';
-import { getMessage } from './i18n';
+import browser from './browser-polyfill.js';
+import { sanitizeFileName } from '../utils/string-utils.js';
+import { generateFrontmatter as generateFrontmatterCore } from './shared.js';
+import { Template, Property } from '../types/types.js';
+import { generalSettings } from './storage-utils.js';
+import { copyToClipboard } from './clipboard-utils.js';
+import { getMessage } from './i18n.js';
 
 export async function generateFrontmatter(properties: Property[]): Promise<string> {
 	const typeMap: Record<string, string> = {};

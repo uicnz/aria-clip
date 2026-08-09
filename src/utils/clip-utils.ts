@@ -1,5 +1,5 @@
-import Defuddle from 'defuddle/full';
-import { setElementHTML } from './dom-utils';
+import { DefuddleFull as Defuddle } from './defuddle.js';
+import { setElementHTML } from './dom-utils.js';
 
 // Parse document content for clipping. In reader mode, extracts from
 // the article's original HTML to avoid reader UI artifacts.

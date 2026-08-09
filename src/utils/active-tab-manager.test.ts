@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { isValidUrl, isBlankPage, isRestrictedUrl } from './active-tab-manager';
+import { isValidUrl, isBlankPage, isRestrictedUrl } from './active-tab-manager.js';
 
 describe('isValidUrl', () => {
 	test('returns true for http URLs', () => {

@@ -1,17 +1,18 @@
-import { Template, Property } from '../types/types';
-import { deleteTemplate, templates, editingTemplateIndex, saveTemplateSettings, setEditingTemplateIndex, loadTemplates } from './template-manager';
-import { initializeIcons, getPropertyTypeIcon } from '../icons/icons';
-import { escapeValue, unescapeValue } from '../utils/string-utils';
-import { generalSettings } from '../utils/storage-utils';
-import { updateUrl } from '../utils/routing';
-import { handleDragStart, handleDragOver, handleDrop, handleDragEnd } from '../utils/drag-and-drop';
-import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils';
-import { updatePromptContextVisibility } from './interpreter-settings';
-import { showSettingsSection } from './settings-section-ui';
-import { updatePropertyType } from './property-types-manager';
-import { getMessage } from '../utils/i18n';
-import { parse, validateVariables, validateFilters } from '../utils/parser';
+import { Template } from '../types/types.js';
+import { deleteTemplate, templates, editingTemplateIndex, saveTemplateSettings, setEditingTemplateIndex, loadTemplates } from './template-manager.js';
+import { initializeIcons, getPropertyTypeIcon } from '../icons/icons.js';
+import { escapeValue, unescapeValue } from '../utils/string-utils.js';
+import { generalSettings } from '../utils/storage-utils.js';
+import { updateUrl } from '../utils/routing.js';
+import { handleDragStart, handleDragOver, handleDrop, handleDragEnd } from '../utils/drag-and-drop.js';
+import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils.js';
+import { updatePromptContextVisibility } from './interpreter-settings.js';
+import { showSettingsSection } from './settings-section-ui.js';
+import { updatePropertyType } from './property-types-manager.js';
+import { getMessage } from '../utils/i18n.js';
+import { parse, validateVariables, validateFilters } from '../utils/parser.js';
 let hasUnsavedChanges = false;
+void hasUnsavedChanges;
 
 export function resetUnsavedChanges(): void {
 	hasUnsavedChanges = false;
@@ -562,6 +563,7 @@ function clearTemplateEditor(): void {
 	const templateEditor = document.getElementById('template-editor');
 	if (templateEditor) templateEditor.style.display = 'none';
 }
+void clearTemplateEditor;
 
 export function initializeAddPropertyButton(): void {
 	const addPropertyBtn = document.getElementById('add-property-btn');

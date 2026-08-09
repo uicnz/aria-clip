@@ -1,17 +1,18 @@
-import browser from './utils/browser-polyfill';
-import * as highlighter from './utils/highlighter';
-import { removeExistingHighlights } from './utils/highlighter-overlays';
-import { loadSettings, generalSettings } from './utils/storage-utils';
-import { getDomain } from './utils/string-utils';
-import { extractContentBySelector as extractContentBySelectorShared } from './utils/shared';
-import Defuddle from 'defuddle';
+import browser from './utils/browser-polyfill.js';
+import * as highlighter from './utils/highlighter.js';
+import { removeExistingHighlights } from './utils/highlighter-overlays.js';
+import { loadSettings, generalSettings } from './utils/storage-utils.js';
+import { getDomain } from './utils/string-utils.js';
+import { extractContentBySelector as extractContentBySelectorShared } from './utils/shared.js';
+import { Defuddle } from './utils/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { flattenShadowDom } from './utils/flatten-shadow-dom';
-import { serializeChildren } from './utils/dom-utils';
-import { saveFile } from './utils/file-utils';
-import { debugLog } from './utils/debug';
-import { updateSidebarWidth, addResizeHandle, cleanupResizeHandlers } from './utils/iframe-resize';
-import { parseForClip } from './utils/clip-utils';
+import { flattenShadowDom } from './utils/flatten-shadow-dom.js';
+import { serializeChildren } from './utils/dom-utils.js';
+import { saveFile } from './utils/file-utils.js';
+import { debugLog } from './utils/debug.js';
+import { updateSidebarWidth, addResizeHandle, cleanupResizeHandlers } from './utils/iframe-resize.js';
+import { parseForClip } from './utils/clip-utils.js';
+import { addRuntimeMessageListener } from './utils/runtime-messaging.js';
 
 declare global {
 	interface Window {
@@ -108,7 +109,7 @@ declare global {
 		metaTags: { name?: string | null; property?: string | null; content: string | null }[];
 	}
 
-	browser.runtime.onMessage.addListener((request: any, sender, sendResponse) => {
+	addRuntimeMessageListener((request: any, _sender, sendResponse) => {
 		// If a newer generation of this content script has been injected,
 		// yield to it rather than responding from a potentially stale context.
 		if (window.ariaClipGeneration !== myGeneration) {
@@ -483,7 +484,7 @@ declare global {
 		const button = document.querySelector('[data-action="toggle-highlighter"]');
 		if (button) {
 			// Handle highlighter button clicks
-			button.addEventListener('click', async (e) => {
+			button.addEventListener('click', async (_e) => {
 				try {
 					// First try to get the tab ID from the background script
 					const response = await browser.runtime.sendMessage({ action: "ensureContentScriptLoaded" });

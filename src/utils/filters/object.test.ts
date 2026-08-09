@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { object, validateObjectParams } from './object';
+import { object, validateObjectParams } from './object.js';
 
 describe('object filter', () => {
 	test('converts object to array of pairs', () => {

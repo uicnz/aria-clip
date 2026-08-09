@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { date_modify, validateDateModifyParams } from './date_modify';
+import { date_modify, validateDateModifyParams } from './date_modify.js';
 
 describe('date_modify filter', () => {
 	test('adds years', () => {

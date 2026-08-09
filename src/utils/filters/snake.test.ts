@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { snake } from './snake';
+import { snake } from './snake.js';
 
 describe('snake filter', () => {
 	test('converts Title Case to snake_case', () => {

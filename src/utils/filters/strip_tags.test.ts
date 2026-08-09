@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { strip_tags } from './strip_tags';
+import { strip_tags } from './strip_tags.js';
 
 describe('strip_tags filter', () => {
 	test('removes all HTML tags', () => {

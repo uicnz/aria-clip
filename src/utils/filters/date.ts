@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
-import isoWeek from "dayjs/plugin/isoWeek";
-import weekOfYear from "dayjs/plugin/weekOfYear";
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import advancedFormat from 'dayjs/plugin/advancedFormat';
+import isoWeek from "dayjs/plugin/isoWeek.js";
+import weekOfYear from "dayjs/plugin/weekOfYear.js";
+import customParseFormat from 'dayjs/plugin/customParseFormat.js';
+import advancedFormat from 'dayjs/plugin/advancedFormat.js';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(isoWeek);

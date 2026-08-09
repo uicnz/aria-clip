@@ -13,7 +13,7 @@ import {
 	BinaryExpression,
 	UnaryExpression,
 	FilterExpression,
-} from './parser';
+} from './parser.js';
 
 // Type guards
 function isTextNode(node: ASTNode): node is TextNode {

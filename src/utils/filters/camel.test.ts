@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { camel } from './camel';
+import { camel } from './camel.js';
 
 describe('camel filter', () => {
 	test('converts space-separated words to camelCase', () => {

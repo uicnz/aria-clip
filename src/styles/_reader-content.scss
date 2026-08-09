@@ -1,3 +1,4 @@
+@use "sass:meta";
 // Shared content styles for reader and highlights views.
 // These apply inside any element with .aria-reader-active.
 // Individual content type files are in the reader/ directory.
@@ -117,16 +118,16 @@
 	--border-width: 1px;
 
 	// Content styles
-	@import 'reader/headings';
-	@import 'reader/links';
-	@import 'reader/blockquotes';
-	@import 'reader/hr';
-	@import 'reader/lists';
-	@import 'reader/code-blocks';
-	@import 'reader/code-highlighting';
-	@import 'reader/tables';
-	@import 'reader/footnotes';
-	@import 'reader/callouts';
+	@include meta.load-css('reader/headings');
+	@include meta.load-css('reader/links');
+	@include meta.load-css('reader/blockquotes');
+	@include meta.load-css('reader/hr');
+	@include meta.load-css('reader/lists');
+	@include meta.load-css('reader/code-blocks');
+	@include meta.load-css('reader/code-highlighting');
+	@include meta.load-css('reader/tables');
+	@include meta.load-css('reader/footnotes');
+	@include meta.load-css('reader/callouts');
 
 	img, video, figure {
 		max-width: 100%;

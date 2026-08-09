@@ -1,4 +1,5 @@
-@import 'styles/_variables';
+@use "sass:meta";
+@use 'styles/_variables';
 
 * {
 	box-sizing: border-box;
@@ -18,30 +19,30 @@ body {
 	font-size: var(--font-ui-medium);
 }
 
-@import 'styles/mobile';
+@include meta.load-css('styles/mobile');
 
-@import 'styles/buttons';
-@import 'styles/charts';
-@import 'styles/dragging';
-@import 'styles/dropdowns';
-@import 'styles/icons';
-@import 'styles/inputs';
-@import 'styles/inspect-variables';
-@import 'styles/interpreter';
-@import 'styles/menu';
-@import 'styles/modals';
-@import 'styles/popup';
-@import 'styles/properties';
-@import 'styles/rtl';
-@import 'styles/safari';
-@import 'styles/reader-themes';
-@import 'styles/highlights';
-@import 'styles/reader-view';
-@import 'styles/settings';
-@import 'styles/side-panel';
-@import 'styles/templates';
-@import 'styles/tree-items';
-@import 'styles/toggles';
+@include meta.load-css('styles/buttons');
+@include meta.load-css('styles/charts');
+@include meta.load-css('styles/dragging');
+@include meta.load-css('styles/dropdowns');
+@include meta.load-css('styles/icons');
+@include meta.load-css('styles/inputs');
+@include meta.load-css('styles/inspect-variables');
+@include meta.load-css('styles/interpreter');
+@include meta.load-css('styles/menu');
+@include meta.load-css('styles/modals');
+@include meta.load-css('styles/popup');
+@include meta.load-css('styles/properties');
+@include meta.load-css('styles/rtl');
+@include meta.load-css('styles/safari');
+@include meta.load-css('styles/reader-themes');
+@include meta.load-css('styles/highlights');
+@include meta.load-css('styles/reader-view');
+@include meta.load-css('styles/settings');
+@include meta.load-css('styles/side-panel');
+@include meta.load-css('styles/templates');
+@include meta.load-css('styles/tree-items');
+@include meta.load-css('styles/toggles');
 
 a.text-muted,
 .text-muted {

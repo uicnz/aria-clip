@@ -1,17 +1,16 @@
-import { ExtractedContent } from '../types/types';
+import { ExtractedContent } from '../types/types.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { sanitizeFileName } from './string-utils';
-import { buildVariables, addSchemaOrgDataToVariables } from './shared';
-import browser from './browser-polyfill';
-import { debugLog } from './debug';
-import dayjs from 'dayjs';
-import { AnyHighlightData, TextHighlightData, HighlightData, collapseGroupsForExport } from './highlighter';
-import { generalSettings } from './storage-utils';
+import { sanitizeFileName } from './string-utils.js';
+import { buildVariables } from './shared.js';
+import browser from './browser-polyfill.js';
+import { debugLog } from './debug.js';
+import { AnyHighlightData, TextHighlightData, HighlightData, collapseGroupsForExport } from './highlighter.js';
+import { generalSettings } from './storage-utils.js';
 import {
 	getElementByXPath,
 	wrapElementWithMark,
 	wrapTextWithMark
-} from './dom-utils';
+} from './dom-utils.js';
 
 // Define ElementHighlightData type inline since it's not exported from highlighter.ts
 interface ElementHighlightData extends HighlightData {

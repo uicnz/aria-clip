@@ -205,7 +205,7 @@ Example response:
 	}
 
 	// Process all locales
-	async processLocales(srcDir: string, targetLocale?: string): Promise<void> {
+	async processLocales(_srcDir: string, targetLocale?: string): Promise<void> {
 		console.log('\n🌍 Starting localization process...');
 		
 		// Read source (English) messages
@@ -312,4 +312,4 @@ Example response:
 
 		console.log('\n✨ Localization process completed successfully!\n');
 	}
-} 
+}

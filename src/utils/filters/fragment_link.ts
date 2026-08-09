@@ -1,4 +1,4 @@
-import { strip_md } from "./strip_md";
+import { strip_md } from "./strip_md.js";
 
 type SelectedText = string;
 
@@ -70,7 +70,7 @@ export const fragment_link = (str: string, param?: string): string[] => {
 		} else if (typeof data === "object" && data !== null) {
 			// Maybe useful for other filters
 			return Object.entries(data).map(
-				([key, value]) =>
+				([_key, value]) =>
 					`${value} [${linktext}](${currentUrl}${createTextFragmentUrl(
 						String(value)
 					)})`

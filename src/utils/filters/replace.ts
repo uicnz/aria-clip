@@ -1,5 +1,5 @@
-import { createParserState, processCharacter, parseRegexPattern } from '../parser-utils';
-import type { ParamValidationResult } from '../filters';
+import { createParserState, processCharacter, parseRegexPattern } from '../parser-utils.js';
+import type { ParamValidationResult } from '../filters.js';
 
 export const validateReplaceParams = (param: string | undefined): ParamValidationResult => {
 	if (!param) {
@@ -98,7 +98,7 @@ export const replace = (str: string, param?: string): string => {
 };
 
 function processEscapedCharacters(str: string): string {
-	return str.replace(/\\([nrt]|[^nrt])/g, (match, char) => {
+	return str.replace(/\\([nrt]|[^nrt])/g, (_match, char) => {
 		switch (char) {
 			case 'n': return '\n';
 			case 'r': return '\r';

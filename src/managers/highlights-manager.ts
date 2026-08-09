@@ -1,9 +1,9 @@
-import browser from '../utils/browser-polyfill';
-import { detectBrowser } from '../utils/browser-detection';
-import { AnyHighlightData, ElementHighlightData, HighlightsStorage, TextHighlightData, TextQuoteAnchor, buildExportedPage, collapseGroupsForExport, expandExportedEntries, normalizeUrl, reconcileLegacyUrlKey } from '../utils/highlighter';
-import { showImportModal } from '../utils/import-modal';
+import browser from '../utils/browser-polyfill.js';
+import { detectBrowser } from '../utils/browser-detection.js';
+import { AnyHighlightData, ElementHighlightData, HighlightsStorage, TextHighlightData, TextQuoteAnchor, buildExportedPage, collapseGroupsForExport, expandExportedEntries, normalizeUrl, reconcileLegacyUrlKey } from '../utils/highlighter.js';
+import { showImportModal } from '../utils/import-modal.js';
 import dayjs from 'dayjs';
-import { getMessage } from '../utils/i18n';
+import { getMessage } from '../utils/i18n.js';
 
 export async function exportHighlights(): Promise<void> {
 	try {
@@ -83,6 +83,8 @@ const _textFieldsAreImported: Record<keyof TextHighlightData, true> = {
 const _elementFieldsAreImported: Record<keyof ElementHighlightData, true> = {
 	id: true, type: true, xpath: true, content: true, notes: true, groupId: true,
 };
+void _textFieldsAreImported;
+void _elementFieldsAreImported;
 
 // Validated field by field rather than trusted, since this lands in storage and
 // is later fed straight to the renderer.

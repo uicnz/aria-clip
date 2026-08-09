@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { lower } from './lower';
+import { lower } from './lower.js';
 
 describe('lower filter', () => {
 	test('converts text to lowercase', () => {

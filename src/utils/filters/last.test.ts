@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { last } from './last';
+import { last } from './last.js';
 
 describe('last filter', () => {
 	test('returns last element of array', () => {

@@ -2,7 +2,7 @@
 // These are aliased by esbuild so that transitive imports
 // of browser-polyfill and storage-utils resolve without error.
 
-import type { Settings } from '../types/types';
+import type { Settings } from '../types/types.js';
 
 export default {} as any;
 

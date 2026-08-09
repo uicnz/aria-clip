@@ -1,10 +1,10 @@
-import { Template, Property } from '../types/types';
-import { templates, getTemplates, saveTemplateSettings, getEditingTemplateIndex } from '../managers/template-manager';
-import { updateTemplateList } from '../managers/template-ui';
-import { updateVaultList } from '../managers/general-settings';
-import { generalSettings, saveSettings } from './storage-utils';
-import { initializeModelList } from '../managers/interpreter-settings';
-import { initializeIcons } from '../icons/icons';
+import { Template, Property } from '../types/types.js';
+import { getTemplates, saveTemplateSettings, getEditingTemplateIndex } from '../managers/template-manager.js';
+import { updateTemplateList } from '../managers/template-ui.js';
+import { updateVaultList } from '../managers/general-settings.js';
+import { generalSettings, saveSettings } from './storage-utils.js';
+import { initializeModelList } from '../managers/interpreter-settings.js';
+import { initializeIcons } from '../icons/icons.js';
 
 let draggedElement: HTMLElement | null = null;
 

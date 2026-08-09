@@ -1,5 +1,5 @@
-import { applyFilters } from '../filters';
-import { resolveVariable, valueToString } from '../resolver';
+import { applyFilters } from '../filters.js';
+import { resolveVariable, valueToString } from '../resolver.js';
 
 // Function to process a simple variable (without special prefixes)
 export async function processSimpleVariable(variableString: string, variables: { [key: string]: any }, currentUrl: string): Promise<string> {

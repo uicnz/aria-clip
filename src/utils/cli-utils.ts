@@ -1,7 +1,7 @@
 import { execFile } from 'child_process';
 import { promisify } from 'util';
-import { sanitizeFileName } from './string-utils';
-import { Template } from '../types/types';
+import { sanitizeFileName } from './string-utils.js';
+import { Template } from '../types/types.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -26,7 +26,7 @@ async function openViaAriaCli(
 	path: string,
 	vault: string,
 	behavior: Template['behavior'],
-	silent: boolean
+	_silent: boolean
 ): Promise<string> {
 	const isDailyNote = behavior === 'append-daily' || behavior === 'prepend-daily';
 	const vaultArgs = vault ? [`vault=${vault}`] : [];

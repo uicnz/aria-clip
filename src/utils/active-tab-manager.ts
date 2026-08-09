@@ -1,7 +1,8 @@
-import browser from './browser-polyfill';
+import browser from './browser-polyfill.js';
 
 let currentActiveTabId: number | undefined;
 let currentWindowId: number | undefined;
+void currentWindowId;
 
 export async function updateCurrentActiveTab(windowId: number) {
 	const tabs = await browser.tabs.query({ active: true, windowId: windowId });

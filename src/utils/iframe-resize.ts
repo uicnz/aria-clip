@@ -1,5 +1,5 @@
-import browser from './browser-polyfill';
-import { throttle } from './throttle';
+import browser from './browser-polyfill.js';
+import { throttle } from './throttle.js';
 
 const IFRAME_ID = 'aria-clip-iframe';
 const MIN_SIZE = 200;

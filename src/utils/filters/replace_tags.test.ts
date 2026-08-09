@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { replace_tags } from './replace_tags';
+import { replace_tags } from './replace_tags.js';
 
 describe('replace_tags filter', () => {
 	test('replaces HTML tags', () => {

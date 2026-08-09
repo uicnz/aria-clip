@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { blockquote } from './blockquote';
+import { blockquote } from './blockquote.js';
 
 describe('blockquote filter', () => {
 	test('adds > prefix to single line', () => {

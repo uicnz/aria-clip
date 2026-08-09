@@ -1,4 +1,4 @@
-import type { ParamValidationResult } from '../filters';
+import type { ParamValidationResult } from '../filters.js';
 
 const validOsParams = ['windows', 'mac', 'linux'];
 

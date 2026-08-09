@@ -1,8 +1,8 @@
-import { initializeIcons } from '../icons/icons';
-import { debounce } from '../utils/debounce';
-import { Template } from '../types/types';
-import { getMessage } from '../utils/i18n';
-import { copyToClipboard } from '../utils/clipboard-utils';
+import { initializeIcons } from '../icons/icons.js';
+import { debounce } from '../utils/debounce.js';
+import { Template } from '../types/types.js';
+import { getMessage } from '../utils/i18n.js';
+import { copyToClipboard } from '../utils/clipboard-utils.js';
 
 let variablesPanel: HTMLElement;
 let currentTemplate: Template | null;

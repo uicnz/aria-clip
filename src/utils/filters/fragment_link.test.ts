@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { fragment_link } from './fragment_link';
+import { fragment_link } from './fragment_link.js';
 
 describe('fragment_link filter', () => {
 	test('creates text fragment link from array', () => {

@@ -1,5 +1,5 @@
-import browser from './browser-polyfill';
-import { getMessage } from './i18n';
+import browser from './browser-polyfill.js';
+import { getMessage } from './i18n.js';
 
 interface Command {
 	name: string;

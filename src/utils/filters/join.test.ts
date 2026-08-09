@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { join } from './join';
+import { join } from './join.js';
 
 describe('join filter', () => {
 	test('combines array elements with comma by default', () => {

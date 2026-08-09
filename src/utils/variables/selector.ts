@@ -1,7 +1,7 @@
-import browser from '../browser-polyfill';
-import { applyFilters } from '../filters';
-import { selectorContentToString } from '../shared';
-import { debugLog } from '../debug';
+import browser from '../browser-polyfill.js';
+import { applyFilters } from '../filters.js';
+import { selectorContentToString } from '../shared.js';
+import { debugLog } from '../debug.js';
 
 /**
  * Send an extractContent message to a tab via the background script,

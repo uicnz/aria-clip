@@ -1,10 +1,10 @@
-import { initializeToggles, initializeSettingToggle } from '../utils/ui-utils';
-import { ModelConfig, Provider } from '../types/types';
-import { generalSettings, loadSettings, saveSettings, getLocalStorage, setLocalStorage } from '../utils/storage-utils';
-import { initializeIcons } from '../icons/icons';
-import { showModal, hideModal } from '../utils/modal-utils';
-import { getMessage, translatePage } from '../utils/i18n';
-import { debugLog } from '../utils/debug';
+import { initializeToggles, initializeSettingToggle } from '../utils/ui-utils.js';
+import { ModelConfig, Provider } from '../types/types.js';
+import { generalSettings, loadSettings, saveSettings, getLocalStorage, setLocalStorage } from '../utils/storage-utils.js';
+import { initializeIcons } from '../icons/icons.js';
+import { showModal, hideModal } from '../utils/modal-utils.js';
+import { getMessage, translatePage } from '../utils/i18n.js';
+import { debugLog } from '../utils/debug.js';
 
 export interface PresetProvider {
 	id: string;
@@ -274,7 +274,7 @@ function initializeProviderList() {
 
 	// Clear existing providers
 	providerList.textContent = '';
-	sortedProviders.forEach((provider, index) => {
+	sortedProviders.forEach((provider) => {
 		const originalIndex = generalSettings.providers.findIndex(p => p.id === provider.id);
 		const providerItem = createProviderListItem(provider, originalIndex);
 		providerList.appendChild(providerItem);
@@ -429,6 +429,7 @@ function duplicateProvider(index: number) {
 	const newIndex = generalSettings.providers.length - 1;
 	showProviderModal(duplicatedProvider, newIndex);
 }
+void duplicateProvider;
 
 function deleteProvider(index: number): void {
 	const providerToDelete = generalSettings.providers[index];

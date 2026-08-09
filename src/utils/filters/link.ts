@@ -1,4 +1,4 @@
-import { escapeMarkdown } from '../string-utils';
+import { escapeMarkdown } from '../string-utils.js';
 
 export const link = (str: string, param?: string): string => {
 	if (!str.trim()) {

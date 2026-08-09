@@ -1,12 +1,12 @@
-import { generalSettings, saveSettings } from './storage-utils';
-import { PromptVariable, Template, ModelConfig, Provider } from '../types/types';
-import { compileTemplate } from './template-compiler';
-import { applyFilters } from './filters';
-import { formatDuration } from './string-utils';
-import { adjustNoteNameHeight } from './ui-utils';
-import { debugLog } from './debug';
-import { getMessage } from './i18n';
-import { updateTokenCount } from './token-counter';
+import { generalSettings, saveSettings } from './storage-utils.js';
+import { PromptVariable, Template, ModelConfig, Provider } from '../types/types.js';
+import { compileTemplate } from './template-compiler.js';
+import { applyFilters } from './filters.js';
+import { formatDuration } from './string-utils.js';
+import { adjustNoteNameHeight } from './ui-utils.js';
+import { debugLog } from './debug.js';
+import { getMessage } from './i18n.js';
+import { updateTokenCount } from './token-counter.js';
 
 const RATE_LIMIT_RESET_TIME = 60000; // 1 minute in milliseconds
 let lastRequestTime = 0;
@@ -14,7 +14,7 @@ let lastRequestTime = 0;
 // Store event listeners for cleanup
 const eventListeners = new WeakMap<HTMLElement, { [key: string]: EventListener }>();
 
-export async function sendToLLM(promptContext: string, content: string, promptVariables: PromptVariable[], model: ModelConfig): Promise<{ promptResponses: any[] }> {
+export async function sendToLLM(promptContext: string, _content: string, promptVariables: PromptVariable[], model: ModelConfig): Promise<{ promptResponses: any[] }> {
 	debugLog('Interpreter', 'Sending request to LLM...');
 	
 	// Find the provider for this model
@@ -370,7 +370,7 @@ function parseLLMResponse(responseContent: string, promptVariables: PromptVariab
 					const prompts_responses: { [key: string]: string } = {};
 					
 					// Extract each prompt response separately
-					promptVariables.forEach((variable, index) => {
+					promptVariables.forEach((_variable, index) => {
 						const promptKey = `prompt_${index + 1}`;
 						const promptRegex = new RegExp(`"${promptKey}"\\s*:\\s*"([^]*?)(?:"\\s*,|"\\s*})`, 'g');
 						const match = promptRegex.exec(jsonMatch[0]);
@@ -577,8 +577,8 @@ export async function initializeInterpreter(template: Template, variables: { [ke
 export async function handleInterpreterUI(
 	template: Template,
 	variables: { [key: string]: string },
-	tabId: number,
-	currentUrl: string,
+	_tabId: number,
+	_currentUrl: string,
 	modelConfig: ModelConfig
 ): Promise<void> {
 	const interpreterContainer = document.getElementById('interpreter');
@@ -716,7 +716,7 @@ export function replaceModelVariables(modelConfig: ModelConfig, provider: Provid
 	const allInputs = document.querySelectorAll('input, textarea');
 	allInputs.forEach((input) => {
 		if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
-			input.value = input.value.replace(/{{(modelProvider|modelId|model)(\|[\s\S]*?)?}}/g, (match, name, filters) => {
+			input.value = input.value.replace(/{{(modelProvider|modelId|model)(\|[\s\S]*?)?}}/g, (_match, name, filters) => {
 				let value = modelValues[name];
 				if (filters) {
 					value = applyFilters(value, filters.slice(1));

@@ -1,9 +1,9 @@
-@import 'styles/reader-themes';
-@import 'styles/reader-content';
-@import 'styles/reader/lightbox';
-@import 'styles/reader/transcripts';
-@import 'styles/reader/comments';
-@import 'styles/reader/outline';
+@use 'styles/reader-themes';
+@use 'styles/reader-content';
+@use 'styles/reader/lightbox';
+@use 'styles/reader/transcripts';
+@use 'styles/reader/comments';
+@use 'styles/reader/outline';
 
 ::view-transition-old(root),
 ::view-transition-new(root) {

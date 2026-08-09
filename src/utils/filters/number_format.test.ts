@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { number_format } from './number_format';
+import { number_format } from './number_format.js';
 
 describe('number_format filter', () => {
 	test('formats number with thousands separator', () => {

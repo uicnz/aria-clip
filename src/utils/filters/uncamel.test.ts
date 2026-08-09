@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { uncamel } from './uncamel';
+import { uncamel } from './uncamel.js';
 
 describe('uncamel filter', () => {
 	test('converts camelCase to space-separated', () => {

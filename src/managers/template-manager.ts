@@ -1,9 +1,9 @@
-import { Template, Property, PropertyType } from '../types/types';
+import { Template, PropertyType } from '../types/types.js';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
-import browser from '../utils/browser-polyfill';
-import { generalSettings } from '../utils/storage-utils';
-import { addPropertyType } from './property-types-manager';
-import { getMessage } from '../utils/i18n';
+import browser from '../utils/browser-polyfill.js';
+import { generalSettings } from '../utils/storage-utils.js';
+import { addPropertyType } from './property-types-manager.js';
+import { getMessage } from '../utils/i18n.js';
 
 export let templates: Template[] = [];
 export let editingTemplateIndex = -1;

@@ -1,9 +1,10 @@
 // Browser globals (DOMParser, window, document) are provided by the esbuild
 // banner in scripts/build-cli.mjs. They must run before any bundled module code.
 import { parseHTML } from 'linkedom';
-import { clip, matchTemplate, DocumentParser } from './api';
-import { openInAria } from './utils/cli-utils';
-import { Template } from './types/types';
+import { clip, matchTemplate, DocumentParser } from './api.js';
+import { openInAria } from './utils/cli-utils.js';
+import { Template } from './types/types.js';
+import { Defuddle } from './utils/defuddle.js';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -61,7 +62,6 @@ function parseArgs(argv: string[]): CliArgs {
 			case '--help':
 				printUsage();
 				process.exit(0);
-				break;
 			case '-t':
 			case '--template':
 				if (i + 1 >= args.length) { console.error('Error: --template requires a value'); process.exit(1); }
@@ -205,9 +205,8 @@ async function main(): Promise<void> {
 		if (!matched) {
 			const hasSchemaTrigs = templates.some(t => t.triggers?.some(tr => tr.startsWith('schema:')));
 			if (hasSchemaTrigs) {
-				const DefuddleClass = (await import('defuddle')).default;
 				parsedDocument = linkedomParser.parseFromString(html, 'text/html');
-				const defuddle = new DefuddleClass((parsedDocument.documentElement || parsedDocument) as unknown as Document, { url: args.url });
+				const defuddle = new Defuddle((parsedDocument.documentElement || parsedDocument) as unknown as Document, { url: args.url });
 				const defuddleResult = defuddle.parse();
 				matched = matchTemplate(templates, args.url, defuddleResult.schemaOrgData);
 			}

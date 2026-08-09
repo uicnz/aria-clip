@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { table } from './table';
+import { table } from './table.js';
 
 describe('table filter', () => {
 	test('converts array of objects to markdown table', () => {

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import I18nAutomation from '../src/utils/i18n-automation';
+import I18nAutomation from '../src/utils/i18n-automation.js';
 import dotenv from 'dotenv';
 
 // Load environment variables

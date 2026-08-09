@@ -1,6 +1,6 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import I18nAutomation from '../src/utils/i18n-automation';
+import I18nAutomation from '../src/utils/i18n-automation.js';
 
 // Load environment variables from .env file
 dotenv.config();

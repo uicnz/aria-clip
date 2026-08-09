@@ -2,14 +2,14 @@
 // Environment-agnostic — no Node.js or browser dependencies.
 // The caller provides a DocumentParser for their environment.
 
-import DefuddleClass from 'defuddle';
+import { Defuddle as DefuddleClass } from './utils/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { compileTemplate, SelectorProcessor } from './utils/template-compiler';
-import { AsyncResolver, RenderContext } from './utils/renderer';
-import { applyFilters } from './utils/filters';
-import { buildVariables, generateFrontmatter, extractContentBySelector, selectorContentToString, formatPropertyValue } from './utils/shared';
-import { sanitizeFileName } from './utils/string-utils';
-import { Template, Property } from './types/types';
+import { compileTemplate, SelectorProcessor } from './utils/template-compiler.js';
+import { AsyncResolver, RenderContext } from './utils/renderer.js';
+import { applyFilters } from './utils/filters.js';
+import { buildVariables, generateFrontmatter, extractContentBySelector, selectorContentToString, formatPropertyValue } from './utils/shared.js';
+import { sanitizeFileName } from './utils/string-utils.js';
+import { Template, Property } from './types/types.js';
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -260,4 +260,4 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 }
 
 // Re-export types that consumers may need
-export type { Template, Property } from './types/types';
+export type { Template, Property } from './types/types.js';

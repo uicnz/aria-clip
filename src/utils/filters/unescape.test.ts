@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { unescape } from './unescape';
+import { unescape } from './unescape.js';
 
 describe('unescape filter', () => {
 	test('unescapes escaped quotes', () => {

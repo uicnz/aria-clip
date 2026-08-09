@@ -1,5 +1,5 @@
-import browser from './browser-polyfill';
-import { detectBrowser } from './browser-detection';
+import browser from './browser-polyfill.js';
+import { detectBrowser } from './browser-detection.js';
 
 export interface SaveFileOptions {
 	content: string;
@@ -11,7 +11,7 @@ export interface SaveFileOptions {
 
 export function base64EncodeUnicode(str: string): string {
 	const utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, 
-		(match, p1) => String.fromCharCode(parseInt(p1, 16))
+		(_match, p1) => String.fromCharCode(parseInt(p1, 16))
 	);
 	return btoa(utf8Bytes);
 }
@@ -85,4 +85,4 @@ export async function saveFile({
 			onError(error as Error);
 		}
 	}
-} 
+}

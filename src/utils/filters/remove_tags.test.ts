@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { remove_tags } from './remove_tags';
+import { remove_tags } from './remove_tags.js';
 
 describe('remove_tags filter', () => {
 	test('removes specified tags only', () => {

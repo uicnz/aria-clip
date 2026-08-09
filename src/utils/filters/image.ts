@@ -1,4 +1,4 @@
-import { escapeMarkdown } from '../string-utils';
+import { escapeMarkdown } from '../string-utils.js';
 
 export const image = (str: string, param?: string): string | string[] => {
 	if (!str.trim()) {

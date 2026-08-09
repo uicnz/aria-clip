@@ -1,4 +1,4 @@
-import browser from './browser-polyfill';
+import browser from './browser-polyfill.js';
 
 declare const DEBUG_MODE: boolean;
 

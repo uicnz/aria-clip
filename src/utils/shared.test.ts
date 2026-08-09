@@ -5,7 +5,7 @@ import {
 	generateFrontmatter,
 	extractContentBySelector,
 	addSchemaOrgDataToVariables,
-} from './shared';
+} from './shared.js';
 
 // ---------------------------------------------------------------------------
 // Helper to create minimal BuildVariablesParams with overrides

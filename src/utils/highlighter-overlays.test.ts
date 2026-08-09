@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, test, expect, beforeAll, beforeEach } from 'vitest';
-import { renderTextHighlight, clearTextHighlights } from './highlighter-overlays';
-import { getElementXPath } from './dom-utils';
+import { renderTextHighlight, clearTextHighlights } from './highlighter-overlays.js';
+import { getElementXPath } from './dom-utils.js';
 
 // Capture ranges handed to the CSS Custom Highlight API (not implemented in
 // jsdom), so we can assert what renderTextHighlight resolved.

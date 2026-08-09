@@ -1,13 +1,13 @@
-import { PropertyType } from '../types/types';
-import { generalSettings, saveSettings } from '../utils/storage-utils';
-import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils';
-import { initializeIcons, getPropertyTypeIcon } from '../icons/icons';
-import { templates } from './template-manager';
-import { refreshPropertyNameSuggestions } from './template-ui';
-import { unescapeValue } from '../utils/string-utils';
-import { showImportModal } from '../utils/import-modal';
-import { saveFile } from '../utils/file-utils';
-import { getMessage } from '../utils/i18n';
+import { PropertyType } from '../types/types.js';
+import { generalSettings, saveSettings } from '../utils/storage-utils.js';
+import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils.js';
+import { initializeIcons, getPropertyTypeIcon } from '../icons/icons.js';
+import { templates } from './template-manager.js';
+import { refreshPropertyNameSuggestions } from './template-ui.js';
+import { unescapeValue } from '../utils/string-utils.js';
+import { showImportModal } from '../utils/import-modal.js';
+import { saveFile } from '../utils/file-utils.js';
+import { getMessage } from '../utils/i18n.js';
 
 export function initializePropertyTypesManager(): void {
 	ensureTagsProperty();
@@ -79,7 +79,7 @@ function countPropertyUsage(): Record<string, number> {
 	return usageCounts;
 }
 
-function createPropertyTypeListItem(propertyType: PropertyType, usageCount: number, isUsed: boolean): HTMLElement {
+function createPropertyTypeListItem(propertyType: PropertyType, usageCount: number, _isUsed: boolean): HTMLElement {
 	const listItem = createElementWithClass('div', 'property-editor');
 
 	const propertySelectDiv = createElementWithClass('div', 'property-select');

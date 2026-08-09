@@ -1,4 +1,4 @@
-import { applyFilters } from '../filters';
+import { applyFilters } from '../filters.js';
 
 function splitListString(str: string): string[] {
 	return str

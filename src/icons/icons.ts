@@ -72,7 +72,7 @@ export const icons = {
 	X
 };
 
-export function initializeIcons(root: HTMLElement | Document = document) {
+export function initializeIcons(_root: HTMLElement | Document = document) {
 	createIcons({
 		icons,
 		attrs: {

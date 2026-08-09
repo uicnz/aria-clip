@@ -1,4 +1,4 @@
-import type { ParamValidationResult } from '../filters';
+import type { ParamValidationResult } from '../filters.js';
 
 export const validateCalcParams = (param: string | undefined): ParamValidationResult => {
 	if (!param) {

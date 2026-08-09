@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { render, renderTemplate, RenderContext } from './renderer';
+import { render, renderTemplate, RenderContext } from './renderer.js';
 
 // Simple filter implementation for testing (direct invocation)
 function testApplyFilterDirect(value: string, filterName: string, _paramString: string | undefined, _currentUrl: string): string {

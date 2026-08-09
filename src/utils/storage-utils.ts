@@ -1,6 +1,6 @@
-import browser from './browser-polyfill';
-import { Settings, ModelConfig, PropertyType, HistoryEntry, Provider, Rating } from '../types/types';
-import { debugLog } from './debug';
+import browser from './browser-polyfill.js';
+import { Settings, ModelConfig, PropertyType, HistoryEntry, Provider, Rating } from '../types/types.js';
+import { debugLog } from './debug.js';
 
 export type { Settings, ModelConfig, PropertyType, HistoryEntry, Provider, Rating };
 

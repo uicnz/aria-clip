@@ -1,5 +1,5 @@
-import { debugLog } from '../debug';
-import type { ParamValidationResult } from '../filters';
+import { debugLog } from '../debug.js';
+import type { ParamValidationResult } from '../filters.js';
 
 export const validateTemplateParams = (param: string | undefined): ParamValidationResult => {
 	if (!param) {

@@ -7,11 +7,11 @@ import { describe, test, expect, vi, beforeAll, afterAll } from 'vitest';
 import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, basename, extname } from 'path';
 import { parseHTML } from 'linkedom';
-import DefuddleClass from 'defuddle';
+import { Defuddle as DefuddleClass } from './defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { buildVariables, generateFrontmatter, formatPropertyValue } from './shared';
-import { compileTemplate } from './template-compiler';
-import { createAsyncResolver, createSelectorProcessor } from '../api';
+import { buildVariables, generateFrontmatter, formatPropertyValue } from './shared.js';
+import { compileTemplate } from './template-compiler.js';
+import { createAsyncResolver, createSelectorProcessor } from '../api.js';
 
 // ---------------------------------------------------------------------------
 // Freeze time so {{date}} is deterministic in expected output

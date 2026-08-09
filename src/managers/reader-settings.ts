@@ -1,10 +1,10 @@
-import { generalSettings, loadSettings, saveSettings } from '../utils/storage-utils';
-import { initializeSettingToggle } from '../utils/ui-utils';
-import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils';
-import { initializeIcons } from '../icons/icons';
-import { debounce } from '../utils/debounce';
-import { getMessage } from '../utils/i18n';
-import { getFontCss, isFontAvailable as probeFontAvailable, sanitizeFontName, SANS_STACK, SERIF_STACK } from '../utils/font-utils';
+import { generalSettings, loadSettings, saveSettings } from '../utils/storage-utils.js';
+import { initializeSettingToggle } from '../utils/ui-utils.js';
+import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils.js';
+import { initializeIcons } from '../icons/icons.js';
+import { debounce } from '../utils/debounce.js';
+import { getMessage } from '../utils/i18n.js';
+import { getFontCss, isFontAvailable as probeFontAvailable, sanitizeFontName, SANS_STACK, SERIF_STACK } from '../utils/font-utils.js';
 
 const THEMES: Array<{ id: string; name: string }> = [
 	{ id: 'default', name: '' },

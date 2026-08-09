@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { capitalize } from './capitalize';
+import { capitalize } from './capitalize.js';
 
 describe('capitalize filter', () => {
 	test('capitalizes first character and lowercases rest', () => {

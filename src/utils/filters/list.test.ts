@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { list, validateListParams } from './list';
+import { list, validateListParams } from './list.js';
 
 describe('list filter', () => {
 	test('converts array to bullet list', () => {

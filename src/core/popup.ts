@@ -1,28 +1,28 @@
-import dayjs from 'dayjs';
-import { Template, Property, PromptVariable } from '../types/types';
-import { incrementStat, addHistoryEntry, getClipHistory } from '../utils/storage-utils';
-import { generateFrontmatter, saveToAria } from '../utils/aria-note-creator';
-import { extractPageContent, initializePageContent } from '../utils/content-extractor';
-import { compileTemplate } from '../utils/template-compiler';
-import { initializeIcons, getPropertyTypeIcon } from '../icons/icons';
-import { findMatchingTemplate, initializeTriggers } from '../utils/triggers';
-import { getLocalStorage, setLocalStorage, loadSettings, generalSettings, Settings } from '../utils/storage-utils';
-import { escapeHtml, unescapeValue } from '../utils/string-utils';
-import { loadTemplates, createDefaultTemplate } from '../managers/template-manager';
-import browser from '../utils/browser-polyfill';
-import { addBrowserClassToHtml, detectBrowser } from '../utils/browser-detection';
-import { createElementWithClass } from '../utils/dom-utils';
-import { initializeInterpreter, handleInterpreterUI, collectPromptVariables } from '../utils/interpreter';
-import { adjustNoteNameHeight } from '../utils/ui-utils';
-import { debugLog } from '../utils/debug';
-import { showVariables, initializeVariablesPanel, updateVariablesPanel } from '../managers/inspect-variables';
-import { isBlankPage, isValidUrl, isRestrictedUrl } from '../utils/active-tab-manager';
-import { memoizeWithExpiration } from '../utils/memoize';
-import { debounce } from '../utils/debounce';
-import { sanitizeFileName } from '../utils/string-utils';
-import { saveFile } from '../utils/file-utils';
-import { translatePage, getMessage, setupLanguageAndDirection } from '../utils/i18n';
-import { formatPropertyValue } from '../utils/shared';
+import { Template, Property } from '../types/types.js';
+import { incrementStat } from '../utils/storage-utils.js';
+import { generateFrontmatter, saveToAria } from '../utils/aria-note-creator.js';
+import { extractPageContent, initializePageContent } from '../utils/content-extractor.js';
+import { compileTemplate } from '../utils/template-compiler.js';
+import { initializeIcons, getPropertyTypeIcon } from '../icons/icons.js';
+import { findMatchingTemplate, initializeTriggers } from '../utils/triggers.js';
+import { getLocalStorage, setLocalStorage, loadSettings, generalSettings, Settings } from '../utils/storage-utils.js';
+import { unescapeValue } from '../utils/string-utils.js';
+import { loadTemplates } from '../managers/template-manager.js';
+import browser from '../utils/browser-polyfill.js';
+import { addBrowserClassToHtml, detectBrowser } from '../utils/browser-detection.js';
+import { createElementWithClass } from '../utils/dom-utils.js';
+import { initializeInterpreter, handleInterpreterUI, collectPromptVariables } from '../utils/interpreter.js';
+import { adjustNoteNameHeight } from '../utils/ui-utils.js';
+import { debugLog } from '../utils/debug.js';
+import { showVariables, initializeVariablesPanel, updateVariablesPanel } from '../managers/inspect-variables.js';
+import { isBlankPage, isValidUrl, isRestrictedUrl } from '../utils/active-tab-manager.js';
+import { memoizeWithExpiration } from '../utils/memoize.js';
+import { debounce } from '../utils/debounce.js';
+import { sanitizeFileName } from '../utils/string-utils.js';
+import { saveFile } from '../utils/file-utils.js';
+import { translatePage, getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
+import { formatPropertyValue } from '../utils/shared.js';
+import { addRuntimeMessageListener } from '../utils/runtime-messaging.js';
 
 interface ReaderModeResponse {
 	success: boolean;
@@ -47,7 +47,7 @@ const memoizedCompileTemplate = memoizeWithExpiration(
 	},
 	{
 		expirationMs: 5000,
-		keyFn: (tabId: number, template: string, variables: { [key: string]: string }, currentUrl: string) =>
+		keyFn: (tabId: number, template: string, _variables: { [key: string]: string }, currentUrl: string) =>
 			`${tabId}-${template}-${currentUrl}`
 	}
 );
@@ -59,6 +59,7 @@ const memoizedGenerateFrontmatter = memoizeWithExpiration(
 	},
 	{ expirationMs: 5000 }
 );
+void memoizedGenerateFrontmatter;
 
 function getPropertiesFromDOM(): Property[] {
 	return Array.from(document.querySelectorAll('.metadata-property input')).map(input => {
@@ -243,7 +244,7 @@ function setupStorageListeners() {
 }
 
 function setupMessageListeners() {
-	browser.runtime.onMessage.addListener((request: any, sender: browser.Runtime.MessageSender, sendResponse: (response?: any) => void) => {
+	addRuntimeMessageListener((request: any, _sender, sendResponse) => {
 		if (request.action === "triggerQuickClip") {
 			handleClipAria().then(() => {
 				sendResponse({success: true});
@@ -276,10 +277,11 @@ function setupMessageListeners() {
 			}
 		} else if (request.action === "updatePopupHighlighterUI") {
 			// This message is now handled by checkHighlighterModeState
-		} else if (request.action === "highlighterModeChanged") {
-			// This message is now handled by checkHighlighterModeState
-		}
-	});
+			} else if (request.action === "highlighterModeChanged") {
+				// This message is now handled by checkHighlighterModeState
+			}
+			return undefined;
+		});
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
@@ -447,6 +449,7 @@ function setupEventListeners(tabId: number) {
 	const copyContentButton = document.getElementById('copy-content');
 	const saveDownloadsButton = document.getElementById('save-downloads');
 	const shareContentButton = document.getElementById('share-content');
+	void shareContentButton;
 
 	if (moreButton && moreDropdown) {
 		moreButton.addEventListener('click', (e) => {
@@ -481,7 +484,7 @@ function setupEventListeners(tabId: number) {
 	const shareButtons = document.querySelectorAll('.share-content');
 	if (shareButtons) {
 		shareButtons.forEach(button => {
-			button.addEventListener('click', async (e) => {
+			button.addEventListener('click', async (_e) => {
 				// Get content synchronously
 				const properties = getPropertiesFromDOM();
 
@@ -633,6 +636,8 @@ function logError(message: string, error?: any): void {
 	console.error(message, error);
 	showError(message);
 }
+void clearError;
+void logError;
 
 async function waitForInterpreter(interpretBtn: HTMLButtonElement): Promise<void> {
 	return new Promise((resolve, reject) => {
@@ -881,7 +886,7 @@ function buildTemplateFieldsSkeleton(template: Template | null) {
 	}
 }
 
-async function fillTemplateFieldValues(currentTabId: number, template: Template | null, variables: { [key: string]: string }, schemaOrgData?: any) {
+async function fillTemplateFieldValues(currentTabId: number, template: Template | null, variables: { [key: string]: string }, _schemaOrgData?: any) {
 	if (!template) return;
 
 	const currentUrl = currentTabId ? (await getTabInfo(currentTabId)).url || '' : '';
@@ -1259,7 +1264,7 @@ async function handleSaveToDownloads() {
 			fileName,
 			mimeType: 'text/markdown',
 			tabId: currentTabId,
-			onError: (error) => showError('failedToSaveFile')
+			onError: (_error) => showError('failedToSaveFile')
 		});
 
 		const tabInfo = await getCurrentTabInfo();

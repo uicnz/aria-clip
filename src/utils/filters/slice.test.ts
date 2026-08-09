@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { slice, validateSliceParams } from './slice';
+import { slice, validateSliceParams } from './slice.js';
 
 describe('slice filter', () => {
 	test('extracts portion of string', () => {

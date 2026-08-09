@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
-import { split } from './split';
-import { render } from '../renderer';
-import { applyFilters } from '../filters';
+import { split } from './split.js';
+import { render } from '../renderer.js';
+import { applyFilters } from '../filters.js';
 
 describe('split filter', () => {
 	test('splits string by comma', () => {

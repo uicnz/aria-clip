@@ -1,8 +1,8 @@
-import { generalSettings } from '../storage-utils';
+import { generalSettings } from '../storage-utils.js';
 
 // This function doesn't really do anything, it just returns the whole prompt variable
 // so that it's still visible in the input fields in the popup
-export async function processPrompt(match: string, variables: { [key: string]: string }, currentUrl: string): Promise<string> {
+export async function processPrompt(match: string, _variables: { [key: string]: string }, _currentUrl: string): Promise<string> {
 	if (generalSettings.interpreterEnabled) {
 		const promptRegex = /{{(?:prompt:)?"(.*?)"(\|.*?)?}}/;
 		const matches = match.match(promptRegex);
@@ -12,6 +12,8 @@ export async function processPrompt(match: string, variables: { [key: string]: s
 		}
 	
 		const [, promptText, filters = ''] = matches;
+		void promptText;
+		void filters;
 	
 		return match;
 	} else {

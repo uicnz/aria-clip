@@ -2,7 +2,6 @@ import {
 	handleTextSelection,
 	highlightElement,
 	AnyHighlightData,
-	BLOCK_HIGHLIGHT_TAGS,
 	highlights,
 	isApplyingHighlights,
 	sortHighlights,
@@ -10,11 +9,11 @@ import {
 	saveHighlights,
 	updateHighlights,
 	updateHighlighterMenu,
-} from './highlighter';
-import { throttle } from './throttle';
-import { getElementByXPath, isDarkColor, setElementHTML } from './dom-utils';
-import { getMessage } from './i18n';
-import { debugLog } from './debug';
+} from './highlighter.js';
+import { throttle } from './throttle.js';
+import { getElementByXPath, isDarkColor, setElementHTML } from './dom-utils.js';
+import { getMessage } from './i18n.js';
+import { debugLog } from './debug.js';
 
 let touchStartX: number = 0;
 let touchStartY: number = 0;

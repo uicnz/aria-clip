@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { duration } from './duration';
+import { duration } from './duration.js';
 
 describe('duration filter', () => {
 	test('normalizes PT1868S with custom format', () => {

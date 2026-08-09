@@ -1,6 +1,6 @@
-@import 'reader-themes';
-@import 'reader-content';
-@import 'sidebar';
+@use 'reader-themes';
+@use 'reader-content';
+@use 'sidebar';
 
 #highlights-page {
 	--settings-background: var(--background-primary);

@@ -1,4 +1,4 @@
-import type { ParamValidationResult } from '../filters';
+import type { ParamValidationResult } from '../filters.js';
 
 export const validateNthParams = (param: string | undefined): ParamValidationResult => {
 	// Param is optional - no param means return all items

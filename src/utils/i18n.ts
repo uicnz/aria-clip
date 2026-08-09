@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import browser from './browser-polyfill';
-import { getLocalStorage, setLocalStorage } from './storage-utils';
+import browser from './browser-polyfill.js';
+import { getLocalStorage, setLocalStorage } from './storage-utils.js';
 import DOMPurify from 'dompurify';
 
 // Import dayjs locales that match our supported languages

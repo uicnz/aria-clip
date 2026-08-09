@@ -1,11 +1,12 @@
 import browser from 'webextension-polyfill';
-import { detectBrowser } from './utils/browser-detection';
-import { updateCurrentActiveTab, isValidUrl, isBlankPage, isNormalPageUrl } from './utils/active-tab-manager';
-import { TextHighlightData } from './utils/highlighter';
-import { debounce } from './utils/debounce';
-import { Settings } from './types/types';
-import { debugLog } from './utils/debug';
-import { incrementStat } from './utils/storage-utils';
+import { detectBrowser } from './utils/browser-detection.js';
+import { updateCurrentActiveTab, isValidUrl, isBlankPage, isNormalPageUrl } from './utils/active-tab-manager.js';
+import { TextHighlightData } from './utils/highlighter.js';
+import { debounce } from './utils/debounce.js';
+import { Settings } from './types/types.js';
+import { debugLog } from './utils/debug.js';
+import { incrementStat } from './utils/storage-utils.js';
+import { addRuntimeMessageListener } from './utils/runtime-messaging.js';
 
 const YOUTUBE_EMBED_RULE_ID = 9001;
 const YOUTUBE_INNERTUBE_RULE_ID = 9002;
@@ -113,6 +114,7 @@ let sidePanelOpenWindows: Set<number> = new Set();
 let highlighterModeState: { [tabId: number]: boolean } = {};
 let readerModeState: { [tabId: number]: boolean } = {};
 let hasHighlights = false;
+void hasHighlights;
 let isContextMenuCreating = false;
 let popupPorts: { [tabId: number]: browser.Runtime.Port } = {};
 
@@ -332,7 +334,7 @@ browser.runtime.onMessage.addListener((request: unknown) => {
 		});
 });
 
-browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime.MessageSender, sendResponse: (response?: any) => void): true | undefined => {
+addRuntimeMessageListener((request: unknown, sender: browser.Runtime.MessageSender, sendResponse): true | undefined => {
 	if (typeof request === 'object' && request !== null) {
 		const typedRequest = request as { action: string; isActive?: boolean; hasHighlights?: boolean; tabId?: number; text?: string; section?: string; readerUrl?: string };
 		

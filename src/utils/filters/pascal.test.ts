@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { pascal } from './pascal';
+import { pascal } from './pascal.js';
 
 describe('pascal filter', () => {
 	test('converts space-separated words to PascalCase', () => {

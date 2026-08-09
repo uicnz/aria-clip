@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import { describe, test, expect, beforeEach, vi } from 'vitest';
-import browser from '../utils/browser-polyfill';
-import { AnyHighlightData, StoredData, TextHighlightData, buildExportedPage, collapseGroupsForExport } from '../utils/highlighter';
-import { importHighlightsFromJson } from './highlights-manager';
+import browser from '../utils/browser-polyfill.js';
+import { AnyHighlightData, StoredData, TextHighlightData, buildExportedPage, collapseGroupsForExport } from '../utils/highlighter.js';
+import { importHighlightsFromJson } from './highlights-manager.js';
 
 // What the exports write today, full records included.
 function exportedFile(): string {

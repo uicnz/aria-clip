@@ -94,25 +94,24 @@ module.exports = (env, argv) => {
 		},
 		resolve: {
 			extensions: ['.ts', '.js'],
+			extensionAlias: {
+				'.js': ['.ts', '.js']
+			},
 			alias: {
-				'./utils/browser-polyfill': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
-				'../utils/browser-polyfill': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js')
+				'./utils/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
+				'../utils/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
+				'./browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
+				'../browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js')
 			}
 		},
 		module: {
 			rules: [
 				{
 					test: /\.tsx?$/,
-					use: [
-						{
-							loader: 'ts-loader',
-							options: {
-								compilerOptions: {
-									module: 'ES2020'
-								}
-							}
-						}
-					],
+					loader: 'esbuild-loader',
+					options: {
+						target: 'esnext'
+					},
 					exclude: /node_modules/,
 				},
 				{

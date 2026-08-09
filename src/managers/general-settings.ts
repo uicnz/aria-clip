@@ -1,23 +1,23 @@
-import { handleDragStart, handleDragOver, handleDrop, handleDragEnd } from '../utils/drag-and-drop';
-import { initializeIcons } from '../icons/icons';
-import { getCommands } from '../utils/hotkeys';
-import { initializeToggles, updateToggleState, initializeSettingToggle } from '../utils/ui-utils';
-import { generalSettings, loadSettings, saveSettings, setLocalStorage, getLocalStorage } from '../utils/storage-utils';
-import { detectBrowser } from '../utils/browser-detection';
-import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils';
-import { createDefaultTemplate, getTemplates, saveTemplateSettings } from '../managers/template-manager';
-import { updateTemplateList, showTemplateEditor } from '../managers/template-ui';
-import { exportAllSettings, importAllSettings } from '../utils/import-export';
-import { Settings, Template } from '../types/types';
-import { exportHighlights, importHighlights } from './highlights-manager';
-import { getMessage, setupLanguageAndDirection } from '../utils/i18n';
-import { debounce } from '../utils/debounce';
-import browser from '../utils/browser-polyfill';
-import { createUsageChart, aggregateUsageData, UsageMetric } from '../utils/charts';
-import { getClipHistory } from '../utils/storage-utils';
+import { handleDragStart, handleDragOver, handleDrop, handleDragEnd } from '../utils/drag-and-drop.js';
+import { initializeIcons } from '../icons/icons.js';
+import { getCommands } from '../utils/hotkeys.js';
+import { initializeToggles, initializeSettingToggle } from '../utils/ui-utils.js';
+import { generalSettings, loadSettings, saveSettings, setLocalStorage, getLocalStorage } from '../utils/storage-utils.js';
+import { detectBrowser } from '../utils/browser-detection.js';
+import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils.js';
+import { createDefaultTemplate, getTemplates, saveTemplateSettings } from '../managers/template-manager.js';
+import { updateTemplateList, showTemplateEditor } from '../managers/template-ui.js';
+import { exportAllSettings, importAllSettings } from '../utils/import-export.js';
+import { Settings, Template } from '../types/types.js';
+import { exportHighlights, importHighlights } from './highlights-manager.js';
+import { getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
+import { debounce } from '../utils/debounce.js';
+import browser from '../utils/browser-polyfill.js';
+import { createUsageChart, aggregateUsageData, UsageMetric } from '../utils/charts.js';
+import { getClipHistory } from '../utils/storage-utils.js';
 import dayjs from 'dayjs';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
-import { showModal, hideModal } from '../utils/modal-utils';
+import weekOfYear from 'dayjs/plugin/weekOfYear.js';
+import { showModal, hideModal } from '../utils/modal-utils.js';
 
 dayjs.extend(weekOfYear);
 
@@ -151,7 +151,7 @@ async function initializeVersionDisplay(): Promise<void> {
 	// Only add update listener for browsers that support it
 	const currentBrowser = await detectBrowser();
 	if (currentBrowser !== 'safari' && currentBrowser !== 'mobile-safari' && browser.runtime.onUpdateAvailable) {
-		browser.runtime.onUpdateAvailable.addListener((details) => {
+		browser.runtime.onUpdateAvailable.addListener((_details) => {
 			if (updateAvailable && usingLatestVersion) {
 				updateAvailable.style.display = 'block';
 				usingLatestVersion.style.display = 'none';

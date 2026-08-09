@@ -1,4 +1,4 @@
-import { getMessage } from './i18n';
+import { getMessage } from './i18n.js';
 
 // CJK-aware text boundary helpers
 const SENT_END = /[.!?。！？]/;

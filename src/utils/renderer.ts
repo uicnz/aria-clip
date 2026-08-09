@@ -23,8 +23,8 @@ import {
 	FilterExpression,
 	MemberExpression,
 	parse,
-} from './parser';
-import { applyFilterDirect as builtInApplyFilterDirect } from './filters';
+} from './parser.js';
+import { applyFilterDirect as builtInApplyFilterDirect } from './filters.js';
 
 // Filter application function type for direct invocation (already-parsed filter name and params)
 type ApplyFilterDirectFn = (value: string, filterName: string, paramString: string | undefined, currentUrl: string) => string;
@@ -967,7 +967,7 @@ export function createSelectorResolver(
 	tabId: number,
 	sendMessage: (tabId: number, message: any) => Promise<any>
 ): AsyncResolver {
-	return async (name: string, context: RenderContext): Promise<any> => {
+	return async (name: string, _context: RenderContext): Promise<any> => {
 		const extractHtml = name.startsWith('selectorHtml:');
 		const prefix = extractHtml ? 'selectorHtml:' : 'selector:';
 		const selectorPart = name.slice(prefix.length);

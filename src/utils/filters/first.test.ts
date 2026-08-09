@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { first } from './first';
+import { first } from './first.js';
 
 describe('first filter', () => {
 	test('returns first element of array', () => {

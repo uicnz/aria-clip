@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { remove_attr } from './remove_attr';
+import { remove_attr } from './remove_attr.js';
 
 describe('remove_attr filter', () => {
 	test('removes specified attribute', () => {

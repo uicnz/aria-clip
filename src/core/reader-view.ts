@@ -1,17 +1,20 @@
-import browser from '../utils/browser-polyfill';
-import { Reader } from '../utils/reader';
-import { initializeI18n, getMessage } from '../utils/i18n';
-import { ReaderSettings } from '../types/types';
-import { getFontCss } from '../utils/font-utils';
-import { getDomain } from '../utils/string-utils';
-import { extractContentBySelector as extractContentBySelectorShared } from '../utils/shared';
-import { setPageUrl, setPageTitle, updatePageDomainSettings, getHighlights, repositionHighlights } from '../utils/highlighter';
-import { throttle } from '../utils/throttle';
-import { loadSettings } from '../utils/storage-utils';
-import Defuddle from 'defuddle';
+import browser from '../utils/browser-polyfill.js';
+import { Reader } from '../utils/reader.js';
+import { initializeI18n, getMessage } from '../utils/i18n.js';
+import { ReaderSettings } from '../types/types.js';
+import { getDomain } from '../utils/string-utils.js';
+import { extractContentBySelector as extractContentBySelectorShared } from '../utils/shared.js';
+import { setPageUrl, setPageTitle, updatePageDomainSettings, getHighlights, repositionHighlights } from '../utils/highlighter.js';
+import { throttle } from '../utils/throttle.js';
+import { loadSettings } from '../utils/storage-utils.js';
+import { Defuddle } from '../utils/defuddle.js';
+import {
+	addRuntimeMessageListener,
+	removeRuntimeMessageListener,
+	type RuntimeMessageListener,
+} from '../utils/runtime-messaging.js';
 
-type MessageListener = (request: any, sender: any, sendResponse: (response?: any) => void) => true | undefined;
-let readerPageMessageListener: MessageListener | null = null;
+let readerPageMessageListener: RuntimeMessageListener | null = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	await applyReaderTheme();
@@ -47,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		const parsedDoc = parser.parseFromString(html, 'text/html');
 		Object.defineProperty(parsedDoc, 'URL', { value: url, configurable: true });
 
-		const defuddle = new Defuddle(parsedDoc, { url, fetch: proxyFetchAsResponse });
+		const defuddle = new Defuddle(parsedDoc, { url, fetch: proxyFetchAsResponse as typeof fetch });
 		const result = await defuddle.parseAsync();
 
 		if (!result.content) {
@@ -219,7 +222,7 @@ async function loadArticle(newUrl: string) {
 		const parsedDoc = parser.parseFromString(html, 'text/html');
 		Object.defineProperty(parsedDoc, 'URL', { value: newUrl, configurable: true });
 
-		const defuddle = new Defuddle(parsedDoc, { url: newUrl, fetch: proxyFetchAsResponse });
+		const defuddle = new Defuddle(parsedDoc, { url: newUrl, fetch: proxyFetchAsResponse as typeof fetch });
 		const result = await defuddle.parseAsync();
 
 		if (!result.content) {
@@ -378,7 +381,7 @@ async function setupReaderPageMessageHandler(articleUrl: string, defuddleResult:
 	};
 
 	if (readerPageMessageListener) {
-		browser.runtime.onMessage.removeListener(readerPageMessageListener);
+		removeRuntimeMessageListener(readerPageMessageListener);
 	}
 
 	readerPageMessageListener = (request: any, _sender: any, sendResponse: (response?: any) => void): true | undefined => {
@@ -418,5 +421,5 @@ async function setupReaderPageMessageHandler(articleUrl: string, defuddleResult:
 		return undefined;
 	};
 
-	browser.runtime.onMessage.addListener(readerPageMessageListener);
+	addRuntimeMessageListener(readerPageMessageListener);
 }

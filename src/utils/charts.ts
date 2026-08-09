@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { HistoryEntry } from '../types/types';
-import { getMessage } from '../utils/i18n';
+import { HistoryEntry } from '../types/types.js';
+import { getMessage } from '../utils/i18n.js';
 
 export type UsageMetric = 'saved' | 'read';
 

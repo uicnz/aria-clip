@@ -1,16 +1,16 @@
-import { Template } from '../types/types';
-import { templates, saveTemplateSettings, editingTemplateIndex, loadTemplates } from '../managers/template-manager';
-import { showTemplateEditor, updateTemplateList } from '../managers/template-ui';
-import { sanitizeFileName } from './string-utils';
-import { generalSettings, loadSettings } from '../utils/storage-utils';
-import { addPropertyType, updatePropertyTypesList } from '../managers/property-types-manager';
-import { hideModal } from '../utils/modal-utils';
-import { showImportModal } from './import-modal';
-import browser from '../utils/browser-polyfill';
-import { saveFile } from './file-utils';
-import { copyToClipboard } from './clipboard-utils';
+import { Template } from '../types/types.js';
+import { templates, saveTemplateSettings, editingTemplateIndex, loadTemplates } from '../managers/template-manager.js';
+import { showTemplateEditor, updateTemplateList } from '../managers/template-ui.js';
+import { sanitizeFileName } from './string-utils.js';
+import { generalSettings, loadSettings } from '../utils/storage-utils.js';
+import { addPropertyType, updatePropertyTypesList } from '../managers/property-types-manager.js';
+import { hideModal } from '../utils/modal-utils.js';
+import { showImportModal } from './import-modal.js';
+import browser from '../utils/browser-polyfill.js';
+import { saveFile } from './file-utils.js';
+import { copyToClipboard } from './clipboard-utils.js';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
-import { getMessage } from './i18n';
+import { getMessage } from './i18n.js';
 
 const SCHEMA_VERSION = '0.1.0';
 
@@ -183,6 +183,8 @@ function handleDrop(e: DragEvent): void {
 		handleFiles(files);
 	}
 }
+void preventDefaults;
+void handleDrop;
 
 function handleFiles(files: FileList): void {
 	Array.from(files).forEach(importTemplateFile);

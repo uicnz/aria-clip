@@ -1,5 +1,5 @@
-import browser from './browser-polyfill';
-import { getElementXPath, getElementByXPath, setElementHTML } from './dom-utils';
+import browser from './browser-polyfill.js';
+import { getElementXPath, getElementByXPath, setElementHTML } from './dom-utils.js';
 import {
 	handleMouseUp,
 	planHighlightOverlayRects,
@@ -8,10 +8,10 @@ import {
 	handleTouchMove,
 	syncHoverListener,
 	markHighlightJustCreated,
-} from './highlighter-overlays';
-import { detectBrowser, addBrowserClassToHtml } from './browser-detection';
+} from './highlighter-overlays.js';
+import { detectBrowser, addBrowserClassToHtml } from './browser-detection.js';
 import dayjs from 'dayjs';
-import { generalSettings, loadSettings } from './storage-utils';
+import { generalSettings, loadSettings } from './storage-utils.js';
 
 /**
  * Helper function to create SVG elements

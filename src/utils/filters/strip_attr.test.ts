@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { strip_attr } from './strip_attr';
+import { strip_attr } from './strip_attr.js';
 
 describe('strip_attr filter', () => {
 	test('removes all HTML attributes', () => {

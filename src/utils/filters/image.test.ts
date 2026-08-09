@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { image } from './image';
+import { image } from './image.js';
 
 describe('image filter', () => {
 	test('converts string to markdown image', () => {

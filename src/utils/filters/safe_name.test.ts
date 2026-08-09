@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { safe_name, validateSafeNameParams } from './safe_name';
+import { safe_name, validateSafeNameParams } from './safe_name.js';
 
 describe('safe_name filter', () => {
 	test('removes forward slashes', () => {

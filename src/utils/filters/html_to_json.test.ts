@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { html_to_json } from './html_to_json';
+import { html_to_json } from './html_to_json.js';
 
 describe('html_to_json filter', () => {
 	// Note: html_to_json uses DOMParser which is not available in Node.js

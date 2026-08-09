@@ -3,8 +3,8 @@
 // storage-utils, browser globals). All browser-dependent behavior is injected
 // via parameters.
 
-import { sanitizeFileName, getDomain, escapeDoubleQuotes } from './string-utils';
-import { Property } from '../types/types';
+import { sanitizeFileName, getDomain, escapeDoubleQuotes } from './string-utils.js';
+import { Property } from '../types/types.js';
 import dayjs from 'dayjs';
 
 // ---------------------------------------------------------------------------

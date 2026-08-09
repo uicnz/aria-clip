@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { round, validateRoundParams } from './round';
+import { round, validateRoundParams } from './round.js';
 
 describe('round filter', () => {
 	test('rounds to nearest integer by default', () => {

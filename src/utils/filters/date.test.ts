@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { date } from './date';
+import { date } from './date.js';
 
 describe('date filter', () => {
 	test('formats date with specified format', () => {

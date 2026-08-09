@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, test, expect } from 'vitest';
-import { createTextQuoteAnchor } from './highlighter';
+import { createTextQuoteAnchor } from './highlighter.js';
 
 function container(text: string): Element {
 	const el = document.createElement('p');

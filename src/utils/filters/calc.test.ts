@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { calc, validateCalcParams } from './calc';
+import { calc, validateCalcParams } from './calc.js';
 
 describe('calc filter', () => {
 	test('addition', () => {

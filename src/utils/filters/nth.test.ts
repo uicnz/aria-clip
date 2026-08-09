@@ -1,8 +1,8 @@
 import { describe, test, expect } from 'vitest';
-import { nth, validateNthParams } from './nth';
-import { render } from '../renderer';
-import { applyFilters } from '../filters';
-import { parse, validateFilters, FilterExpression, LiteralExpression, VariableNode } from '../parser';
+import { nth, validateNthParams } from './nth.js';
+import { render } from '../renderer.js';
+import { applyFilters } from '../filters.js';
+import { parse, validateFilters, FilterExpression, LiteralExpression, VariableNode } from '../parser.js';
 
 describe('nth filter', () => {
 	test('keeps nth element (1-based)', () => {

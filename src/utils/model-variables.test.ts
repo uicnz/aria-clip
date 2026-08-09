@@ -3,10 +3,10 @@
 // These are preserved through template compilation and filled in by the
 // interpreter once a model has actually been used (issue #360).
 import { describe, test, expect, beforeEach } from 'vitest';
-import { compileTemplate } from './template-compiler';
-import { replaceModelVariables } from './interpreter';
-import { generalSettings } from './storage-utils';
-import { ModelConfig, Provider } from '../types/types';
+import { compileTemplate } from './template-compiler.js';
+import { replaceModelVariables } from './interpreter.js';
+import { generalSettings } from './storage-utils.js';
+import { ModelConfig, Provider } from '../types/types.js';
 
 const modelConfig: ModelConfig = {
 	id: 'model-1',

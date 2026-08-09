@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { trim } from './trim';
+import { trim } from './trim.js';
 
 describe('trim filter', () => {
 	test('removes whitespace from both ends', () => {

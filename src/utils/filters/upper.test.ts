@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { upper } from './upper';
+import { upper } from './upper.js';
 
 describe('upper filter', () => {
 	test('converts text to uppercase', () => {

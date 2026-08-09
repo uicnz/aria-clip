@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, test, expect } from 'vitest';
-import { processHighlights } from './content-extractor';
-import { TextHighlightData } from './highlighter';
+import { processHighlights } from './content-extractor.js';
+import { TextHighlightData } from './highlighter.js';
 
 // Default settings already use highlighterEnabled + 'highlight-inline', the
 // behavior these tests exercise.

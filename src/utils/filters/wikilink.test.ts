@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { wikilink } from './wikilink';
+import { wikilink } from './wikilink.js';
 
 describe('wikilink filter', () => {
 	test('creates wikilink from string', () => {

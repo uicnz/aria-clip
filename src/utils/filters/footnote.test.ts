@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { footnote } from './footnote';
+import { footnote } from './footnote.js';
 
 describe('footnote filter', () => {
 	test('converts array to footnotes', () => {

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { unique } from './unique';
+import { unique } from './unique.js';
 
 describe('unique filter', () => {
 	test('removes duplicates from array of primitives', () => {

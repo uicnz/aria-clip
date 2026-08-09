@@ -1,17 +1,17 @@
-import browser from '../utils/browser-polyfill';
-import { AnyHighlightData, StoredData, DomainSettings, buildExportedPage, normalizeUrl } from '../utils/highlighter';
-import { translatePage, getMessage, setupLanguageAndDirection } from '../utils/i18n';
-import { addBrowserClassToHtml, detectBrowser } from '../utils/browser-detection';
+import browser from '../utils/browser-polyfill.js';
+import { AnyHighlightData, StoredData, DomainSettings, buildExportedPage, normalizeUrl } from '../utils/highlighter.js';
+import { translatePage, getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
+import { addBrowserClassToHtml, detectBrowser } from '../utils/browser-detection.js';
 import DOMPurify from 'dompurify';
-import Defuddle from 'defuddle';
+import { Defuddle } from '../utils/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { getFontCss } from '../utils/font-utils';
-import { ReaderSettings } from '../types/types';
+import { getFontCss } from '../utils/font-utils.js';
+import { ReaderSettings } from '../types/types.js';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import relativeTime from 'dayjs/plugin/relativeTime.js';
 import { createIcons } from 'lucide';
-import { icons } from '../icons/icons';
-import { initializeMenu } from '../managers/menu';
+import { icons } from '../icons/icons.js';
+import { initializeMenu } from '../managers/menu.js';
 
 dayjs.extend(relativeTime);
 

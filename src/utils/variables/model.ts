@@ -1,5 +1,5 @@
-import { generalSettings } from '../storage-utils';
-import { MODEL_VARIABLE_NAMES } from '../renderer';
+import { generalSettings } from '../storage-utils.js';
+import { MODEL_VARIABLE_NAMES } from '../renderer.js';
 
 // Returns true if the variable string (e.g. `model` or `modelId|lower`)
 // is an interpreter model variable

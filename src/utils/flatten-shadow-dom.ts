@@ -1,4 +1,4 @@
-import browser from './browser-polyfill';
+import browser from './browser-polyfill.js';
 
 export function flattenShadowDom(doc: Document): Promise<void> {
 	let found = false;

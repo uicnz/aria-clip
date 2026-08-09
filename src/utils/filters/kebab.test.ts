@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { kebab } from './kebab';
+import { kebab } from './kebab.js';
 
 describe('kebab filter', () => {
 	test('converts Title Case to kebab-case', () => {

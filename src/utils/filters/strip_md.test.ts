@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { strip_md } from './strip_md';
+import { strip_md } from './strip_md.js';
 
 describe('strip_md filter', () => {
 	test('removes bold formatting', () => {

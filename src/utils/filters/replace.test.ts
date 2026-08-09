@@ -1,8 +1,8 @@
 import { describe, test, expect } from 'vitest';
-import { replace, validateReplaceParams } from './replace';
-import { render } from '../renderer';
-import { applyFilters } from '../filters';
-import { parse, validateFilters } from '../parser';
+import { replace, validateReplaceParams } from './replace.js';
+import { render } from '../renderer.js';
+import { applyFilters } from '../filters.js';
+import { parse, validateFilters } from '../parser.js';
 
 describe('replace filter', () => {
 	test('simple replacement', () => {

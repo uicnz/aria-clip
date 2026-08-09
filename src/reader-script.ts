@@ -1,5 +1,6 @@
-import { Reader } from './utils/reader';
-import browser from './utils/browser-polyfill';
+import { Reader } from './utils/reader.js';
+import browser from './utils/browser-polyfill.js';
+import { addRuntimeMessageListener } from './utils/runtime-messaging.js';
 
 // Initialize reader mode
 (function() {
@@ -12,7 +13,7 @@ import browser from './utils/browser-polyfill';
 	(window as any).ariaReaderInitialized = true;
 
 	// Listen for messages from the content script
-	browser.runtime.onMessage.addListener((request: any, sender: browser.Runtime.MessageSender, sendResponse: (response?: any) => void) => {
+	addRuntimeMessageListener((request: any, _sender, sendResponse) => {
 		if (request.action === "toggleReaderMode") {
 			// When deactivating, respond before restore triggers a page reload
 			if (document.documentElement.classList.contains('aria-reader-active')) {
@@ -33,5 +34,6 @@ import browser from './utils/browser-polyfill';
 			})();
 			return true;
 		}
+		return undefined;
 	});
-})(); 
+})();

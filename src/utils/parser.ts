@@ -7,8 +7,8 @@
 // - Logic tags: if/elseif/else/endif, for/endfor, set
 // - Expressions with operators and literals
 
-import { Token, TokenType, tokenize, TokenizerResult } from './tokenizer';
-import { filterMetadata, validFilterNames } from './filters';
+import { Token, TokenType, tokenize } from './tokenizer.js';
+import { filterMetadata, validFilterNames } from './filters.js';
 
 // ============================================================================
 // AST Node Types
@@ -1234,6 +1234,7 @@ function parsePrimaryExpression(state: ParserState): Expression | null {
 		if (check(state, 'colon')) {
 			// Look ahead to see if this is a special prefix
 			const colonToken = peek(state);
+			void colonToken;
 			advance(state); // consume ':'
 
 			// Build the full identifier including the prefix

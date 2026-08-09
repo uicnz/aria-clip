@@ -2,13 +2,13 @@
 // This module provides the main entry point for template compilation,
 // integrating the AST-based renderer with the variable processors.
 
-import { render, RenderContext, AsyncResolver } from './renderer';
-import { applyFilterDirect } from './filters';
-import { processSimpleVariable } from './variables/simple';
-import { processSelector, resolveSelector } from './variables/selector';
-import { processSchema } from './variables/schema';
-import { processPrompt } from './variables/prompt';
-import { isModelVariable, processModelVariable } from './variables/model';
+import { render, RenderContext, AsyncResolver } from './renderer.js';
+import { applyFilterDirect } from './filters.js';
+import { processSimpleVariable } from './variables/simple.js';
+import { processSelector, resolveSelector } from './variables/selector.js';
+import { processSchema } from './variables/schema.js';
+import { processPrompt } from './variables/prompt.js';
+import { isModelVariable, processModelVariable } from './variables/model.js';
 
 /**
  * A function that processes a selector match string and returns the result.

@@ -1,7 +1,6 @@
-import { updateUrl } from '../utils/routing';
-import { generalSettings } from '../utils/storage-utils';
-import { updatePromptContextVisibility } from './interpreter-settings';
-import { initializePropertyTypesManager } from './property-types-manager';
+import { updateUrl } from '../utils/routing.js';
+import { updatePromptContextVisibility } from './interpreter-settings.js';
+import { initializePropertyTypesManager } from './property-types-manager.js';
 
 export type SettingsSection = 'general' | 'properties' | 'highlighter' | 'interpreter' | 'reader' | 'templates';
 
@@ -53,6 +52,8 @@ function updateTemplateListActiveState(templateId: string): void {
 		}
 	});
 }
+void updateSidebarActiveState;
+void updateTemplateListActiveState;
 
 export function initializeSidebar(): void {
 	const sidebar = document.getElementById('sidebar');

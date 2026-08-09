@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
-import { callout } from './callout';
-import { render } from '../renderer';
-import { applyFilters } from '../filters';
+import { callout } from './callout.js';
+import { render } from '../renderer.js';
+import { applyFilters } from '../filters.js';
 
 describe('callout filter', () => {
 	test('creates default info callout', () => {

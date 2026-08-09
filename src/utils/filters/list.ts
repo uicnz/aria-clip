@@ -1,4 +1,4 @@
-import type { ParamValidationResult } from '../filters';
+import type { ParamValidationResult } from '../filters.js';
 
 type ListType = 'bullet' | 'numbered' | 'task' | 'numbered-task';
 

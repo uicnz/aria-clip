@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { title } from './title';
+import { title } from './title.js';
 
 describe('title filter', () => {
 	test('converts text to Title Case', () => {
