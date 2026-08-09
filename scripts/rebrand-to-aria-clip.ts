@@ -340,6 +340,17 @@ function migratePackageToBun(): void {
 		xcodeProjectPath,
 		replaceAllLiteral(xcodeProject, 'MACOSX_DEPLOYMENT_TARGET = 11.0;', 'MACOSX_DEPLOYMENT_TARGET = 12.0;'),
 	);
+	const safariHandlerPath = join(ROOT, 'xcode', 'Aria Clip', 'Shared (Extension)', 'SafariWebExtensionHandler.swift');
+	const safariHandler = readFileSync(safariHandlerPath, 'utf8');
+	if (!safariHandler.includes('_ = profile')) {
+		writeFileSync(
+			safariHandlerPath,
+			safariHandler.replace(
+				'            profile = request?.userInfo?["profile"] as? UUID\n        }\n\n        let message: Any?',
+				'            profile = request?.userInfo?["profile"] as? UUID\n        }\n        _ = profile\n\n        let message: Any?',
+			),
+		);
+	}
 	const youtubeExpectedPath = join(ROOT, 'src', 'utils', 'fixtures', 'expected', 'youtube.md');
 	const youtubeExpected = readFileSync(youtubeExpectedPath, 'utf8');
 	writeFileSync(
