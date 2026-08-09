@@ -32,6 +32,8 @@ const TOOL_SLUG = 'clip';
 const previousBrand = ['Obsi', 'dian'].join('');
 const previousBrandLower = previousBrand.toLowerCase();
 const previousBrandUpper = previousBrand.toUpperCase();
+const previousBrandArabic = ['أوبس', 'يديان'].join('');
+const previousBrandPersian = ['ابسی', 'دین'].join('');
 const previousTool = ['Clip', 'per'].join('');
 const previousToolLower = previousTool.toLowerCase();
 const previousToolUpper = previousTool.toUpperCase();
@@ -128,6 +130,8 @@ const replacements: Replacement[] = [
 	literal(`Web-${previousTool}`, TOOL_NAME),
 	literal(`web ${previousToolLower}`, TOOL_SLUG),
 	literal(`web-${previousToolLower}`, TOOL_SLUG),
+	literal(previousBrandArabic, BRAND_NAME),
+	literal(previousBrandPersian, BRAND_NAME),
 	literal(previousBrandUpper, BRAND_NAME.toUpperCase()),
 	literal(previousBrand, BRAND_NAME),
 	literal(previousBrandLower, BRAND_SLUG),
@@ -224,6 +228,49 @@ function renamePaths(): number {
 		renameSync(oldPath, newPath);
 		changed += 1;
 	}
+	return changed;
+}
+
+function normalizeLocalizedProductNames(): number {
+	const localesRoot = join(ROOT, 'src', '_locales');
+	const localizedOpenCommands: Record<string, string> = {
+		ar: `فتح ${PRODUCT_NAME}`,
+		fa: `${PRODUCT_NAME} را باز کن`,
+		pl: `Otwórz ${PRODUCT_NAME}`,
+		tr: `${PRODUCT_NAME}'i aç`,
+		zh_CN: `打开 ${PRODUCT_NAME}`,
+	};
+	let changed = 0;
+
+	for (const locale of readdirSync(localesRoot, { withFileTypes: true })) {
+		if (!locale.isDirectory()) continue;
+		const path = join(localesRoot, locale.name, 'messages.json');
+		const messages = JSON.parse(readFileSync(path, 'utf8')) as Record<
+			string,
+			{ message?: string }
+		>;
+		let localeChanged = false;
+		const extensionName = messages.extensionName;
+		if (!extensionName) throw new Error(`Missing extensionName in locale ${locale.name}`);
+		if (extensionName.message !== PRODUCT_NAME) {
+			extensionName.message = PRODUCT_NAME;
+			localeChanged = true;
+		}
+		const localizedOpenCommand = localizedOpenCommands[locale.name];
+		const openCommand = messages.commandOpenClip;
+		if (localizedOpenCommand && !openCommand) {
+			throw new Error(`Missing commandOpenClip in locale ${locale.name}`);
+		}
+		if (localizedOpenCommand && openCommand?.message !== localizedOpenCommand) {
+			openCommand.message = localizedOpenCommand;
+			localeChanged = true;
+		}
+		if (localeChanged) {
+			writeFileSync(path, `${JSON.stringify(messages, null, '\t')}\n`);
+			changed += 1;
+		}
+	}
+
 	return changed;
 }
 
@@ -480,7 +527,14 @@ function installWithBun(): void {
 
 function audit(): void {
 	const stale: string[] = [];
-	const forbidden = [previousBrand, previousBrandLower, previousTool, previousToolLower];
+	const forbidden = [
+		previousBrand,
+		previousBrandLower,
+		previousBrandArabic,
+		previousBrandPersian,
+		previousTool,
+		previousToolLower,
+	];
 	for (const path of listPaths(ROOT)) {
 		const relativePath = relative(ROOT, path);
 		if (forbidden.some((term) => relativePath.includes(term))) stale.push(`path: ${relativePath}`);
@@ -502,6 +556,7 @@ function main(): void {
 	removeGeneratedOutput();
 	const rewrittenFiles = rewriteTextFiles();
 	const renamedPaths = renamePaths();
+	const normalizedProductNames = normalizeLocalizedProductNames();
 	migratePackageToBun();
 	refreshBrandArtwork();
 	installWithBun();
@@ -511,7 +566,7 @@ function main(): void {
 		throw new Error('assets/icon.svg changed during migration; refusing to continue.');
 	}
 	console.log(
-		`Rebranded ${rewrittenFiles} text files and renamed ${renamedPaths} paths.`,
+		`Rebranded ${rewrittenFiles} text files, renamed ${renamedPaths} paths, and normalized product names in ${normalizedProductNames} locale files.`,
 	);
 	console.log(`Preserved assets/icon.svg (${iconDigestAfter}).`);
 }
