@@ -1,7 +1,7 @@
 import browser from './browser-polyfill';
 import { throttle } from './throttle';
 
-const IFRAME_ID = 'obsidian-clipper-iframe';
+const IFRAME_ID = 'aria-clip-iframe';
 const MIN_SIZE = 200;
 
 let sidebarWidthRaf: number | null = null;
@@ -10,9 +10,9 @@ export function updateSidebarWidth(doc: Document, container: HTMLElement | null)
 	if (sidebarWidthRaf) cancelAnimationFrame(sidebarWidthRaf);
 	sidebarWidthRaf = requestAnimationFrame(() => {
 		if (container && doc.contains(container)) {
-			doc.documentElement.style.setProperty('--clipper-sidebar-width', `${container.offsetWidth + 24}px`);
+			doc.documentElement.style.setProperty('--clip-sidebar-width', `${container.offsetWidth + 24}px`);
 		} else {
-			doc.documentElement.style.removeProperty('--clipper-sidebar-width');
+			doc.documentElement.style.removeProperty('--clip-sidebar-width');
 		}
 	});
 }
@@ -24,7 +24,7 @@ interface ResizeCallbacks {
 
 export function addResizeHandle(doc: Document, container: HTMLElement, direction: string, callbacks?: ResizeCallbacks): void {
 	const handle = doc.createElement('div');
-	handle.className = `obsidian-clipper-resize-handle obsidian-clipper-resize-handle-${direction}`;
+	handle.className = `aria-clip-resize-handle aria-clip-resize-handle-${direction}`;
 	container.appendChild(handle);
 
 	let startX: number, startY: number, startWidth: number, startHeight: number, startTop: number;
@@ -72,8 +72,8 @@ export function addResizeHandle(doc: Document, container: HTMLElement, direction
 			doc.body.style.cursor = '';
 
 			browser.storage.local.set({
-				clipperIframeWidth: container.offsetWidth,
-				clipperIframeHeight: container.offsetHeight,
+				clipIframeWidth: container.offsetWidth,
+				clipIframeHeight: container.offsetHeight,
 			});
 
 			doc.onmousemove = null;

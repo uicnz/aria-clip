@@ -1,10 +1,10 @@
 {
 	"manifest_version": 3,
 	"default_locale": "en",
-	"name": "Obsidian Web Clipper",
-	"homepage_url": "https://obsidian.md/",
+	"name": "Aria Clip",
+	"homepage_url": "https://aria.bot/",
 	"version": "1.7.1",
-	"description": "Save and highlight web pages in a private and durable format that you can access offline. The official extension for Obsidian.",
+	"description": "Save and highlight web pages in a private and durable format that you can access offline. The official extension for Aria.",
 	"permissions": [
 		"activeTab",
 		"clipboardWrite",
@@ -60,7 +60,7 @@
 				"default": "Ctrl+Shift+O",
 				"mac": "Command+Shift+O"
 			},
-			"description": "__MSG_commandOpenClipper__"
+			"description": "__MSG_commandOpenClip__"
 		},
 		"quick_clip": {
 			"suggested_key": {

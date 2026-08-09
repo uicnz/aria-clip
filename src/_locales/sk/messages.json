@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Pridať poskytovateľa"
 	},
-	"addToObsidian": {
-		"message": "Pridať do Obsidianu"
+	"addToAria": {
+		"message": "Pridať do Ariau"
 	},
 	"addVaultPlaceholder": {
 		"message": "Stlačte Enter na pridanie vaultu"
@@ -45,7 +45,7 @@
 		"message": "Chýba API kľúč"
 	},
 	"apiKeysWarning": {
-		"message": "Používaním externého poskytovateľa súhlasíte s jeho podmienkami a zásadami ochrany súkromia. Požiadavky tlmočníka sa odosielajú priamo poskytovateľovi, ktorého si vyberiete. Obsidian nezhromažďuje ani neukladá žiadne údaje o vašich požiadavkách."
+		"message": "Používaním externého poskytovateľa súhlasíte s jeho podmienkami a zásadami ochrany súkromia. Požiadavky tlmočníka sa odosielajú priamo poskytovateľovi, ktorého si vyberiete. Aria nezhromažďuje ani neukladá žiadne údaje o vašich požiadavkách."
 	},
 	"appendToDaily": {
 		"message": "Pridať do dennej poznámky, na koniec"
@@ -96,7 +96,7 @@
 		"message": "Správanie výstrižku"
 	},
 	"clipBehaviorDescription": {
-		"message": "Vyberte, ako sa zvýraznený obsah ukladá do Obsidianu. Definuje premennú $strong_start${{content}}$strong_end$.",
+		"message": "Vyberte, ako sa zvýraznený obsah ukladá do Ariau. Definuje premennú $strong_start${{content}}$strong_end$.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian nemá prístup k vašej schránke. Skúste pokyny na riešenie problémov tu: $1",
+		"message": "Aria nemá prístup k vašej schránke. Skúste pokyny na riešenie problémov tu: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Zavrieť"
 	},
-	"commandOpenClipper": {
-		"message": "Otvoriť Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "Otvoriť Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Rýchly výstrižok"
@@ -196,13 +196,13 @@
 		"message": "Duplikovať"
 	},
 	"earlyAccessDescription": {
-		"message": "Používajte funkcie, ktoré vyžadujú najnovšiu $link_start$verziu s predbežným prístupom$link_end$ Obsidianu. Aktuálne vyžaduje Obsidian 1.7.2 alebo novší.",
+		"message": "Používajte funkcie, ktoré vyžadujú najnovšiu $link_start$verziu s predbežným prístupom$link_end$ Ariau. Aktuálne vyžaduje Aria 1.7.2 alebo novší.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Vložené"
 	},
 	"enableHighlighterDescription": {
-		"message": "Zvýrazňujte obsah na webových stránkach, ktorý môžete uložiť do Obsidianu."
+		"message": "Zvýrazňujte obsah na webových stránkach, ktorý môžete uložiť do Ariau."
 	},
 	"enableInterpreter": {
 		"message": "Zapnúť tlmočníka"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Exportovať vlastnosti"
 	},
 	"exportPropertiesDescription": {
-		"message": "Uložiť vlastnosti Web Clippera do súboru $strong_start$types.json$strong_end$, ktorý možno importovať do vášho Obsidian vaultu alebo do Web Clippera na iných zariadeniach.",
+		"message": "Uložiť vlastnosti Clipa do súboru $strong_start$types.json$strong_end$, ktorý možno importovať do vášho Aria vaultu alebo do Clipa na iných zariadeniach.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Ukladajte obsah z webu v súkromnom a trvácnom formáte, ku ktorému máte prístup aj offline. Oficiálne rozšírenie prehliadača pre Obsidian."
+		"message": "Ukladajte obsah z webu v súkromnom a trvácnom formáte, ku ktorému máte prístup aj offline. Oficiálne rozšírenie prehliadača pre Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Nepodarilo sa skopírovať text"
@@ -337,7 +337,7 @@
 		"message": "Spätná väzba"
 	},
 	"feedbackDescription": {
-		"message": "Ako môžeme zlepšiť Web Clipper? Navštívte našu stránku pomoci, kde môžete nahlásiť chyby, navrhnúť funkcie a získať pomoc s bežnými problémami."
+		"message": "Ako môžeme zlepšiť Clip? Navštívte našu stránku pomoci, kde môžete nahlásiť chyby, navrhnúť funkcie a získať pomoc s bežnými problémami."
 	},
 	"feedbackTitle": {
 		"message": "Ďakujeme za vašu spätnú väzbu"
@@ -358,7 +358,7 @@
 		"message": "Pomoc"
 	},
 	"helpDescription": {
-		"message": "Zistite, ako používať Web Clipper, a získajte pomoc pri riešení problémov."
+		"message": "Zistite, ako používať Clip, a získajte pomoc pri riešení problémov."
 	},
 	"highlightInline": {
 		"message": "Zvýrazniť obsah stránky"
@@ -423,7 +423,7 @@
 		"message": "Importovať vlastnosti"
 	},
 	"importPropertiesDescription": {
-		"message": "Ak chcete importovať vlastnosti z Obsidianu, nájdite súbor $strong_1_start$types.json$strong_1_end$ v priečinku $strong_2_start$.obsidian$strong_2_end$ vo vašom vaulte. Upozorňujeme, že tento priečinok je vo väčšine operačných systémov predvolene skrytý.",
+		"message": "Ak chcete importovať vlastnosti z Ariau, nájdite súbor $strong_1_start$types.json$strong_1_end$ v priečinku $strong_2_start$.aria$strong_2_end$ vo vašom vaulte. Upozorňujeme, že tento priečinok je vo väčšine operačných systémov predvolene skrytý.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Režim kompatibility"
 	},
 	"legacyModeDescription": {
-		"message": "Používa metódu orezávania cez URI kompatibilnú s Obsidianom 1.6.7 alebo starším. Upozorňujeme, že dĺžka obsahu, ktorý môžete uložiť, je obmedzená vaším prehliadačom a OS. Niektoré stránky môžu zlyhať bez akýchkoľvek chýb."
+		"message": "Používa metódu orezávania cez URI kompatibilnú s Ariaom 1.6.7 alebo starším. Upozorňujeme, že dĺžka obsahu, ktorý môžete uložiť, je obmedzená vaším prehliadačom a OS. Niektoré stránky môžu zlyhať bez akýchkoľvek chýb."
 	},
 	"loadArticle": {
 		"message": "Čítať článok"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "Otvoriť"
 	},
 	"openBehaviorDescription": {
-		"message": "Vyberte, ako sa má Web Clipper predvolene otvárať."
+		"message": "Vyberte, ako sa má Clip predvolene otvárať."
 	},
 	"openBehaviorTitle": {
 		"message": "Správanie pri otvorení"
@@ -714,7 +714,7 @@
 		"message": "Poskytovatelia"
 	},
 	"rateExtensionDescription": {
-		"message": "Páči sa vám Web Clipper? Pomôžte nám tým, že mu dáte hodnotenie."
+		"message": "Páči sa vám Clip? Pomôžte nám tým, že mu dáte hodnotenie."
 	},
 	"read": {
 		"message": "Prečítané"
@@ -966,7 +966,7 @@
 		"message": "Ak chcete zmeniť priradenie klávesov, prejdite na $1, kliknite na ikonu ozubeného kolieska a vyberte „Spravovať klávesové skratky rozšírení“."
 	},
 	"shortcutInstructionsIntro": {
-		"message": "Klávesové skratky vám poskytujú rýchly prístup k funkciám clippera."
+		"message": "Klávesové skratky vám poskytujú rýchly prístup k funkciám clipa."
 	},
 	"shortcutInstructionsSafari": {
 		"message": "Klávesové skratky nie je možné v Safari prispôsobiť."
@@ -978,7 +978,7 @@
 		"message": "Zobraziť tlačidlo akcií"
 	},
 	"showActionsDescription": {
-		"message": "Umožňuje skontrolovať premenné stránky z ponuky clippera. Užitočné na zobrazenie premenných, ktoré sú k dispozícii na použitie v šablónach."
+		"message": "Umožňuje skontrolovať premenné stránky z ponuky clipa. Užitočné na zobrazenie premenných, ktoré sú k dispozícii na použitie v šablónach."
 	},
 	"showPageVariables": {
 		"message": "Zobraziť premenné stránky"
@@ -987,7 +987,7 @@
 		"message": "Uložiť výstrižok bez jeho otvorenia"
 	},
 	"silentOpenDescription": {
-		"message": "Výstrižky sa uložia, ale neotvoria sa v novej karte. Obsidian sa aj tak presunie do popredia."
+		"message": "Výstrižky sa uložia, ale neotvoria sa v novej karte. Aria sa aj tak presunie do popredia."
 	},
 	"sort": {
 		"message": "Zoradiť"
@@ -1082,7 +1082,7 @@
 		"message": "Vaulty"
 	},
 	"vaultsDescription": {
-		"message": "Predvolene sa výstrižky ukladajú do aktuálne otvoreného vaultu. Ak chcete mať možnosť ukladať do rôznych vaultov, môžete ich tu pridať. Názvy vaultov sa musia presne zhodovať s názvom Obsidian vaultu. Stlačte $strong_start$Enter$strong_end$ na pridanie vaultu.",
+		"message": "Predvolene sa výstrižky ukladajú do aktuálne otvoreného vaultu. Ak chcete mať možnosť ukladať do rôznych vaultov, môžete ich tu pridať. Názvy vaultov sa musia presne zhodovať s názvom Aria vaultu. Stlačte $strong_start$Enter$strong_end$ na pridanie vaultu.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

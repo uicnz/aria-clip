@@ -2,7 +2,7 @@
 // banner in scripts/build-cli.mjs. They must run before any bundled module code.
 import { parseHTML } from 'linkedom';
 import { clip, matchTemplate, DocumentParser } from './api';
-import { openInObsidian } from './utils/cli-utils';
+import { openInAria } from './utils/cli-utils';
 import { Template } from './types/types';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -25,17 +25,17 @@ interface CliArgs {
 
 function printUsage(): void {
 	const usage = `
-Usage: obsidian-clipper <url> [options]
+Usage: aria-clip <url> [options]
 
 Options:
   -t, --template <path>        Path to template JSON file or directory (required)
                                If a directory, auto-matches template by URL triggers
   -o, --output <path>          Output .md file path (default: stdout)
       --html <path>            Read HTML from file instead of fetching URL (use - for stdin)
-      --vault <name>           Obsidian vault name
-      --open                   Send to Obsidian instead of writing file
-      --uri                    Use URI scheme instead of Obsidian CLI
-      --silent                 Suppress Obsidian focus (URI mode)
+      --vault <name>           Aria vault name
+      --open                   Send to Aria instead of writing file
+      --uri                    Use URI scheme instead of Aria CLI
+      --silent                 Suppress Aria focus (URI mode)
       --property-types <path>  JSON mapping property names to types
   -h, --help                   Show this help message
 `.trim();
@@ -240,7 +240,7 @@ async function main(): Promise<void> {
 	// Output
 	if (args.open) {
 		const vault = args.vault || template.vault || '';
-		const obsResult = await openInObsidian(
+		const obsResult = await openInAria(
 			result.fullContent,
 			result.noteName,
 			template.path || '',

@@ -15,7 +15,7 @@ import { parseForClip } from './utils/clip-utils';
 
 declare global {
 	interface Window {
-		obsidianClipperGeneration?: number;
+		ariaClipGeneration?: number;
 	}
 }
 
@@ -25,14 +25,14 @@ declare global {
 	// over their own generation value and bail out when they see a newer one,
 	// so a zombie content script (runtime invalidated after extension update)
 	// will silently yield to the freshly-injected instance.
-	window.obsidianClipperGeneration = (window.obsidianClipperGeneration ?? 0) + 1;
-	const myGeneration = window.obsidianClipperGeneration;
+	window.ariaClipGeneration = (window.ariaClipGeneration ?? 0) + 1;
+	const myGeneration = window.ariaClipGeneration;
 
-	debugLog('Clipper', 'Initializing content script, generation', myGeneration);
+	debugLog('Clip', 'Initializing content script, generation', myGeneration);
 
 	let isHighlighterMode = false;
-	const iframeId = 'obsidian-clipper-iframe';
-	const containerId = 'obsidian-clipper-container';
+	const iframeId = 'aria-clip-iframe';
+	const containerId = 'aria-clip-container';
 
 	function removeContainer(container: HTMLElement) {
 		container.classList.add('is-closing');
@@ -57,12 +57,12 @@ declare global {
 		container.id = containerId;
 		container.classList.add('is-open');
 
-		const { clipperIframeWidth, clipperIframeHeight } = await browser.storage.local.get(['clipperIframeWidth', 'clipperIframeHeight']);
-		if (clipperIframeWidth) {
-			container.style.width = `${clipperIframeWidth}px`;
+		const { clipIframeWidth, clipIframeHeight } = await browser.storage.local.get(['clipIframeWidth', 'clipIframeHeight']);
+		if (clipIframeWidth) {
+			container.style.width = `${clipIframeWidth}px`;
 		}
-		if (clipperIframeHeight) {
-			container.style.height = `${clipperIframeHeight}px`;
+		if (clipIframeHeight) {
+			container.style.height = `${clipIframeHeight}px`;
 		}
 
 		const iframe = document.createElement('iframe');
@@ -111,7 +111,7 @@ declare global {
 	browser.runtime.onMessage.addListener((request: any, sender, sendResponse) => {
 		// If a newer generation of this content script has been injected,
 		// yield to it rather than responding from a potentially stale context.
-		if (window.obsidianClipperGeneration !== myGeneration) {
+		if (window.ariaClipGeneration !== myGeneration) {
 			return;
 		}
 
@@ -291,7 +291,7 @@ declare global {
 				highlighter.updatePageDomainSettings({ site: defuddled.site, favicon: defuddled.favicon });
 				sendResponse(response);
 			}).catch((error: unknown) => {
-				console.error('[Obsidian Clipper] getPageContent error:', error);
+				console.error('[Aria Clip] getPageContent error:', error);
 				sendResponse({ success: false, error: error instanceof Error ? error.message : String(error) });
 			});
 			return true;
@@ -390,7 +390,7 @@ declare global {
 				});
 			return true;
 		} else if (request.action === "getReaderModeState") {
-			sendResponse({ isActive: document.documentElement.classList.contains('obsidian-reader-active') });
+			sendResponse({ isActive: document.documentElement.classList.contains('aria-reader-active') });
 			return true;
 		}
 		return true;
@@ -444,7 +444,7 @@ declare global {
 	// all state operations to this single module instance. Without this,
 	// both bundles own a copy of highlighter.ts with independent mutable
 	// state — the bridge ensures one source of truth per tab.
-	window.__obsidianHighlighter = {
+	window.__ariaHighlighter = {
 		toggleHighlighterMenu: highlighter.toggleHighlighterMenu,
 		handleTextSelection: highlighter.handleTextSelection,
 		highlightElement: highlighter.highlightElement,
@@ -478,7 +478,7 @@ declare global {
 	window.addEventListener('beforeunload', handlePageUnload);
 
 	// Listen for custom events from the reader script
-	document.addEventListener('obsidian-reader-init', async () => {
+	document.addEventListener('aria-reader-init', async () => {
 		// Find the highlighter button
 		const button = document.querySelector('[data-action="toggle-highlighter"]');
 		if (button) {

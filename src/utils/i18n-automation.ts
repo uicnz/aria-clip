@@ -32,10 +32,10 @@ export default class I18nAutomation {
 	private initializeChatHistory(targetLanguage: string) {
 		this.chatHistories[targetLanguage] = [{
 			role: "system",
-			content: `You are a professional translator for the Obsidian Web Clipper browser extension.
+			content: `You are a professional translator for the Aria Clip browser extension.
 
 About the extension:
-- It's a browser extension that helps users save web content to their Obsidian vault
+- It's a browser extension that helps users save web content to their Aria vault
 - Users can clip entire articles, selected text, or highlights
 - It includes features for customizing templates, managing settings, and organizing clips
 - The interface needs to be clear and concise

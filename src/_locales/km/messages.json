@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "បន្ថែមអ្នកផ្តល់សេវា"
 	},
-	"addToObsidian": {
-		"message": "បន្ថែមទៅ Obsidian"
+	"addToAria": {
+		"message": "បន្ថែមទៅ Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "ចុច Enter ដើម្បីបន្ថែម Vault"
@@ -45,7 +45,7 @@
 		"message": "គ្មានសោ API"
 	},
 	"apiKeysWarning": {
-		"message": "ដោយប្រើអ្នកផ្តល់សេវាខាងក្រៅ អ្នកយល់ព្រមតាមលក្ខខណ្ឌ និងគោលការណ៍ឯកជនភាពរបស់ពួកគេ។ សំណើ Interpreter ត្រូវបានផ្ញើដោយផ្ទាល់ទៅកាន់អ្នកផ្តល់សេវាដែលអ្នកជ្រើសរើស។ Obsidian មិនប្រមូល ឬរក្សាទុកទិន្នន័យណាមួយអំពីសំណើរបស់អ្នកទេ។"
+		"message": "ដោយប្រើអ្នកផ្តល់សេវាខាងក្រៅ អ្នកយល់ព្រមតាមលក្ខខណ្ឌ និងគោលការណ៍ឯកជនភាពរបស់ពួកគេ។ សំណើ Interpreter ត្រូវបានផ្ញើដោយផ្ទាល់ទៅកាន់អ្នកផ្តល់សេវាដែលអ្នកជ្រើសរើស។ Aria មិនប្រមូល ឬរក្សាទុកទិន្នន័យណាមួយអំពីសំណើរបស់អ្នកទេ។"
 	},
 	"appendToDaily": {
 		"message": "បន្ថែមទៅកំណត់ត្រាប្រចាំថ្ងៃ នៅខាងក្រោម"
@@ -96,7 +96,7 @@
 		"message": "ឥរិយាបថការកាត់យក"
 	},
 	"clipBehaviorDescription": {
-		"message": "ជ្រើសរើសរបៀបដែលមាតិកាដែលបានរំលេចត្រូវបានរក្សាទុកទៅ Obsidian។ កំណត់អថេរ $strong_start${{content}}$strong_end$។",
+		"message": "ជ្រើសរើសរបៀបដែលមាតិកាដែលបានរំលេចត្រូវបានរក្សាទុកទៅ Aria។ កំណត់អថេរ $strong_start${{content}}$strong_end$។",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian មិនអាចចូលប្រើក្តារតម្បៀតខ្ទាស់របស់អ្នកបានទេ។ សាកល្បងការណែនាំដោះស្រាយបញ្ហានៅទីនេះ៖ $1",
+		"message": "Aria មិនអាចចូលប្រើក្តារតម្បៀតខ្ទាស់របស់អ្នកបានទេ។ សាកល្បងការណែនាំដោះស្រាយបញ្ហានៅទីនេះ៖ $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "បិទ"
 	},
-	"commandOpenClipper": {
-		"message": "បើក Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "បើក Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "កាត់យករហ័ស"
@@ -196,13 +196,13 @@
 		"message": "ចម្លងទ្វេ"
 	},
 	"earlyAccessDescription": {
-		"message": "ប្រើមុខងារដែលត្រូវការកំណែ $link_start$early access version$link_end$ ចុងក្រោយបំផុតរបស់ Obsidian។ បច្ចុប្បន្នត្រូវការ Obsidian 1.7.2 ឬថ្មីជាងនេះ។",
+		"message": "ប្រើមុខងារដែលត្រូវការកំណែ $link_start$early access version$link_end$ ចុងក្រោយបំផុតរបស់ Aria។ បច្ចុប្បន្នត្រូវការ Aria 1.7.2 ឬថ្មីជាងនេះ។",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "បង្កប់"
 	},
 	"enableHighlighterDescription": {
-		"message": "រំលេចមាតិកានៅលើទំព័របណ្ដាញ ដែលអ្នកអាចរក្សាទុកទៅ Obsidian។"
+		"message": "រំលេចមាតិកានៅលើទំព័របណ្ដាញ ដែលអ្នកអាចរក្សាទុកទៅ Aria។"
 	},
 	"enableInterpreter": {
 		"message": "បើក Interpreter"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "នាំចេញលក្ខណៈសម្បត្តិ"
 	},
 	"exportPropertiesDescription": {
-		"message": "រក្សាទុកលក្ខណៈសម្បត្តិ Web Clipper ទៅឯកសារ $strong_start$types.json$strong_end$ ដែលអាចនាំចូលទៅក្នុង vault របស់ Obsidian របស់អ្នក ឬទៅក្នុង Web Clipper លើឧបករណ៍ផ្សេងៗ។",
+		"message": "រក្សាទុកលក្ខណៈសម្បត្តិ Clip ទៅឯកសារ $strong_start$types.json$strong_end$ ដែលអាចនាំចូលទៅក្នុង vault របស់ Aria របស់អ្នក ឬទៅក្នុង Clip លើឧបករណ៍ផ្សេងៗ។",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "រក្សាទុកមាតិកាពីបណ្ដាញក្នុងទម្រង់ឯកជន និងប្រើបានយូរ ដែលអ្នកអាចចូលប្រើក្រៅបណ្ដាញបាន។ ផ្នែកបន្ថែមកម្មវិធីរុករកផ្លូវការរបស់ Obsidian។"
+		"message": "រក្សាទុកមាតិកាពីបណ្ដាញក្នុងទម្រង់ឯកជន និងប្រើបានយូរ ដែលអ្នកអាចចូលប្រើក្រៅបណ្ដាញបាន។ ផ្នែកបន្ថែមកម្មវិធីរុករកផ្លូវការរបស់ Aria។"
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "បានបរាជ័យក្នុងការចម្លងអត្ថបទ"
@@ -337,7 +337,7 @@
 		"message": "មតិយោបល់"
 	},
 	"feedbackDescription": {
-		"message": "តើយើងអាចកែលម្អ Web Clipper ដោយរបៀបណា? សូមចូលទៅទំព័រជំនួយរបស់យើង ដែលអ្នកអាចរាយការណ៍កំហុស ស្នើមុខងារ និងទទួលជំនួយសម្រាប់បញ្ហាទូទៅ។"
+		"message": "តើយើងអាចកែលម្អ Clip ដោយរបៀបណា? សូមចូលទៅទំព័រជំនួយរបស់យើង ដែលអ្នកអាចរាយការណ៍កំហុស ស្នើមុខងារ និងទទួលជំនួយសម្រាប់បញ្ហាទូទៅ។"
 	},
 	"feedbackTitle": {
 		"message": "អរគុណសម្រាប់មតិយោបល់របស់អ្នក"
@@ -358,7 +358,7 @@
 		"message": "ជំនួយ"
 	},
 	"helpDescription": {
-		"message": "ស្វែងយល់ពីរបៀបប្រើ Web Clipper និងទទួលជំនួយដោះស្រាយបញ្ហា។"
+		"message": "ស្វែងយល់ពីរបៀបប្រើ Clip និងទទួលជំនួយដោះស្រាយបញ្ហា។"
 	},
 	"highlightInline": {
 		"message": "រំលេចមាតិកាទំព័រ"
@@ -423,7 +423,7 @@
 		"message": "នាំចូលលក្ខណៈសម្បត្តិ"
 	},
 	"importPropertiesDescription": {
-		"message": "ដើម្បីនាំចូលលក្ខណៈសម្បត្តិរបស់អ្នកពី Obsidian សូមស្វែងរកឯកសារ $strong_1_start$types.json$strong_1_end$ នៅក្នុងថត $strong_2_start$.obsidian$strong_2_end$ ខាងក្នុង vault របស់អ្នក។ សូមចំណាំថា ថតនេះត្រូវបានលាក់ជាលំនាំដើមលើប្រព័ន្ធប្រតិបត្តិការភាគច្រើន។",
+		"message": "ដើម្បីនាំចូលលក្ខណៈសម្បត្តិរបស់អ្នកពី Aria សូមស្វែងរកឯកសារ $strong_1_start$types.json$strong_1_end$ នៅក្នុងថត $strong_2_start$.aria$strong_2_end$ ខាងក្នុង vault របស់អ្នក។ សូមចំណាំថា ថតនេះត្រូវបានលាក់ជាលំនាំដើមលើប្រព័ន្ធប្រតិបត្តិការភាគច្រើន។",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "របៀបចាស់"
 	},
 	"legacyModeDescription": {
-		"message": "ប្រើវិធីកាត់យកតាម URI ដែលឆបគ្នាជាមួយ Obsidian 1.6.7 ឬចាស់ជាងនេះ។ សូមចំណាំថា ប្រវែងមាតិកាដែលអ្នកអាចកាត់យកបាន ត្រូវបានកំណត់ដោយកម្មវិធីរុករក និងប្រព័ន្ធប្រតិបត្តិការរបស់អ្នក។ ទំព័រខ្លះអាចបរាជ័យដោយគ្មានកំហុសណាមួយ។"
+		"message": "ប្រើវិធីកាត់យកតាម URI ដែលឆបគ្នាជាមួយ Aria 1.6.7 ឬចាស់ជាងនេះ។ សូមចំណាំថា ប្រវែងមាតិកាដែលអ្នកអាចកាត់យកបាន ត្រូវបានកំណត់ដោយកម្មវិធីរុករក និងប្រព័ន្ធប្រតិបត្តិការរបស់អ្នក។ ទំព័រខ្លះអាចបរាជ័យដោយគ្មានកំហុសណាមួយ។"
 	},
 	"loadArticle": {
 		"message": "អានអត្ថបទ"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "បើក"
 	},
 	"openBehaviorDescription": {
-		"message": "ជ្រើសរើសរបៀបដែល Web Clipper បើកជាលំនាំដើម។"
+		"message": "ជ្រើសរើសរបៀបដែល Clip បើកជាលំនាំដើម។"
 	},
 	"openBehaviorTitle": {
 		"message": "ឥរិយាបថការបើក"
@@ -714,7 +714,7 @@
 		"message": "អ្នកផ្តល់សេវា"
 	},
 	"rateExtensionDescription": {
-		"message": "តើអ្នកកំពុងរីករាយជាមួយ Web Clipper មែនទេ? ជួយយើងដោយផ្តល់ការវាយតម្លៃ។"
+		"message": "តើអ្នកកំពុងរីករាយជាមួយ Clip មែនទេ? ជួយយើងដោយផ្តល់ការវាយតម្លៃ។"
 	},
 	"read": {
 		"message": "បានអាន"
@@ -966,7 +966,7 @@
 		"message": "ដើម្បីប្តូរការកំណត់គ្រាប់ចុច សូមទៅកាន់ $1 ចុចរូបតំណាងស្ពឺ ហើយជ្រើស \"គ្រប់គ្រងផ្លូវកាត់ផ្នែកបន្ថែម\"។"
 	},
 	"shortcutInstructionsIntro": {
-		"message": "ផ្លូវកាត់ក្តារចុចផ្តល់ឲ្យអ្នកនូវការចូលប្រើរហ័សទៅមុខងារ clipper។"
+		"message": "ផ្លូវកាត់ក្តារចុចផ្តល់ឲ្យអ្នកនូវការចូលប្រើរហ័សទៅមុខងារ clip។"
 	},
 	"shortcutInstructionsSafari": {
 		"message": "ផ្លូវកាត់ក្តារចុចមិនអាចប្ដូរតាមបំណងបានទេនៅលើ Safari។"
@@ -978,7 +978,7 @@
 		"message": "បង្ហាញប៊ូតុងសកម្មភាព"
 	},
 	"showActionsDescription": {
-		"message": "អនុញ្ញាតឲ្យអ្នកពិនិត្យអថេរទំព័រពីម៉ឺនុយ clipper។ មានប្រយោជន៍សម្រាប់មើលអថេរដែលអាចប្រើក្នុងគំរូបាន។"
+		"message": "អនុញ្ញាតឲ្យអ្នកពិនិត្យអថេរទំព័រពីម៉ឺនុយ clip។ មានប្រយោជន៍សម្រាប់មើលអថេរដែលអាចប្រើក្នុងគំរូបាន។"
 	},
 	"showPageVariables": {
 		"message": "បង្ហាញអថេរទំព័រ"
@@ -987,7 +987,7 @@
 		"message": "រក្សាទុកកំណត់ត្រាដែលបានកាត់យក ដោយមិនបើកវា"
 	},
 	"silentOpenDescription": {
-		"message": "កំណត់ត្រាដែលបានកាត់យកនឹងត្រូវបានរក្សាទុក ប៉ុន្តែមិនបើកជាផ្ទាំងថ្មីទេ។ Obsidian នឹងត្រូវបាននាំមកខាងមុខនៅតែដដែល។"
+		"message": "កំណត់ត្រាដែលបានកាត់យកនឹងត្រូវបានរក្សាទុក ប៉ុន្តែមិនបើកជាផ្ទាំងថ្មីទេ។ Aria នឹងត្រូវបាននាំមកខាងមុខនៅតែដដែល។"
 	},
 	"sort": {
 		"message": "តម្រៀប"
@@ -1082,7 +1082,7 @@
 		"message": "Vaults"
 	},
 	"vaultsDescription": {
-		"message": "តាមលំនាំដើម កំណត់ត្រាដែលបានកាត់យកនឹងត្រូវបានរក្សាទុកទៅ vault ដែលកំពុងបើក។ អ្នកអាចបន្ថែម vault នៅទីនេះ ប្រសិនបើអ្នកចង់មានជម្រើសរក្សាទុកទៅ vault ផ្សេងៗ។ ឈ្មោះ vault ត្រូវតែត្រូវគ្នាពិតប្រាកដជាមួយឈ្មោះ vault របស់ Obsidian។ ចុច $strong_start$enter$strong_end$ ដើម្បីបន្ថែម vault។",
+		"message": "តាមលំនាំដើម កំណត់ត្រាដែលបានកាត់យកនឹងត្រូវបានរក្សាទុកទៅ vault ដែលកំពុងបើក។ អ្នកអាចបន្ថែម vault នៅទីនេះ ប្រសិនបើអ្នកចង់មានជម្រើសរក្សាទុកទៅ vault ផ្សេងៗ។ ឈ្មោះ vault ត្រូវតែត្រូវគ្នាពិតប្រាកដជាមួយឈ្មោះ vault របស់ Aria។ ចុច $strong_start$enter$strong_end$ ដើម្បីបន្ថែម vault។",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

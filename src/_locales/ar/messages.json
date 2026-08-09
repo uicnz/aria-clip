@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "أضف مزود"
 	},
-	"addToObsidian": {
-		"message": "إضافة إلى أوبسيديان"
+	"addToAria": {
+		"message": "إضافة إلى Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "اضغط على Enter لإضافة خزينة"
@@ -45,7 +45,7 @@
 		"message": "لا يوجد مفتاح API"
 	},
 	"apiKeysWarning": {
-		"message": "باستخدام مزود خارجي، فإنك توافق على شروطهم وسياسة الخصوصية الخاصة بهم. يتم إرسال طلبات المفسر مباشرة إلى المزود الذي تختاره. لا يقوم Obsidian بجمع أو تخزين أي بيانات حول طلباتك."
+		"message": "باستخدام مزود خارجي، فإنك توافق على شروطهم وسياسة الخصوصية الخاصة بهم. يتم إرسال طلبات المفسر مباشرة إلى المزود الذي تختاره. لا يقوم Aria بجمع أو تخزين أي بيانات حول طلباتك."
 	},
 	"appendToDaily": {
 		"message": "إضافة إلى الملاحظة اليومية، في النهاية"
@@ -96,7 +96,7 @@
 		"message": "سلوك القص"
 	},
 	"clipBehaviorDescription": {
-		"message": "اختر كيفية حفظ المحتوى المظلل في أوبسيديان. يحدد متغير $strong_start${{content}}$strong_end$.",
+		"message": "اختر كيفية حفظ المحتوى المظلل في Aria. يحدد متغير $strong_start${{content}}$strong_end$.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "لا يستطيع Obsidian الوصول إلى الحافظة لديك. جرّب إرشادات استكشاف الأخطاء وإصلاحها هنا: $1",
+		"message": "لا يستطيع Aria الوصول إلى الحافظة لديك. جرّب إرشادات استكشاف الأخطاء وإصلاحها هنا: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "إغلاق"
 	},
-	"commandOpenClipper": {
-		"message": "فتح قاصّ أوبسيديان"
+	"commandOpenClip": {
+		"message": "فتح Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "قص سريع"
@@ -196,13 +196,13 @@
 		"message": "نسخ"
 	},
 	"earlyAccessDescription": {
-		"message": "استخدم الميزات التي تتطلب أحدث $link_start$نسخة وصول مبكر$link_end$ من أوبسيديان. تتطلب حالياً أوبسيديان 1.7.2 أو أحدث.",
+		"message": "استخدم الميزات التي تتطلب أحدث $link_start$نسخة وصول مبكر$link_end$ من Aria. تتطلب حالياً Aria 1.7.2 أو أحدث.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "مضمن"
 	},
 	"enableHighlighterDescription": {
-		"message": "قم بتظليل المحتوى على صفحات الويب الذي تريد حفظه في أوبسيديان."
+		"message": "قم بتظليل المحتوى على صفحات الويب الذي تريد حفظه في Aria."
 	},
 	"enableInterpreter": {
 		"message": "تمكين المفسر"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "تصدير الخصائص"
 	},
 	"exportPropertiesDescription": {
-		"message": "احفظ خصائص قاصّ الويب في ملف $strong_start$types.json$strong_end$ يمكن استيراده إلى خزينة أوبسيديان الخاصة بك، أو إلى قاصّ الويب على أجهزة أخرى.",
+		"message": "احفظ خصائص قاصّ الويب في ملف $strong_start$types.json$strong_end$ يمكن استيراده إلى خزينة Aria الخاصة بك، أو إلى قاصّ الويب على أجهزة أخرى.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "احفظ المحتوى من الويب بتنسيق خاص ودائم يمكنك الوصول إليه دون اتصال. الإضافة الرسمية للمتصفح لأوبسيديان."
+		"message": "احفظ المحتوى من الويب بتنسيق خاص ودائم يمكنك الوصول إليه دون اتصال. الإضافة الرسمية للمتصفح لAria."
 	},
 	"extensionName": {
-		"message": "قاصّ أوبسيديان للويب"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "فشل نسخ النص"
@@ -337,7 +337,7 @@
 		"message": "الملاحظات"
 	},
 	"feedbackDescription": {
-		"message": "كيف يمكننا تحسين Web Clipper؟ يرجى زيارة صفحة المساعدة الخاصة بنا، حيث يمكنك الإبلاغ عن الأخطاء، اقتراح الميزات، والحصول على المساعدة في المشكلات الشائعة."
+		"message": "كيف يمكننا تحسين Clip؟ يرجى زيارة صفحة المساعدة الخاصة بنا، حيث يمكنك الإبلاغ عن الأخطاء، اقتراح الميزات، والحصول على المساعدة في المشكلات الشائعة."
 	},
 	"feedbackTitle": {
 		"message": "شكراً لملاحظاتك"
@@ -423,7 +423,7 @@
 		"message": "استيراد الخصائص"
 	},
 	"importPropertiesDescription": {
-		"message": "لاستيراد خصائصك من أوبسيديان، حدد موقع ملف $strong_1_start$types.json$strong_1_end$ في مجلد $strong_2_start$.obsidian$strong_2_end$ داخل خزينتك. لاحظ أن هذا المجلد مخفي افتراضياً في معظم أنظمة التشغيل.",
+		"message": "لاستيراد خصائصك من Aria، حدد موقع ملف $strong_1_start$types.json$strong_1_end$ في مجلد $strong_2_start$.aria$strong_2_end$ داخل خزينتك. لاحظ أن هذا المجلد مخفي افتراضياً في معظم أنظمة التشغيل.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "الوضع القديم"
 	},
 	"legacyModeDescription": {
-		"message": "يستخدم طريقة قص URI المتوافقة مع أوبسيديان 1.6.7 أو أقدم. لاحظ أن طول المحتوى الذي يمكنك قصه محدود بواسطة متصفحك ونظام التشغيل. قد تفشل بعض الصفحات بدون أي أخطاء."
+		"message": "يستخدم طريقة قص URI المتوافقة مع Aria 1.6.7 أو أقدم. لاحظ أن طول المحتوى الذي يمكنك قصه محدود بواسطة متصفحك ونظام التشغيل. قد تفشل بعض الصفحات بدون أي أخطاء."
 	},
 	"loadArticle": {
 		"message": "قراءة المقالة"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "فتح"
 	},
 	"openBehaviorDescription": {
-		"message": "اختر كيف يفتح Web Clipper بشكل افتراضي."
+		"message": "اختر كيف يفتح Clip بشكل افتراضي."
 	},
 	"openBehaviorTitle": {
 		"message": "سلوك الفتح"
@@ -714,7 +714,7 @@
 		"message": "المزودون"
 	},
 	"rateExtensionDescription": {
-		"message": "هل تستمتع بـ Web Clipper؟ ساعدنا عن طريق تقييمه."
+		"message": "هل تستمتع بـ Clip؟ ساعدنا عن طريق تقييمه."
 	},
 	"read": {
 		"message": "مقروءة"
@@ -987,7 +987,7 @@
 		"message": "حفظ الملاحظة المقصوصة دون فتحها"
 	},
 	"silentOpenDescription": {
-		"message": "سيتم حفظ الملاحظات المقصوصة ولكن لن يتم فتحها كتبويب جديد. سيظل أوبسيديان يُجلب إلى المقدمة."
+		"message": "سيتم حفظ الملاحظات المقصوصة ولكن لن يتم فتحها كتبويب جديد. سيظل Aria يُجلب إلى المقدمة."
 	},
 	"sort": {
 		"message": "فرز"
@@ -1082,7 +1082,7 @@
 		"message": "الخزائن"
 	},
 	"vaultsDescription": {
-		"message": "بشكل افتراضي، يتم حفظ الملاحظات المقصوصة في الخزينة المفتوحة حالياً. يمكنك إضافة خزائن هنا إذا كنت تريد خيار الحفظ في خزائن مختلفة. يجب أن تتطابق أسماء الخزائن بالضبط مع اسم خزينة أوبسيديان. اضغط على $strong_start$enter$strong_end$ لإضافة خزينة.",
+		"message": "بشكل افتراضي، يتم حفظ الملاحظات المقصوصة في الخزينة المفتوحة حالياً. يمكنك إضافة خزائن هنا إذا كنت تريد خيار الحفظ في خزائن مختلفة. يجب أن تتطابق أسماء الخزائن بالضبط مع اسم خزينة Aria. اضغط على $strong_start$enter$strong_end$ لإضافة خزينة.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

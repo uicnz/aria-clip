@@ -1,18 +1,19 @@
 ---
-permalink: web-clipper/interpreter
+permalink: clip/interpreter
 aliases:
   - Interpreter
 ---
-Interpreter is a [[Introduction to Obsidian Web Clipper|Web Clipper]] feature that lets you interact with web pages using natural language. Interpreter helps you capture and modify data that you want to save to Obsidian. For example:
+
+Interpreter is a [[Introduction to Aria Clip|Clip]] feature that lets you interact with web pages using natural language. Interpreter helps you capture and modify data that you want to save to Aria. For example:
 
 - Extract specific text fragments.
 - Summarize or explain information.
 - Convert text from one format to another.
 - Translate text to a different language.
 
-Interpreter leverages language models to process information on a web page, and return results using [[Variables]] that you can add to your [[Obsidian Web Clipper/Templates|Web Clipper Templates]].
+Interpreter leverages language models to process information on a web page, and return results using [[Variables]] that you can add to your [[Aria Clip/Templates|Clip Templates]].
 
-![[web-clipper-interpreter-demo.mp4#interface]]
+![[clip-interpreter-demo.mp4#interface]]
 
 ## Examples of prompts
 
@@ -28,15 +29,15 @@ The output of your prompts can be further manipulated using [[Filters]]. Filters
 
 Interpreter works with almost any language model provider, including options that run privately on your device. To set up Interpreter:
 
-1. Go to the **Interpreter** section in Web Clipper settings.
+1. Go to the **Interpreter** section in Clip settings.
 2. Toggle on **Enable Interpreter**.
 3. Configure your provider and model, see [[Interpret web pages#Models|models]] section below.
-4. Add [[Variables|prompt variables]] to your [[Obsidian Web Clipper/Templates|templates]].
+4. Add [[Variables|prompt variables]] to your [[Aria Clip/Templates|templates]].
 5. If your template includes prompt variables, the Interpreter section will be visible when you [[Clip web pages|clip a page]]. Click **interpret** to process the prompt variables.
 
 ## How it works
 
-When Interpreter is enabled *and* your template contains [[Variables#Prompt variables|prompt variables]], a new Interpreter section is displayed in the extension window, above the **Add to Obsidian** button. This section lets you select a model and run Interpreter for the current page.
+When Interpreter is enabled *and* your template contains [[Variables#Prompt variables|prompt variables]], a new Interpreter section is displayed in the extension window, above the **Add to Aria** button. This section lets you select a model and run Interpreter for the current page.
 
 When you click **interpret**, Interpreter sends the page context to your selected model, along with *all* the prompts in your template in one request. Depending on the model provider you choose, this can be an external call or local to your device. The model evaluates your prompts against the page context, and returns its responses. Interpreter then replaces the prompt variables with the response data.
 
@@ -48,7 +49,7 @@ The term *context* refers to the page data that Interpreter uses to process prom
 
 By default, Interpreter uses the entire page HTML as its context, however this can make prompts slower and more expensive than necessary.
 
-You can override the default context in Interpreter **Advanced settings** and define context per [[Obsidian Web Clipper/Templates|template]].
+You can override the default context in Interpreter **Advanced settings** and define context per [[Aria Clip/Templates|template]].
 
 To define a more targeted context use [[Variables#Selector variables|selector variables]] (or other variable types) to interpret a section of the page. For example, you could use the following selector variable in your template's Interpreter context:
 
@@ -61,7 +62,7 @@ To define a more targeted context use [[Variables#Selector variables|selector va
 ## Models
 
 > [!warning] Privacy
-> By using a third-party model provider you agree to their terms and privacy policy. Interpreter requests are sent directly to the provider you choose. Obsidian does not gather or store any data about your requests.
+> By using a third-party model provider you agree to their terms and privacy policy. Interpreter requests are sent directly to the provider you choose. Aria does not gather or store any data about your requests.
 
 ### Preset providers
 
@@ -83,11 +84,11 @@ Interpreter includes several preset providers. To use these providers you need a
 
 ### Choosing a model
 
-In general we recommend using small models with Web Clipper because they are faster and perform fairly accurately for this task. Examples of smaller models include **Anthropic's Claude Haiku**, **Google Gemini Flash**, **Llama** with 3B or 8B parameters, or **OpenAI's Mini** series of models.
+In general we recommend using small models with Clip because they are faster and perform fairly accurately for this task. Examples of smaller models include **Anthropic's Claude Haiku**, **Google Gemini Flash**, **Llama** with 3B or 8B parameters, or **OpenAI's Mini** series of models.
 
 ### Custom providers and models
 
-To add a custom provider and/or model go to Web Clipper **[[Settings]]** → **Interpreter**:
+To add a custom provider and/or model go to Clip **[[Settings]]** → **Interpreter**:
 
 - **Add provider** to configure preset and custom providers.
 - **Add model** to configure preset and custom models.

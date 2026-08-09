@@ -1,4 +1,4 @@
-// Template renderer for the Web Clipper template engine
+// Template renderer for the Clip template engine
 // Evaluates an AST and produces string output
 //
 // The renderer handles:

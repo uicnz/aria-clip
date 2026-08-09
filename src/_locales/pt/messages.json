@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Adicionar fornecedor"
 	},
-	"addToObsidian": {
-		"message": "Adicionar ao Obsidian"
+	"addToAria": {
+		"message": "Adicionar ao Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "Prima Enter para adicionar um cofre"
@@ -45,7 +45,7 @@
 		"message": "Sem chave de API"
 	},
 	"apiKeysWarning": {
-		"message": "Ao utilizar um fornecedor externo, concorda com os respetivos termos e política de privacidade. Os pedidos do intérprete são enviados diretamente para o fornecedor que escolher. O Obsidian não recolhe nem armazena quaisquer dados sobre os seus pedidos."
+		"message": "Ao utilizar um fornecedor externo, concorda com os respetivos termos e política de privacidade. Os pedidos do intérprete são enviados diretamente para o fornecedor que escolher. O Aria não recolhe nem armazena quaisquer dados sobre os seus pedidos."
 	},
 	"appendToDaily": {
 		"message": "Adicionar à nota diária, no fim"
@@ -96,7 +96,7 @@
 		"message": "Comportamento do recorte"
 	},
 	"clipBehaviorDescription": {
-		"message": "Escolha como o conteúdo realçado é guardado no Obsidian. Define a variável $strong_start${{content}}$strong_end$.",
+		"message": "Escolha como o conteúdo realçado é guardado no Aria. Define a variável $strong_start${{content}}$strong_end$.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "O Obsidian não consegue aceder à sua área de transferência. Experimente as instruções de resolução de problemas aqui: $1",
+		"message": "O Aria não consegue aceder à sua área de transferência. Experimente as instruções de resolução de problemas aqui: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Fechar"
 	},
-	"commandOpenClipper": {
-		"message": "Abrir Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "Abrir Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Recorte rápido"
@@ -196,13 +196,13 @@
 		"message": "Duplicar"
 	},
 	"earlyAccessDescription": {
-		"message": "Utilize funcionalidades que requerem a versão $link_start$de acesso antecipado$link_end$ mais recente do Obsidian. Atualmente requer o Obsidian 1.7.2 ou posterior.",
+		"message": "Utilize funcionalidades que requerem a versão $link_start$de acesso antecipado$link_end$ mais recente do Aria. Atualmente requer o Aria 1.7.2 ou posterior.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Incorporado"
 	},
 	"enableHighlighterDescription": {
-		"message": "Realce conteúdo em páginas web que pode guardar no Obsidian."
+		"message": "Realce conteúdo em páginas web que pode guardar no Aria."
 	},
 	"enableInterpreter": {
 		"message": "Ativar intérprete"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Exportar propriedades"
 	},
 	"exportPropertiesDescription": {
-		"message": "Guarde as propriedades do Web Clipper num ficheiro $strong_start$types.json$strong_end$ que pode ser importado para o seu cofre do Obsidian ou para o Web Clipper noutros dispositivos.",
+		"message": "Guarde as propriedades do Clip num ficheiro $strong_start$types.json$strong_end$ que pode ser importado para o seu cofre do Aria ou para o Clip noutros dispositivos.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Guarde conteúdo da web num formato privado e duradouro ao qual pode aceder offline. A extensão oficial do navegador para o Obsidian."
+		"message": "Guarde conteúdo da web num formato privado e duradouro ao qual pode aceder offline. A extensão oficial do navegador para o Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Falha ao copiar texto"
@@ -337,7 +337,7 @@
 		"message": "Feedback"
 	},
 	"feedbackDescription": {
-		"message": "Como podemos melhorar o Web Clipper? Visite a nossa página de ajuda, onde pode reportar erros, sugerir funcionalidades e obter ajuda com problemas comuns."
+		"message": "Como podemos melhorar o Clip? Visite a nossa página de ajuda, onde pode reportar erros, sugerir funcionalidades e obter ajuda com problemas comuns."
 	},
 	"feedbackTitle": {
 		"message": "Obrigado pelo seu feedback"
@@ -358,7 +358,7 @@
 		"message": "Ajuda"
 	},
 	"helpDescription": {
-		"message": "Saiba como usar o Web Clipper e obtenha ajuda na resolução de problemas."
+		"message": "Saiba como usar o Clip e obtenha ajuda na resolução de problemas."
 	},
 	"highlightInline": {
 		"message": "Realçar o conteúdo da página"
@@ -423,7 +423,7 @@
 		"message": "Importar propriedades"
 	},
 	"importPropertiesDescription": {
-		"message": "Para importar as suas propriedades do Obsidian, localize o ficheiro $strong_1_start$types.json$strong_1_end$ na pasta $strong_2_start$.obsidian$strong_2_end$ dentro do seu cofre. Note que esta pasta está oculta por predefinição na maioria dos sistemas operativos.",
+		"message": "Para importar as suas propriedades do Aria, localize o ficheiro $strong_1_start$types.json$strong_1_end$ na pasta $strong_2_start$.aria$strong_2_end$ dentro do seu cofre. Note que esta pasta está oculta por predefinição na maioria dos sistemas operativos.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Modo legado"
 	},
 	"legacyModeDescription": {
-		"message": "Utiliza o método de recorte por URI compatível com o Obsidian 1.6.7 ou anterior. Note que o tamanho do conteúdo que pode recortar é limitado pelo seu navegador e sistema operativo. Algumas páginas podem falhar sem qualquer erro."
+		"message": "Utiliza o método de recorte por URI compatível com o Aria 1.6.7 ou anterior. Note que o tamanho do conteúdo que pode recortar é limitado pelo seu navegador e sistema operativo. Algumas páginas podem falhar sem qualquer erro."
 	},
 	"loadArticle": {
 		"message": "Ler artigo"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "Abrir"
 	},
 	"openBehaviorDescription": {
-		"message": "Escolha como o Web Clipper abre por predefinição."
+		"message": "Escolha como o Clip abre por predefinição."
 	},
 	"openBehaviorTitle": {
 		"message": "Comportamento de abertura"
@@ -714,7 +714,7 @@
 		"message": "Fornecedores"
 	},
 	"rateExtensionDescription": {
-		"message": "Está a gostar do Web Clipper? Ajude-nos atribuindo uma classificação."
+		"message": "Está a gostar do Clip? Ajude-nos atribuindo uma classificação."
 	},
 	"read": {
 		"message": "Lidas"
@@ -966,7 +966,7 @@
 		"message": "Para alterar as atribuições de teclas, vá a $1, clique no ícone de engrenagem e selecione \"Gerir atalhos de extensões\"."
 	},
 	"shortcutInstructionsIntro": {
-		"message": "Os atalhos de teclado dão-lhe acesso rápido às funcionalidades do clipper."
+		"message": "Os atalhos de teclado dão-lhe acesso rápido às funcionalidades do clip."
 	},
 	"shortcutInstructionsSafari": {
 		"message": "Os atalhos de teclado não são personalizáveis no Safari."
@@ -978,7 +978,7 @@
 		"message": "Mostrar botão de ações"
 	},
 	"showActionsDescription": {
-		"message": "Permite-lhe inspecionar as variáveis da página a partir do menu do clipper. Útil para ver as variáveis disponíveis para usar em modelos."
+		"message": "Permite-lhe inspecionar as variáveis da página a partir do menu do clip. Útil para ver as variáveis disponíveis para usar em modelos."
 	},
 	"showPageVariables": {
 		"message": "Mostrar variáveis da página"
@@ -987,7 +987,7 @@
 		"message": "Guardar a nota recortada sem a abrir"
 	},
 	"silentOpenDescription": {
-		"message": "As notas recortadas serão guardadas, mas não serão abertas como um novo separador. O Obsidian continuará a ser trazido para primeiro plano."
+		"message": "As notas recortadas serão guardadas, mas não serão abertas como um novo separador. O Aria continuará a ser trazido para primeiro plano."
 	},
 	"sort": {
 		"message": "Ordenar"
@@ -1082,7 +1082,7 @@
 		"message": "Cofres"
 	},
 	"vaultsDescription": {
-		"message": "Por predefinição, as notas recortadas são guardadas no cofre atualmente aberto. Pode adicionar cofres aqui se quiser a opção de guardar em cofres diferentes. Os nomes dos cofres têm de corresponder exatamente ao nome do cofre do Obsidian. Prima $strong_start$Enter$strong_end$ para adicionar um cofre.",
+		"message": "Por predefinição, as notas recortadas são guardadas no cofre atualmente aberto. Pode adicionar cofres aqui se quiser a opção de guardar em cofres diferentes. Os nomes dos cofres têm de corresponder exatamente ao nome do cofre do Aria. Prima $strong_start$Enter$strong_end$ para adicionar um cofre.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

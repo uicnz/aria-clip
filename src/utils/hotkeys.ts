@@ -10,7 +10,7 @@ interface Command {
 // Mapping from command name in manifest to message key in messages.json
 const commandNameToMessageKey: { [key: string]: string } = {
 	// chrome default command
-	'_execute_action': 'commandOpenClipper',
+	'_execute_action': 'commandOpenClip',
 	'quick_clip': 'commandQuickClip',
 	'toggle_highlighter': 'commandToggleHighlighter',
 	'toggle_reader': 'commandToggleReader'
@@ -20,7 +20,7 @@ export async function getCommands (): Promise<Command[]> {
 	const commands = await browser.commands.getAll();
 	return commands.map(cmd => ({
 		name: cmd.name || '',
-		description: getMessage(commandNameToMessageKey[cmd.name || ''] || 'Open clipper'),
+		description: getMessage(commandNameToMessageKey[cmd.name || ''] || 'Open clip'),
 		shortcut: cmd.shortcut || null
 	}));
 }

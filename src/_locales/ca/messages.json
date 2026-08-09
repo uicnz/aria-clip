@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Agregar proveïdor"
 	},
-	"addToObsidian": {
-		"message": "Agregar a Obsidian"
+	"addToAria": {
+		"message": "Agregar a Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "Pressiona retorn per afegir una cambra cuirassada"
@@ -45,7 +45,7 @@
 		"message": "Sense clau API"
 	},
 	"apiKeysWarning": {
-		"message": "En usar un proveïdor extern, accepta els seus termes i política de privacitat. Les sol·licituds de l'intèrpret s'envien directament al proveïdor que esculli. Obsidian no recopila ni emmagatzema cap dada sobre les seves sol·licituds."
+		"message": "En usar un proveïdor extern, accepta els seus termes i política de privacitat. Les sol·licituds de l'intèrpret s'envien directament al proveïdor que esculli. Aria no recopila ni emmagatzema cap dada sobre les seves sol·licituds."
 	},
 	"appendToDaily": {
 		"message": "Agregar a la nota diària, al final"
@@ -96,7 +96,7 @@
 		"message": "Comportament de guardat"
 	},
 	"clipBehaviorDescription": {
-		"message": "Escull com es guarda el contingut ressaltat a Obsidian. Defineix la variable $strong_start${{content}}$strong_end$.",
+		"message": "Escull com es guarda el contingut ressaltat a Aria. Defineix la variable $strong_start${{content}}$strong_end$.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "L'Obsidian no pot accedir al porta-retalls. Prova les instruccions de resolució de problemes aquí: $1",
+		"message": "L'Aria no pot accedir al porta-retalls. Prova les instruccions de resolució de problemes aquí: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Tancar"
 	},
-	"commandOpenClipper": {
-		"message": "Obrir Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "Obrir Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Guardat ràpid"
@@ -196,13 +196,13 @@
 		"message": "Duplicar"
 	},
 	"earlyAccessDescription": {
-		"message": "Utilitzar funcions que requereixen la darrera versió de $link_start$accés anticipat$link_end$ d'Obsidian. Actualment, requereix Obsidian 1.7.2 o posterior.",
+		"message": "Utilitzar funcions que requereixen la darrera versió de $link_start$accés anticipat$link_end$ d'Aria. Actualment, requereix Aria 1.7.2 o posterior.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Incrustat"
 	},
 	"enableHighlighterDescription": {
-		"message": "Ressalti contingut en pàgines web que pot guardar a Obsidian."
+		"message": "Ressalti contingut en pàgines web que pot guardar a Aria."
 	},
 	"enableInterpreter": {
 		"message": "Habilitar intèrpret"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Exportar propietats"
 	},
 	"exportPropertiesDescription": {
-		"message": "Guardar les propietats de Web Clipper en un fitxer $strong_start$types.json$strong_end$ que pot ser importat a la cambra cuirassada d'Obsidian o a Web Clipper en altres dispositius.",
+		"message": "Guardar les propietats de Clip en un fitxer $strong_start$types.json$strong_end$ que pot ser importat a la cambra cuirassada d'Aria o a Clip en altres dispositius.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Guardar contingut web en un format privat i durador al qual pot accedir sense connexió. L'extensió oficial per a Obsidian."
+		"message": "Guardar contingut web en un format privat i durador al qual pot accedir sense connexió. L'extensió oficial per a Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Error en copiar el text"
@@ -337,7 +337,7 @@
 		"message": "Comentaris"
 	},
 	"feedbackDescription": {
-		"message": "Com podem millorar Web Clipper? Si us plau, visita la nostra pàgina d'ajuda, on pots informar de bugs, suggerir funcionalitats i obtenir ajuda amb problemes comuns."
+		"message": "Com podem millorar Clip? Si us plau, visita la nostra pàgina d'ajuda, on pots informar de bugs, suggerir funcionalitats i obtenir ajuda amb problemes comuns."
 	},
 	"feedbackTitle": {
 		"message": "Gràcies pels teus comentaris"
@@ -358,7 +358,7 @@
 		"message": "Ajuda"
 	},
 	"helpDescription": {
-		"message": "Aprengui a usar Web Clipper i obtingui ajuda per resoldre problemes."
+		"message": "Aprengui a usar Clip i obtingui ajuda per resoldre problemes."
 	},
 	"highlightInline": {
 		"message": "Ressaltar el contingut de la pàgina"
@@ -423,7 +423,7 @@
 		"message": "Importar propietats"
 	},
 	"importPropertiesDescription": {
-		"message": "Per importar les seves propietats d’Obsidian, localitzi el fitxer $strong_1_start$types.json$strong_1_end$ a la carpeta $strong_2_start$.obsidian$strong_2_end$ dins de la seva cambra cuirassada. Tingui en compte que aquesta carpeta està oculta per defecte a la majoria dels sistemes operatius.",
+		"message": "Per importar les seves propietats d’Aria, localitzi el fitxer $strong_1_start$types.json$strong_1_end$ a la carpeta $strong_2_start$.aria$strong_2_end$ dins de la seva cambra cuirassada. Tingui en compte que aquesta carpeta està oculta per defecte a la majoria dels sistemes operatius.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Mode heretat"
 	},
 	"legacyModeDescription": {
-		"message": "Utilitzi el mètode de retall d'URI compatible amb Obsidian 1.6.7 o anterior. Tingui en compte que la longitud del contingut que pot guardar està limitada pel seu navegador i el seu sistema operatiu. Algunes pàgines poden fallar sense mostrar errors."
+		"message": "Utilitzi el mètode de retall d'URI compatible amb Aria 1.6.7 o anterior. Tingui en compte que la longitud del contingut que pot guardar està limitada pel seu navegador i el seu sistema operatiu. Algunes pàgines poden fallar sense mostrar errors."
 	},
 	"loadArticle": {
 		"message": "Llegeix l'article"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "Obrir"
 	},
 	"openBehaviorDescription": {
-		"message": "Trieu com s'obre Web Clipper per defecte."
+		"message": "Trieu com s'obre Clip per defecte."
 	},
 	"openBehaviorTitle": {
 		"message": "Comportament d'obertura"
@@ -714,7 +714,7 @@
 		"message": "Proveïdors"
 	},
 	"rateExtensionDescription": {
-		"message": "T'està agradant Web Clipper? Ajuda'ns donant-li una valoració."
+		"message": "T'està agradant Clip? Ajuda'ns donant-li una valoració."
 	},
 	"read": {
 		"message": "Llegides"
@@ -966,7 +966,7 @@
 		"message": "Per canviar les assignacions de tecles, vagi a $1, faci clic a la icona d'engranatge i seleccioni \"Gestionar dreceres d'extensió\"."
 	},
 	"shortcutInstructionsIntro": {
-		"message": "Les dreceres de teclat li donen accés ràpid a les funcions del clipper."
+		"message": "Les dreceres de teclat li donen accés ràpid a les funcions del clip."
 	},
 	"shortcutInstructionsSafari": {
 		"message": "Les dreceres de teclat no són personalitzables a Safari."
@@ -978,7 +978,7 @@
 		"message": "Mostrar el botó d'accions"
 	},
 	"showActionsDescription": {
-		"message": "Permet inspeccionar les variables de pàgina des del menú del clipper. Útil per veure les variables disponibles per a usar a les plantilles."
+		"message": "Permet inspeccionar les variables de pàgina des del menú del clip. Útil per veure les variables disponibles per a usar a les plantilles."
 	},
 	"showPageVariables": {
 		"message": "Mostrar variables de pàgina"
@@ -987,7 +987,7 @@
 		"message": "Guardar nota sense obrir-la"
 	},
 	"silentOpenDescription": {
-		"message": "Les notes retallades es guardaran, però no s'obriran en una nova pestanya. Obsidian encara es posarà en primer pla."
+		"message": "Les notes retallades es guardaran, però no s'obriran en una nova pestanya. Aria encara es posarà en primer pla."
 	},
 	"sort": {
 		"message": "Ordena"
@@ -1082,7 +1082,7 @@
 		"message": "Cambres cuirassades"
 	},
 	"vaultsDescription": {
-		"message": "Per defecte, les notes es guarden a la cambra cuirassada oberta actualment. Pot afegir cambres cuirassades aquí si vol l'opció de guardar a diferents cambres cuirassades. Els noms de les cambres cuirassades han de coincidir exactament amb el nom de la cambra cuirassada d'Obsidian. Pressioni $strong_start$enter$strong_end$ per afegir una cambra cuirassada.",
+		"message": "Per defecte, les notes es guarden a la cambra cuirassada oberta actualment. Pot afegir cambres cuirassades aquí si vol l'opció de guardar a diferents cambres cuirassades. Els noms de les cambres cuirassades han de coincidir exactament amb el nom de la cambra cuirassada d'Aria. Pressioni $strong_start$enter$strong_end$ per afegir una cambra cuirassada.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

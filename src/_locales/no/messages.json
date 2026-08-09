@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Legg til leverandør"
 	},
-	"addToObsidian": {
-		"message": "Legg til i Obsidian"
+	"addToAria": {
+		"message": "Legg til i Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "Trykk Enter for å legge til hvelv"
@@ -45,7 +45,7 @@
 		"message": "API-nøkkel mangler"
 	},
 	"apiKeysWarning": {
-		"message": "Ved å bruke en ekstern leverandør godtar du deres vilkår og personvernregler. Tolkningsforespørsler sendes direkte til din valgte leverandør. Obsidian samler ikke inn eller lagrer informasjon om dine forespørsler."
+		"message": "Ved å bruke en ekstern leverandør godtar du deres vilkår og personvernregler. Tolkningsforespørsler sendes direkte til din valgte leverandør. Aria samler ikke inn eller lagrer informasjon om dine forespørsler."
 	},
 	"appendToDaily": {
 		"message": "Legg til i daglig notat, på slutten"
@@ -96,7 +96,7 @@
 		"message": "Klippoppførsel"
 	},
 	"clipBehaviorDescription": {
-		"message": "Velg hvordan valgt innhold lagres i Obsidian. Setter variabelen $strong_start${{content}}$strong_end$",
+		"message": "Velg hvordan valgt innhold lagres i Aria. Setter variabelen $strong_start${{content}}$strong_end$",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian har ikke tilgang til utklippstavlen din. Prøv feilsøkingsinstruksjonene her: $1",
+		"message": "Aria har ikke tilgang til utklippstavlen din. Prøv feilsøkingsinstruksjonene her: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Lukk"
 	},
-	"commandOpenClipper": {
-		"message": "Åpne Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "Åpne Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Hurtigklipp"
@@ -196,13 +196,13 @@
 		"message": "Dupliser"
 	},
 	"earlyAccessDescription": {
-		"message": "Bruk funksjoner som krever den nyeste $link_start$tidlig tilgang-versjonen$link_end$ av Obsidian. Krever for øyeblikket Obsidian 1.7.2 eller nyere.",
+		"message": "Bruk funksjoner som krever den nyeste $link_start$tidlig tilgang-versjonen$link_end$ av Aria. Krever for øyeblikket Aria 1.7.2 eller nyere.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Innebygd"
 	},
 	"enableHighlighterDescription": {
-		"message": "Uthev innhold på nettsider for å lagre i Obsidian"
+		"message": "Uthev innhold på nettsider for å lagre i Aria"
 	},
 	"enableInterpreter": {
 		"message": "Aktiver tolk"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Eksporter egenskaper"
 	},
 	"exportPropertiesDescription": {
-		"message": "Lagre Web Clipper-egenskaper til en $strong_start$types.json$strong_end$-fil som kan importeres til ditt Obsidian-hvelv eller Web Clipper på andre enheter",
+		"message": "Lagre Clip-egenskaper til en $strong_start$types.json$strong_end$-fil som kan importeres til ditt Aria-hvelv eller Clip på andre enheter",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Lagre webinnhold i et privat og varig format som kan nås offline. Den offisielle nettleserutvidelsen for Obsidian."
+		"message": "Lagre webinnhold i et privat og varig format som kan nås offline. Den offisielle nettleserutvidelsen for Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Kunne ikke kopiere tekst"
@@ -337,7 +337,7 @@
 		"message": "Tilbakemelding"
 	},
 	"feedbackDescription": {
-		"message": "Hvordan kan vi forbedre Web Clipper? Besøk vår hjelpeside for å rapportere feil, foreslå funksjoner og få hjelp med vanlige problemer."
+		"message": "Hvordan kan vi forbedre Clip? Besøk vår hjelpeside for å rapportere feil, foreslå funksjoner og få hjelp med vanlige problemer."
 	},
 	"feedbackTitle": {
 		"message": "Takk for tilbakemeldingen"
@@ -358,7 +358,7 @@
 		"message": "Hjelp"
 	},
 	"helpDescription": {
-		"message": "Lær hvordan du bruker Web Clipper og få hjelp med feilsøking"
+		"message": "Lær hvordan du bruker Clip og få hjelp med feilsøking"
 	},
 	"highlightInline": {
 		"message": "Uthev innhold på siden"
@@ -423,7 +423,7 @@
 		"message": "Importer egenskaper"
 	},
 	"importPropertiesDescription": {
-		"message": "For å importere egenskaper fra Obsidian, finn $strong_1_start$types.json$strong_1_end$-filen i $strong_2_start$.obsidian$strong_2_end$-mappen i hvelvet ditt. Denne mappen er skjult som standard på de fleste operativsystemer.",
+		"message": "For å importere egenskaper fra Aria, finn $strong_1_start$types.json$strong_1_end$-filen i $strong_2_start$.aria$strong_2_end$-mappen i hvelvet ditt. Denne mappen er skjult som standard på de fleste operativsystemer.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Eldre modus"
 	},
 	"legacyModeDescription": {
-		"message": "Bruker URI-fangstmetoden som er kompatibel med Obsidian 1.6.7 og eldre. Merk at lengden på fanget innhold er begrenset av nettleseren og operativsystemet. Noen sider kan mislykkes uten feilmelding."
+		"message": "Bruker URI-fangstmetoden som er kompatibel med Aria 1.6.7 og eldre. Merk at lengden på fanget innhold er begrenset av nettleseren og operativsystemet. Noen sider kan mislykkes uten feilmelding."
 	},
 	"loadArticle": {
 		"message": "Les artikkel"
@@ -562,7 +562,7 @@
 		"message": "Åpne"
 	},
 	"openBehaviorDescription": {
-		"message": "Velg hvordan Web Clipper åpnes som standard."
+		"message": "Velg hvordan Clip åpnes som standard."
 	},
 	"openBehaviorTitle": {
 		"message": "Åpne oppførsel"
@@ -706,7 +706,7 @@
 		"message": "Leverandører"
 	},
 	"rateExtensionDescription": {
-		"message": "Liker du Web Clipper? Hjelp oss ved å gi en vurdering."
+		"message": "Liker du Clip? Hjelp oss ved å gi en vurdering."
 	},
 	"read": {
 		"message": "Lest"
@@ -979,7 +979,7 @@
 		"message": "Lagre notater uten å åpne dem"
 	},
 	"silentOpenDescription": {
-		"message": "Klippede notater vil bli lagret men ikke åpnet i en ny fane. Obsidian vil fortsatt bli brakt til forgrunnen."
+		"message": "Klippede notater vil bli lagret men ikke åpnet i en ny fane. Aria vil fortsatt bli brakt til forgrunnen."
 	},
 	"sort": {
 		"message": "Sorter"
@@ -1074,7 +1074,7 @@
 		"message": "Hvelv"
 	},
 	"vaultsDescription": {
-		"message": "Som standard lagres klippede notater i det åpne hvelvet. Du kan legge til hvelv her hvis du ønsker muligheten til å lagre i forskjellige hvelv. Hvelvnavnet må samsvare nøyaktig med Obsidian-hvelvnavnet. Trykk $strong_start$enter$strong_end$ for å legge til et hvelv.",
+		"message": "Som standard lagres klippede notater i det åpne hvelvet. Du kan legge til hvelv her hvis du ønsker muligheten til å lagre i forskjellige hvelv. Hvelvnavnet må samsvare nøyaktig med Aria-hvelvnavnet. Trykk $strong_start$enter$strong_end$ for å legge til et hvelv.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

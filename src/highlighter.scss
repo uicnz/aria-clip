@@ -1,21 +1,21 @@
 @media (max-width: 769px) {
-	.obsidian-highlighter-menu {
-		--obsidian-highlighter-menu-font-size: 15px;
-		--obsidian-highlighter-menu-padding: 4px;
-		--obsidian-highlighter-menu-height: 32px;
-		--obsidian-undo-button-display: flex;
-		--obsidian-highlighter-button-border: none;
+	.aria-highlighter-menu {
+		--aria-highlighter-menu-font-size: 15px;
+		--aria-highlighter-menu-padding: 4px;
+		--aria-highlighter-menu-height: 32px;
+		--aria-undo-button-display: flex;
+		--aria-highlighter-button-border: none;
 		top: auto !important;
 		bottom: 25px !important;
 	}
 }
 @media (max-width: 500px) {
-	#obsidian-clipper-container {
+	#aria-clip-container {
 		width: 100%;
 	}
 }
 
-#obsidian-clipper-iframe {
+#aria-clip-iframe {
 	color-scheme: light dark;
 	flex-grow: 1;
 	border: none !important;
@@ -28,12 +28,12 @@
 	}
 }
 
-#obsidian-clipper-container {
-	--obsidian-clipper-background-primary: #fff;
-	--obsidian-clipper-background-primary-rgb: 255, 255, 255;
-	--obsidian-clipper-background-opacity: 0.97;
-	--obsidian-clipper-text-muted: #5c5c5c;
-	--obsidian-clipper-box-shadow: 0 0 0 1px rgba(0,0,0,0.1),
+#aria-clip-container {
+	--aria-clip-background-primary: #fff;
+	--aria-clip-background-primary-rgb: 255, 255, 255;
+	--aria-clip-background-opacity: 0.97;
+	--aria-clip-text-muted: #5c5c5c;
+	--aria-clip-box-shadow: 0 0 0 1px rgba(0,0,0,0.1),
 			0px 16px 28px -4px rgba(0, 0, 0, 0.15),
 			0px 8px 16px -4px rgba(0, 0, 0, 0.06);
 
@@ -48,11 +48,11 @@
 	height: calc(100% - 24px);
 	width: 350px;
 	z-index: 9999999999;
-	background-color: var(--obsidian-clipper-background-primary);
-	background-color: rgba(var(--obsidian-clipper-background-primary-rgb), var(--obsidian-clipper-background-opacity));
+	background-color: var(--aria-clip-background-primary);
+	background-color: rgba(var(--aria-clip-background-primary-rgb), var(--aria-clip-background-opacity));
 	backdrop-filter: saturate(1.5) blur(32px);
 	border-radius: 12px;
-	box-shadow: var(--obsidian-clipper-box-shadow);
+	box-shadow: var(--aria-clip-box-shadow);
 	display: flex;
 	flex-direction: column;
 	user-select: none;
@@ -62,27 +62,27 @@
 	transform: scale(0.95);
 
 	@media (prefers-color-scheme: dark) {
-		--obsidian-clipper-background-primary: #1e1e1e;
-		--obsidian-clipper-background-primary-rgb: 26, 26, 26;
-		--obsidian-clipper-box-shadow: 0 0 0 1px rgba(255,255,255,0.1),
+		--aria-clip-background-primary: #1e1e1e;
+		--aria-clip-background-primary-rgb: 26, 26, 26;
+		--aria-clip-box-shadow: 0 0 0 1px rgba(255,255,255,0.1),
 			0px 16px 28px -4px rgba(0, 0, 0, 0.15),
 			0px 8px 16px -4px rgba(0, 0, 0, 0.06);
 	}
 
 	&.is-open {
-		animation: 80ms ease 60ms 1 normal forwards running clipperOpenAnimation;
-		#obsidian-clipper-iframe {
+		animation: 80ms ease 60ms 1 normal forwards running clipOpenAnimation;
+		#aria-clip-iframe {
 			opacity: 1;
 		}
 	}
 	&.is-closing {
-		animation: 80ms ease 1 normal forwards running clipperCloseAnimation;
+		animation: 80ms ease 1 normal forwards running clipCloseAnimation;
 	}
 }
 
-.obsidian-clipper-resize-handle {
+.aria-clip-resize-handle {
 	position: absolute;
-	&.obsidian-clipper-resize-handle-w {
+	&.aria-clip-resize-handle-w {
 		top: 10px;
 		left: -5px;
 		bottom: 10px;
@@ -90,7 +90,7 @@
 		cursor: ew-resize;
 		z-index: 99999999999;
 	}
-	&.obsidian-clipper-resize-handle-s {
+	&.aria-clip-resize-handle-s {
 		position: absolute;
 		bottom: -5px;
 		left: 10px;
@@ -99,7 +99,7 @@
 		cursor: ns-resize;
 		z-index: 99999999999;
 	}
-	&.obsidian-clipper-resize-handle-sw {
+	&.aria-clip-resize-handle-sw {
 		position: absolute;
 		bottom: -5px;
 		left: -5px;
@@ -111,19 +111,19 @@
 }
 /* Hide the clip button on iPadOS because it's not supported */
 .is-ipad-os {
-	.obsidian-highlighter-menu {
-		#obsidian-clip-button {
+	.aria-highlighter-menu {
+		#aria-clip-button {
 			display: none;
 		}
 	}
 }
 
-body.obsidian-highlighter-active {
-	--obsidian-highlighter-menu-font-size: 13px;
-	--obsidian-highlighter-menu-padding: 4px;
-	--obsidian-highlighter-menu-height: 24px;
-	--obsidian-undo-button-display: none;
-	--obsidian-highlighter-button-border: inset rgba(255, 255, 255, 0.1) 0px 0px 0px 1px !important;
+body.aria-highlighter-active {
+	--aria-highlighter-menu-font-size: 13px;
+	--aria-highlighter-menu-padding: 4px;
+	--aria-highlighter-menu-height: 24px;
+	--aria-undo-button-display: none;
+	--aria-highlighter-button-border: inset rgba(255, 255, 255, 0.1) 0px 0px 0px 1px !important;
 
 	// Disable pinch zoom on mobile
 	touch-action: pan-x pan-y;
@@ -133,13 +133,13 @@ body.obsidian-highlighter-active {
 	*::selection {
 		background-color: rgba(255, 235, 0, 0.35) !important;
 	}
-	.obsidian-highlight-overlay {
+	.aria-highlight-overlay {
 		cursor: pointer;
 		pointer-events: auto;
 	}
 }
 
-.obsidian-highlighter-menu {
+.aria-highlighter-menu {
 	box-sizing: border-box !important;
 	cursor: default;
 	position: fixed;
@@ -149,15 +149,15 @@ body.obsidian-highlighter-active {
 	border: 1px solid #424242;
 	background: #353535;
 	color: #fff;
-	padding: var(--obsidian-highlighter-menu-padding);
-	height: calc(var(--obsidian-highlighter-menu-height) + var(--obsidian-highlighter-menu-padding) * 2);
-	border-radius: var(--obsidian-highlighter-menu-height);
+	padding: var(--aria-highlighter-menu-padding);
+	height: calc(var(--aria-highlighter-menu-height) + var(--aria-highlighter-menu-padding) * 2);
+	border-radius: var(--aria-highlighter-menu-height);
 	display: flex;
 	align-items: center;
 	gap: 4px;
 	z-index: 9999999999;
 	font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-	font-size: var(--obsidian-highlighter-menu-font-size) !important;
+	font-size: var(--aria-highlighter-menu-font-size) !important;
 	font-weight: 600 !important;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
 	user-select: none;
@@ -171,15 +171,15 @@ body.obsidian-highlighter-active {
 		padding: 0 4px 0 8px;
 	}
 
-	button#obsidian-redo-highlights:not(.active),
-	button#obsidian-undo-highlights:not(.active) {
+	button#aria-redo-highlights:not(.active),
+	button#aria-undo-highlights:not(.active) {
 		background-color: transparent !important;
 		opacity: 0.5;
 		cursor: default !important;
 	}
-	button#obsidian-undo-highlights,
-	button#obsidian-redo-highlights {
-		display: var(--obsidian-undo-button-display) !important;
+	button#aria-undo-highlights,
+	button#aria-redo-highlights {
+		display: var(--aria-undo-button-display) !important;
 	}
 
 	.highlight-count {
@@ -188,21 +188,21 @@ body.obsidian-highlighter-active {
 		padding-inline-start: 4px;
 	}
 
-	button#obsidian-clear-highlights {
+	button#aria-clear-highlights {
 		padding: 0 8px 0 8px !important;
 	}
 
 	button {
 		font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Microsoft YaHei Light", sans-serif !important;
-		font-size: var(--obsidian-highlighter-menu-font-size) !important;
+		font-size: var(--aria-highlighter-menu-font-size) !important;
 		appearance: none !important;
 		background-color: transparent !important;
 		color: #bebebe !important;
 		font-weight: 600 !important;
-		height: var(--obsidian-highlighter-menu-height) !important;
-		min-width: var(--obsidian-highlighter-menu-height) !important;
+		height: var(--aria-highlighter-menu-height) !important;
+		min-width: var(--aria-highlighter-menu-height) !important;
 		padding: 0 !important;
-		border-radius: var(--obsidian-highlighter-menu-height) !important;
+		border-radius: var(--aria-highlighter-menu-height) !important;
 		border: none !important;
 		cursor: pointer !important;
 		box-shadow: none !important;
@@ -213,7 +213,7 @@ body.obsidian-highlighter-active {
 		font-variant-numeric: tabular-nums !important;
 		gap: 4px;
 		background-color: rgba(255, 255, 255, 0.1) !important;
-		box-shadow: var(--obsidian-highlighter-button-border) !important;
+		box-shadow: var(--aria-highlighter-button-border) !important;
 		-webkit-font-smoothing: antialiased !important;
 		svg {
 			mix-blend-mode: normal !important;
@@ -241,7 +241,7 @@ body.obsidian-highlighter-active {
 			background-color: #895DF4 !important;
 			color: white !important;
 			padding: 0 8px !important;
-			box-shadow: var(--obsidian-highlighter-button-border) !important;
+			box-shadow: var(--aria-highlighter-button-border) !important;
 			@media (hover: hover) {
 				&:hover {
 					background-color: #A68AF9 !important;
@@ -254,7 +254,7 @@ body.obsidian-highlighter-active {
 // Element highlight overlay (figure, img, table, pre, picture). Always
 // visible — the hover-delete button is the primary affordance and needs
 // something to hit-test regardless of highlighter mode.
-.obsidian-highlight-overlay {
+.aria-highlight-overlay {
 	display: block;
 	position: absolute;
 	background-color: rgba(255, 235, 0, 0.35);
@@ -263,7 +263,7 @@ body.obsidian-highlighter-active {
 	pointer-events: none;
 	z-index: 999999998;
 
-	&.obsidian-highlight-overlay-dark {
+	&.aria-highlight-overlay-dark {
 		mix-blend-mode: screen;
 		background-color: rgba(255, 235, 0, 0.25);
 	}
@@ -275,13 +275,13 @@ body.obsidian-highlighter-active {
 // highlights are lightweight, and the user can create them outside highlighter
 // mode (via the in-reader selection-to-highlight button), so they need to be
 // visible without requiring mode activation.
-::highlight(obsidian-highlight) {
+::highlight(aria-highlight) {
 	background-color: rgba(255, 235, 0, 0.35);
 }
 
 // Shared base for floating action buttons (Remove highlight, Highlight selection).
-.obsidian-highlight-delete,
-.obsidian-selection-action {
+.aria-highlight-delete,
+.aria-selection-action {
 	position: absolute;
 	display: none;
 	align-items: center;
@@ -326,14 +326,14 @@ body.obsidian-highlighter-active {
 	}
 }
 
-@keyframes clipperOpenAnimation {
+@keyframes clipOpenAnimation {
 	to {
 		opacity: 1;
 		transform: scale(1);
 	}
 }
 
-@keyframes clipperCloseAnimation {
+@keyframes clipCloseAnimation {
 	from {
 		opacity: 1;
 		transform: scale(1);

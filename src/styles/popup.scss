@@ -97,7 +97,7 @@
 
 }
 
-.clipper {
+.clip {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
@@ -141,7 +141,7 @@
 		}
 	}
 
-	.clipper-footer {
+	.clip-footer {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
@@ -150,8 +150,8 @@
 		border-top: 1px solid var(--divider-color);
 		background-color: var(--background-primary);
 		button {
-			font-weight: var(--clipper-button-font-weight);
-			font-size: var(--clipper-button-font-size);
+			font-weight: var(--clip-button-font-weight);
+			font-size: var(--clip-button-font-size);
 		}
 	}
 	.vault-path-container {
@@ -162,7 +162,7 @@
 			flex-grow: 1;
 		}
 		#vault-select {
-			font-weight: var(--clipper-select-font-weight);
+			font-weight: var(--clip-select-font-weight);
 			min-width: 100px;
 			cursor: default;
 		}
@@ -278,7 +278,7 @@
 	}
 }
 
-.clipper ~ .metadata-properties {
+.clip ~ .metadata-properties {
 	display: none;
 }
 
@@ -316,7 +316,7 @@
 	width: 100%;
 	margin-inline-start: 0;
 	margin-inline-end: auto;
-	font-weight: var(--clipper-select-font-weight);
+	font-weight: var(--clip-select-font-weight);
 	color: var(--text-muted);
 	height: 1.625rem;
 	cursor: default;

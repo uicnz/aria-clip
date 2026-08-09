@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "הוסף ספק"
 	},
-	"addToObsidian": {
-		"message": "הוסף ל-Obsidian"
+	"addToAria": {
+		"message": "הוסף ל-Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "לחץ/י Enter להוספת כספת"
@@ -45,7 +45,7 @@
 		"message": "חסר מפתח API"
 	},
 	"apiKeysWarning": {
-		"message": "השימוש בספק חיצוני מהווה הסכמה לתנאי השימוש ומדיניות הפרטיות שלהם. בקשות המתרגם נשלחות ישירות לספק שבחרת. Obsidian אינו אוסף או מאחסן מידע על הבקשות שלך."
+		"message": "השימוש בספק חיצוני מהווה הסכמה לתנאי השימוש ומדיניות הפרטיות שלהם. בקשות המתרגם נשלחות ישירות לספק שבחרת. Aria אינו אוסף או מאחסן מידע על הבקשות שלך."
 	},
 	"appendToDaily": {
 		"message": "הוסף לרשימה היומית, בסוף"
@@ -96,7 +96,7 @@
 		"message": "אופן השמירה"
 	},
 	"clipBehaviorDescription": {
-		"message": "בחר כיצד התוכן הנבחר נשמר ל-Obsidian. מגדיר את המשתנה $strong_start${{content}}$strong_end$",
+		"message": "בחר כיצד התוכן הנבחר נשמר ל-Aria. מגדיר את המשתנה $strong_start${{content}}$strong_end$",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "ל-Obsidian אין אפשרות לגשת ללוח שלך. נסה את הוראות פתרון הבעיות כאן: $1",
+		"message": "ל-Aria אין אפשרות לגשת ללוח שלך. נסה את הוראות פתרון הבעיות כאן: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "סגור"
 	},
-	"commandOpenClipper": {
-		"message": "פתח את Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "פתח את Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "גזירה מהירה"
@@ -196,13 +196,13 @@
 		"message": "שכפל"
 	},
 	"earlyAccessDescription": {
-		"message": "השתמש בתכונות הדורשות את $link_start$גרסת הגישה המוקדמת$link_end$ העדכנית ביותר של Obsidian. כרגע נדרש Obsidian 1.7.2 ומעלה.",
+		"message": "השתמש בתכונות הדורשות את $link_start$גרסת הגישה המוקדמת$link_end$ העדכנית ביותר של Aria. כרגע נדרש Aria 1.7.2 ומעלה.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "משולב"
 	},
 	"enableHighlighterDescription": {
-		"message": "סמן תוכן בדפי אינטרנט שניתן לשמור ב-Obsidian"
+		"message": "סמן תוכן בדפי אינטרנט שניתן לשמור ב-Aria"
 	},
 	"enableInterpreter": {
 		"message": "הפעל מתרגם"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "ייצא מאפיינים"
 	},
 	"exportPropertiesDescription": {
-		"message": "שמור את מאפייני Web Clipper לקובץ $strong_start$types.json$strong_end$ שניתן לייבא לכספת Obsidian שלך או ל-Web Clipper במכשירים אחרים",
+		"message": "שמור את מאפייני Clip לקובץ $strong_start$types.json$strong_end$ שניתן לייבא לכספת Aria שלך או ל-Clip במכשירים אחרים",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "שמור תוכן מהאינטרנט בפורמט פרטי ובר-קיימא שניתן לגשת אליו במצב לא מקוון. הרחבת הדפדפן הרשמית של Obsidian."
+		"message": "שמור תוכן מהאינטרנט בפורמט פרטי ובר-קיימא שניתן לגשת אליו במצב לא מקוון. הרחבת הדפדפן הרשמית של Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "נכשל בהעתקת טקסט"
@@ -337,7 +337,7 @@
 		"message": "משוב"
 	},
 	"feedbackDescription": {
-		"message": "כיצד נוכל לשפר את Web Clipper? בקר/י בדף העזרה שלנו כדי לדווח על באגים, להציע תכונות ולקבל עזרה בבעיות נפוצות."
+		"message": "כיצד נוכל לשפר את Clip? בקר/י בדף העזרה שלנו כדי לדווח על באגים, להציע תכונות ולקבל עזרה בבעיות נפוצות."
 	},
 	"feedbackTitle": {
 		"message": "תודה על המשוב"
@@ -358,7 +358,7 @@
 		"message": "עזרה"
 	},
 	"helpDescription": {
-		"message": "למד/י כיצד להשתמש ב-Web Clipper וקבל/י עזרה בפתרון בעיות"
+		"message": "למד/י כיצד להשתמש ב-Clip וקבל/י עזרה בפתרון בעיות"
 	},
 	"highlightInline": {
 		"message": "סמן תוכן בדף"
@@ -423,7 +423,7 @@
 		"message": "ייבא מאפיינים"
 	},
 	"importPropertiesDescription": {
-		"message": "כדי לייבא מאפיינים מ-Obsidian, מצא את הקובץ $strong_1_start$types.json$strong_1_end$ בתיקיית $strong_2_start$.obsidian$strong_2_end$ של הכספת שלך. תיקייה זו מוסתרת כברירת מחדל ברוב מערכות ההפעלה.",
+		"message": "כדי לייבא מאפיינים מ-Aria, מצא את הקובץ $strong_1_start$types.json$strong_1_end$ בתיקיית $strong_2_start$.aria$strong_2_end$ של הכספת שלך. תיקייה זו מוסתרת כברירת מחדל ברוב מערכות ההפעלה.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "מצב מורשת"
 	},
 	"legacyModeDescription": {
-		"message": "שימוש בשיטת URI המתאימה ל-Obsidian 1.6.7 ומטה. שים/י לב שאורך התוכן מוגבל על ידי הדפדפן ומערכת ההפעלה. חלק מהדפים עלולים להיכשל ללא הודעת שגיאה."
+		"message": "שימוש בשיטת URI המתאימה ל-Aria 1.6.7 ומטה. שים/י לב שאורך התוכן מוגבל על ידי הדפדפן ומערכת ההפעלה. חלק מהדפים עלולים להיכשל ללא הודעת שגיאה."
 	},
 	"loadArticle": {
 		"message": "קרא מאמר"
@@ -706,7 +706,7 @@
 		"message": "ספקים"
 	},
 	"rateExtensionDescription": {
-		"message": "אוהב את Web Clipper? עזור לנו על ידי דירוג."
+		"message": "אוהב את Clip? עזור לנו על ידי דירוג."
 	},
 	"read": {
 		"message": "נקראו"
@@ -979,7 +979,7 @@
 		"message": "שמור פתקים מבלי לפתוח"
 	},
 	"silentOpenDescription": {
-		"message": "פתקים שנגזרו יישמרו אך לא ייפתחו בכרטיסייה חדשה. Obsidian עדיין יועבר לחזית."
+		"message": "פתקים שנגזרו יישמרו אך לא ייפתחו בכרטיסייה חדשה. Aria עדיין יועבר לחזית."
 	},
 	"sort": {
 		"message": "מיון"
@@ -1074,7 +1074,7 @@
 		"message": "כספות"
 	},
 	"vaultsDescription": {
-		"message": "כברירת מחדל, פתקים שנגזרו נשמרים בכספת הפתוחה. תוכל/י להוסיף כספות כאן אם תרצה/י את האפשרות לשמור בכספות שונות. שם הכספת חייב להתאים בדיוק לשם כספת ה-Obsidian. לחץ/י $strong_start$enter$strong_end$ כדי להוסיף כספת.",
+		"message": "כברירת מחדל, פתקים שנגזרו נשמרים בכספת הפתוחה. תוכל/י להוסיף כספות כאן אם תרצה/י את האפשרות לשמור בכספות שונות. שם הכספת חייב להתאים בדיוק לשם כספת ה-Aria. לחץ/י $strong_start$enter$strong_end$ כדי להוסיף כספת.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

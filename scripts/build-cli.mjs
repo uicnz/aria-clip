@@ -11,7 +11,7 @@ const defuddleDir = path.join(root, 'node_modules/defuddle/dist');
 // Turndown (bundled in defuddle/full) checks `window.DOMParser` at module
 // init time, so we must provide it before require() runs.
 const polyfillBanner = `
-#!/usr/bin/env node
+#!/usr/bin/env bun
 ;(function() {
   var linkedom = require("linkedom");
   var _parseHTML = linkedom.parseHTML;

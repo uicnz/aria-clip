@@ -6,11 +6,11 @@ import { Template } from '../types/types';
 const execFileAsync = promisify(execFile);
 
 /**
- * Check if the `obsidian` CLI is available on PATH.
+ * Check if the `aria` CLI is available on PATH.
  */
-async function hasObsidianCli(): Promise<boolean> {
+async function hasAriaCli(): Promise<boolean> {
 	try {
-		await execFileAsync('obsidian', ['version']);
+		await execFileAsync('aria', ['version']);
 		return true;
 	} catch {
 		return false;
@@ -18,9 +18,9 @@ async function hasObsidianCli(): Promise<boolean> {
 }
 
 /**
- * Create/append/prepend a note via the Obsidian CLI.
+ * Create/append/prepend a note via the Aria CLI.
  */
-async function openViaObsidianCli(
+async function openViaAriaCli(
 	fileContent: string,
 	noteName: string,
 	path: string,
@@ -33,7 +33,7 @@ async function openViaObsidianCli(
 
 	if (isDailyNote) {
 		const command = behavior === 'append-daily' ? 'daily:append' : 'daily:prepend';
-		const { stdout } = await execFileAsync('obsidian', [
+		const { stdout } = await execFileAsync('aria', [
 			command,
 			`content=${fileContent}`,
 			...vaultArgs,
@@ -47,7 +47,7 @@ async function openViaObsidianCli(
 
 	if (behavior === 'append-specific' || behavior === 'prepend-specific') {
 		const command = behavior === 'append-specific' ? 'append' : 'prepend';
-		const { stdout } = await execFileAsync('obsidian', [
+		const { stdout } = await execFileAsync('aria', [
 			command,
 			`path=${filePath}`,
 			`content=${fileContent}`,
@@ -68,12 +68,12 @@ async function openViaObsidianCli(
 		args.push('overwrite');
 	}
 
-	const { stdout } = await execFileAsync('obsidian', args);
+	const { stdout } = await execFileAsync('aria', args);
 	return stdout.trim();
 }
 
 /**
- * Open a note in Obsidian via URI scheme (fallback / legacy mode).
+ * Open a note in Aria via URI scheme (fallback / legacy mode).
  */
 async function openViaUri(
 	fileContent: string,
@@ -85,48 +85,48 @@ async function openViaUri(
 ): Promise<void> {
 	const isDailyNote = behavior === 'append-daily' || behavior === 'prepend-daily';
 
-	let obsidianUrl: string;
+	let ariaUrl: string;
 	if (isDailyNote) {
-		obsidianUrl = `obsidian://daily?`;
+		ariaUrl = `aria://daily?`;
 	} else {
 		const normalizedPath = path && !path.endsWith('/') ? path + '/' : path;
 		const formattedNoteName = sanitizeFileName(noteName);
-		obsidianUrl = `obsidian://new?file=${encodeURIComponent(normalizedPath + formattedNoteName)}`;
+		ariaUrl = `aria://new?file=${encodeURIComponent(normalizedPath + formattedNoteName)}`;
 	}
 
 	if (behavior.startsWith('append')) {
-		obsidianUrl += '&append=true';
+		ariaUrl += '&append=true';
 	} else if (behavior.startsWith('prepend')) {
-		obsidianUrl += '&prepend=true';
+		ariaUrl += '&prepend=true';
 	} else if (behavior === 'overwrite') {
-		obsidianUrl += '&overwrite=true';
+		ariaUrl += '&overwrite=true';
 	}
 
 	if (vault) {
-		obsidianUrl += `&vault=${encodeURIComponent(vault)}`;
+		ariaUrl += `&vault=${encodeURIComponent(vault)}`;
 	}
 
 	if (silent) {
-		obsidianUrl += '&silent=true';
+		ariaUrl += '&silent=true';
 	}
 
-	obsidianUrl += `&content=${encodeURIComponent(fileContent)}`;
+	ariaUrl += `&content=${encodeURIComponent(fileContent)}`;
 
 	const platform = process.platform;
 	if (platform === 'darwin') {
-		await execFileAsync('open', [obsidianUrl]);
+		await execFileAsync('open', [ariaUrl]);
 	} else if (platform === 'win32') {
-		await execFileAsync('powershell', ['-Command', 'Start-Process', '-Uri', obsidianUrl]);
+		await execFileAsync('powershell', ['-Command', 'Start-Process', '-Uri', ariaUrl]);
 	} else {
-		await execFileAsync('xdg-open', [obsidianUrl]);
+		await execFileAsync('xdg-open', [ariaUrl]);
 	}
 }
 
 /**
- * Send a note to Obsidian. Uses the Obsidian CLI by default,
+ * Send a note to Aria. Uses the Aria CLI by default,
  * falls back to URI scheme if --uri is set or CLI is not available.
  */
-export async function openInObsidian(
+export async function openInAria(
 	fileContent: string,
 	noteName: string,
 	path: string,
@@ -135,11 +135,11 @@ export async function openInObsidian(
 	silent: boolean,
 	forceUri: boolean
 ): Promise<string> {
-	if (!forceUri && await hasObsidianCli()) {
-		const result = await openViaObsidianCli(fileContent, noteName, path, vault, behavior, silent);
+	if (!forceUri && await hasAriaCli()) {
+		const result = await openViaAriaCli(fileContent, noteName, path, vault, behavior, silent);
 		return result;
 	}
 
 	await openViaUri(fileContent, noteName, path, vault, behavior, silent);
-	return `Opened in Obsidian${vault ? ` (vault: ${vault})` : ''}`;
+	return `Opened in Aria${vault ? ` (vault: ${vault})` : ''}`;
 }

@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Dodaj operatora"
 	},
-	"addToObsidian": {
-		"message": "Zapisz w Obsidian"
+	"addToAria": {
+		"message": "Zapisz w Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "Kliknij enter, aby dodać sejf"
@@ -45,7 +45,7 @@
 		"message": "Brak klucza API"
 	},
 	"apiKeysWarning": {
-		"message": "Korzystając z usług zewnętrznego operatora, użytkownik akceptuje jego regulamin i politykę prywatności. Zapytania użytkowników wysyłane są bezpośrednio do wybranego operatora. Obsidian nie gromadzi ani nie przechowuje żadnych danych dotyczących zapytań."
+		"message": "Korzystając z usług zewnętrznego operatora, użytkownik akceptuje jego regulamin i politykę prywatności. Zapytania użytkowników wysyłane są bezpośrednio do wybranego operatora. Aria nie gromadzi ani nie przechowuje żadnych danych dotyczących zapytań."
 	},
 	"appendToDaily": {
 		"message": "Zapisz na końcu w dzienniku"
@@ -96,7 +96,7 @@
 		"message": "Sposób działania przechwytywania"
 	},
 	"clipBehaviorDescription": {
-		"message": "Pozwala wybrać sposób zapisywania wyróżnionej zawartości w Obsidian. Definiuje zmienną $strong_start${{content}}$strong_end$.",
+		"message": "Pozwala wybrać sposób zapisywania wyróżnionej zawartości w Aria. Definiuje zmienną $strong_start${{content}}$strong_end$.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian nie ma dostępu do Twojego schowka. Wypróbuj instrukcje rozwiązywania problemów tutaj: $1",
+		"message": "Aria nie ma dostępu do Twojego schowka. Wypróbuj instrukcje rozwiązywania problemów tutaj: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Zamknij"
 	},
-	"commandOpenClipper": {
-		"message": "Otwórz schowek Obsidian"
+	"commandOpenClip": {
+		"message": "Otwórz Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Przechwyć"
@@ -196,13 +196,13 @@
 		"message": "Duplikuj"
 	},
 	"earlyAccessDescription": {
-		"message": "Korzystaj z funkcji, które wymagają najnowszej wersji $link_start$wczesnego dostępu$link_end$ Obsidian. Obecnie wymagana wersja Obsidian to 1.7.2 lub nowsza.",
+		"message": "Korzystaj z funkcji, które wymagają najnowszej wersji $link_start$wczesnego dostępu$link_end$ Aria. Obecnie wymagana wersja Aria to 1.7.2 lub nowsza.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Osadzone"
 	},
 	"enableHighlighterDescription": {
-		"message": "Wyróżniaj treści na stronach, które możesz zapisać w Obsidian."
+		"message": "Wyróżniaj treści na stronach, które możesz zapisać w Aria."
 	},
 	"enableInterpreter": {
 		"message": "Włącz tłumacza"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Eksportuj atrybuty"
 	},
 	"exportPropertiesDescription": {
-		"message": "Zapisz atrybuty Web Clipper w pliku $strong_start$types.json$strong_end$, który można zaimportować do sejfu w Obsidian lub do Web Clipper na innych urządzeniach.",
+		"message": "Zapisz atrybuty Clip w pliku $strong_start$types.json$strong_end$, który można zaimportować do sejfu w Aria lub do Clip na innych urządzeniach.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Zapisuj treści z Internetu w prywatnym i bezpiecznym formacie, do którego masz dostęp offline. Oficjalne rozszerzenie przeglądarki dla Obsidian."
+		"message": "Zapisuj treści z Internetu w prywatnym i bezpiecznym formacie, do którego masz dostęp offline. Oficjalne rozszerzenie przeglądarki dla Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Nie udało się skopiować tekstu"
@@ -337,7 +337,7 @@
 		"message": "Opinia"
 	},
 	"feedbackDescription": {
-		"message": "Jak możemy poprawić Web Clipper? Odwiedź naszą stronę pomocy, gdzie możesz zgłaszać błędy, proponować funkcje i uzyskać pomoc w rozwiązywaniu typowych problemów."
+		"message": "Jak możemy poprawić Clip? Odwiedź naszą stronę pomocy, gdzie możesz zgłaszać błędy, proponować funkcje i uzyskać pomoc w rozwiązywaniu typowych problemów."
 	},
 	"feedbackTitle": {
 		"message": "Dziękujemy za Twoją opinię"
@@ -358,7 +358,7 @@
 		"message": "Pomoc"
 	},
 	"helpDescription": {
-		"message": "Dowiedz się, jak korzystać z rozszerzenia Web Clipper i uzyskaj pomoc techniczną."
+		"message": "Dowiedz się, jak korzystać z rozszerzenia Clip i uzyskaj pomoc techniczną."
 	},
 	"highlightInline": {
 		"message": "Wyróżnij zawartość strony"
@@ -423,7 +423,7 @@
 		"message": "Importuj atrybuty"
 	},
 	"importPropertiesDescription": {
-		"message": "Aby zaimportować atrybuty z Obsidian, zlokalizuj plik $strong_1_start$types.json$strong_1_end$ w folderze $strong_2_start$.obsidian$strong_2_end$ w sejfie. Folder ten jest domyślnie ukryty w większości systemów operacyjnych.",
+		"message": "Aby zaimportować atrybuty z Aria, zlokalizuj plik $strong_1_start$types.json$strong_1_end$ w folderze $strong_2_start$.aria$strong_2_end$ w sejfie. Folder ten jest domyślnie ukryty w większości systemów operacyjnych.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Tryb klasyczny"
 	},
 	"legacyModeDescription": {
-		"message": "Używa URI jako sposobu wyodrębniania treści, który jest kompatybilny z Obsidian w wersji 1.6.7 lub starszej. Należy pamiętać, że długość treści, którą można wyodrębnić, jest ograniczona przez przeglądarkę i system operacyjny. Część stron może nie działać pomimo braku błędów."
+		"message": "Używa URI jako sposobu wyodrębniania treści, który jest kompatybilny z Aria w wersji 1.6.7 lub starszej. Należy pamiętać, że długość treści, którą można wyodrębnić, jest ograniczona przez przeglądarkę i system operacyjny. Część stron może nie działać pomimo braku błędów."
 	},
 	"loadArticle": {
 		"message": "Czytaj artykuł"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "Otwórz"
 	},
 	"openBehaviorDescription": {
-		"message": "Wybierz, jak domyślnie otwiera się Web Clipper."
+		"message": "Wybierz, jak domyślnie otwiera się Clip."
 	},
 	"openBehaviorTitle": {
 		"message": "Zachowanie przy otwieraniu"
@@ -714,7 +714,7 @@
 		"message": "Operatorzy"
 	},
 	"rateExtensionDescription": {
-		"message": "Czy podoba Ci się Web Clipper? Pomóż nam, oceniając go."
+		"message": "Czy podoba Ci się Clip? Pomóż nam, oceniając go."
 	},
 	"read": {
 		"message": "Przeczytane"
@@ -987,7 +987,7 @@
 		"message": "Zapisz notatkę bez jej otwierania"
 	},
 	"silentOpenDescription": {
-		"message": "Notatki będą zapisywane bez otwierania ich w nowej karcie. Obsidian nadal będzie umieszczany na wierzchu."
+		"message": "Notatki będą zapisywane bez otwierania ich w nowej karcie. Aria nadal będzie umieszczany na wierzchu."
 	},
 	"sort": {
 		"message": "Sortuj"
@@ -1082,7 +1082,7 @@
 		"message": "Sejfy"
 	},
 	"vaultsDescription": {
-		"message": "Domyślnie notatki są zapisywane w obecnie otwartym sejfie. Jeśli chcesz mieć możliwość zapisywania w różnych sejfach, możesz je dodawać w tym miejscu. Nazwy sejfów muszą dokładnie odpowiadać tym w Obsidian. Kliknij $strong_start$enter$strong_end$, aby dodać sejf.",
+		"message": "Domyślnie notatki są zapisywane w obecnie otwartym sejfie. Jeśli chcesz mieć możliwość zapisywania w różnych sejfach, możesz je dodawać w tym miejscu. Nazwy sejfów muszą dokładnie odpowiadać tym w Aria. Kliknij $strong_start$enter$strong_end$, aby dodać sejf.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

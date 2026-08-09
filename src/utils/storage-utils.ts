@@ -39,7 +39,7 @@ export let generalSettings: Settings = {
 		customCss: ''
 	},
 	stats: {
-		addToObsidian: 0,
+		addToAria: 0,
 		saveFile: 0,
 		copyToClipboard: 0,
 		share: 0,
@@ -47,7 +47,7 @@ export let generalSettings: Settings = {
 	},
 	history: [],
 	ratings: [],
-	saveBehavior: 'addToObsidian'
+	saveBehavior: 'addToAria'
 };
 
 export function setLocalStorage(key: string, value: any): Promise<void> {
@@ -65,7 +65,7 @@ interface StorageData {
 		legacyMode?: boolean;
 		silentOpen?: boolean;
 		openBehavior?: boolean | 'popup' | 'embedded';
-		saveBehavior?: 'addToObsidian' | 'copyToClipboard' | 'saveFile';
+		saveBehavior?: 'addToAria' | 'copyToClipboard' | 'saveFile';
 	};
 	vaults?: string[];
 	highlighter_settings?: {
@@ -100,7 +100,7 @@ interface StorageData {
 	};
 	property_types?: PropertyType[];
 	stats?: {
-		addToObsidian: number;
+		addToAria: number;
 		saveFile: number;
 		copyToClipboard: number;
 		share: number;
@@ -134,7 +134,7 @@ export async function loadSettings(): Promise<Settings> {
 		interpreterAutoRun: false,
 		defaultPromptContext: '',
 		propertyTypes: [],
-		saveBehavior: 'addToObsidian',
+		saveBehavior: 'addToAria',
 		readerSettings: {
 			fontSize: 16,
 			lineHeight: 1.6,
@@ -153,7 +153,7 @@ export async function loadSettings(): Promise<Settings> {
 			customCss: ''
 		},
 		stats: {
-			addToObsidian: 0,
+			addToAria: 0,
 			saveFile: 0,
 			copyToClipboard: 0,
 			share: 0,

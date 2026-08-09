@@ -1,4 +1,4 @@
-// Template parser for the Web Clipper template engine
+// Template parser for the Clip template engine
 // Converts token stream into an Abstract Syntax Tree (AST)
 //
 // The parser handles:

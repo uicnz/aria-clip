@@ -8,7 +8,7 @@ Install the extension from the source. This won't be distributed publicly.
 
 ### Translations
 
-You can help translate Web Clipper into your language. Submit your translation via pull request using the format found in the [/_locales](/src/_locales) folder.
+You can help translate Clip into your language. Submit your translation via pull request using the format found in the [/_locales](/src/_locales) folder.
 
 ## Roadmap
 
@@ -17,10 +17,10 @@ In no particular order:
 - [ ] Annotate highlights
 - [ ] Template directory
 - [ ] Sync settings across browsers
-- [x] A separate icon for Web Clipper (1.6.3)
+- [x] A separate icon for Clip (1.6.3)
 - [x] Template validation (1.1.0)
 - [x] Template logic (if/for)  (1.1.0)
-- [x] Save images locally ([Obsidian 1.8.0](https://obsidian.md/changelog/2024-12-18-desktop-v1.8.0/))
+- [x] Save images locally ([Aria 1.8.0](https://aria.bot/changelog/2024-12-18-desktop-v1.8.0/))
 - [x] Translate UI into more languages — help is welcomed
 
 ## Developers
@@ -61,11 +61,11 @@ If you want to run the extension permanently you can do so with the Nightly or D
 For iOS Simulator testing on macOS:
 
 1. Run `bun run build` to build the extension
-2. Open `xcode/Obsidian Web Clipper/Obsidian Web Clipper.xcodeproj` in Xcode
-3. Select the **Obsidian Web Clipper (iOS)** scheme from the scheme selector
+2. Open `xcode/Aria Clip/Aria Clip.xcodeproj` in Xcode
+3. Select the **Aria Clip (iOS)** scheme from the scheme selector
 4. Choose an iOS Simulator device and click **Run** to build and launch the app
 5. Once the app is running on the simulator, open **Safari**
-6. Navigate to a webpage and tap the **Extensions** button in Safari to access the Web Clipper extension
+6. Navigate to a webpage and tap the **Extensions** button in Safari to access the Clip extension
 
 ### Run tests
 

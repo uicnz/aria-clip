@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Lisää palveluntarjoaja"
 	},
-	"addToObsidian": {
-		"message": "Lisää Obsidianiin"
+	"addToAria": {
+		"message": "Lisää Ariaiin"
 	},
 	"addVaultPlaceholder": {
 		"message": "Paina enter lisätäksesi holvin"
@@ -45,7 +45,7 @@
 		"message": "Ei API-avainta"
 	},
 	"apiKeysWarning": {
-		"message": "Käyttämällä ulkoista palveluntarjoajaa hyväksyt heidän käyttöehtonsa ja tietosuojakäytäntönsä. Tulkin pyynnöt lähetetään suoraan valitsemallesi palveluntarjoajalle. Obsidian ei kerää tai tallenna mitään tietoja pyynnöistäsi."
+		"message": "Käyttämällä ulkoista palveluntarjoajaa hyväksyt heidän käyttöehtonsa ja tietosuojakäytäntönsä. Tulkin pyynnöt lähetetään suoraan valitsemallesi palveluntarjoajalle. Aria ei kerää tai tallenna mitään tietoja pyynnöistäsi."
 	},
 	"appendToDaily": {
 		"message": "Lisää päivittäiseen muistiinpanoon, loppuun"
@@ -96,7 +96,7 @@
 		"message": "Leikkauksen käyttäytyminen"
 	},
 	"clipBehaviorDescription": {
-		"message": "Valitse, miten valittu sisältö tallennetaan Obsidianiin. Määrittää muuttujan $strong_start${{content}}$strong_end$",
+		"message": "Valitse, miten valittu sisältö tallennetaan Ariaiin. Määrittää muuttujan $strong_start${{content}}$strong_end$",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian ei voi käyttää leikepöytääsi. Kokeile vianmääritysohjeita täällä: $1",
+		"message": "Aria ei voi käyttää leikepöytääsi. Kokeile vianmääritysohjeita täällä: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Sulje"
 	},
-	"commandOpenClipper": {
-		"message": "Avaa Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "Avaa Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Pikaleikkaus"
@@ -196,13 +196,13 @@
 		"message": "Monista"
 	},
 	"earlyAccessDescription": {
-		"message": "Käytä ominaisuuksia, jotka vaativat uusimman $link_start$early access -version$link_end$ Obsidianista. Vaatii tällä hetkellä Obsidian 1.7.2 tai uudemman.",
+		"message": "Käytä ominaisuuksia, jotka vaativat uusimman $link_start$early access -version$link_end$ Ariaista. Vaatii tällä hetkellä Aria 1.7.2 tai uudemman.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Upotettu"
 	},
 	"enableHighlighterDescription": {
-		"message": "Korosta verkkosivujen sisältöä, jonka voit tallentaa Obsidianiin"
+		"message": "Korosta verkkosivujen sisältöä, jonka voit tallentaa Ariaiin"
 	},
 	"enableInterpreter": {
 		"message": "Ota tulkki käyttöön"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Vie ominaisuudet"
 	},
 	"exportPropertiesDescription": {
-		"message": "Tallenna Web Clipperin ominaisuudet $strong_start$types.json$strong_end$ -tiedostoon, jonka voit tuoda Obsidian-holviin tai Web Clipperiin muilla laitteilla",
+		"message": "Tallenna Clipin ominaisuudet $strong_start$types.json$strong_end$ -tiedostoon, jonka voit tuoda Aria-holviin tai Clipiin muilla laitteilla",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Tallenna verkkosisältöä yksityisessä ja kestävässä muodossa, jota voit käyttää offline-tilassa. Obsidianin virallinen selainlaajennus."
+		"message": "Tallenna verkkosisältöä yksityisessä ja kestävässä muodossa, jota voit käyttää offline-tilassa. Ariain virallinen selainlaajennus."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Tekstin kopiointi epäonnistui"
@@ -337,7 +337,7 @@
 		"message": "Palaute"
 	},
 	"feedbackDescription": {
-		"message": "Miten voimme parantaa Web Clipperia? Vieraile ohjesivullamme, jossa voit raportoida virheitä, ehdottaa ominaisuuksia ja saada apua yleisiin ongelmiin."
+		"message": "Miten voimme parantaa Clipia? Vieraile ohjesivullamme, jossa voit raportoida virheitä, ehdottaa ominaisuuksia ja saada apua yleisiin ongelmiin."
 	},
 	"feedbackTitle": {
 		"message": "Kiitos palautteestasi"
@@ -358,7 +358,7 @@
 		"message": "Ohje"
 	},
 	"helpDescription": {
-		"message": "Opi käyttämään Web Clipperia ja saa apua ongelmien ratkaisemiseen"
+		"message": "Opi käyttämään Clipia ja saa apua ongelmien ratkaisemiseen"
 	},
 	"highlightInline": {
 		"message": "Korosta sivun sisältö"
@@ -423,7 +423,7 @@
 		"message": "Tuo ominaisuudet"
 	},
 	"importPropertiesDescription": {
-		"message": "Tuodaksesi ominaisuudet Obsidianista, etsi $strong_1_start$types.json$strong_1_end$ -tiedosto holvisi $strong_2_start$.obsidian$strong_2_end$ -kansiosta. Huomaa, että tämä kansio on oletuksena piilotettu useimmissa käyttöjärjestelmissä.",
+		"message": "Tuodaksesi ominaisuudet Ariaista, etsi $strong_1_start$types.json$strong_1_end$ -tiedosto holvisi $strong_2_start$.aria$strong_2_end$ -kansiosta. Huomaa, että tämä kansio on oletuksena piilotettu useimmissa käyttöjärjestelmissä.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Yhteensopivuustila"
 	},
 	"legacyModeDescription": {
-		"message": "Käyttää URI-leikkausmenetelmää, joka on yhteensopiva Obsidian 1.6.7:n tai sitä aikaisempien versioiden kanssa. Huomaa, että selaimen ja käyttöjärjestelmän rajoittama leikattavan sisällön pituus. Jotkin sivut saattavat epäonnistua ilman virheitä."
+		"message": "Käyttää URI-leikkausmenetelmää, joka on yhteensopiva Aria 1.6.7:n tai sitä aikaisempien versioiden kanssa. Huomaa, että selaimen ja käyttöjärjestelmän rajoittama leikattavan sisällön pituus. Jotkin sivut saattavat epäonnistua ilman virheitä."
 	},
 	"loadArticle": {
 		"message": "Lue artikkeli"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "Avaa"
 	},
 	"openBehaviorDescription": {
-		"message": "Valitse, miten Web Clipper avautuu oletuksena."
+		"message": "Valitse, miten Clip avautuu oletuksena."
 	},
 	"openBehaviorTitle": {
 		"message": "Avautumiskäyttäytyminen"
@@ -722,7 +722,7 @@
 		"message": "Palveluntarjoajat"
 	},
 	"rateExtensionDescription": {
-		"message": "Pidätkö Web Clipperista? Auta meitä antamalla sille arvostelu."
+		"message": "Pidätkö Clipista? Auta meitä antamalla sille arvostelu."
 	},
 	"read": {
 		"message": "Luettu"
@@ -974,7 +974,7 @@
 		"message": "Muuttaaksesi pikanäppäimiä, mene osoitteeseen $1, napsauta hammaspyöräkuvaketta ja valitse \"Hallitse laajennuksen pikanäppäimiä\""
 	},
 	"shortcutInstructionsIntro": {
-		"message": "Pikanäppäimet antavat sinun käyttää clipperin toimintoja nopeasti."
+		"message": "Pikanäppäimet antavat sinun käyttää clipin toimintoja nopeasti."
 	},
 	"shortcutInstructionsSafari": {
 		"message": "Pikanäppäimiä ei voi mukauttaa Safarissa."
@@ -986,7 +986,7 @@
 		"message": "Näytä toimintopainike"
 	},
 	"showActionsDescription": {
-		"message": "Antaa sinun tarkastella sivun muuttujia clipperin valikosta. Hyödyllinen nähdäksesi malleissa käytettävissä olevat muuttujat."
+		"message": "Antaa sinun tarkastella sivun muuttujia clipin valikosta. Hyödyllinen nähdäksesi malleissa käytettävissä olevat muuttujat."
 	},
 	"showPageVariables": {
 		"message": "Näytä sivun muuttujat"
@@ -995,7 +995,7 @@
 		"message": "Tallenna leikatut muistiinpanot avaamatta"
 	},
 	"silentOpenDescription": {
-		"message": "Leikatut muistiinpanot tallennetaan mutta niitä ei avata uudessa välilehdessä. Obsidian tuodaan silti etualalle."
+		"message": "Leikatut muistiinpanot tallennetaan mutta niitä ei avata uudessa välilehdessä. Aria tuodaan silti etualalle."
 	},
 	"sort": {
 		"message": "Lajittele"
@@ -1090,7 +1090,7 @@
 		"message": "Holvit"
 	},
 	"vaultsDescription": {
-		"message": "Oletuksena leikatut muistiinpanot tallennetaan avoinna olevaan holviin. Voit lisätä holveja täällä, jos haluat mahdollisuuden tallentaa eri holveihin. Holvin nimen täytyy vastata täsmälleen Obsidian-holvin nimeä. Paina $strong_start$enter$strong_end$ lisätäksesi holvin.",
+		"message": "Oletuksena leikatut muistiinpanot tallennetaan avoinna olevaan holviin. Voit lisätä holveja täällä, jos haluat mahdollisuuden tallentaa eri holveihin. Holvin nimen täytyy vastata täsmälleen Aria-holvin nimeä. Paina $strong_start$enter$strong_end$ lisätäksesi holvin.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

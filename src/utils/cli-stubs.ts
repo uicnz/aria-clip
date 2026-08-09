@@ -41,7 +41,7 @@ export const generalSettings: Settings = {
 		customCss: '',
 	},
 	stats: {
-		addToObsidian: 0,
+		addToAria: 0,
 		saveFile: 0,
 		copyToClipboard: 0,
 		share: 0,
@@ -49,7 +49,7 @@ export const generalSettings: Settings = {
 	},
 	history: [],
 	ratings: [],
-	saveBehavior: 'addToObsidian',
+	saveBehavior: 'addToAria',
 };
 
 export const loadSettings = async () => {};

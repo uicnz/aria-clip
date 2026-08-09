@@ -50,7 +50,7 @@ export interface Rating {
 	date: string;
 }
 
-export type SaveBehavior = 'addToObsidian' | 'saveFile' | 'copyToClipboard';
+export type SaveBehavior = 'addToAria' | 'saveFile' | 'copyToClipboard';
 
 export interface ReaderSettings {
 	fontSize: number;
@@ -89,7 +89,7 @@ export interface Settings {
 	propertyTypes: PropertyType[];
 	readerSettings: ReaderSettings;
 	stats: {
-		addToObsidian: number;
+		addToAria: number;
 		saveFile: number;
 		copyToClipboard: number;
 		share: number;
@@ -97,7 +97,7 @@ export interface Settings {
 	};
 	history: HistoryEntry[];
 	ratings: Rating[];
-	saveBehavior: 'addToObsidian' | 'saveFile' | 'copyToClipboard';
+	saveBehavior: 'addToAria' | 'saveFile' | 'copyToClipboard';
 }
 
 export interface ModelConfig {
@@ -111,7 +111,7 @@ export interface ModelConfig {
 export interface HistoryEntry {
 	datetime: string;
 	url: string;
-	action: 'addToObsidian' | 'saveFile' | 'copyToClipboard' | 'share' | 'readerMode';
+	action: 'addToAria' | 'saveFile' | 'copyToClipboard' | 'share' | 'readerMode';
 	title?: string;
 	vault?: string;
 	path?: string;

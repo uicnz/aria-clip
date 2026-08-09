@@ -23,7 +23,7 @@ async function enableYouTubeEmbedRule(tabId: number): Promise<void> {
 				requestHeaders: [{
 					header: 'Referer',
 					operation: 'set' as any,
-					value: 'https://obsidian.md/'
+					value: 'https://aria.bot/'
 				}]
 			},
 			condition: {
@@ -118,16 +118,16 @@ let popupPorts: { [tabId: number]: browser.Runtime.Port } = {};
 
 async function injectContentScript(tabId: number): Promise<void> {
 	if (browser.scripting) {
-		debugLog('Clipper', 'Using scripting API');
+		debugLog('Clip', 'Using scripting API');
 		await browser.scripting.executeScript({
 			target: { tabId },
 			files: ['content.js']
 		});
 	} else {
-		debugLog('Clipper', 'Using tabs.executeScript fallback');
+		debugLog('Clip', 'Using tabs.executeScript fallback');
 		await browser.tabs.executeScript(tabId, { file: 'content.js' });
 	}
-	debugLog('Clipper', 'Injection completed, waiting for init...');
+	debugLog('Clip', 'Injection completed, waiting for init...');
 
 	// Poll until the content script responds, rather than a fixed delay.
 	// Try immediately after injection, then back off with 50ms sleeps.
@@ -145,7 +145,7 @@ async function injectContentScript(tabId: number): Promise<void> {
 	if (!ready) {
 		throw new Error('Content script did not respond after injection');
 	}
-	debugLog('Clipper', 'Post-injection ping succeeded');
+	debugLog('Clip', 'Post-injection ping succeeded');
 }
 
 async function ensureContentScriptLoadedInBackground(tabId: number): Promise<void> {
@@ -160,7 +160,7 @@ async function ensureContentScriptLoadedInBackground(tabId: number): Promise<voi
 
 		// Attempt to send a message to the content script
 		await browser.tabs.sendMessage(tabId, { action: "ping" });
-		debugLog('Clipper', 'Content script ping succeeded');
+		debugLog('Clip', 'Content script ping succeeded');
 	} catch (error) {
 		// If the error is about invalid URL, re-throw it
 		if (error instanceof Error && error.message.includes('invalid URL')) {
@@ -168,7 +168,7 @@ async function ensureContentScriptLoadedInBackground(tabId: number): Promise<voi
 		}
 
 		// If the message fails, the content script is not loaded, so inject it
-		debugLog('Clipper', 'Ping failed, injecting content script...', error);
+		debugLog('Clip', 'Ping failed, injecting content script...', error);
 		await injectContentScript(tabId);
 	}
 }
@@ -216,7 +216,7 @@ async function exitReaderPageIfNeeded(tabId: number, readerUrl?: string): Promis
 		originalUrl = isReaderPageUrl(tab.url);
 	} catch {}
 
-	// Fallback: the embedded clipper passes the reader URL when
+	// Fallback: the embedded clip passes the reader URL when
 	// tabs.get() can't access the extension page URL
 	if (!originalUrl && readerUrl) {
 		originalUrl = isReaderPageUrl(readerUrl);
@@ -250,7 +250,7 @@ async function initialize() {
 		// Set up action popup based on openBehavior setting
 		await updateActionPopup();
 
-		debugLog('Clipper', 'Background script initialized successfully');
+		debugLog('Clip', 'Background script initialized successfully');
 	} catch (error) {
 		console.error('Error initializing background script:', error);
 	}
@@ -621,7 +621,7 @@ browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime
 		if (typedRequest.action === "getTabInfo") {
 			browser.tabs.get(typedRequest.tabId as number).then((tab) => {
 				// For reader page tabs, return the article URL so the
-				// clipper treats it as a normal web page
+				// clip treats it as a normal web page
 				const url = isReaderPageUrl(tab.url) ?? tab.url;
 				sendResponse({
 					success: true,
@@ -646,7 +646,7 @@ browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime
 				injectContentScript(tabId)
 					.then(() => sendResponse({ success: true }))
 					.catch((error) => {
-						console.error('[Obsidian Clipper] forceInjectContentScript failed:', error);
+						console.error('[Aria Clip] forceInjectContentScript failed:', error);
 						sendResponse({ success: false, error: error instanceof Error ? error.message : String(error) });
 					});
 				return true;
@@ -663,7 +663,7 @@ browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime
 				routeMessageToTab(tabId, message).then((response) => {
 					sendResponse(response);
 				}).catch((error) => {
-					console.error('[Obsidian Clipper] Error sending message to tab:', error);
+					console.error('[Aria Clip] Error sending message to tab:', error);
 					sendResponse({
 						success: false,
 						error: error instanceof Error ? error.message : String(error)
@@ -692,7 +692,7 @@ browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime
 			return true;
 		}
 
-		if (typedRequest.action === "openObsidianUrl") {
+		if (typedRequest.action === "openAriaUrl") {
 			const url = (typedRequest as any).url;
 			if (url) {
 				browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
@@ -701,7 +701,7 @@ browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime
 						browser.tabs.update(currentTab.id, { url: url }).then(() => {
 							sendResponse({ success: true });
 						}).catch((error) => {
-							console.error('Error opening Obsidian URL:', error);
+							console.error('Error opening Aria URL:', error);
 							sendResponse({
 								success: false,
 								error: error instanceof Error ? error.message : String(error)
@@ -735,7 +735,7 @@ browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime
 			typedRequest.action === "ensureContentScriptLoaded" ||
 			typedRequest.action === "getHighlighterMode" ||
 			typedRequest.action === "toggleHighlighterMode" ||
-			typedRequest.action === "openObsidianUrl") {
+			typedRequest.action === "openAriaUrl") {
 			return true;
 		}
 	}
@@ -798,7 +798,7 @@ const debouncedUpdateContextMenu = debounce(async (tabId: number) => {
 			contexts: browser.Menus.ContextType[];
 		}[] = [
 				{
-					id: "open-obsidian-clipper",
+					id: "open-aria-clip",
 					title: "Save this page",
 					contexts: ["page", "selection", "image", "video", "audio"]
 				},
@@ -854,7 +854,7 @@ const debouncedUpdateContextMenu = debounce(async (tabId: number) => {
 }, 100); // 100ms debounce time
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
-	if (info.menuItemId === "open-obsidian-clipper") {
+	if (info.menuItemId === "open-aria-clip") {
 		openPopup();
 	} else if (info.menuItemId === "enter-highlighter" && tab && tab.id) {
 		await setHighlighterMode(tab.id, true);

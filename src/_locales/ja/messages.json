@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "\"プロバイダーを追加\""
 	},
-	"addToObsidian": {
-		"message": "Obsidianに追加"
+	"addToAria": {
+		"message": "Ariaに追加"
 	},
 	"addVaultPlaceholder": {
 		"message": "Enterキーを押して保管庫を追加"
@@ -45,7 +45,7 @@
 		"message": "\"APIキーがありません\""
 	},
 	"apiKeysWarning": {
-		"message": "外部プロバイダーを使用することで、そのプロバイダーの利用規約とプライバシーポリシーに同意したことになります。インタープリターのリクエストは選択したプロバイダーに直接送信されます。Obsidianはリクエストに関するデータを収集または保存しません。"
+		"message": "外部プロバイダーを使用することで、そのプロバイダーの利用規約とプライバシーポリシーに同意したことになります。インタープリターのリクエストは選択したプロバイダーに直接送信されます。Ariaはリクエストに関するデータを収集または保存しません。"
 	},
 	"appendToDaily": {
 		"message": "デイリーノートの末尾に追加"
@@ -96,7 +96,7 @@
 		"message": "クリップの動作"
 	},
 	"clipBehaviorDescription": {
-		"message": "ハイライトしたコンテンツをObsidianに保存する方法を選択します。$strong_start${{content}}$strong_end$変数を定義します。",
+		"message": "ハイライトしたコンテンツをAriaに保存する方法を選択します。$strong_start${{content}}$strong_end$変数を定義します。",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian がクリップボードにアクセスできません。こちらのトラブルシューティング手順をお試しください: $1",
+		"message": "Aria がクリップボードにアクセスできません。こちらのトラブルシューティング手順をお試しください: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "閉じる"
 	},
-	"commandOpenClipper": {
-		"message": "Obsidian Clipperを開く"
+	"commandOpenClip": {
+		"message": "Aria Clipを開く"
 	},
 	"commandQuickClip": {
 		"message": "クイッククリップ"
@@ -196,13 +196,13 @@
 		"message": "複製"
 	},
 	"earlyAccessDescription": {
-		"message": "Obsidianの最新の$link_start$アーリーアクセスバージョン$link_end$が必要な機能を使用します。現在はObsidian 1.7.2以降が必要です。",
+		"message": "Ariaの最新の$link_start$アーリーアクセスバージョン$link_end$が必要な機能を使用します。現在はAria 1.7.2以降が必要です。",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "埋め込み"
 	},
 	"enableHighlighterDescription": {
-		"message": "WebページのコンテンツをハイライトしてObsidianに保存できます。"
+		"message": "WebページのコンテンツをハイライトしてAriaに保存できます。"
 	},
 	"enableInterpreter": {
 		"message": "インタープリターを有効化"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "プロパティをエクスポート"
 	},
 	"exportPropertiesDescription": {
-		"message": "Web Clipperのプロパティを$strong_start$types.json$strong_end$ファイルに保存します。このファイルはObsidian保管庫や他のデバイスのWeb Clipperにインポートできます。",
+		"message": "Clipのプロパティを$strong_start$types.json$strong_end$ファイルに保存します。このファイルはAria保管庫や他のデバイスのClipにインポートできます。",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Webコンテンツをプライベートで永続的なオフラインアクセス可能な形式で保存します。Obsidianの公式ブラウザ拡張機能です。"
+		"message": "Webコンテンツをプライベートで永続的なオフラインアクセス可能な形式で保存します。Ariaの公式ブラウザ拡張機能です。"
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "テキストのコピーに失敗しました"
@@ -337,7 +337,7 @@
 		"message": "フィードバック"
 	},
 	"feedbackDescription": {
-		"message": "Web Clipperをどのように改善できるでしょうか？バグを報告したり、機能を提案したり、一般的な問題に対するヘルプを得るために、ヘルプページをご覧ください。"
+		"message": "Clipをどのように改善できるでしょうか？バグを報告したり、機能を提案したり、一般的な問題に対するヘルプを得るために、ヘルプページをご覧ください。"
 	},
 	"feedbackTitle": {
 		"message": "フィードバックありがとうございます"
@@ -358,7 +358,7 @@
 		"message": "ヘルプ"
 	},
 	"helpDescription": {
-		"message": "Web Clipperの使い方とトラブルシューティングのヘルプを参照してください。"
+		"message": "Clipの使い方とトラブルシューティングのヘルプを参照してください。"
 	},
 	"highlightInline": {
 		"message": "ページ内容をハイライトする"
@@ -423,7 +423,7 @@
 		"message": "プロパティをインポート"
 	},
 	"importPropertiesDescription": {
-		"message": "Obsidianからプロパティをインポートするには、保管庫内の$strong_2_start$.obsidian$strong_2_end$フォルダにある$strong_1_start$types.json$strong_1_end$ファイルを探してください。このフォルダは多くのOSでデフォルトで非表示になっています。",
+		"message": "Ariaからプロパティをインポートするには、保管庫内の$strong_2_start$.aria$strong_2_end$フォルダにある$strong_1_start$types.json$strong_1_end$ファイルを探してください。このフォルダは多くのOSでデフォルトで非表示になっています。",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "レガシーモード"
 	},
 	"legacyModeDescription": {
-		"message": "Obsidian 1.6.7以前と互換性のあるURIクリップ方式を使用します。クリップできるコンテンツの長さはブラウザとOSによって制限されます。エラーなしに失敗する場合があります。"
+		"message": "Aria 1.6.7以前と互換性のあるURIクリップ方式を使用します。クリップできるコンテンツの長さはブラウザとOSによって制限されます。エラーなしに失敗する場合があります。"
 	},
 	"loadArticle": {
 		"message": "記事を読む"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "開く"
 	},
 	"openBehaviorDescription": {
-		"message": "Web Clipperがデフォルトでどのように開くかを選択します。"
+		"message": "Clipがデフォルトでどのように開くかを選択します。"
 	},
 	"openBehaviorTitle": {
 		"message": "開く動作"
@@ -714,7 +714,7 @@
 		"message": "プロバイダー"
 	},
 	"rateExtensionDescription": {
-		"message": "Web Clipperを楽しんでいますか？評価をつけることで私たちを支えてください。"
+		"message": "Clipを楽しんでいますか？評価をつけることで私たちを支えてください。"
 	},
 	"read": {
 		"message": "読了"
@@ -987,7 +987,7 @@
 		"message": "ノートを開かずに保存"
 	},
 	"silentOpenDescription": {
-		"message": "クリップしたノートは保存されますが、新しいタブで開きません。Obsidianは引き続き前面に表示されます。"
+		"message": "クリップしたノートは保存されますが、新しいタブで開きません。Ariaは引き続き前面に表示されます。"
 	},
 	"sort": {
 		"message": "並べ替え"
@@ -1082,7 +1082,7 @@
 		"message": "保管庫"
 	},
 	"vaultsDescription": {
-		"message": "デフォルトでは、クリップしたノートは現在開いている保管庫に保存されます。異なる保管庫に保存するオプションが必要な場合は、ここで保管庫を追加できます。保管庫名はObsidian保管庫の名前と完全に一致する必要があります。$strong_start$Enter$strong_end$キーを押して保管庫を追加します。",
+		"message": "デフォルトでは、クリップしたノートは現在開いている保管庫に保存されます。異なる保管庫に保存するオプションが必要な場合は、ここで保管庫を追加できます。保管庫名はAria保管庫の名前と完全に一致する必要があります。$strong_start$Enter$strong_end$キーを押して保管庫を追加します。",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

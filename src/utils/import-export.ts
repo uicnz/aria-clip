@@ -28,7 +28,7 @@ export async function exportTemplate(): Promise<void> {
 
 	const template = templates[editingTemplateIndex] as Template;
 	const sanitizedName = sanitizeFileName(template.name);
-	const fileName = `${sanitizedName.replace(/\s+/g, '-').toLowerCase()}-clipper.json`;
+	const fileName = `${sanitizedName.replace(/\s+/g, '-').toLowerCase()}-clip.json`;
 
 	const isDailyNote = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
 
@@ -353,7 +353,7 @@ export async function exportAllSettings(): Promise<void> {
 		const content = JSON.stringify(exportData, null, 2);
 		console.log('Data stringified, length:', content.length);
 
-		const fileName = 'obsidian-web-clipper-settings.json';
+		const fileName = 'aria-clip-settings.json';
 
 		await saveFile({
 			content,

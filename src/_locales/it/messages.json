@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Aggiungi fornitore"
 	},
-	"addToObsidian": {
-		"message": "Aggiungi a Obsidian"
+	"addToAria": {
+		"message": "Aggiungi a Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "Premi invio per aggiungere un vault"
@@ -45,7 +45,7 @@
 		"message": "Nessuna chiave API"
 	},
 	"apiKeysWarning": {
-		"message": "Utilizzando un fornitore esterno, accetti i loro termini e la loro politica sulla privacy. Le richieste dell'interprete vengono inviate direttamente al fornitore che scegli. Obsidian non raccoglie o memorizza alcun dato sulle tue richieste."
+		"message": "Utilizzando un fornitore esterno, accetti i loro termini e la loro politica sulla privacy. Le richieste dell'interprete vengono inviate direttamente al fornitore che scegli. Aria non raccoglie o memorizza alcun dato sulle tue richieste."
 	},
 	"appendToDaily": {
 		"message": "Aggiungi alla nota giornaliera, in fondo"
@@ -96,7 +96,7 @@
 		"message": "Comportamento del clip"
 	},
 	"clipBehaviorDescription": {
-		"message": "Scegli come il contenuto evidenziato viene salvato in Obsidian. Definisce la variabile $strong_start${{content}}$strong_end$.",
+		"message": "Scegli come il contenuto evidenziato viene salvato in Aria. Definisce la variabile $strong_start${{content}}$strong_end$.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian non riesce ad accedere agli appunti. Prova le istruzioni per la risoluzione dei problemi qui: $1",
+		"message": "Aria non riesce ad accedere agli appunti. Prova le istruzioni per la risoluzione dei problemi qui: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Chiudi"
 	},
-	"commandOpenClipper": {
-		"message": "Apri Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "Apri Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Clip veloce"
@@ -196,13 +196,13 @@
 		"message": "Duplica"
 	},
 	"earlyAccessDescription": {
-		"message": "Utilizza funzioni che richiedono l'ultima $link_start$versione di accesso anticipato$link_end$ di Obsidian. Attualmente richiede Obsidian 1.7.2 o successivo.",
+		"message": "Utilizza funzioni che richiedono l'ultima $link_start$versione di accesso anticipato$link_end$ di Aria. Attualmente richiede Aria 1.7.2 o successivo.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Incorporato"
 	},
 	"enableHighlighterDescription": {
-		"message": "Evidenzia il contenuto sulle pagine web che puoi salvare in Obsidian."
+		"message": "Evidenzia il contenuto sulle pagine web che puoi salvare in Aria."
 	},
 	"enableInterpreter": {
 		"message": "Abilita interprete"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Esporta proprietà"
 	},
 	"exportPropertiesDescription": {
-		"message": "Salva le proprietà del Web Clipper in un file $strong_start$types.json$strong_end$ che può essere importato nel tuo vault Obsidian, o nel Web Clipper su altri dispositivi.",
+		"message": "Salva le proprietà del Clip in un file $strong_start$types.json$strong_end$ che può essere importato nel tuo vault Aria, o nel Clip su altri dispositivi.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Salva contenuti dal web in un formato privato e duraturo che puoi accedere offline. L'estensione del browser ufficiale per Obsidian."
+		"message": "Salva contenuti dal web in un formato privato e duraturo che puoi accedere offline. L'estensione del browser ufficiale per Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Impossibile copiare il testo"
@@ -337,7 +337,7 @@
 		"message": "Feedback"
 	},
 	"feedbackDescription": {
-		"message": "Come possiamo migliorare Web Clipper? Si prega di visitare la nostra pagina di aiuto, dove è possibile segnalare bug, suggerire funzionalità e ottenere aiuto con problemi comuni."
+		"message": "Come possiamo migliorare Clip? Si prega di visitare la nostra pagina di aiuto, dove è possibile segnalare bug, suggerire funzionalità e ottenere aiuto con problemi comuni."
 	},
 	"feedbackTitle": {
 		"message": "Grazie per il tuo feedback"
@@ -358,7 +358,7 @@
 		"message": "Aiuto"
 	},
 	"helpDescription": {
-		"message": "Scopri come utilizzare Web Clipper e ottieni aiuto per la risoluzione dei problemi."
+		"message": "Scopri come utilizzare Clip e ottieni aiuto per la risoluzione dei problemi."
 	},
 	"highlightInline": {
 		"message": "Evidenzia il contenuto della pagina"
@@ -423,7 +423,7 @@
 		"message": "Importa proprietà"
 	},
 	"importPropertiesDescription": {
-		"message": "Per importare le tue proprietà da Obsidian, individua il file $strong_1_start$types.json$strong_1_end$ nella cartella $strong_2_start$.obsidian$strong_2_end$ all'interno del tuo vault. Nota che questa cartella è nascosta di default sulla maggior parte dei sistemi operativi.",
+		"message": "Per importare le tue proprietà da Aria, individua il file $strong_1_start$types.json$strong_1_end$ nella cartella $strong_2_start$.aria$strong_2_end$ all'interno del tuo vault. Nota che questa cartella è nascosta di default sulla maggior parte dei sistemi operativi.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Modalità legacy"
 	},
 	"legacyModeDescription": {
-		"message": "Utilizza il metodo di clipping URI compatibile con Obsidian 1.6.7 o precedente. Nota che la lunghezza del contenuto che puoi ritagliare è limitata dal tuo browser e dal sistema operativo. Alcune pagine potrebbero fallire senza alcun errore."
+		"message": "Utilizza il metodo di clipping URI compatibile con Aria 1.6.7 o precedente. Nota che la lunghezza del contenuto che puoi ritagliare è limitata dal tuo browser e dal sistema operativo. Alcune pagine potrebbero fallire senza alcun errore."
 	},
 	"loadArticle": {
 		"message": "Leggi articolo"
@@ -556,7 +556,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/variables\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/variables\" target=\"_blank\">"
 			}
 		}
 	},
@@ -570,7 +570,7 @@
 		"message": "Apri"
 	},
 	"openBehaviorDescription": {
-		"message": "Scegli come aprire Web Clipper per impostazione predefinita."
+		"message": "Scegli come aprire Clip per impostazione predefinita."
 	},
 	"openBehaviorTitle": {
 		"message": "Comportamento all'apertura"
@@ -714,7 +714,7 @@
 		"message": "Fornitori"
 	},
 	"rateExtensionDescription": {
-		"message": "Ti piace Web Clipper? Aiutaci dandogli una valutazione."
+		"message": "Ti piace Clip? Aiutaci dandogli una valutazione."
 	},
 	"read": {
 		"message": "Lette"
@@ -966,7 +966,7 @@
 		"message": "Per modificare le assegnazioni dei tasti, vai a $1, clicca sull'icona dell'ingranaggio e seleziona \"Gestisci scorciatoie estensione\"."
 	},
 	"shortcutInstructionsIntro": {
-		"message": "Le scorciatoie da tastiera ti danno un accesso rapido alle funzioni del clipper."
+		"message": "Le scorciatoie da tastiera ti danno un accesso rapido alle funzioni del clip."
 	},
 	"shortcutInstructionsSafari": {
 		"message": "Le scorciatoie da tastiera non sono personalizzabili su Safari."
@@ -978,7 +978,7 @@
 		"message": "Mostra pulsante azioni"
 	},
 	"showActionsDescription": {
-		"message": "Ti permette di ispezionare le variabili della pagina dal menu del clipper. Utile per vedere le variabili che sono disponibili per l'uso nei modelli."
+		"message": "Ti permette di ispezionare le variabili della pagina dal menu del clip. Utile per vedere le variabili che sono disponibili per l'uso nei modelli."
 	},
 	"showPageVariables": {
 		"message": "Mostra variabili della pagina"
@@ -987,7 +987,7 @@
 		"message": "Salva la nota ritagliata senza aprirla"
 	},
 	"silentOpenDescription": {
-		"message": "Le note ritagliate verranno salvate ma non si apriranno in una nuova scheda. Obsidian sarà comunque portato in primo piano."
+		"message": "Le note ritagliate verranno salvate ma non si apriranno in una nuova scheda. Aria sarà comunque portato in primo piano."
 	},
 	"sort": {
 		"message": "Ordina"
@@ -1082,7 +1082,7 @@
 		"message": "Vaults"
 	},
 	"vaultsDescription": {
-		"message": "Per impostazione predefinita, le note ritagliate vengono salvate nel vault attualmente aperto. Puoi aggiungere vault qui se desideri avere l'opzione di salvare in vault diversi. I nomi dei vault devono corrispondere esattamente al nome del vault Obsidian. Premi $strong_start$invio$strong_end$ per aggiungere un vault.",
+		"message": "Per impostazione predefinita, le note ritagliate vengono salvate nel vault attualmente aperto. Puoi aggiungere vault qui se desideri avere l'opzione di salvare in vault diversi. I nomi dei vault devono corrispondere esattamente al nome del vault Aria. Premi $strong_start$invio$strong_end$ per aggiungere un vault.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

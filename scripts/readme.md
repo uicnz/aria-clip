@@ -8,7 +8,7 @@ First, add an OpenAI API key in `.env` at the root of the repo:
 OPENAI_API_KEY=sk-...
 ```
 
-Scripts can be run using npm in the root of the repo.
+Scripts can be run using Bun in the root of the repo.
 
 #### Update locale
 

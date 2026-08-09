@@ -17,8 +17,8 @@
 	"addProviderTitle": {
 		"message": "Adaugă furnizor"
 	},
-	"addToObsidian": {
-		"message": "Adaugă în Obsidian"
+	"addToAria": {
+		"message": "Adaugă în Aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "Apasă Enter pentru a adăuga seiful"
@@ -45,7 +45,7 @@
 		"message": "Lipsește cheia API"
 	},
 	"apiKeysWarning": {
-		"message": "Folosind un furnizor extern, ești de acord cu termenii și condițiile lor de utilizare și politica de confidențialitate. Cererile interpretorului sunt trimise direct către furnizorul ales. Obsidian nu colectează și nu stochează informații despre cererile tale."
+		"message": "Folosind un furnizor extern, ești de acord cu termenii și condițiile lor de utilizare și politica de confidențialitate. Cererile interpretorului sunt trimise direct către furnizorul ales. Aria nu colectează și nu stochează informații despre cererile tale."
 	},
 	"appendToDaily": {
 		"message": "Adaugă la nota zilnică, la sfârșit"
@@ -96,7 +96,7 @@
 		"message": "Comportament decupare"
 	},
 	"clipBehaviorDescription": {
-		"message": "Alege cum este salvat conținutul selectat în Obsidian. Setează variabila $strong_start${{content}}$strong_end$",
+		"message": "Alege cum este salvat conținutul selectat în Aria. Setează variabila $strong_start${{content}}$strong_end$",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -107,7 +107,7 @@
 		}
 	},
 	"clipboardError": {
-		"message": "Obsidian nu poate accesa clipboardul tău. Încearcă instrucțiunile de depanare de aici: $1",
+		"message": "Aria nu poate accesa clipboardul tău. Încearcă instrucțiunile de depanare de aici: $1",
 		"placeholders": {
 			"1": {
 				"content": "$1"
@@ -117,8 +117,8 @@
 	"close": {
 		"message": "Închide"
 	},
-	"commandOpenClipper": {
-		"message": "Deschide Obsidian Clipper"
+	"commandOpenClip": {
+		"message": "Deschide Aria Clip"
 	},
 	"commandQuickClip": {
 		"message": "Decupare rapidă"
@@ -196,13 +196,13 @@
 		"message": "Duplică"
 	},
 	"earlyAccessDescription": {
-		"message": "Folosește funcții care necesită cea mai recentă $link_start$versiune cu acces anticipat$link_end$ a Obsidian. În prezent necesită Obsidian 1.7.2 sau mai nou.",
+		"message": "Folosește funcții care necesită cea mai recentă $link_start$versiune cu acces anticipat$link_end$ a Aria. În prezent necesită Aria 1.7.2 sau mai nou.",
 		"placeholders": {
 			"link_end": {
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/Obsidian/Early+access+versions\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot\" target=\"_blank\">"
 			}
 		}
 	},
@@ -225,7 +225,7 @@
 		"message": "Încorporat"
 	},
 	"enableHighlighterDescription": {
-		"message": "Evidențiază conținut pe pagini web pentru a-l salva în Obsidian"
+		"message": "Evidențiază conținut pe pagini web pentru a-l salva în Aria"
 	},
 	"enableInterpreter": {
 		"message": "Activează interpretorul"
@@ -237,7 +237,7 @@
 				"content": "</a>"
 			},
 			"link_start": {
-				"content": "<a href=\"https://help.obsidian.md/web-clipper/interpreter\" target=\"_blank\">"
+				"content": "<a href=\"https://docs.aria.bot/interpreter\" target=\"_blank\">"
 			},
 			"strong_end": {
 				"content": "</strong>"
@@ -272,7 +272,7 @@
 		"message": "Exportă proprietăți"
 	},
 	"exportPropertiesDescription": {
-		"message": "Salvează proprietățile Web Clipper într-un fișier $strong_start$types.json$strong_end$ care poate fi importat în seiful tău Obsidian sau în Web Clipper pe alte dispozitive",
+		"message": "Salvează proprietățile Clip într-un fișier $strong_start$types.json$strong_end$ care poate fi importat în seiful tău Aria sau în Clip pe alte dispozitive",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"
@@ -283,10 +283,10 @@
 		}
 	},
 	"extensionDescription": {
-		"message": "Salvează conținut web într-un format privat și durabil care poate fi accesat offline. Extensia oficială de browser pentru Obsidian."
+		"message": "Salvează conținut web într-un format privat și durabil care poate fi accesat offline. Extensia oficială de browser pentru Aria."
 	},
 	"extensionName": {
-		"message": "Obsidian Web Clipper"
+		"message": "Aria Clip"
 	},
 	"failedToCopyText": {
 		"message": "Nu s-a putut copia textul"
@@ -337,7 +337,7 @@
 		"message": "Feedback"
 	},
 	"feedbackDescription": {
-		"message": "Cum putem îmbunătăți Web Clipper? Vizitează pagina noastră de ajutor pentru a raporta erori, sugera funcționalități și primi ajutor pentru probleme comune."
+		"message": "Cum putem îmbunătăți Clip? Vizitează pagina noastră de ajutor pentru a raporta erori, sugera funcționalități și primi ajutor pentru probleme comune."
 	},
 	"feedbackTitle": {
 		"message": "Mulțumim pentru feedback"
@@ -358,7 +358,7 @@
 		"message": "Ajutor"
 	},
 	"helpDescription": {
-		"message": "Învață cum să folosești Web Clipper și primește ajutor pentru depanare"
+		"message": "Învață cum să folosești Clip și primește ajutor pentru depanare"
 	},
 	"highlightInline": {
 		"message": "Evidențiază conținut în pagină"
@@ -423,7 +423,7 @@
 		"message": "Importă proprietăți"
 	},
 	"importPropertiesDescription": {
-		"message": "Pentru a importa proprietăți din Obsidian, găsește fișierul $strong_1_start$types.json$strong_1_end$ în dosarul $strong_2_start$.obsidian$strong_2_end$ al seifului tău. Acest dosar este ascuns implicit în majoritatea sistemelor de operare.",
+		"message": "Pentru a importa proprietăți din Aria, găsește fișierul $strong_1_start$types.json$strong_1_end$ în dosarul $strong_2_start$.aria$strong_2_end$ al seifului tău. Acest dosar este ascuns implicit în majoritatea sistemelor de operare.",
 		"placeholders": {
 			"strong_1_end": {
 				"content": "</strong>"
@@ -481,7 +481,7 @@
 		"message": "Mod vechi"
 	},
 	"legacyModeDescription": {
-		"message": "Folosește metoda de captură URI compatibilă cu Obsidian 1.6.7 sau mai vechi. Reține că lungimea conținutului capturat este limitată de browser și sistemul de operare. Unele pagini pot eșua fără mesaj de eroare."
+		"message": "Folosește metoda de captură URI compatibilă cu Aria 1.6.7 sau mai vechi. Reține că lungimea conținutului capturat este limitată de browser și sistemul de operare. Unele pagini pot eșua fără mesaj de eroare."
 	},
 	"loadArticle": {
 		"message": "Citește articolul"
@@ -562,7 +562,7 @@
 		"message": "Deschide"
 	},
 	"openBehaviorDescription": {
-		"message": "Alegeți modul în care Web Clipper se deschide în mod implicit."
+		"message": "Alegeți modul în care Clip se deschide în mod implicit."
 	},
 	"openBehaviorTitle": {
 		"message": "Comportament la deschidere"
@@ -706,7 +706,7 @@
 		"message": "Furnizori"
 	},
 	"rateExtensionDescription": {
-		"message": "Îți place Web Clipper? Ajută-ne dându-ne o evaluare."
+		"message": "Îți place Clip? Ajută-ne dându-ne o evaluare."
 	},
 	"read": {
 		"message": "Citite"
@@ -958,7 +958,7 @@
 		"message": "Pentru a modifica asocierile de taste, mergi la $1, dă clic pe pictograma roții dințate și selectează \"Gestionează scurtăturile extensiei\""
 	},
 	"shortcutInstructionsIntro": {
-		"message": "Scurtăturile de la tastatură îți oferă acces rapid la funcțiile clipper-ului."
+		"message": "Scurtăturile de la tastatură îți oferă acces rapid la funcțiile clip-ului."
 	},
 	"shortcutInstructionsSafari": {
 		"message": "Scurtăturile de la tastatură nu pot fi personalizate în Safari."
@@ -970,7 +970,7 @@
 		"message": "Arată butonul de acțiuni"
 	},
 	"showActionsDescription": {
-		"message": "Îți permite să vezi variabilele paginii din meniul clipper-ului. Util pentru a vedea ce variabile sunt disponibile pentru utilizare în șabloane."
+		"message": "Îți permite să vezi variabilele paginii din meniul clip-ului. Util pentru a vedea ce variabile sunt disponibile pentru utilizare în șabloane."
 	},
 	"showPageVariables": {
 		"message": "Arată variabilele paginii"
@@ -979,7 +979,7 @@
 		"message": "Salvează note fără a le deschide"
 	},
 	"silentOpenDescription": {
-		"message": "Notele decupate vor fi salvate dar nu vor fi deschise într-o filă nouă. Obsidian va fi totuși adus în prim-plan."
+		"message": "Notele decupate vor fi salvate dar nu vor fi deschise într-o filă nouă. Aria va fi totuși adus în prim-plan."
 	},
 	"sort": {
 		"message": "Sortează"
@@ -1074,7 +1074,7 @@
 		"message": "Seifuri"
 	},
 	"vaultsDescription": {
-		"message": "În mod implicit, notele decupate sunt salvate în seiful deschis. Poți adăuga seifuri aici dacă dorești opțiunea de a salva în diferite seifuri. Numele seifului trebuie să se potrivească exact cu numele seifului Obsidian. Apasă $strong_start$enter$strong_end$ pentru a adăuga un seif.",
+		"message": "În mod implicit, notele decupate sunt salvate în seiful deschis. Poți adăuga seifuri aici dacă dorești opțiunea de a salva în diferite seifuri. Numele seifului trebuie să se potrivească exact cu numele seifului Aria. Apasă $strong_start$enter$strong_end$ pentru a adăuga un seif.",
 		"placeholders": {
 			"strong_end": {
 				"content": "</strong>"

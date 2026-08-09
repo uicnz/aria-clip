@@ -1,4 +1,4 @@
-// Template tokenizer for the Web Clipper template engine
+// Template tokenizer for the Clip template engine
 // Converts template strings into a stream of tokens for parsing
 //
 // This tokenizer handles:

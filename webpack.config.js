@@ -174,7 +174,7 @@ module.exports = (env, argv) => {
 			...(isProduction ? [
 				new ZipPlugin({
 					path: path.resolve(__dirname, 'builds'),
-					filename: `obsidian-web-clipper-${package.version}-${browserName}.zip`,
+					filename: `aria-clip-${package.version}-${browserName}.zip`,
 				})
 			] : [])
 		]

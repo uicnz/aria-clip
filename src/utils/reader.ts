@@ -17,7 +17,7 @@ import { removeExistingHighlights as localRemoveExistingHighlights } from './hig
 // first resolution so the fallback spread doesn't re-allocate per call.
 let _hl: HighlighterAPI;
 function hl(): HighlighterAPI {
-	return _hl ??= window.__obsidianHighlighter ?? {
+	return _hl ??= window.__ariaHighlighter ?? {
 		...localHighlighter,
 		removeExistingHighlights: localRemoveExistingHighlights,
 		ensureHighlighterCSS: () => Reader.ensureHighlighterCSS(document),
@@ -184,11 +184,11 @@ export class Reader {
 	private static injectSettingsBar(doc: Document) {
 		// Create settings bar
 		const settingsBar = doc.createElement('div');
-		settingsBar.className = 'obsidian-reader-settings';
+		settingsBar.className = 'aria-reader-settings';
 
 		// Trigger button (always visible)
 		const trigger = doc.createElement('button');
-		trigger.className = 'obsidian-reader-settings-trigger nav-btn';
+		trigger.className = 'aria-reader-settings-trigger nav-btn';
 		trigger.setAttribute('aria-label', getMessage('settings'));
 		trigger.appendChild(this.createSVG({
 			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
@@ -210,7 +210,7 @@ export class Reader {
 
 		// Highlighter button
 		const highlighterBtn = doc.createElement('button');
-		highlighterBtn.className = 'obsidian-reader-settings-trigger nav-btn';
+		highlighterBtn.className = 'aria-reader-settings-trigger nav-btn';
 		highlighterBtn.setAttribute('aria-label', getMessage('highlighter'));
 		highlighterBtn.appendChild(this.createSVG({
 			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
@@ -224,7 +224,7 @@ export class Reader {
 
 		// Sync active state with highlighter mode
 		const syncHighlighterBtn = () => {
-			highlighterBtn.classList.toggle('is-active', doc.body.classList.contains('obsidian-highlighter-active'));
+			highlighterBtn.classList.toggle('is-active', doc.body.classList.contains('aria-highlighter-active'));
 		};
 		syncHighlighterBtn();
 		this.highlighterObserver = new MutationObserver(syncHighlighterBtn);
@@ -232,24 +232,24 @@ export class Reader {
 
 		// Clip button with dropdown
 		const clipButton = doc.createElement('button');
-		clipButton.className = 'obsidian-reader-settings-trigger nav-btn';
-		clipButton.setAttribute('aria-label', getMessage('addToObsidian'));
+		clipButton.className = 'aria-reader-settings-trigger nav-btn';
+		clipButton.setAttribute('aria-label', getMessage('addToAria'));
 		clipButton.appendChild(this.createSVG({
 			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
 			paths: ['m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48'],
 		}));
 
-		const addToObsidianBtn = doc.createElement('button');
-		addToObsidianBtn.className = 'nav-btn';
-		addToObsidianBtn.setAttribute('aria-label', getMessage('addToObsidian'));
-		const obsidianIcon = doc.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		obsidianIcon.setAttribute('width', '18');
-		obsidianIcon.setAttribute('height', '18');
-		obsidianIcon.setAttribute('viewBox', '0 0 256 256');
-		obsidianIcon.setAttribute('fill', 'currentColor');
-		setSVGChildren(obsidianIcon, '<path d="M94.82 149.44c6.53-1.94 17.13-4.9 29.26-5.71a102.97 102.97 0 0 1-7.64-48.84c1.63-16.51 7.54-30.38 13.25-42.1l3.47-7.14 4.48-9.18c2.35-5 4.08-9.38 4.9-13.56.81-4.07.81-7.64-.2-11.11-1.03-3.47-3.07-7.14-7.15-11.21a17.02 17.02 0 0 0-15.8 3.77l-52.81 47.5a17.12 17.12 0 0 0-5.5 10.2l-4.5 30.18a149.26 149.26 0 0 1 38.24 57.2ZM54.45 106l-1.02 3.06-27.94 62.2a17.33 17.33 0 0 0 3.27 18.96l43.94 45.16a88.7 88.7 0 0 0 8.97-88.5A139.47 139.47 0 0 0 54.45 106Z"/><path d="m82.9 240.79 2.34.2c8.26.2 22.33 1.02 33.64 3.06 9.28 1.73 27.73 6.83 42.82 11.21 11.52 3.47 23.45-5.8 25.08-17.73 1.23-8.67 3.57-18.46 7.75-27.53a94.81 94.81 0 0 0-25.9-40.99 56.48 56.48 0 0 0-29.56-13.35 96.55 96.55 0 0 0-40.99 4.79 98.89 98.89 0 0 1-15.29 80.34h.1Z"/><path d="M201.87 197.76a574.87 574.87 0 0 0 19.78-31.6 8.67 8.67 0 0 0-.61-9.48 185.58 185.58 0 0 1-21.82-35.9c-5.91-14.16-6.73-36.08-6.83-46.69 0-4.07-1.22-8.05-3.77-11.21l-34.16-43.33c0 1.94-.4 3.87-.81 5.81a76.42 76.42 0 0 1-5.71 15.9l-4.7 9.8-3.36 6.72a111.95 111.95 0 0 0-12.03 38.23 93.9 93.9 0 0 0 8.67 47.92 67.9 67.9 0 0 1 39.56 16.52 99.4 99.4 0 0 1 25.8 37.31Z"/>');
-		addToObsidianBtn.appendChild(obsidianIcon);
-		addToObsidianBtn.addEventListener('click', () => {
+		const addToAriaBtn = doc.createElement('button');
+		addToAriaBtn.className = 'nav-btn';
+		addToAriaBtn.setAttribute('aria-label', getMessage('addToAria'));
+		const ariaIcon = doc.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		ariaIcon.setAttribute('width', '18');
+		ariaIcon.setAttribute('height', '18');
+		ariaIcon.setAttribute('viewBox', '0 0 256 256');
+		ariaIcon.setAttribute('fill', 'currentColor');
+		setSVGChildren(ariaIcon, '<path d="M94.82 149.44c6.53-1.94 17.13-4.9 29.26-5.71a102.97 102.97 0 0 1-7.64-48.84c1.63-16.51 7.54-30.38 13.25-42.1l3.47-7.14 4.48-9.18c2.35-5 4.08-9.38 4.9-13.56.81-4.07.81-7.64-.2-11.11-1.03-3.47-3.07-7.14-7.15-11.21a17.02 17.02 0 0 0-15.8 3.77l-52.81 47.5a17.12 17.12 0 0 0-5.5 10.2l-4.5 30.18a149.26 149.26 0 0 1 38.24 57.2ZM54.45 106l-1.02 3.06-27.94 62.2a17.33 17.33 0 0 0 3.27 18.96l43.94 45.16a88.7 88.7 0 0 0 8.97-88.5A139.47 139.47 0 0 0 54.45 106Z"/><path d="m82.9 240.79 2.34.2c8.26.2 22.33 1.02 33.64 3.06 9.28 1.73 27.73 6.83 42.82 11.21 11.52 3.47 23.45-5.8 25.08-17.73 1.23-8.67 3.57-18.46 7.75-27.53a94.81 94.81 0 0 0-25.9-40.99 56.48 56.48 0 0 0-29.56-13.35 96.55 96.55 0 0 0-40.99 4.79 98.89 98.89 0 0 1-15.29 80.34h.1Z"/><path d="M201.87 197.76a574.87 574.87 0 0 0 19.78-31.6 8.67 8.67 0 0 0-.61-9.48 185.58 185.58 0 0 1-21.82-35.9c-5.91-14.16-6.73-36.08-6.83-46.69 0-4.07-1.22-8.05-3.77-11.21l-34.16-43.33c0 1.94-.4 3.87-.81 5.81a76.42 76.42 0 0 1-5.71 15.9l-4.7 9.8-3.36 6.72a111.95 111.95 0 0 0-12.03 38.23 93.9 93.9 0 0 0 8.67 47.92 67.9 67.9 0 0 1 39.56 16.52 99.4 99.4 0 0 1 25.8 37.31Z"/>');
+		addToAriaBtn.appendChild(ariaIcon);
+		addToAriaBtn.addEventListener('click', () => {
 			if (Reader.isReaderPage) {
 				Reader.toggleReaderPageIframe(doc);
 			} else {
@@ -258,7 +258,7 @@ export class Reader {
 		});
 
 		const clipDropdown = doc.createElement('div');
-		clipDropdown.className = 'obsidian-reader-clip-dropdown';
+		clipDropdown.className = 'aria-reader-clip-dropdown';
 
 		const clipActions: Array<{ action: string; icon: SVGElement }> = [
 			{ action: 'copyToClipboard', icon: this.createSVG({ width: '16', height: '16', viewBox: '0 0 24 24', strokeWidth: '1.75', paths: ['M20 8H10a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z', 'M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2'] }) },
@@ -267,7 +267,7 @@ export class Reader {
 
 		for (const { action, icon } of clipActions) {
 			const item = doc.createElement('div');
-			item.className = 'obsidian-reader-clip-item';
+			item.className = 'aria-reader-clip-item';
 			item.appendChild(icon);
 
 			const itemLabel = doc.createElement('span');
@@ -311,7 +311,7 @@ export class Reader {
 
 		// Outline button (mobile only, hidden until outline is generated)
 		const outlineBtn = doc.createElement('button');
-		outlineBtn.className = 'obsidian-reader-settings-trigger nav-btn nav-btn-outline';
+		outlineBtn.className = 'aria-reader-settings-trigger nav-btn nav-btn-outline';
 		outlineBtn.setAttribute('aria-label', 'Outline');
 		outlineBtn.classList.add('is-hidden');
 		outlineBtn.appendChild(this.createSVG({
@@ -321,7 +321,7 @@ export class Reader {
 
 		// Create mobile outline overlay
 		const outlineOverlay = doc.createElement('div');
-		outlineOverlay.className = 'obsidian-reader-outline-overlay';
+		outlineOverlay.className = 'aria-reader-outline-overlay';
 
 		outlineBtn.addEventListener('click', (e) => {
 			e.stopPropagation();
@@ -335,12 +335,12 @@ export class Reader {
 		doc.body.appendChild(outlineOverlay);
 
 		const triggerGroup = doc.createElement('div');
-		triggerGroup.className = 'obsidian-reader-nav';
+		triggerGroup.className = 'aria-reader-nav';
 		triggerGroup.appendChild(outlineBtn);
 		triggerGroup.appendChild(highlighterBtn);
 		triggerGroup.appendChild(clipButton);
 		triggerGroup.appendChild(trigger);
-		triggerGroup.appendChild(addToObsidianBtn);
+		triggerGroup.appendChild(addToAriaBtn);
 		settingsBar.appendChild(triggerGroup);
 		settingsBar.appendChild(clipDropdown);
 
@@ -402,14 +402,14 @@ export class Reader {
 
 		// Create settings controls container
 		const controlsContainer = doc.createElement('div');
-		controlsContainer.className = 'obsidian-reader-settings-controls';
+		controlsContainer.className = 'aria-reader-settings-controls';
 
 		// Font size controls group
 		const fontGroup = doc.createElement('div');
-		fontGroup.className = 'obsidian-reader-settings-controls-group';
+		fontGroup.className = 'aria-reader-settings-controls-group';
 
 		const decreaseFontBtn = doc.createElement('button');
-		decreaseFontBtn.className = 'obsidian-reader-settings-button';
+		decreaseFontBtn.className = 'aria-reader-settings-button';
 		decreaseFontBtn.dataset.action = 'decrease-font';
 		decreaseFontBtn.appendChild(this.createSVG({
 			width: '20', height: '20', viewBox: '0 0 24 24',
@@ -418,7 +418,7 @@ export class Reader {
 		}));
 
 		const increaseFontBtn = doc.createElement('button');
-		increaseFontBtn.className = 'obsidian-reader-settings-button';
+		increaseFontBtn.className = 'aria-reader-settings-button';
 		increaseFontBtn.dataset.action = 'increase-font';
 		increaseFontBtn.appendChild(this.createSVG({
 			width: '20', height: '20', viewBox: '0 0 24 24',
@@ -431,10 +431,10 @@ export class Reader {
 
 		// Width controls group
 		const widthGroup = doc.createElement('div');
-		widthGroup.className = 'obsidian-reader-settings-controls-group';
+		widthGroup.className = 'aria-reader-settings-controls-group';
 
 		const decreaseWidthBtn = doc.createElement('button');
-		decreaseWidthBtn.className = 'obsidian-reader-settings-button';
+		decreaseWidthBtn.className = 'aria-reader-settings-button';
 		decreaseWidthBtn.dataset.action = 'decrease-width';
 		decreaseWidthBtn.appendChild(this.createSVG({
 			width: '20', height: '20', viewBox: '0 0 24 24',
@@ -442,7 +442,7 @@ export class Reader {
 		}));
 
 		const increaseWidthBtn = doc.createElement('button');
-		increaseWidthBtn.className = 'obsidian-reader-settings-button';
+		increaseWidthBtn.className = 'aria-reader-settings-button';
 		increaseWidthBtn.dataset.action = 'increase-width';
 		increaseWidthBtn.appendChild(this.createSVG({
 			width: '20', height: '20', viewBox: '0 0 24 24',
@@ -455,10 +455,10 @@ export class Reader {
 
 		// Line height controls group
 		const lineHeightGroup = doc.createElement('div');
-		lineHeightGroup.className = 'obsidian-reader-settings-controls-group';
+		lineHeightGroup.className = 'aria-reader-settings-controls-group';
 
 		const decreaseLineHeightBtn = doc.createElement('button');
-		decreaseLineHeightBtn.className = 'obsidian-reader-settings-button';
+		decreaseLineHeightBtn.className = 'aria-reader-settings-button';
 		decreaseLineHeightBtn.dataset.action = 'decrease-line-height';
 		decreaseLineHeightBtn.appendChild(this.createSVG({
 			width: '20', height: '20', viewBox: '0 0 24 24',
@@ -466,7 +466,7 @@ export class Reader {
 		}));
 
 		const increaseLineHeightBtn = doc.createElement('button');
-		increaseLineHeightBtn.className = 'obsidian-reader-settings-button';
+		increaseLineHeightBtn.className = 'aria-reader-settings-button';
 		increaseLineHeightBtn.dataset.action = 'increase-line-height';
 		increaseLineHeightBtn.appendChild(this.createSVG({
 			width: '20', height: '20', viewBox: '0 0 24 24',
@@ -479,7 +479,7 @@ export class Reader {
 
 		// Theme select
 		const themeWrapper = doc.createElement('div');
-		themeWrapper.className = 'obsidian-reader-settings-select-wrapper';
+		themeWrapper.className = 'aria-reader-settings-select-wrapper';
 		themeWrapper.appendChild(this.createSVG({
 			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
 			circles: [
@@ -491,7 +491,7 @@ export class Reader {
 			paths: ['M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z'],
 		}));
 		const themeSelect = doc.createElement('select');
-		themeSelect.className = 'obsidian-reader-settings-select';
+		themeSelect.className = 'aria-reader-settings-select';
 		themeSelect.dataset.action = 'change-theme';
 
 		const themeOptions: Array<[string, string]> = [
@@ -516,7 +516,7 @@ export class Reader {
 
 		// Theme mode select
 		const themeModeWrapper = doc.createElement('div');
-		themeModeWrapper.className = 'obsidian-reader-settings-select-wrapper';
+		themeModeWrapper.className = 'aria-reader-settings-select-wrapper';
 
 		const sunIcon = this.createSVG({
 			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
@@ -546,7 +546,7 @@ export class Reader {
 		});
 
 		const themeModeSelect = doc.createElement('select');
-		themeModeSelect.className = 'obsidian-reader-settings-select';
+		themeModeSelect.className = 'aria-reader-settings-select';
 
 		const modeOptions: Array<[string, string]> = [
 			['auto', 'readerAppearanceAuto'],
@@ -566,7 +566,7 @@ export class Reader {
 
 		// Settings button
 		const settingsBtn = doc.createElement('button');
-		settingsBtn.className = 'obsidian-reader-settings-link-button';
+		settingsBtn.className = 'aria-reader-settings-link-button';
 		settingsBtn.setAttribute('aria-label', getMessage('readerSettings'));
 		settingsBtn.appendChild(this.createSVG({
 			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
@@ -584,7 +584,7 @@ export class Reader {
 
 		// Font select
 		const fontWrapper = doc.createElement('div');
-		fontWrapper.className = 'obsidian-reader-settings-select-wrapper';
+		fontWrapper.className = 'aria-reader-settings-select-wrapper';
 		fontWrapper.appendChild(this.createSVG({
 			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
 			paths: [
@@ -594,7 +594,7 @@ export class Reader {
 			],
 		}));
 		const fontSelect = doc.createElement('select');
-		fontSelect.className = 'obsidian-reader-settings-select';
+		fontSelect.className = 'aria-reader-settings-select';
 
 		const sansOption = doc.createElement('option');
 		sansOption.value = '';
@@ -615,25 +615,25 @@ export class Reader {
 		fontWrapper.appendChild(fontSelect);
 
 		const fontNotice = doc.createElement('div');
-		fontNotice.className = 'obsidian-reader-font-notice';
+		fontNotice.className = 'aria-reader-font-notice';
 		fontNotice.textContent = getMessage('readerFontUnavailable');
 		fontNotice.style.display = 'none';
 		this.fontNotice = fontNotice;
 
 		// Assemble everything
 		const typographyGroup = doc.createElement('div');
-		typographyGroup.className = 'obsidian-reader-settings-typography-group';
+		typographyGroup.className = 'aria-reader-settings-typography-group';
 		typographyGroup.appendChild(fontGroup);
 		typographyGroup.appendChild(widthGroup);
 		typographyGroup.appendChild(lineHeightGroup);
 		controlsContainer.appendChild(typographyGroup);
 
 		const spacer = doc.createElement('div');
-		spacer.className = 'obsidian-reader-settings-spacer';
+		spacer.className = 'aria-reader-settings-spacer';
 		controlsContainer.appendChild(spacer);
 
 		const dropdownGroup = doc.createElement('div');
-		dropdownGroup.className = 'obsidian-reader-settings-dropdown-group';
+		dropdownGroup.className = 'aria-reader-settings-dropdown-group';
 		dropdownGroup.appendChild(themeModeWrapper);
 		dropdownGroup.appendChild(themeWrapper);
 		dropdownGroup.appendChild(fontWrapper);
@@ -641,7 +641,7 @@ export class Reader {
 		controlsContainer.appendChild(dropdownGroup);
 
 		const spacer2 = doc.createElement('div');
-		spacer2.className = 'obsidian-reader-settings-spacer';
+		spacer2.className = 'aria-reader-settings-spacer';
 		controlsContainer.appendChild(spacer2);
 
 		controlsContainer.appendChild(settingsBtn);
@@ -658,7 +658,7 @@ export class Reader {
 
 		settingsBar.addEventListener('click', (e) => {
 			const target = e.target as HTMLElement;
-			const button = target.closest('.obsidian-reader-settings-button') as HTMLButtonElement;
+			const button = target.closest('.aria-reader-settings-button') as HTMLButtonElement;
 			if (!button) return;
 
 			const action = button.dataset.action;
@@ -713,7 +713,7 @@ export class Reader {
 		doc.fonts?.ready?.then(() => this.updateFontNotice(doc, this.settings.defaultFont)).catch(() => {});
 
 		// Notify content script to listen for highlighter button
-		document.dispatchEvent(new CustomEvent('obsidian-reader-init'));
+		document.dispatchEvent(new CustomEvent('aria-reader-init'));
 		
 	}
 
@@ -890,7 +890,7 @@ export class Reader {
 		if (!article) return null;
 
 		// Get the existing outline container
-		const outline = doc.querySelector('.obsidian-reader-outline') as HTMLElement;
+		const outline = doc.querySelector('.aria-reader-outline') as HTMLElement;
 		if (!outline) return null;
 
 		// Find all headings h2-h6, excluding those inside blockquotes
@@ -916,10 +916,10 @@ export class Reader {
 		const outlineItems = new Map();
 
 		// Add title as first outline item
-		const titleHeading = doc.querySelector('.obsidian-reader-content h1');
+		const titleHeading = doc.querySelector('.aria-reader-content h1');
 		if (title && titleHeading) {
 			const titleItem = doc.createElement('div');
-			titleItem.className = 'obsidian-reader-outline-item obsidian-reader-outline-h1';
+			titleItem.className = 'aria-reader-outline-item aria-reader-outline-h1';
 			titleItem.setAttribute('data-depth', '0');
 			titleItem.textContent = title;
 			titleItem.addEventListener('click', () => {
@@ -962,7 +962,7 @@ export class Reader {
 			}
 
 			const item = doc.createElement('div');
-			item.className = `obsidian-reader-outline-item obsidian-reader-outline-${heading.tagName.toLowerCase()}`;
+			item.className = `aria-reader-outline-item aria-reader-outline-${heading.tagName.toLowerCase()}`;
 			item.setAttribute('data-depth', depth.toString());
 			item.setAttribute('data-heading-id', heading.id);
 			item.textContent = heading.textContent;
@@ -1065,7 +1065,7 @@ export class Reader {
 		const footnotes = article.querySelector('#footnotes');
 		if (footnotes) {
 			const item = doc.createElement('div');
-			item.className = 'obsidian-reader-outline-item';
+			item.className = 'aria-reader-outline-item';
 			item.setAttribute('data-depth', '0');
 			item.textContent = getMessage('readerFootnotes');
 			
@@ -1079,7 +1079,7 @@ export class Reader {
 		}
 
 		// Populate mobile outline overlay
-		const outlineOverlay = doc.querySelector('.obsidian-reader-outline-overlay') as HTMLElement;
+		const outlineOverlay = doc.querySelector('.aria-reader-outline-overlay') as HTMLElement;
 		const outlineBtn = doc.querySelector('.nav-btn-outline') as HTMLElement;
 		if (outlineOverlay && outlineBtn) {
 			outlineBtn.classList.remove('is-hidden');
@@ -1091,7 +1091,7 @@ export class Reader {
 				doc.body.style.overflow = '';
 			};
 
-			const outlineItemsList = outline.querySelectorAll('.obsidian-reader-outline-item');
+			const outlineItemsList = outline.querySelectorAll('.aria-reader-outline-item');
 			const headingEntries = Array.from(outlineItems.entries());
 
 			outlineItemsList.forEach((item, index) => {
@@ -1154,9 +1154,9 @@ export class Reader {
 		}
 		for (const obs of this.outlineMutationObservers) obs.disconnect();
 		this.outlineMutationObservers = [];
-		const outline = doc.querySelector('.obsidian-reader-outline') as HTMLElement;
+		const outline = doc.querySelector('.aria-reader-outline') as HTMLElement;
 		if (outline) outline.textContent = '';
-		const outlineOverlay = doc.querySelector('.obsidian-reader-outline-overlay') as HTMLElement;
+		const outlineOverlay = doc.querySelector('.aria-reader-outline-overlay') as HTMLElement;
 		if (outlineOverlay) outlineOverlay.textContent = '';
 
 		// Footnotes
@@ -1181,7 +1181,7 @@ export class Reader {
 			doc.removeEventListener('keydown', this.lightboxKeyHandler);
 			this.lightboxKeyHandler = null;
 		}
-		doc.querySelector('.obsidian-reader-lightbox')?.remove();
+		doc.querySelector('.aria-reader-lightbox')?.remove();
 
 		// Highlights
 		hl().removeExistingHighlights();
@@ -1405,9 +1405,9 @@ export class Reader {
 			scripts.forEach(el => el.remove());
 
 			// Replace body with a clone to remove all event listeners.
-			// Skip when the clipper iframe is present — cloning creates a
+			// Skip when the clip iframe is present — cloning creates a
 			// new iframe element which reloads and loses user edits.
-			if (!doc.getElementById('obsidian-clipper-container')) {
+			if (!doc.getElementById('aria-clip-container')) {
 				const newBody = doc.body.cloneNode(true);
 				doc.body.parentNode?.replaceChild(newBody, doc.body);
 			}
@@ -1756,7 +1756,7 @@ export class Reader {
 	private static initializeLightbox(doc: Document) {
 		// Create lightbox container
 		this.lightbox = doc.createElement('div');
-		this.lightbox.className = 'obsidian-reader-lightbox theme-dark';
+		this.lightbox.className = 'aria-reader-lightbox theme-dark';
 		this.lightbox.setAttribute('role', 'dialog');
 		this.lightbox.setAttribute('aria-modal', 'true');
 		// Create lightbox
@@ -1988,8 +1988,8 @@ export class Reader {
 
 			this.hasApplied = true;
 
-			// Clipper iframe container
-			const clipperIframeContainer = doc.getElementById('obsidian-clipper-container');
+			// Clip iframe container
+			const clipIframeContainer = doc.getElementById('aria-clip-container');
 
 			// Load saved settings
 			await this.loadSettings();
@@ -2030,7 +2030,7 @@ export class Reader {
 			// Clone document and start Defuddle before the view transition
 			// so content extraction runs during the crossfade animation
 			const docClone = doc.cloneNode(true) as Document;
-			docClone.getElementById('obsidian-clipper-container')?.remove();
+			docClone.getElementById('aria-clip-container')?.remove();
 			Object.defineProperty(docClone, 'URL', { value: doc.URL, configurable: true });
 			const contentPromise = this.extractContent(docClone);
 
@@ -2083,17 +2083,17 @@ export class Reader {
 			// Remove stylesheet links and style tags, except reader and extension styles
 			const styleElements = head.querySelectorAll('link[rel="stylesheet"], link[as="style"], style');
 			styleElements.forEach(el => {
-				if (el.id === 'obsidian-reader-styles') return;
-				// Preserve extension-injected styles (clipper, highlighter)
-				if (el instanceof HTMLStyleElement && el.textContent?.includes('obsidian-clipper')) return;
+				if (el.id === 'aria-reader-styles') return;
+				// Preserve extension-injected styles (clip, highlighter)
+				if (el instanceof HTMLStyleElement && el.textContent?.includes('aria-clip')) return;
 				el.remove();
 			});
 
 			// Re-add reader CSS as a link element after cleanup
 			// The CSS injected by insertCSS lacks the protected id and gets removed above
-			if (!doc.getElementById('obsidian-reader-styles')) {
+			if (!doc.getElementById('aria-reader-styles')) {
 				const readerLink = doc.createElement('link');
-				readerLink.id = 'obsidian-reader-styles';
+				readerLink.id = 'aria-reader-styles';
 				readerLink.rel = 'stylesheet';
 				readerLink.href = browser.runtime.getURL('reader.css');
 				doc.head.appendChild(readerLink);
@@ -2119,11 +2119,11 @@ export class Reader {
 				head.insertBefore(charset, head.firstChild);
 			}
 
-			// Clear body children, preserving the clipper iframe container
-			if (clipperIframeContainer) {
+			// Clear body children, preserving the clip iframe container
+			if (clipIframeContainer) {
 				for (let i = doc.body.childNodes.length - 1; i >= 0; i--) {
 					const child = doc.body.childNodes[i];
-					if (child !== clipperIframeContainer) {
+					if (child !== clipIframeContainer) {
 						doc.body.removeChild(child);
 					}
 				}
@@ -2133,18 +2133,18 @@ export class Reader {
 
 			// Create main container
 			const readerContainer = doc.createElement('div');
-			readerContainer.className = 'obsidian-reader-container';
+			readerContainer.className = 'aria-reader-container';
 
 			// Create left sidebar
 			const leftSidebar = doc.createElement('div');
-			leftSidebar.className = 'obsidian-reader-left-sidebar';
+			leftSidebar.className = 'aria-reader-left-sidebar';
 			const outline = doc.createElement('div');
-			outline.className = 'obsidian-reader-outline';
+			outline.className = 'aria-reader-outline';
 			leftSidebar.appendChild(outline);
 
 			// Create content area
 			const readerContent = doc.createElement('div');
-			readerContent.className = 'obsidian-reader-content';
+			readerContent.className = 'aria-reader-content';
 
 			// Create main element
 			main = doc.createElement('main');
@@ -2152,9 +2152,9 @@ export class Reader {
 			// Create article placeholder with loading spinner
 			article = doc.createElement('article');
 			spinner = doc.createElement('div');
-			spinner.className = 'obsidian-reader-loading';
+			spinner.className = 'aria-reader-loading';
 			const spinnerText = doc.createElement('div');
-			spinnerText.className = 'obsidian-reader-loading-text';
+			spinnerText.className = 'aria-reader-loading-text';
 			spinnerText.textContent = getMessage('readerLoading');
 			spinner.appendChild(spinnerText);
 			article.appendChild(spinner);
@@ -2164,13 +2164,13 @@ export class Reader {
 
 			// Create footer (hidden until content loads)
 			footer = doc.createElement('div');
-			footer.className = 'obsidian-reader-footer';
+			footer.className = 'aria-reader-footer';
 			footer.style.display = 'none';
 			readerContent.appendChild(footer);
 
 			// Create right sidebar
 			const rightSidebar = doc.createElement('div');
-			rightSidebar.className = 'obsidian-reader-right-sidebar';
+			rightSidebar.className = 'aria-reader-right-sidebar';
 
 			// Assemble and display the shell immediately
 			readerContainer.appendChild(leftSidebar);
@@ -2179,7 +2179,7 @@ export class Reader {
 			doc.body.appendChild(readerContainer);
 
 			// Add reader classes and attributes
-			doc.documentElement.classList.add('obsidian-reader-active');
+			doc.documentElement.classList.add('aria-reader-active');
 
 			// Load the highlighter stylesheet. On a live page (case 2), this
 			// goes through content.js's bridge. On reader.html (case 3), the
@@ -2199,7 +2199,7 @@ export class Reader {
 
 			if (this.settings.customCss) {
 				const styleEl = doc.createElement('style');
-				styleEl.id = 'obsidian-reader-custom-css';
+				styleEl.id = 'aria-reader-custom-css';
 				styleEl.textContent = this.settings.customCss;
 				doc.head.appendChild(styleEl);
 			}
@@ -2208,14 +2208,14 @@ export class Reader {
 			this.injectSettingsBar(doc);
 
 			// Re-activate highlighter if it was active before entering Reader
-			if (doc.body.classList.contains('obsidian-highlighter-active')) {
+			if (doc.body.classList.contains('aria-highlighter-active')) {
 				hl().toggleHighlighterMenu(true);
 			}
 
-			// Re-attach the clipper iframe container only if it was
+			// Re-attach the clip iframe container only if it was
 			// detached (not present when body clone was skipped)
-			if (clipperIframeContainer && !doc.body.contains(clipperIframeContainer)) {
-				doc.body.appendChild(clipperIframeContainer);
+			if (clipIframeContainer && !doc.body.contains(clipIframeContainer)) {
+				doc.body.appendChild(clipIframeContainer);
 			}
 
 			// D: toggle dark mode (visual only, doesn't change appearance setting)
@@ -2392,10 +2392,10 @@ export class Reader {
 		// Idempotent: if Reader.apply runs again without a page reload (e.g.
 		// SPA navigation where we re-enter reader), don't stack a second
 		// button + three more listeners on the same document.
-		if (doc.querySelector('.obsidian-selection-action')) return;
+		if (doc.querySelector('.aria-selection-action')) return;
 		const btn = doc.createElement('button');
 		btn.type = 'button';
-		btn.className = 'obsidian-selection-action';
+		btn.className = 'aria-selection-action';
 		btn.setAttribute('aria-label', getMessage('highlightSelection'));
 		setElementHTML(btn, `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span>${getMessage('highlightSelection')}</span>`);
 		btn.style.display = 'none';
@@ -2419,11 +2419,11 @@ export class Reader {
 
 		const update = () => {
 			if (!this.isActive) return hide();
-			if (doc.body.classList.contains('obsidian-highlighter-active')) return hide();
+			if (doc.body.classList.contains('aria-highlighter-active')) return hide();
 			const sel = doc.getSelection();
 			if (!sel || sel.isCollapsed || sel.rangeCount === 0) return hide();
 			const range = sel.getRangeAt(0);
-			const article = doc.querySelector('.obsidian-reader-content article');
+			const article = doc.querySelector('.aria-reader-content article');
 			if (!article || !article.contains(range.commonAncestorContainer)) return hide();
 			const rects = range.getClientRects();
 			if (rects.length === 0) return hide();
@@ -2479,16 +2479,16 @@ export class Reader {
 	// content.js). On live pages (case 2), hl() routes to content.js's
 	// Promise-cached version instead.
 	static ensureHighlighterCSS(doc: Document): void {
-		if (doc.getElementById('obsidian-highlighter-stylesheet')) return;
+		if (doc.getElementById('aria-highlighter-stylesheet')) return;
 		const link = doc.createElement('link');
-		link.id = 'obsidian-highlighter-stylesheet';
+		link.id = 'aria-highlighter-stylesheet';
 		link.rel = 'stylesheet';
 		link.href = browser.runtime.getURL('highlighter.css');
 		(doc.head || doc.documentElement).appendChild(link);
 	}
 
 	static toggleHighlighter(doc: Document): void {
-		const willBeActive = !doc.body.classList.contains('obsidian-highlighter-active');
+		const willBeActive = !doc.body.classList.contains('aria-highlighter-active');
 		hl().toggleHighlighterMenu(willBeActive);
 	}
 
@@ -2508,7 +2508,7 @@ export class Reader {
 	private static initializeFollowLinks(doc: Document): void {
 		if (!this.settings.followLinks) return;
 
-		const article = doc.querySelector('.obsidian-reader-content article');
+		const article = doc.querySelector('.aria-reader-content article');
 		if (!article) return;
 
 		article.addEventListener('click', (e: Event) => {
@@ -2619,10 +2619,10 @@ export class Reader {
 		}
 
 		// Footer
-		const footer = doc.querySelector('.obsidian-reader-footer') as HTMLElement | null;
+		const footer = doc.querySelector('.aria-reader-footer') as HTMLElement | null;
 		if (footer) {
 			const footerItems = [
-				'Obsidian Reader',
+				'Aria Reader',
 				content.wordCount ? new Intl.NumberFormat().format(content.wordCount) + ' words' : '',
 				content.parseTime ? 'parsed in ' + new Intl.NumberFormat().format(content.parseTime) + ' ms' : '',
 			].filter(Boolean);
@@ -2656,7 +2656,7 @@ export class Reader {
 	// Shared between apply() and updateReaderContent().
 	private static async initializeContentFeatures(doc: Document, title?: string): Promise<void> {
 		this.observer = this.generateOutline(doc, title);
-		const leftSidebar = doc.querySelector('.obsidian-reader-left-sidebar') as HTMLElement;
+		const leftSidebar = doc.querySelector('.aria-reader-left-sidebar') as HTMLElement;
 		if (leftSidebar) {
 			leftSidebar.classList.toggle('is-empty', !this.observer);
 		}
@@ -2691,7 +2691,7 @@ export class Reader {
 
 	// Replace article content in-place for SPA navigation on the reader page.
 	static async updateReaderContent(doc: Document, content: ReaderContent): Promise<void> {
-		const main = doc.querySelector('.obsidian-reader-content main') as HTMLElement | null;
+		const main = doc.querySelector('.aria-reader-content main') as HTMLElement | null;
 		if (!main) return;
 
 		this.teardownContent(doc);
@@ -2730,8 +2730,8 @@ export class Reader {
 	// --- Reader page helpers (extension page context) ---
 
 	static async toggleReaderPageIframe(doc: Document): Promise<void> {
-		const containerId = 'obsidian-clipper-container';
-		const iframeId = 'obsidian-clipper-iframe';
+		const containerId = 'aria-clip-container';
+		const iframeId = 'aria-clip-iframe';
 
 		const existing = doc.getElementById(containerId);
 		if (existing) {
@@ -2749,9 +2749,9 @@ export class Reader {
 		container.id = containerId;
 		container.classList.add('is-open');
 
-		const { clipperIframeWidth, clipperIframeHeight } = await browser.storage.local.get(['clipperIframeWidth', 'clipperIframeHeight']);
-		if (clipperIframeWidth) container.style.width = `${clipperIframeWidth}px`;
-		if (clipperIframeHeight) container.style.height = `${clipperIframeHeight}px`;
+		const { clipIframeWidth, clipIframeHeight } = await browser.storage.local.get(['clipIframeWidth', 'clipIframeHeight']);
+		if (clipIframeWidth) container.style.width = `${clipIframeWidth}px`;
+		if (clipIframeHeight) container.style.height = `${clipIframeHeight}px`;
 
 		const iframe = doc.createElement('iframe');
 		iframe.id = iframeId;
