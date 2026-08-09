@@ -68,6 +68,8 @@ const previousWebSlug = `${previousBrandLower}-web-${previousToolLower}`;
 const previousReverseWebSlug = `web-${previousToolLower}-${previousBrandLower}`;
 
 const storeFallback = 'https://github.com/uicnz/aria-clip/releases';
+// Replace the most specific product forms first, then enforce the primary
+// brand invariant everywhere: Obsidian -> Aria and Clipper -> Clip.
 const replacements: Replacement[] = [
 	literal(
 		`md.${previousBrandLower}.${previousBrand}-Web-${previousTool}.Extension`,
@@ -296,8 +298,20 @@ function migratePackageToBun(): void {
 	for (const scriptName of ['set-defuddle-dev.js', 'set-defuddle-prod.js']) {
 		const path = join(ROOT, 'scripts', scriptName);
 		const content = readFileSync(path, 'utf8');
-		writeFileSync(path, replaceAllLiteral(content, 'npm install', 'bun install'));
+		const bunContent = replaceAllLiteral(content, 'npm install', 'bun install');
+		writeFileSync(path, bunContent.split('\n').map((line) => line.trimEnd()).join('\n'));
 	}
+
+	const scriptsReadmePath = join(ROOT, 'scripts', 'readme.md');
+	const scriptsReadme = readFileSync(scriptsReadmePath, 'utf8');
+	writeFileSync(
+		scriptsReadmePath,
+		replaceAllLiteral(
+			scriptsReadme,
+			'Scripts can be run using npm in the root of the repo.',
+			'Scripts can be run using Bun in the root of the repo.',
+		),
+	);
 
 	const cliBuildPath = join(ROOT, 'scripts', 'build-cli.mjs');
 	const cliBuild = readFileSync(cliBuildPath, 'utf8');
