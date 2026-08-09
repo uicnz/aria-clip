@@ -261,6 +261,7 @@ function migratePackageToBun(): void {
 	const packagePath = join(ROOT, 'package.json');
 	const packageJson = JSON.parse(readFileSync(packagePath, 'utf8')) as {
 		name: string;
+		description?: string;
 		packageManager?: string;
 		engines?: Record<string, string>;
 		scripts: Record<string, string>;
@@ -268,6 +269,7 @@ function migratePackageToBun(): void {
 	};
 
 	packageJson.name = PRODUCT_SLUG;
+	packageJson.description = 'Browser clip for Aria.';
 	packageJson.packageManager = `bun@${REQUIRED_BUN_VERSION}`;
 	packageJson.engines = { ...(packageJson.engines ?? {}), bun: `>=${REQUIRED_BUN_VERSION}` };
 	packageJson.scripts = {
@@ -285,6 +287,7 @@ function migratePackageToBun(): void {
 		prepublishOnly: 'bun run build:cli && bun run build:api',
 	};
 	packageJson.devDependencies['@types/webextension-polyfill'] = '0.12.1';
+	packageJson.devDependencies.sass = '1.78.0';
 	packageJson.devDependencies['terser-webpack-plugin'] = '^5.4.0';
 	delete packageJson.devDependencies['ts-node'];
 	writeFileSync(packagePath, `${JSON.stringify(packageJson, null, '\t')}\n`);
@@ -307,16 +310,35 @@ function migratePackageToBun(): void {
 	writeFileSync(tsconfigPath, `${JSON.stringify(tsconfig, null, '\t')}\n`);
 
 	const vitestConfigPath = join(ROOT, 'vitest.config.ts');
-	const vitestConfig = readFileSync(vitestConfigPath, 'utf8');
+	const vitestModuleConfigPath = join(ROOT, 'vitest.config.mts');
+	const activeVitestConfigPath = existsSync(vitestConfigPath) ? vitestConfigPath : vitestModuleConfigPath;
+	const vitestConfig = readFileSync(activeVitestConfigPath, 'utf8');
 	if (!vitestConfig.includes("process.env.TZ = 'UTC';")) {
 		writeFileSync(
-			vitestConfigPath,
+			activeVitestConfigPath,
 			vitestConfig.replace(
 				"import { defineConfig } from 'vitest/config';",
 				"import { defineConfig } from 'vitest/config';\n\nprocess.env.TZ = 'UTC';",
 			),
 		);
 	}
+	if (activeVitestConfigPath === vitestConfigPath) {
+		renameSync(vitestConfigPath, vitestModuleConfigPath);
+	}
+
+	const stringCheckPath = join(ROOT, 'scripts', 'check-unused-strings.ts');
+	const stringCheck = readFileSync(stringCheckPath, 'utf8');
+	writeFileSync(
+		stringCheckPath,
+		replaceAllLiteral(stringCheck, "path.join(__dirname, '../src/locales')", "path.join(__dirname, '../src/_locales')"),
+	);
+
+	const xcodeProjectPath = join(ROOT, 'xcode', 'Aria Clip', 'Aria Clip.xcodeproj', 'project.pbxproj');
+	const xcodeProject = readFileSync(xcodeProjectPath, 'utf8');
+	writeFileSync(
+		xcodeProjectPath,
+		replaceAllLiteral(xcodeProject, 'MACOSX_DEPLOYMENT_TARGET = 11.0;', 'MACOSX_DEPLOYMENT_TARGET = 12.0;'),
+	);
 	const youtubeExpectedPath = join(ROOT, 'src', 'utils', 'fixtures', 'expected', 'youtube.md');
 	const youtubeExpected = readFileSync(youtubeExpectedPath, 'utf8');
 	writeFileSync(
@@ -385,7 +407,7 @@ function renderMarketingCard(
 	const args = [
 		'-size', `${width}x${height}`,
 		'canvas:#f5f5f2',
-		'(', sourceIcon, '-resize', `${iconSize}x${iconSize}`, ')',
+		'(', join(ROOT, 'xcode', 'Aria Clip', 'Shared (App)', 'AppIcon.icon', 'Assets', 'AppIcon.png'), '-resize', `${iconSize}x${iconSize}`, ')',
 		'-gravity', 'center',
 		'-geometry', `+0${iconOffset >= 0 ? '+' : ''}${iconOffset}`,
 		'-composite',
