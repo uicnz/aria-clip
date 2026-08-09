@@ -68,8 +68,8 @@ const previousWebSlug = `${previousBrandLower}-web-${previousToolLower}`;
 const previousReverseWebSlug = `web-${previousToolLower}-${previousBrandLower}`;
 
 const storeFallback = 'https://github.com/uicnz/aria-clip/releases';
-// Replace the most specific product forms first, then enforce the primary
-// brand invariant everywhere: Obsidian -> Aria and Clipper -> Clip.
+// Replace the most specific legacy product forms first, then enforce the
+// primary brand and tool-name invariants everywhere.
 const replacements: Replacement[] = [
 	literal(
 		`md.${previousBrandLower}.${previousBrand}-Web-${previousTool}.Extension`,
