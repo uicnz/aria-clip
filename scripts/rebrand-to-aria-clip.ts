@@ -58,6 +58,12 @@ const ignoredDirectories = new Set([
 ]);
 
 const sourceIcon = join(ROOT, 'assets', 'icon.svg');
+const canonicalPathNames = new Map([
+	['Filters.md', 'filters.md'],
+	['Logic.md', 'logic.md'],
+	['Templates.md', 'templates.md'],
+	['Variables.md', 'variables.md'],
+]);
 
 type Replacement = readonly [from: string, to: string];
 
@@ -219,11 +225,22 @@ function renamePaths(): number {
 	const paths = listPaths(ROOT).sort((a, b) => b.split('/').length - a.split('/').length);
 	for (const oldPath of paths) {
 		if (!existsSync(oldPath)) continue;
-		const newName = rebrand(basename(oldPath));
+		const brandedName = rebrand(basename(oldPath));
+		const newName = canonicalPathNames.get(brandedName) ?? brandedName;
 		if (newName === basename(oldPath)) continue;
 		const newPath = join(dirname(oldPath), newName);
 		if (existsSync(newPath)) {
-			throw new Error(`Refusing to overwrite existing path: ${relative(ROOT, newPath)}`);
+			if (oldPath.toLowerCase() !== newPath.toLowerCase()) {
+				throw new Error(`Refusing to overwrite existing path: ${relative(ROOT, newPath)}`);
+			}
+			const temporaryPath = `${oldPath}.aria-clip-case-rename`;
+			if (existsSync(temporaryPath)) {
+				throw new Error(`Refusing to overwrite temporary path: ${relative(ROOT, temporaryPath)}`);
+			}
+			renameSync(oldPath, temporaryPath);
+			renameSync(temporaryPath, newPath);
+			changed += 1;
+			continue;
 		}
 		renameSync(oldPath, newPath);
 		changed += 1;
