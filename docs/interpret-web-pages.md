@@ -44,7 +44,7 @@ The whole process can take milliseconds or more than 30 seconds depending on the
 
 ## Context
 
-The term *context* refers to the page data that Interpreter uses to process prompts. The smaller the context, the faster Interpreter runs. 
+The term *context* refers to the page data that Interpreter uses to process prompts. The smaller the context, the faster Interpreter runs.
 
 By default, Interpreter uses the entire page HTML as its context, however this can make prompts slower and more expensive than necessary.
 
@@ -100,7 +100,7 @@ Interpreter can use local models which offer greater privacy and offline compati
 
 #### Ollama
 
-[Ollama](https://ollama.com/) lets you run language models locally and privately on your device. 
+[Ollama](https://ollama.com/) lets you run language models locally and privately on your device.
 
 Once you have downloaded and installed Ollama, add Ollama using **Add provider** in Interpreter settings. Ollama does not require an API key. Then choose a model from the [model list](https://ollama.com/search). For example if you want to use [Llama 3.2](https://ollama.com/library/llama3.2), click **Add model**, then:
 
@@ -110,7 +110,7 @@ Once you have downloaded and installed Ollama, add Ollama using **Add provider**
 
 **Start the Ollama server**
 
-To allow a browser extension to interact with Ollama you must [give it explicit instruction](https://github.com/ollama/ollama/issues/2308) when running the server, or else you will see a `403` error. 
+To allow a browser extension to interact with Ollama you must [give it explicit instruction](https://github.com/ollama/ollama/issues/2308) when running the server, or else you will see a `403` error.
 
 Close the Ollama app, and run the following command in your terminal. The protocol should be changed to your browser's extension protocol if you don't use Chrome or Firefox.
 

@@ -59,4 +59,3 @@ Footer functionality includes:
 - **Vault** dropdown to switch between saved vaults added in Web Clipper settings.
 - **Folder** field to define which folder to save to.
 - **Interpreter** to run [[Interpret web pages|natural language prompts]] on the page.
-

@@ -1,6 +1,7 @@
 ---
 permalink: web-clipper/variables
 ---
+
 [[Obsidian Web Clipper/Templates|Web Clipper templates]] can use variables to automatically pre-populate data from the page in a template. Variables can be used in the **note name**, **note location**, **properties**, and **note content**. Variables can also be modified using [[filters]].
 
 Use the `...` icon in the [[Introduction to Obsidian Web Clipper|Web Clipper]] extension to access the current page variables for use in templates. There are five types of variables you can use:
@@ -50,7 +51,7 @@ Prompt variables have the benefit of being extremely flexible and easy to write,
 
 Unlike other variable types, prompt variables need to be processed by an external language model, so they are replaced only once [[Interpret web pages|Interpreter]] has run.
 
-It is best to *not* use prompt variables if the data you want to extract is in a consistent format that could be extracted with other variable types. 
+It is best to *not* use prompt variables if the data you want to extract is in a consistent format that could be extracted with other variable types.
 
 On the other hand, prompt variables can be useful if the data you want to extract is an *inconsistent* format across websites. For example, you can make a [[Obsidian Web Clipper/Templates|template]] to save books that is agnostic of the book site. Prompt variables like `{{"author of the book"}}` will work across any book site, whereas selector variables typically only work for one site.
 
@@ -117,4 +118,3 @@ Nested properties and array access work as well, both with and without the schem
 - `{{schema:author.name}}` will find the first `author` property and then access its `name` sub-property.
 - `{{schema:author[0].name}}` will access the `name` of the first author in an array of authors.
 - `{{schema:author[*].name}}` will return an array of all author names.
-

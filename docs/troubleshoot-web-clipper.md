@@ -1,6 +1,7 @@
 ---
 permalink: web-clipper/troubleshoot
 ---
+
 If you encounter issues with [[Introduction to Obsidian Web Clipper|Web Clipper]] you can get help via the [official Discord channel](https://discord.com/channels/686053708261228577/1285652864089198672). You can also report bugs on the [GitHub repo](https://github.com/obsidianmd/obsidian-clipper).
 
 ## General
@@ -27,7 +28,7 @@ If you don't see any content in Obsidian when you click **Add to Obsidian**:
 
 ## Linux
 
-#### Obsidian does not open
+### Obsidian does not open
 
 - Make sure the [[Obsidian URI]] protocol [[Obsidian URI#Register Obsidian URI|is registered]].
 - If you are using Firefox you may need to [register it the browser settings](https://kb.mozillazine.org/Register_protocol).

@@ -17,7 +17,7 @@ Converts a date to the specified format, [see reference](https://day.js.org/docs
 - `{{date|date:"YYYY-MM-DD"}}` converts the current date to "YYYY-MM-DD".
 - Use `date:("outputFormat", "inputFormat")` to specify the input format, e.g. `"12/01/2024"|date:("YYYY-MM-DD", "MM/DD/YYYY")` parses "12/01/2024" and returns `"2024-12-01"`.
 
-### `date_modify` 
+### `date_modify`
 
 Modifies a date by adding or subtracting a specified amount of time, [see reference](https://day.js.org/docs/en/manipulate/add).
 
@@ -117,9 +117,9 @@ Converts a value to uppercase, e.g. `"hello world"|upper` returns `"HELLO WORLD"
 
 Apply [[Basic formatting syntax]] and [[Advanced formatting syntax]] to text.
 
-### `blockquote` 
+### `blockquote`
 
-Adds a Markdown quote prefix (`> `) to each line of the input.
+Adds a Markdown quote prefix (`>`) to each line of the input.
 
 ### `callout`
 
@@ -143,7 +143,7 @@ Converts strings and arrays into [text fragment](https://developer.mozilla.org/e
 - `highlights|fragment_link` returns `Highlight content [link](text-fragment-url)`
 - `highlights|fragment_link:"custom title"` returns `Highlight content [custom title](text-fragment-url)`
 
-### `image` 
+### `image`
 
 Converts strings, arrays, or objects into Markdown image syntax.
 
@@ -217,13 +217,13 @@ Rounds a number to the nearest integer or to a specified number of decimal place
 
 Process HTML content and convert HTML to Markdown. Note that your input [[Variables|variable]] must contain HTML content, e.g. using `{{fullHtml}}`, `{{contentHtml}}` or a `{{selectorHtml:}}` variable.
 
-### `markdown` 
+### `markdown`
 
 Converts a string to an [[Obsidian Flavored Markdown]] formatted string.
 
 - Useful when combined with variables that return HTML such as `{{contentHtml}}`, `{{fullHtml}}`, and selector variables like `{{selectorHtml:cssSelector}}`.
 
-### `remove_attr` 
+### `remove_attr`
 
 Removes only the specified HTML attributes from tags.
 
@@ -237,7 +237,7 @@ Removes the specified HTML elements and their content from a string.
 - Supports tag name, class, or id, e.g. `{{fullHtml|remove_html:("img,.class-name,#element-id")}}`
 - To remove only HTML tags or attributes without removing the content use the `strip_tags` or `strip_attr` filters.
 
-### `remove_tags` 
+### `remove_tags`
 
 Removes only the specified HTML tags. Keeps the content of the tags.
 
@@ -275,7 +275,7 @@ Removes **all** HTML tags from a string. Content within the tag is preserved.
 
 Process arrays and objects.
 
-### `first` 
+### `first`
 
 Returns the first element of an array as a string.
 
