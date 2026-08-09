@@ -190,15 +190,6 @@ function removeGeneratedOutput(): void {
 	}
 }
 
-function collectBrandMessageKeys(): string[] {
-	const englishPath = join(ROOT, 'src', '_locales', 'en', 'messages.json');
-	const messages = JSON.parse(readFileSync(englishPath, 'utf8')) as Record<string, unknown>;
-	const terms = [previousBrand, previousBrandLower, previousTool, previousToolLower];
-	return Object.entries(messages)
-		.filter(([, value]) => terms.some((term) => JSON.stringify(value).includes(term)))
-		.map(([key]) => rebrand(key));
-}
-
 function rewriteTextFiles(): number {
 	let changed = 0;
 	for (const path of listFiles(ROOT)) {
@@ -233,33 +224,6 @@ function renamePaths(): number {
 		renameSync(oldPath, newPath);
 		changed += 1;
 	}
-	return changed;
-}
-
-function normalizeLocalizedBrandMessages(keys: string[]): number {
-	const localesRoot = join(ROOT, 'src', '_locales');
-	const englishPath = join(localesRoot, 'en', 'messages.json');
-	const english = JSON.parse(readFileSync(englishPath, 'utf8')) as Record<string, unknown>;
-	let changed = 0;
-
-	for (const locale of readdirSync(localesRoot, { withFileTypes: true })) {
-		if (!locale.isDirectory() || locale.name === 'en') continue;
-		const path = join(localesRoot, locale.name, 'messages.json');
-		const messages = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
-		let localeChanged = false;
-		for (const key of keys) {
-			if (!(key in english) || !(key in messages)) continue;
-			const source = JSON.stringify(english[key]);
-			if (JSON.stringify(messages[key]) === source) continue;
-			messages[key] = JSON.parse(source);
-			localeChanged = true;
-		}
-		if (localeChanged) {
-			writeFileSync(path, `${JSON.stringify(messages, null, '\t')}\n`);
-			changed += 1;
-		}
-	}
-
 	return changed;
 }
 
@@ -536,10 +500,8 @@ function main(): void {
 	if (!existsSync(sourceIcon)) throw new Error('Missing required branding source: assets/icon.svg');
 	const iconDigestBefore = digest(sourceIcon);
 	removeGeneratedOutput();
-	const brandMessageKeys = collectBrandMessageKeys();
 	const rewrittenFiles = rewriteTextFiles();
 	const renamedPaths = renamePaths();
-	const normalizedLocales = normalizeLocalizedBrandMessages(brandMessageKeys);
 	migratePackageToBun();
 	refreshBrandArtwork();
 	installWithBun();
@@ -549,7 +511,7 @@ function main(): void {
 		throw new Error('assets/icon.svg changed during migration; refusing to continue.');
 	}
 	console.log(
-		`Rebranded ${rewrittenFiles} text files, renamed ${renamedPaths} paths, and normalized ${normalizedLocales} locale files.`,
+		`Rebranded ${rewrittenFiles} text files and renamed ${renamedPaths} paths.`,
 	);
 	console.log(`Preserved assets/icon.svg (${iconDigestAfter}).`);
 }
