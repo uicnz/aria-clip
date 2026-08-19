@@ -259,23 +259,6 @@ async function showProviderModal(provider: Provider, index?: number) {
 			return;
 		}
 
-		// Clear and populate preset select
-		presetSelect.textContent = '';
-		
-		// Add custom option
-		const customOption = document.createElement('option');
-		customOption.value = '';
-		customOption.textContent = getMessage('custom');
-		presetSelect.appendChild(customOption);
-		
-		// Add preset options
-		Object.entries(cachedPresetProviders || {}).forEach(([id, preset]) => {
-			const option = document.createElement('option');
-			option.value = id;
-			option.textContent = preset.name;
-			presetSelect.appendChild(option);
-		});
-
 		nameInput.value = '';
 		baseUrlInput.value = '';
 		apiKeyInput.value = '';

@@ -61,6 +61,7 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { generalSettings, loadSettings, saveSettings } from "@/utils/storage-utils"
+import { getPresetProviders, type PresetProvider } from "@/managers/interpreter-settings"
 
 export function SettingsShell() {
   const requestedSection = new URLSearchParams(window.location.search).get("section")
@@ -71,6 +72,7 @@ export function SettingsShell() {
     ...generalSettings,
     readerSettings: { ...generalSettings.readerSettings },
   }))
+  const [providerPresets, setProviderPresets] = useState<Record<string, PresetProvider>>({})
 
   useEffect(() => {
     let mounted = true
@@ -78,6 +80,16 @@ export function SettingsShell() {
       if (mounted) {
         setSettings({ ...loaded, readerSettings: { ...loaded.readerSettings } })
       }
+    })
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let mounted = true
+    void getPresetProviders().then((presets) => {
+      if (mounted) setProviderPresets(presets)
     })
     return () => {
       mounted = false
@@ -405,7 +417,12 @@ export function SettingsShell() {
         <DialogContent id="provider-modal">
           <DialogHeader><DialogTitle className="modal-title" data-i18n="addProviderTitle">Add provider</DialogTitle></DialogHeader>
           <form id="provider-form"><FieldGroup>
-            <Field><Label htmlFor="provider-preset" data-i18n="provider">Provider</Label><NativeSelect id="provider-preset" name="preset"><NativeSelectOption value="">Custom</NativeSelectOption></NativeSelect></Field>
+            <Field><Label htmlFor="provider-preset" data-i18n="provider">Provider</Label><NativeSelect id="provider-preset" name="preset">
+              <NativeSelectOption value="">Custom</NativeSelectOption>
+              {Object.entries(providerPresets)
+                .sort(([, left], [, right]) => left.name.localeCompare(right.name))
+                .map(([id, preset]) => <NativeSelectOption key={id} value={id}>{preset.name}</NativeSelectOption>)}
+            </NativeSelect></Field>
             <Field><Label htmlFor="provider-name" data-i18n="providerName">Provider name</Label><Input id="provider-name" name="name" placeholder="Provider name" required /></Field>
             <Field><Label htmlFor="provider-base-url" data-i18n="providerBaseUrl">Base URL</Label><Input id="provider-base-url" name="baseUrl" placeholder="Base URL" required /></Field>
             <Field className="setting-item"><FieldContent><Label htmlFor="provider-api-key" data-i18n="providerApiKey">API key</Label><FieldDescription /></FieldContent><Input id="provider-api-key" name="apiKey" placeholder="API key" /></Field>
