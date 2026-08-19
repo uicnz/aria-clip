@@ -116,10 +116,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7A15D46F2CB5D97B00BC4F99 /* highlighter.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = highlighter.css; path = ../../../dist_safari/highlighter.css; sourceTree = "<group>"; };
-		7A6480582D820A9800A5924D /* reader.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = reader.css; path = ../../../dist_safari/reader.css; sourceTree = "<group>"; };
-		7A6535C82D8B530300DDF54C /* reader-script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "reader-script.js"; path = "../../../dist_safari/reader-script.js"; sourceTree = "<group>"; };
-		7AC138862E4B9C8E00B6F4CF /* side-panel.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "side-panel.html"; path = "../../../dist_safari/side-panel.html"; sourceTree = "<group>"; };
+		AF0000013000000000000001 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
+		7A15D46F2CB5D97B00BC4F99 /* highlighter.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = highlighter.css; path = ../../../dist/safari/highlighter.css; sourceTree = "<group>"; };
+		7A6480582D820A9800A5924D /* reader.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = reader.css; path = ../../../dist/safari/reader.css; sourceTree = "<group>"; };
+		7A6535C82D8B530300DDF54C /* reader-script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "reader-script.js"; path = "../../../dist/safari/reader-script.js"; sourceTree = "<group>"; };
+		7AC138862E4B9C8E00B6F4CF /* side-panel.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "side-panel.html"; path = "../../../dist/safari/side-panel.html"; sourceTree = "<group>"; };
 		7AEF056F2CA0F50D005FFBC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
 		7AEF05702CA0F50D005FFBC2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		7AEF05712CA0F50D005FFBC2 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
@@ -143,22 +144,22 @@
 		7AEF05A42CA0F50D005FFBC2 /* Aria Clip Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Aria Clip Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AEF05A92CA0F50D005FFBC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AEF05AA2CA0F50D005FFBC2 /* Aria Clip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Aria Clip.entitlements"; sourceTree = "<group>"; };
-		7AEF05CB2CA0F50D005FFBC2 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../../dist_safari/background.js; sourceTree = "<group>"; };
-		7AEF05CC2CA0F50D005FFBC2 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../dist_safari/popup.js; sourceTree = "<group>"; };
-		7AEF05CF2CA0F50D005FFBC2 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = ../../../dist_safari/popup.html; sourceTree = "<group>"; };
-		7AEF05D02CA0F50D005FFBC2 /* browser-polyfill.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "browser-polyfill.min.js"; path = "../../../dist_safari/browser-polyfill.min.js"; sourceTree = "<group>"; };
-		7AEF05D32CA0F50D005FFBC2 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = ../../../dist_safari/icons; sourceTree = "<group>"; };
-		7AEF05D42CA0F50D005FFBC2 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = style.css; path = ../../../dist_safari/style.css; sourceTree = "<group>"; };
-		7AEF05D52CA0F50D005FFBC2 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../dist_safari/manifest.json; sourceTree = "<group>"; };
-		7AEF05D62CA0F50D005FFBC2 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../dist_safari/content.js; sourceTree = "<group>"; };
-		7AEF05D82CA0F50D005FFBC2 /* settings.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = settings.html; path = ../../../dist_safari/settings.html; sourceTree = "<group>"; };
-		7AEF05DA2CA0F50D005FFBC2 /* settings.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = settings.js; path = ../../../dist_safari/settings.js; sourceTree = "<group>"; };
-		AF3D6D412F8B297F004F2D8D /* highlights.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = highlights.html; path = ../../../dist_safari/highlights.html; sourceTree = "<group>"; };
-		AF3D6D422F8B297F004F2D8D /* highlights.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = highlights.js; path = ../../../dist_safari/highlights.js; sourceTree = "<group>"; };
-		AF3D6D432F8B297F004F2D8D /* reader.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = reader.html; path = ../../../dist_safari/reader.html; sourceTree = "<group>"; };
-		AF3D6D442F8B297F004F2D8D /* reader-page.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "reader-page.js"; path = "../../../dist_safari/reader-page.js"; sourceTree = "<group>"; };
+		7AEF05CB2CA0F50D005FFBC2 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../../dist/safari/background.js; sourceTree = "<group>"; };
+		7AEF05CC2CA0F50D005FFBC2 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../dist/safari/popup.js; sourceTree = "<group>"; };
+		7AEF05CF2CA0F50D005FFBC2 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = ../../../dist/safari/popup.html; sourceTree = "<group>"; };
+		7AEF05D02CA0F50D005FFBC2 /* browser-polyfill.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "browser-polyfill.min.js"; path = "../../../dist/safari/browser-polyfill.min.js"; sourceTree = "<group>"; };
+		7AEF05D32CA0F50D005FFBC2 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = ../../../dist/safari/icons; sourceTree = "<group>"; };
+		7AEF05D42CA0F50D005FFBC2 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = style.css; path = ../../../dist/safari/style.css; sourceTree = "<group>"; };
+		7AEF05D52CA0F50D005FFBC2 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../dist/safari/manifest.json; sourceTree = "<group>"; };
+		7AEF05D62CA0F50D005FFBC2 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../dist/safari/content.js; sourceTree = "<group>"; };
+		7AEF05D82CA0F50D005FFBC2 /* settings.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = settings.html; path = ../../../dist/safari/settings.html; sourceTree = "<group>"; };
+		7AEF05DA2CA0F50D005FFBC2 /* settings.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = settings.js; path = ../../../dist/safari/settings.js; sourceTree = "<group>"; };
+		AF3D6D412F8B297F004F2D8D /* highlights.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = highlights.html; path = ../../../dist/safari/highlights.html; sourceTree = "<group>"; };
+		AF3D6D422F8B297F004F2D8D /* highlights.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = highlights.js; path = ../../../dist/safari/highlights.js; sourceTree = "<group>"; };
+		AF3D6D432F8B297F004F2D8D /* reader.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = reader.html; path = ../../../dist/safari/reader.html; sourceTree = "<group>"; };
+		AF3D6D442F8B297F004F2D8D /* reader-page.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "reader-page.js"; path = "../../../dist/safari/reader-page.js"; sourceTree = "<group>"; };
 		AF4F759A2F9C1AD80072BA9B /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
-		AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "flatten-shadow-dom.js"; path = "../../../dist_safari/flatten-shadow-dom.js"; sourceTree = "<group>"; };
+		AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "flatten-shadow-dom.js"; path = "../../../dist/safari/flatten-shadow-dom.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +197,7 @@
 		7AEF05672CA0F50C005FFBC2 = {
 			isa = PBXGroup;
 			children = (
+				AF0000013000000000000001 /* Version.xcconfig */,
 				7AEF056C2CA0F50D005FFBC2 /* Shared (App) */,
 				7AEF05752CA0F50D005FFBC2 /* Shared (Extension) */,
 				7AEF057D2CA0F50D005FFBC2 /* iOS (App) */,
@@ -610,6 +612,7 @@
 /* Begin XCBuildConfiguration section */
 		7AEF05B92CA0F50D005FFBC2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF0000013000000000000001 /* Version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -674,6 +677,7 @@
 		};
 		7AEF05BA2CA0F50D005FFBC2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF0000013000000000000001 /* Version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -743,7 +747,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -773,7 +777,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -811,7 +815,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -849,7 +853,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -888,7 +892,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -924,7 +928,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -964,7 +968,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -1005,7 +1009,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = "$(ARIA_CLIP_VERSION)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,

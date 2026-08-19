@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Bağlantıları renklendir"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Varsayılan"
-	},
 	"readerCurrentPosition": {
 		"message": "Geçerli konum"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "Okuma görünümünde otomatik olarak uygulanan CSS."
 	},
-	"readerDarkTheme": {
-		"message": "Koyu mod teması"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Koyu modda farklı bir tema kullanın."
-	},
 	"readerError": {
 		"message": "İçerik çıkarılamadı."
 	},
-	"readerFont": {
-		"message": "Yazı tipi seçenekleri"
-	},
-	"readerFontDefault": {
-		"message": "Varsayılan"
-	},
-	"readerFontDescription": {
-		"message": "Sisteminizde yüklü yazı tiplerini ekleyin. Bir yazı tipi eklemek için Enter'a basın."
-	},
-	"readerFontNotFound": {
-		"message": "Bulunamadı"
-	},
-	"readerFontPlaceholder": {
-		"message": "Bir yazı tipi eklemek için Enter'a basın"
-	},
-	"readerFontSetDefault": {
-		"message": "Varsayılan olarak ayarla"
-	},
 	"readerFontSize": {
 		"message": "Temel yazı tipi boyutu"
-	},
-	"readerFontSystem": {
-		"message": "Sistem"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Bu yazı tipi burada kullanılamıyor — tarayıcınız özel yazı tiplerini engelliyor olabilir."
-	},
-	"readerFonts": {
-		"message": "Yazı tipleri"
 	},
 	"readerFootnotes": {
 		"message": "Dipnotlar"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Okuyucu ayarları"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Okuma görünümünde kullanılan renkleri seçin."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Transkriptler"

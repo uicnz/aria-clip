@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Coloreja els enllaços"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Per defecte"
-	},
 	"readerCurrentPosition": {
 		"message": "Posició actual"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS aplicat automàticament a la vista de lectura."
 	},
-	"readerDarkTheme": {
-		"message": "Tema del mode fosc"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Utilitza un tema diferent en mode fosc."
-	},
 	"readerError": {
 		"message": "No s'ha pogut extreure el contingut."
 	},
-	"readerFont": {
-		"message": "Opcions de lletra"
-	},
-	"readerFontDefault": {
-		"message": "Per defecte"
-	},
-	"readerFontDescription": {
-		"message": "Afegeix les lletres instal·lades al teu sistema. Prem Retorn per afegir una lletra."
-	},
-	"readerFontNotFound": {
-		"message": "No s'ha trobat"
-	},
-	"readerFontPlaceholder": {
-		"message": "Prem Retorn per afegir una lletra"
-	},
-	"readerFontSetDefault": {
-		"message": "Estableix com a predeterminat"
-	},
 	"readerFontSize": {
 		"message": "Mida base de la lletra"
-	},
-	"readerFontSystem": {
-		"message": "Sistema"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Aquesta lletra no està disponible aquí — el navegador podria estar bloquejant les lletres personalitzades."
-	},
-	"readerFonts": {
-		"message": "Lletres"
 	},
 	"readerFootnotes": {
 		"message": "Notes a peu de pàgina"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Configuració del lector"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Tria els colors que s'utilitzen a la vista de lectura."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Transcripcions"

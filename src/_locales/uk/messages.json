@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "Розфарбовувати посилання"
 	},
-	"readerColorSchemeDefault": {
-		"message": "За замовчуванням"
-	},
 	"readerCurrentPosition": {
 		"message": "Поточна позиція"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS, що застосовується автоматично в режимі читання."
 	},
-	"readerDarkTheme": {
-		"message": "Тема темного режиму"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Використовувати іншу тему в темному режимі."
-	},
 	"readerError": {
 		"message": "Не вдалося витягти вміст."
 	},
-	"readerFont": {
-		"message": "Параметри шрифтів"
-	},
-	"readerFontDefault": {
-		"message": "За замовчуванням"
-	},
-	"readerFontDescription": {
-		"message": "Додайте шрифти, встановлені у вашій системі. Натисніть Enter, щоб додати шрифт."
-	},
-	"readerFontNotFound": {
-		"message": "Не знайдено"
-	},
-	"readerFontPlaceholder": {
-		"message": "Натисніть Enter, щоб додати шрифт"
-	},
-	"readerFontSetDefault": {
-		"message": "Встановити за замовчуванням"
-	},
 	"readerFontSize": {
 		"message": "Базовий розмір шрифту"
-	},
-	"readerFontSystem": {
-		"message": "Системний"
-	},
-	"readerFontSystemSans": {
-		"message": "Без засічок"
-	},
-	"readerFontSystemSerif": {
-		"message": "Із засічками"
-	},
-	"readerFontUnavailable": {
-		"message": "Цей шрифт тут недоступний — можливо, ваш браузер блокує користувацькі шрифти."
-	},
-	"readerFonts": {
-		"message": "Шрифти"
 	},
 	"readerFootnotes": {
 		"message": "Виноски"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "Налаштування режиму читання"
-	},
-	"readerTheme": {
-		"message": "Тема"
-	},
-	"readerThemeDescription": {
-		"message": "Виберіть кольори, що використовуються в режимі читання."
-	},
-	"readerThemeSection": {
-		"message": "Тема"
 	},
 	"readerTranscripts": {
 		"message": "Транскрипти"

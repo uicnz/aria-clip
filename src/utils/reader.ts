@@ -24,12 +24,12 @@ function hl(): HighlighterAPI {
 }
 import { copyToClipboard } from './clipboard-utils.js';
 import { getMessage, initializeI18n } from './i18n.js';
-import { getFontCss, isFontAvailable } from './font-utils.js';
 import { createMarkdownContent } from 'defuddle/full';
 import { saveFile } from './file-utils.js';
 import { parseForClip } from './clip-utils.js';
 import { updateSidebarWidth, addResizeHandle, cleanupResizeHandlers } from './iframe-resize.js';
 import { setElementHTML, setSVGChildren, serializeChildren } from './dom-utils.js';
+import { initializeExtensionTheme } from './theme-utils.js';
 
 // Mobile viewport settings
 const VIEWPORT = 'width=device-width, initial-scale=1, maximum-scale=1';
@@ -138,10 +138,6 @@ export class Reader {
 		return svg;
 	}
 	private static settingsBar: HTMLElement | null = null;
-	private static fontNotice: HTMLElement | null = null;
-	// Safari and Firefox farble canvas text metrics, so the canvas-based font
-	// probe is unreliable there; fall back to the Font Loading API instead.
-	private static fontProbeBlocked: boolean = false;
 	private static colorSchemeMediaQuery: MediaQueryList | null = null;
 	private static readerStyles: HTMLLinkElement | null = null;
 	private static lightbox: HTMLElement | null = null;
@@ -151,11 +147,7 @@ export class Reader {
 		fontSize: 16,
 		lineHeight: 1.6,
 		maxWidth: 38,
-		lightTheme: 'default',
-		darkTheme: 'same',
 		appearance: 'auto',
-		fonts: [],
-		defaultFont: '',
 		blendImages: true,
 		colorLinks: false,
 		followLinks: true,
@@ -481,43 +473,6 @@ export class Reader {
 		lineHeightGroup.appendChild(decreaseLineHeightBtn);
 		lineHeightGroup.appendChild(increaseLineHeightBtn);
 
-		// Theme select
-		const themeWrapper = doc.createElement('div');
-		themeWrapper.className = 'aria-reader-settings-select-wrapper';
-		themeWrapper.appendChild(this.createSVG({
-			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
-			circles: [
-				{ cx: '13.5', cy: '6.5', r: '.5', fill: 'currentColor' },
-				{ cx: '17.5', cy: '10.5', r: '.5', fill: 'currentColor' },
-				{ cx: '8.5', cy: '7.5', r: '.5', fill: 'currentColor' },
-				{ cx: '6.5', cy: '12.5', r: '.5', fill: 'currentColor' },
-			],
-			paths: ['M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z'],
-		}));
-		const themeSelect = doc.createElement('select');
-		themeSelect.className = 'aria-reader-settings-select';
-		themeSelect.dataset.action = 'change-theme';
-
-		const themeOptions: Array<[string, string]> = [
-			['default', ''],
-			['flexoki', 'Flexoki'],
-			['ayu', 'Ayu'],
-			['catppuccin', 'Catppuccin'],
-			['everforest', 'Everforest'],
-			['gruvbox', 'Gruvbox'],
-			['nord', 'Nord'],
-			['rose-pine', 'Rosé Pine'],
-			['solarized', 'Solarized'],
-		];
-
-		for (const [value, name] of themeOptions) {
-			const option = doc.createElement('option');
-			option.value = value;
-			option.textContent = name || getMessage('readerColorSchemeDefault');
-			themeSelect.appendChild(option);
-		}
-		themeWrapper.appendChild(themeSelect);
-
 		// Theme mode select
 		const themeModeWrapper = doc.createElement('div');
 		themeModeWrapper.className = 'aria-reader-settings-select-wrapper';
@@ -586,44 +541,6 @@ export class Reader {
 			browser.runtime.sendMessage({ action: 'openSettings', section: 'reader' });
 		});
 
-		// Font select
-		const fontWrapper = doc.createElement('div');
-		fontWrapper.className = 'aria-reader-settings-select-wrapper';
-		fontWrapper.appendChild(this.createSVG({
-			width: '18', height: '18', viewBox: '0 0 24 24', strokeWidth: '1.75',
-			paths: [
-				'M4 7V4h16v3',
-				'M9 20h6',
-				'M12 4v16',
-			],
-		}));
-		const fontSelect = doc.createElement('select');
-		fontSelect.className = 'aria-reader-settings-select';
-
-		const sansOption = doc.createElement('option');
-		sansOption.value = '';
-		sansOption.textContent = getMessage('readerFontSystemSans');
-		fontSelect.appendChild(sansOption);
-
-		const serifOption = doc.createElement('option');
-		serifOption.value = '__serif__';
-		serifOption.textContent = getMessage('readerFontSystemSerif');
-		fontSelect.appendChild(serifOption);
-
-		for (const font of [...this.settings.fonts].sort((a, b) => a.localeCompare(b))) {
-			const option = doc.createElement('option');
-			option.value = font;
-			option.textContent = font;
-			fontSelect.appendChild(option);
-		}
-		fontWrapper.appendChild(fontSelect);
-
-		const fontNotice = doc.createElement('div');
-		fontNotice.className = 'aria-reader-font-notice';
-		fontNotice.textContent = getMessage('readerFontUnavailable');
-		fontNotice.style.display = 'none';
-		this.fontNotice = fontNotice;
-
 		// Assemble everything
 		const typographyGroup = doc.createElement('div');
 		typographyGroup.className = 'aria-reader-settings-typography-group';
@@ -639,9 +556,6 @@ export class Reader {
 		const dropdownGroup = doc.createElement('div');
 		dropdownGroup.className = 'aria-reader-settings-dropdown-group';
 		dropdownGroup.appendChild(themeModeWrapper);
-		dropdownGroup.appendChild(themeWrapper);
-		dropdownGroup.appendChild(fontWrapper);
-		dropdownGroup.appendChild(fontNotice);
 		controlsContainer.appendChild(dropdownGroup);
 
 		const spacer2 = doc.createElement('div');
@@ -691,30 +605,11 @@ export class Reader {
 			}
 		});
 
-		// Add theme select event listener
-		themeSelect.value = this.getEffectiveTheme();
-		themeSelect.addEventListener('change', () => {
-			this.updateTheme(doc, themeSelect.value);
-		});
-
 		// Add theme mode select event listener
 		themeModeSelect.value = this.settings.appearance;
 		themeModeSelect.addEventListener('change', () => {
 			this.updateThemeMode(doc, themeModeSelect.value as 'auto' | 'light' | 'dark');
 		});
-
-		// Add font select event listener
-		fontSelect.value = this.settings.defaultFont;
-		fontSelect.addEventListener('change', () => {
-			this.settings.defaultFont = fontSelect.value;
-			this.applyFont(doc, fontSelect.value);
-			this.saveSettings();
-		});
-
-		// Surface the notice now, and re-check once any web fonts finish loading
-		// so a still-loading font isn't briefly flagged as unavailable.
-		this.updateFontNotice(doc, this.settings.defaultFont);
-		doc.fonts?.ready?.then(() => this.updateFontNotice(doc, this.settings.defaultFont)).catch(() => {});
 
 		// Notify content script to listen for highlighter button
 		document.dispatchEvent(new CustomEvent('aria-reader-init'));
@@ -742,32 +637,6 @@ export class Reader {
 		this.saveSettings();
 	}
 
-	private static getEffectiveTheme(): string {
-		const { lightTheme, darkTheme, appearance } = this.settings;
-		const isDark = appearance === 'dark' || (appearance === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-		return isDark && darkTheme !== 'same' ? darkTheme : lightTheme;
-	}
-
-	private static applyTheme(doc: Document): void {
-		const theme = this.getEffectiveTheme();
-		if (theme === 'default') {
-			doc.documentElement.removeAttribute('data-reader-theme');
-		} else {
-			doc.documentElement.setAttribute('data-reader-theme', theme);
-		}
-	}
-
-	private static updateTheme(doc: Document, theme: string): void {
-		const isDark = doc.documentElement.classList.contains('theme-dark');
-		if (isDark && this.settings.darkTheme !== 'same') {
-			this.settings.darkTheme = theme;
-		} else {
-			this.settings.lightTheme = theme;
-		}
-		this.applyTheme(doc);
-		this.saveSettings();
-	}
-
 	private static updateThemeMode(doc: Document, mode: 'auto' | 'light' | 'dark'): void {
 		const html = doc.documentElement;
 		html.classList.remove('theme-light', 'theme-dark');
@@ -780,28 +649,7 @@ export class Reader {
 		}
 
 		this.settings.appearance = mode;
-		this.applyTheme(doc);
 		this.saveSettings();
-	}
-
-	private static applyFont(doc: Document, defaultFont: string): void {
-		const css = getFontCss(defaultFont);
-		if (css) {
-			doc.body.style.setProperty('--font-text', css);
-		} else {
-			doc.body.style.removeProperty('--font-text');
-		}
-		this.updateFontNotice(doc, defaultFont);
-	}
-
-	// Warn when the chosen font can't actually render on this page. The most
-	// common cause is a browser (e.g. Brave on web origins) restricting access
-	// to locally installed fonts, which otherwise fails silently to sans-serif.
-	private static updateFontNotice(doc: Document, defaultFont: string): void {
-		const notice = this.fontNotice;
-		if (!notice) return;
-		const available = isFontAvailable(defaultFont, { doc, blocksCanvasProbe: this.fontProbeBlocked });
-		notice.style.display = available ? 'none' : '';
 	}
 
 	private static updateBlendImages(doc: Document, blend: boolean): void {
@@ -822,7 +670,6 @@ export class Reader {
 		if (this.settings.appearance === 'auto') {
 			doc.documentElement.classList.remove('theme-light', 'theme-dark');
 			doc.documentElement.classList.add(e.matches ? 'theme-dark' : 'theme-light');
-			this.applyTheme(doc);
 		}
 	}
 
@@ -2005,9 +1852,6 @@ export class Reader {
 			const host = doc.URL ? new URL(doc.URL).hostname : '';
 			const isYouTube = host.includes('youtube.com') || host.includes('youtu.be');
 			const browserType = await detectBrowser();
-			// Safari/Firefox block canvas font metrics, so the font-availability
-			// probe must fall back to the Font Loading API on those browsers.
-			this.fontProbeBlocked = ['safari', 'mobile-safari', 'ipad-os', 'orion', 'firefox', 'firefox-mobile'].includes(browserType);
 			if (isYouTube) {
 				const videoElement = doc.querySelector('video');
 				if (videoElement) {
@@ -2197,7 +2041,6 @@ export class Reader {
 			doc.documentElement.style.setProperty('--font-text-size', `${this.settings.fontSize}px`);
 			doc.documentElement.style.setProperty('--line-height-normal', this.settings.lineHeight.toString());
 			doc.documentElement.style.setProperty('--line-width', `${this.settings.maxWidth}em`);
-			this.applyFont(doc, this.settings.defaultFont);
 			this.applyBlendImages(doc, this.settings.blendImages);
 			this.applyColorLinks(doc, this.settings.colorLinks);
 
@@ -2228,7 +2071,6 @@ export class Reader {
 				const isDark = html.classList.contains('theme-dark');
 				html.classList.remove('theme-light', 'theme-dark');
 				html.classList.add(isDark ? 'theme-light' : 'theme-dark');
-				this.applyTheme(doc);
 			});
 
 			// H: toggle highlighter
@@ -2312,12 +2154,12 @@ export class Reader {
 						thumbnail.href = watchUrl;
 						thumbnail.target = '_blank';
 						thumbnail.rel = 'noopener';
-						thumbnail.style.cssText = 'display:block;position:relative;aspect-ratio:16/9;max-width:100%;background:#000;border-radius:8px;overflow:hidden;';
+						thumbnail.className = 'reader-video-thumbnail';
 						const thumbImg = doc.createElement('img');
 						thumbImg.src = 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg';
-						thumbImg.style.cssText = 'width:100%;height:100%;object-fit:cover;mix-blend-mode:normal!important;';
+						thumbImg.className = 'reader-video-thumbnail-image';
 						const playSvg = doc.createElementNS('http://www.w3.org/2000/svg', 'svg');
-						playSvg.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:48px;mix-blend-mode:normal!important;';
+						playSvg.classList.add('reader-video-thumbnail-play');
 						playSvg.setAttribute('viewBox', '0 0 68 48');
 						setSVGChildren(playSvg,
 							'<path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/>'
@@ -2400,6 +2242,7 @@ export class Reader {
 		const btn = doc.createElement('button');
 		btn.type = 'button';
 		btn.className = 'aria-selection-action';
+		void initializeExtensionTheme(btn);
 		btn.setAttribute('aria-label', getMessage('highlightSelection'));
 		setElementHTML(btn, `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span>${getMessage('highlightSelection')}</span>`);
 		btn.style.display = 'none';

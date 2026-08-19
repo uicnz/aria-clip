@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Colorer les liens"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Par défaut"
-	},
 	"readerCurrentPosition": {
 		"message": "Position actuelle"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS appliqué automatiquement en mode lecture."
 	},
-	"readerDarkTheme": {
-		"message": "Thème du mode sombre"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Utiliser un thème différent en mode sombre."
-	},
 	"readerError": {
 		"message": "Échec de l’extraction du contenu."
 	},
-	"readerFont": {
-		"message": "Options de police"
-	},
-	"readerFontDefault": {
-		"message": "Par défaut"
-	},
-	"readerFontDescription": {
-		"message": "Ajoutez des polices installées sur votre système. Appuyez sur Entrée pour ajouter une police."
-	},
-	"readerFontNotFound": {
-		"message": "Introuvable"
-	},
-	"readerFontPlaceholder": {
-		"message": "Appuyez sur Entrée pour ajouter une police"
-	},
-	"readerFontSetDefault": {
-		"message": "Définir par défaut"
-	},
 	"readerFontSize": {
 		"message": "Taille de police de base"
-	},
-	"readerFontSystem": {
-		"message": "Système"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Cette police n’est pas disponible ici — votre navigateur bloque peut-être les polices personnalisées."
-	},
-	"readerFonts": {
-		"message": "Polices"
 	},
 	"readerFootnotes": {
 		"message": "Notes de bas de page"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Paramètres du lecteur"
-	},
-	"readerTheme": {
-		"message": "Thème"
-	},
-	"readerThemeDescription": {
-		"message": "Choisissez les couleurs utilisées en mode lecture."
-	},
-	"readerThemeSection": {
-		"message": "Thème"
 	},
 	"readerTranscripts": {
 		"message": "Transcriptions"

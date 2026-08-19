@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "Kulayan ang mga link"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Default"
-	},
 	"readerCurrentPosition": {
 		"message": "Kasalukuyang posisyon"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "Awtomatikong inilalapat ang CSS sa reading view."
 	},
-	"readerDarkTheme": {
-		"message": "Tema ng dark mode"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Gumamit ng ibang tema sa dark mode."
-	},
 	"readerError": {
 		"message": "Nabigong i-extract ang nilalaman."
 	},
-	"readerFont": {
-		"message": "Mga opsyon sa font"
-	},
-	"readerFontDefault": {
-		"message": "Default"
-	},
-	"readerFontDescription": {
-		"message": "Magdagdag ng mga font na naka-install sa iyong system. Pindutin ang Enter para magdagdag ng font."
-	},
-	"readerFontNotFound": {
-		"message": "Hindi nahanap"
-	},
-	"readerFontPlaceholder": {
-		"message": "Pindutin ang Enter para magdagdag ng font"
-	},
-	"readerFontSetDefault": {
-		"message": "Itakda bilang default"
-	},
 	"readerFontSize": {
 		"message": "Base na laki ng font"
-	},
-	"readerFontSystem": {
-		"message": "System"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Hindi available ang font na ito rito — maaaring hinaharangan ng iyong browser ang mga custom na font."
-	},
-	"readerFonts": {
-		"message": "Mga font"
 	},
 	"readerFootnotes": {
 		"message": "Mga talababa"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "Mga setting ng reader"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Piliin ang mga kulay na gagamitin sa reading view."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Mga transcript"

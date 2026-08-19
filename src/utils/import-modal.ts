@@ -9,6 +9,8 @@ export async function showImportModal(
 	isTemplateImport: boolean = false,
 	modalTitleKey: string = 'import'
 ): Promise<void> {
+	showModal(modalId);
+	await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 	const modal = document.getElementById(modalId);
 	const dropZone = modal?.querySelector('.import-drop-zone') as HTMLElement;
 	const jsonTextarea = modal?.querySelector('.import-json-textarea') as HTMLTextAreaElement;
@@ -39,8 +41,7 @@ export async function showImportModal(
 	// Clear the textarea when showing the modal
 	jsonTextarea.value = '';
 
-	// Show modal and translate
-	showModal(modal);
+	// Translate the mounted dialog content.
 	await translatePage();
 
 	// Remove existing event listeners

@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "Colorează linkurile"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Implicit"
-	},
 	"readerCurrentPosition": {
 		"message": "Poziția curentă"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS aplicat automat în vizualizarea de citire."
 	},
-	"readerDarkTheme": {
-		"message": "Temă pentru modul întunecat"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Folosește o temă diferită în modul întunecat."
-	},
 	"readerError": {
 		"message": "Extragerea conținutului a eșuat."
 	},
-	"readerFont": {
-		"message": "Opțiuni de font"
-	},
-	"readerFontDefault": {
-		"message": "Implicit"
-	},
-	"readerFontDescription": {
-		"message": "Adaugă fonturi instalate pe sistemul tău. Apasă Enter pentru a adăuga un font."
-	},
-	"readerFontNotFound": {
-		"message": "Nu a fost găsit"
-	},
-	"readerFontPlaceholder": {
-		"message": "Apasă Enter pentru a adăuga un font"
-	},
-	"readerFontSetDefault": {
-		"message": "Setează ca implicit"
-	},
 	"readerFontSize": {
 		"message": "Dimensiunea de bază a fontului"
-	},
-	"readerFontSystem": {
-		"message": "Sistem"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Acest font nu este disponibil aici — browserul tău ar putea bloca fonturile personalizate."
-	},
-	"readerFonts": {
-		"message": "Fonturi"
 	},
 	"readerFootnotes": {
 		"message": "Note de subsol"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "Setări cititor"
-	},
-	"readerTheme": {
-		"message": "Temă"
-	},
-	"readerThemeDescription": {
-		"message": "Alege culorile folosite în vizualizarea de citire."
-	},
-	"readerThemeSection": {
-		"message": "Temă"
 	},
 	"readerTranscripts": {
 		"message": "Transcrieri"

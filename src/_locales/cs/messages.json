@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "Barevné odkazy"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Výchozí"
-	},
 	"readerCurrentPosition": {
 		"message": "Aktuální pozice"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS automaticky použité v režimu čtení."
 	},
-	"readerDarkTheme": {
-		"message": "Motiv tmavého režimu"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Použít jiný motiv v tmavém režimu."
-	},
 	"readerError": {
 		"message": "Nepodařilo se extrahovat obsah."
 	},
-	"readerFont": {
-		"message": "Možnosti písma"
-	},
-	"readerFontDefault": {
-		"message": "Výchozí"
-	},
-	"readerFontDescription": {
-		"message": "Přidejte písma nainstalovaná ve vašem systému. Stisknutím Enter přidáte písmo."
-	},
-	"readerFontNotFound": {
-		"message": "Nenalezeno"
-	},
-	"readerFontPlaceholder": {
-		"message": "Stisknutím Enter přidáte písmo"
-	},
-	"readerFontSetDefault": {
-		"message": "Nastavit jako výchozí"
-	},
 	"readerFontSize": {
 		"message": "Základní velikost písma"
-	},
-	"readerFontSystem": {
-		"message": "Systémové"
-	},
-	"readerFontSystemSans": {
-		"message": "Bezpatkové"
-	},
-	"readerFontSystemSerif": {
-		"message": "Patkové"
-	},
-	"readerFontUnavailable": {
-		"message": "Toto písmo zde není dostupné — váš prohlížeč může blokovat vlastní písma."
-	},
-	"readerFonts": {
-		"message": "Písma"
 	},
 	"readerFootnotes": {
 		"message": "Poznámky pod čarou"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "Nastavení čtečky"
-	},
-	"readerTheme": {
-		"message": "Motiv"
-	},
-	"readerThemeDescription": {
-		"message": "Vyberte barvy používané v režimu čtení."
-	},
-	"readerThemeSection": {
-		"message": "Motiv"
 	},
 	"readerTranscripts": {
 		"message": "Přepisy"

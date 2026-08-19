@@ -3,7 +3,7 @@ const fs = require('fs');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
-const package = require('./package.json');
+const packageJson = require('./package.json');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -20,21 +20,27 @@ function removeDSStore(dir) {
 	});
 }
 
+function buildManifest(content) {
+	const manifest = JSON.parse(content.toString());
+
+	if ('version' in manifest) {
+		throw new Error('Source manifests must not declare a version. Set it once in package.json.');
+	}
+
+	if (!/^\d+\.\d+\.\d+$/.test(packageJson.version)) {
+		throw new Error(`package.json version must use numeric X.Y.Z format: ${packageJson.version}`);
+	}
+
+	manifest.version = packageJson.version;
+	return `${JSON.stringify(manifest, null, '\t')}\n`;
+}
+
 module.exports = (env, argv) => {
 	const isFirefox = env.BROWSER === 'firefox';
 	const isSafari = env.BROWSER === 'safari';
 	const isProduction = argv.mode === 'production';
-
-	const getOutputDir = () => {
-		if (isProduction) {
-			return isFirefox ? 'dist_firefox' : (isSafari ? 'dist_safari' : 'dist');
-		} else {
-			return isFirefox ? 'dev_firefox' : (isSafari ? 'dev_safari' : 'dev');
-		}
-	};
-
-	const outputDir = getOutputDir();
 	const browserName = isFirefox ? 'firefox' : (isSafari ? 'safari' : 'chrome');
+	const outputDir = path.join(isProduction ? 'dist' : 'dev', browserName);
 
 	const mainConfig = {
 		mode: argv.mode,
@@ -45,15 +51,16 @@ module.exports = (env, argv) => {
 			'reader-page': './src/core/reader-view.ts',
 			content: './src/content.ts',
 			background: './src/background.ts',
-			style: './src/style.scss',
-			highlighter: './src/highlighter.scss',
-			reader: './src/reader.scss',
+			style: './src/style.css',
+			highlighter: './src/highlighter.css',
+			reader: './src/reader.css',
 			'reader-script': './src/reader-script.ts'
 		},
 		output: {
 			path: path.resolve(__dirname, outputDir),
 			filename: '[name].js',
 			module: false,
+			clean: true,
 		},
 		devtool: isProduction ? false : 'source-map',
 		optimization: {
@@ -92,12 +99,13 @@ module.exports = (env, argv) => {
 		experiments: {
 			outputModule: false,
 		},
-		resolve: {
-			extensions: ['.ts', '.js'],
-			extensionAlias: {
-				'.js': ['.ts', '.js']
-			},
-			alias: {
+			resolve: {
+				extensions: ['.tsx', '.ts', '.jsx', '.js'],
+				extensionAlias: {
+					'.js': ['.tsx', '.ts', '.js']
+				},
+				alias: {
+					'@': path.resolve(__dirname, 'src'),
 				'./utils/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
 				'../utils/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
 				'./browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
@@ -110,12 +118,13 @@ module.exports = (env, argv) => {
 					test: /\.tsx?$/,
 					loader: 'esbuild-loader',
 					options: {
-						target: 'esnext'
+						target: 'esnext',
+						jsx: 'automatic'
 					},
 					exclude: /node_modules/,
 				},
 				{
-					test: /\.scss$/,
+					test: /\.css$/,
 					use: [
 						MiniCssExtractPlugin.loader,
 						{
@@ -125,9 +134,12 @@ module.exports = (env, argv) => {
 							}
 						},
 						{
-							loader: 'sass-loader',
+							loader: 'postcss-loader',
 							options: {
-								sourceMap: !isProduction
+								sourceMap: !isProduction,
+								postcssOptions: {
+									plugins: ['@tailwindcss/postcss']
+								}
 							}
 						}
 					]
@@ -137,10 +149,11 @@ module.exports = (env, argv) => {
 		plugins: [
 			new CopyPlugin({
 				patterns: [
-					{ 
-						from: isFirefox ? "src/manifest.firefox.json" : 
-							  (isSafari ? "src/manifest.safari.json" : "src/manifest.chrome.json"), 
-						to: "manifest.json" 
+					{
+						from: isFirefox ? "src/manifest.firefox.json" :
+							(isSafari ? "src/manifest.safari.json" : "src/manifest.chrome.json"),
+						to: "manifest.json",
+						transform: buildManifest
 					},
 					{ from: "src/popup.html", to: "popup.html" },
 					{ from: "src/side-panel.html", to: "side-panel.html" },
@@ -173,7 +186,7 @@ module.exports = (env, argv) => {
 			...(isProduction ? [
 				new ZipPlugin({
 					path: path.resolve(__dirname, 'builds'),
-					filename: `aria-clip-${package.version}-${browserName}.zip`,
+					filename: `aria-clip-${packageJson.version}-${browserName}.zip`,
 				})
 			] : [])
 		]

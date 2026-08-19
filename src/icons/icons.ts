@@ -76,8 +76,9 @@ export function initializeIcons(_root: HTMLElement | Document = document) {
 	createIcons({
 		icons,
 		attrs: {
-			'stroke-width': 1.75,
-			'class': 'lucide-icon'
+			'class': 'lucide-icon',
+			width: '1em',
+			height: '1em'
 		},
 		nameAttr: 'data-lucide',
 	});

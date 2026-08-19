@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "Χρωματισμός συνδέσμων"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Προεπιλογή"
-	},
 	"readerCurrentPosition": {
 		"message": "Τρέχουσα θέση"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS που εφαρμόζεται αυτόματα στην προβολή ανάγνωσης."
 	},
-	"readerDarkTheme": {
-		"message": "Θέμα σκοτεινής λειτουργίας"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Χρησιμοποιήστε διαφορετικό θέμα στη σκοτεινή λειτουργία."
-	},
 	"readerError": {
 		"message": "Αποτυχία εξαγωγής περιεχομένου."
 	},
-	"readerFont": {
-		"message": "Επιλογές γραμματοσειράς"
-	},
-	"readerFontDefault": {
-		"message": "Προεπιλογή"
-	},
-	"readerFontDescription": {
-		"message": "Προσθέστε γραμματοσειρές που είναι εγκατεστημένες στο σύστημά σας. Πατήστε Enter για να προσθέσετε μια γραμματοσειρά."
-	},
-	"readerFontNotFound": {
-		"message": "Δεν βρέθηκε"
-	},
-	"readerFontPlaceholder": {
-		"message": "Πατήστε Enter για να προσθέσετε μια γραμματοσειρά"
-	},
-	"readerFontSetDefault": {
-		"message": "Ορισμός ως προεπιλογή"
-	},
 	"readerFontSize": {
 		"message": "Βασικό μέγεθος γραμματοσειράς"
-	},
-	"readerFontSystem": {
-		"message": "Σύστημα"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Αυτή η γραμματοσειρά δεν είναι διαθέσιμη εδώ — το πρόγραμμα περιήγησής σας ενδέχεται να αποκλείει προσαρμοσμένες γραμματοσειρές."
-	},
-	"readerFonts": {
-		"message": "Γραμματοσειρές"
 	},
 	"readerFootnotes": {
 		"message": "Υποσημειώσεις"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "Ρυθμίσεις αναγνώστη"
-	},
-	"readerTheme": {
-		"message": "Θέμα"
-	},
-	"readerThemeDescription": {
-		"message": "Επιλέξτε τα χρώματα που χρησιμοποιούνται στην προβολή ανάγνωσης."
-	},
-	"readerThemeSection": {
-		"message": "Θέμα"
 	},
 	"readerTranscripts": {
 		"message": "Μεταγραφές"

@@ -116,7 +116,7 @@ export function createDefaultTemplate(): Template {
 		name: getMessage('defaultTemplateName'),
 		behavior: 'create',
 		noteNameFormat: '{{title}}',
-		path: 'Clippings',
+		path: 'Clips',
 		noteContentFormat: '{{content}}',
 		context: "",
 		properties: [
@@ -126,7 +126,7 @@ export function createDefaultTemplate(): Template {
 			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'published', value: '{{published}}' },
 			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'created', value: '{{date}}' },
 			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'description', value: '{{description}}' },
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'tags', value: 'clippings' }
+			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'tags', value: 'clips' }
 		],
 		triggers: []
 	};
@@ -216,7 +216,7 @@ async function updateGlobalPropertyTypes(templates: Template[]): Promise<void> {
 		'published': { type: 'date', defaultValue: '{{published}}' },
 		'created': { type: 'date', defaultValue: '{{date}}' },
 		'description': { type: 'text', defaultValue: '{{description}}' },
-		'tags': { type: 'multitext', defaultValue: 'clippings' }
+		'tags': { type: 'multitext', defaultValue: 'clips' }
 	};
 
 	templates.forEach(template => {

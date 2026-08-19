@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Koloruj linki"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Domyślny"
-	},
 	"readerCurrentPosition": {
 		"message": "Bieżąca pozycja"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS stosowany automatycznie w widoku czytania."
 	},
-	"readerDarkTheme": {
-		"message": "Motyw trybu ciemnego"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Użyj innego motywu w trybie ciemnym."
-	},
 	"readerError": {
 		"message": "Nie udało się wyodrębnić treści."
 	},
-	"readerFont": {
-		"message": "Opcje czcionek"
-	},
-	"readerFontDefault": {
-		"message": "Domyślna"
-	},
-	"readerFontDescription": {
-		"message": "Dodaj czcionki zainstalowane w systemie. Naciśnij Enter, aby dodać czcionkę."
-	},
-	"readerFontNotFound": {
-		"message": "Nie znaleziono"
-	},
-	"readerFontPlaceholder": {
-		"message": "Naciśnij Enter, aby dodać czcionkę"
-	},
-	"readerFontSetDefault": {
-		"message": "Ustaw jako domyślną"
-	},
 	"readerFontSize": {
 		"message": "Podstawowy rozmiar czcionki"
-	},
-	"readerFontSystem": {
-		"message": "Systemowa"
-	},
-	"readerFontSystemSans": {
-		"message": "Bezszeryfowa"
-	},
-	"readerFontSystemSerif": {
-		"message": "Szeryfowa"
-	},
-	"readerFontUnavailable": {
-		"message": "Ta czcionka nie jest tutaj dostępna — Twoja przeglądarka może blokować czcionki niestandardowe."
-	},
-	"readerFonts": {
-		"message": "Czcionki"
 	},
 	"readerFootnotes": {
 		"message": "Przypisy"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Ustawienia czytnika"
-	},
-	"readerTheme": {
-		"message": "Motyw"
-	},
-	"readerThemeDescription": {
-		"message": "Wybierz kolory używane w widoku czytania."
-	},
-	"readerThemeSection": {
-		"message": "Motyw"
 	},
 	"readerTranscripts": {
 		"message": "Transkrypcje"

@@ -12,6 +12,7 @@ import {
 import { detectBrowser, addBrowserClassToHtml } from './browser-detection.js';
 import dayjs from 'dayjs';
 import { generalSettings, loadSettings } from './storage-utils.js';
+import { initializeExtensionTheme } from './theme-utils.js';
 
 /**
  * Helper function to create SVG elements
@@ -392,6 +393,10 @@ export function createHighlighterMenu() {
 		menu = document.createElement('div');
 		menu.className = 'aria-highlighter-menu';
 		document.body.appendChild(menu);
+	}
+	if (!(menu as HTMLElement).dataset.themeInitialized) {
+		(menu as HTMLElement).dataset.themeInitialized = 'true';
+		void initializeExtensionTheme(menu as HTMLElement);
 	}
 	
 	const highlightCount = highlights.length;
@@ -1435,4 +1440,3 @@ function findLastTextNode(element: Element): Text | null {
 	}
 	return lastNode as Text | null;
 }
-

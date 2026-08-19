@@ -5,13 +5,9 @@ node_modules/
 
 # Dev
 dev/
-dev_firefox/
-dev_safari/
 
 # Prod
 dist/
-dist_firefox/
-dist_safari/
 builds/
 changelogs/
 assets/shared
@@ -19,6 +15,7 @@ assets/shared
 # Xcode
 *.xcuserstate
 *.xcuserdatad
+xcode/Aria Clip/Version.xcconfig
 
 .context
 .cursorrules

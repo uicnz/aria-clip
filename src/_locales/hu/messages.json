@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Hivatkozások színezése"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Alapértelmezett"
-	},
 	"readerCurrentPosition": {
 		"message": "Jelenlegi pozíció"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "Az olvasó nézetben automatikusan alkalmazott CSS."
 	},
-	"readerDarkTheme": {
-		"message": "Sötét mód témája"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Másik téma használata sötét módban."
-	},
 	"readerError": {
 		"message": "Nem sikerült kinyerni a tartalmat."
 	},
-	"readerFont": {
-		"message": "Betűtípus-beállítások"
-	},
-	"readerFontDefault": {
-		"message": "Alapértelmezett"
-	},
-	"readerFontDescription": {
-		"message": "Adj hozzá a rendszereden telepített betűtípusokat. Nyomd meg az Entert egy betűtípus hozzáadásához."
-	},
-	"readerFontNotFound": {
-		"message": "Nem található"
-	},
-	"readerFontPlaceholder": {
-		"message": "Nyomd meg az Entert egy betűtípus hozzáadásához"
-	},
-	"readerFontSetDefault": {
-		"message": "Beállítás alapértelmezettként"
-	},
 	"readerFontSize": {
 		"message": "Alap betűméret"
-	},
-	"readerFontSystem": {
-		"message": "Rendszer"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Ez a betűtípus itt nem érhető el — előfordulhat, hogy a böngészője blokkolja az egyéni betűtípusokat."
-	},
-	"readerFonts": {
-		"message": "Betűtípusok"
 	},
 	"readerFootnotes": {
 		"message": "Lábjegyzetek"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Olvasó beállításai"
-	},
-	"readerTheme": {
-		"message": "Téma"
-	},
-	"readerThemeDescription": {
-		"message": "Válaszd ki az olvasó nézetben használt színeket."
-	},
-	"readerThemeSection": {
-		"message": "Téma"
 	},
 	"readerTranscripts": {
 		"message": "Leiratok"

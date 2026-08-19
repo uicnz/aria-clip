@@ -31,11 +31,11 @@ To build the extension:
 bun run build
 ```
 
-This will create three directories:
+This will create one distribution directory with a subdirectory for each browser:
 
-- `dist/` for the Chromium version
-- `dist_firefox/` for the Firefox version
-- `dist_safari/` for the Safari version
+- `dist/chrome/` for the Chromium version
+- `dist/firefox/` for the Firefox version
+- `dist/safari/` for the Safari version
 
 ### Install the extension locally
 
@@ -43,13 +43,13 @@ For Chromium browsers, such as Chrome, Brave, Edge, and Arc:
 
 1. Open your browser and navigate to `chrome://extensions`
 2. Enable **Developer mode**
-3. Click **Load unpacked** and select the `dist` directory
+3. Click **Load unpacked** and select the `dist/chrome` directory
 
 For Firefox:
 
 1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
 2. Click **Load Temporary Add-on**
-3. Navigate to the `dist_firefox` directory and select the `manifest.json` file
+3. Navigate to the `dist/firefox` directory and select the `manifest.json` file
 
 If you want to run the extension permanently you can do so with the Nightly or Developer versions of Firefox.
 
@@ -78,12 +78,3 @@ Or run in watch mode during development:
 ```sh
 bun run test:watch
 ```
-
-## Third-party libraries
-
-- [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) for browser compatibility
-- [defuddle](https://github.com/kepano/defuddle) for content extraction and Markdown conversion
-- [dayjs](https://github.com/iamkun/dayjs) for date parsing and formatting
-- [lz-string](https://github.com/pieroxy/lz-string) to compress templates to reduce storage space
-- [lucide](https://github.com/lucide-icons/lucide) for icons
-- [dompurify](https://github.com/cure53/DOMPurify) for sanitizing HTML

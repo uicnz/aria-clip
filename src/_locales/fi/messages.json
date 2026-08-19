@@ -766,9 +766,6 @@
 	"readerColorLinks": {
 		"message": "Väritä linkit"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Oletus"
-	},
 	"readerCurrentPosition": {
 		"message": "Nykyinen sijainti"
 	},
@@ -778,50 +775,11 @@
 	"readerCustomCssDescription": {
 		"message": "Lukunäkymässä automaattisesti käytettävä CSS."
 	},
-	"readerDarkTheme": {
-		"message": "Tumman tilan teema"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Käytä eri teemaa tummassa tilassa."
-	},
 	"readerError": {
 		"message": "Sisällön poiminta epäonnistui."
 	},
-	"readerFont": {
-		"message": "Fonttiasetukset"
-	},
-	"readerFontDefault": {
-		"message": "Oletus"
-	},
-	"readerFontDescription": {
-		"message": "Lisää järjestelmääsi asennettuja fontteja. Lisää fontti painamalla Enteriä."
-	},
-	"readerFontNotFound": {
-		"message": "Ei löytynyt"
-	},
-	"readerFontPlaceholder": {
-		"message": "Lisää fontti painamalla Enteriä"
-	},
-	"readerFontSetDefault": {
-		"message": "Aseta oletukseksi"
-	},
 	"readerFontSize": {
 		"message": "Perusfonttikoko"
-	},
-	"readerFontSystem": {
-		"message": "Järjestelmä"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Tämä fontti ei ole käytettävissä täällä — selaimesi saattaa estää mukautetut fontit."
-	},
-	"readerFonts": {
-		"message": "Fontit"
 	},
 	"readerFootnotes": {
 		"message": "Alaviitteet"
@@ -858,15 +816,6 @@
 	},
 	"readerSettings": {
 		"message": "Lukijan asetukset"
-	},
-	"readerTheme": {
-		"message": "Teema"
-	},
-	"readerThemeDescription": {
-		"message": "Valitse lukunäkymässä käytettävät värit."
-	},
-	"readerThemeSection": {
-		"message": "Teema"
 	},
 	"readerTranscripts": {
 		"message": "Litteroinnit"

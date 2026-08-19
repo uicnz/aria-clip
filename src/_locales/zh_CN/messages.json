@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "链接着色"
 	},
-	"readerColorSchemeDefault": {
-		"message": "默认"
-	},
 	"readerCurrentPosition": {
 		"message": "当前位置"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "在阅读视图中自动应用的 CSS。"
 	},
-	"readerDarkTheme": {
-		"message": "深色模式主题"
-	},
-	"readerDarkThemeDescription": {
-		"message": "在深色模式下使用不同的主题。"
-	},
 	"readerError": {
 		"message": "内容提取失败。"
 	},
-	"readerFont": {
-		"message": "字体选项"
-	},
-	"readerFontDefault": {
-		"message": "默认"
-	},
-	"readerFontDescription": {
-		"message": "添加系统中已安装的字体。按 Enter 添加字体。"
-	},
-	"readerFontNotFound": {
-		"message": "未找到"
-	},
-	"readerFontPlaceholder": {
-		"message": "按 Enter 添加字体"
-	},
-	"readerFontSetDefault": {
-		"message": "设为默认"
-	},
 	"readerFontSize": {
 		"message": "基础字号"
-	},
-	"readerFontSystem": {
-		"message": "系统"
-	},
-	"readerFontSystemSans": {
-		"message": "无衬线"
-	},
-	"readerFontSystemSerif": {
-		"message": "衬线"
-	},
-	"readerFontUnavailable": {
-		"message": "此字体在此处不可用 — 您的浏览器可能阻止了自定义字体。"
-	},
-	"readerFonts": {
-		"message": "字体"
 	},
 	"readerFootnotes": {
 		"message": "脚注"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "阅读器设置"
-	},
-	"readerTheme": {
-		"message": "主题"
-	},
-	"readerThemeDescription": {
-		"message": "选择阅读视图中使用的颜色。"
-	},
-	"readerThemeSection": {
-		"message": "主题"
 	},
 	"readerTranscripts": {
 		"message": "字幕稿"

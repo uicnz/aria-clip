@@ -36,8 +36,8 @@
 		"libReplacement": false,
 		"jsx": "react-jsx",
 
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
 
@@ -47,6 +47,9 @@
 		"allowArbitraryExtensions": true,
 
 		"paths": {
+			"@/*": [
+				"./src/*"
+			],
 			"*": [
 				"./src/*"
 			],
@@ -78,7 +81,6 @@
 	"exclude": [
 		"node_modules",
 		"dist",
-		"dist_firefox",
-		"dist_safari"
+		"dev"
 	]
 }

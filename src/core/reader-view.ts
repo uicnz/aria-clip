@@ -13,6 +13,9 @@ import {
 	removeRuntimeMessageListener,
 	type RuntimeMessageListener,
 } from '../utils/runtime-messaging.js';
+import { initializeExtensionTheme } from '../utils/theme-utils.js';
+
+void initializeExtensionTheme();
 
 let readerPageMessageListener: RuntimeMessageListener | null = null;
 
@@ -340,12 +343,6 @@ async function applyReaderTheme() {
 			: window.matchMedia('(prefers-color-scheme: dark)').matches;
 		html.classList.add(isDark ? 'theme-dark' : 'theme-light');
 
-		if (settings) {
-			const effectiveTheme = isDark && settings.darkTheme !== 'same' ? settings.darkTheme : settings.lightTheme;
-			if (effectiveTheme && effectiveTheme !== 'default') {
-				html.setAttribute('data-reader-theme', effectiveTheme);
-			}
-		}
 	} catch {
 		document.documentElement.classList.add('aria-reader-active');
 		document.documentElement.classList.add(

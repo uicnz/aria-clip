@@ -13,6 +13,7 @@ import { debugLog } from './utils/debug.js';
 import { updateSidebarWidth, addResizeHandle, cleanupResizeHandlers } from './utils/iframe-resize.js';
 import { parseForClip } from './utils/clip-utils.js';
 import { addRuntimeMessageListener } from './utils/runtime-messaging.js';
+import { initializeExtensionTheme } from './utils/theme-utils.js';
 
 declare global {
 	interface Window {
@@ -57,6 +58,7 @@ declare global {
 		const container = document.createElement('div');
 		container.id = containerId;
 		container.classList.add('is-open');
+		void initializeExtensionTheme(container);
 
 		const { clipIframeWidth, clipIframeHeight } = await browser.storage.local.get(['clipIframeWidth', 'clipIframeHeight']);
 		if (clipIframeWidth) {

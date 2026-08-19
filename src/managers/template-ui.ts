@@ -1,16 +1,17 @@
 import { Template } from '../types/types.js';
 import { deleteTemplate, templates, editingTemplateIndex, saveTemplateSettings, setEditingTemplateIndex, loadTemplates } from './template-manager.js';
-import { initializeIcons, getPropertyTypeIcon } from '../icons/icons.js';
+import { initializeIcons } from '../icons/icons.js';
 import { escapeValue, unescapeValue } from '../utils/string-utils.js';
 import { generalSettings } from '../utils/storage-utils.js';
 import { updateUrl } from '../utils/routing.js';
-import { handleDragStart, handleDragOver, handleDrop, handleDragEnd } from '../utils/drag-and-drop.js';
 import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils.js';
 import { updatePromptContextVisibility } from './interpreter-settings.js';
 import { showSettingsSection } from './settings-section-ui.js';
 import { updatePropertyType } from './property-types-manager.js';
 import { getMessage } from '../utils/i18n.js';
 import { parse, validateVariables, validateFilters } from '../utils/parser.js';
+import { renderTemplateList } from '../components/settings/template-list.js';
+import { renderTemplateProperties, type TemplatePropertyRow } from '../components/settings/template-properties.js';
 let hasUnsavedChanges = false;
 void hasUnsavedChanges;
 
@@ -32,85 +33,13 @@ export function updateTemplateList(loadedTemplates?: Template[]): void {
 		template != null && typeof template === 'object' && 'id' in template && 'name' in template
 	);
 
-	// Clear existing templates
-	templateList.textContent = '';
-	validTemplates.forEach((template, index) => {
-		const li = document.createElement('li');
-		
-		const dragHandle = createElementWithClass('div', 'drag-handle');
-		dragHandle.appendChild(createElementWithHTML('i', '', { 'data-lucide': 'grip-vertical' }));
-		li.appendChild(dragHandle);
-
-		const templateName = createElementWithClass('span', 'template-name');
-		templateName.textContent = template.name;
-		li.appendChild(templateName);
-
-		const deleteBtn = createElementWithClass('button', 'delete-template-btn clickable-icon');
-		deleteBtn.setAttribute('type', 'button');
-		deleteBtn.setAttribute('aria-label', 'Delete template');
-		deleteBtn.appendChild(createElementWithHTML('i', '', { 'data-lucide': 'trash-2' }));
-		li.appendChild(deleteBtn);
-
-		li.dataset.id = template.id;
-		li.dataset.index = index.toString();
-		li.draggable = true;
-
-		let touchStartTime: number;
-		let touchStartY: number;
-
-		li.addEventListener('touchstart', (e) => {
-			touchStartTime = Date.now();
-			touchStartY = e.touches[0].clientY;
-		});
-
-		li.addEventListener('touchend', (e) => {
-			const touchEndY = e.changedTouches[0].clientY;
-			const touchDuration = Date.now() - touchStartTime;
-			const touchDistance = Math.abs(touchEndY - touchStartY);
-
-			if (touchDuration < 300 && touchDistance < 10) {
-				const target = e.target as HTMLElement;
-				if (!target.closest('.delete-template-btn')) {
-					e.preventDefault();
-					showTemplateEditor(template);
-					// Add these lines to close the sidebar and deactivate the hamburger menu
-					const settingsContainer = document.getElementById('settings');
-					const hamburgerMenu = document.getElementById('hamburger-menu');
-					if (settingsContainer) {
-						settingsContainer.classList.remove('sidebar-open');
-					}
-					if (hamburgerMenu) {
-						hamburgerMenu.classList.remove('is-active');
-					}
-				}
-			}
-		});
-
-		// Keep the click event for non-touch devices
-		li.addEventListener('click', (e) => {
-			const target = e.target as HTMLElement;
-			if (!target.closest('.delete-template-btn')) {
-				showTemplateEditor(template);
-			}
-		});
-
-		deleteBtn.addEventListener('click', (e) => {
-			e.stopPropagation();
-			deleteTemplateFromList(template.id);
-		});
-		
-		if (index === editingTemplateIndex) {
-			li.classList.add('active');
-		}
-		templateList.appendChild(li);
-	});
+	renderTemplateList(templateList, validTemplates, editingTemplateIndex, showTemplateEditor, deleteTemplateFromList);
 
 	// If any invalid templates were found and removed, save the changes
 	if (validTemplates.length !== templatesToUse.length) {
 		saveTemplateSettings();
 	}
 
-	initializeIcons(templateList);
 }
 
 // Rename this function to make it clear it's for deleting from the list
@@ -147,7 +76,7 @@ export function showTemplateEditor(template: Template | null): void {
 			name: newTemplateName,
 			behavior: 'create',
 			noteNameFormat: '{{title}}',
-			path: 'Clippings',
+			path: 'Clips',
 			noteContentFormat: '{{content}}',
 			properties: [],
 			triggers: [],
@@ -176,7 +105,6 @@ export function showTemplateEditor(template: Template | null): void {
 
 	if (templateEditorTitle) templateEditorTitle.textContent = getMessage('editTemplate');
 	if (templateName) templateName.value = editingTemplate.name;
-	if (templateProperties) templateProperties.textContent = '';
 
 	const pathInput = document.getElementById('template-path-name') as HTMLInputElement;
 	if (pathInput) {
@@ -213,8 +141,32 @@ export function showTemplateEditor(template: Template | null): void {
 
 	refreshPropertyNameSuggestions();
 
-	if (editingTemplate && Array.isArray(editingTemplate.properties)) {
-		editingTemplate.properties.forEach(property => addPropertyToEditor(property.name, property.value, property.id));
+	if (templateProperties && editingTemplate && Array.isArray(editingTemplate.properties)) {
+		renderTemplateProperties(templateProperties, {
+			initialRows: editingTemplate.properties.map((property) => ({
+				id: property.id || `${Date.now()}${Math.random().toString(36).slice(2, 11)}`,
+				name: property.name,
+				value: unescapeValue(property.value),
+				type: (property.type || generalSettings.propertyTypes.find(item => item.name === property.name)?.type || 'text') as TemplatePropertyRow['type']
+			})),
+			propertyTypes: generalSettings.propertyTypes,
+			typeLabels: {
+				text: getMessage('propertyTypeText'),
+				multitext: getMessage('propertyTypeMultitext'),
+				number: getMessage('propertyTypeNumber'),
+				checkbox: getMessage('propertyTypeCheckbox'),
+				date: getMessage('propertyTypeDate'),
+				datetime: getMessage('propertyTypeDatetime')
+			},
+			labels: {
+				propertyName: getMessage('propertyName'),
+				propertyValue: getMessage('propertyValue'),
+				propertyType: getMessage('propertyType'),
+				removeProperty: getMessage('removeProperty')
+			},
+			onTypeChange: (name, type) => { void updatePropertyType(name, type) },
+			onValidate: (input, container) => validateTemplateField(input, false, container)
+		});
 	}
 
 	const triggersTextarea = document.getElementById('url-patterns') as HTMLTextAreaElement;
@@ -294,202 +246,6 @@ function updateBehaviorFields(): void {
 	}
 }
 
-export function addPropertyToEditor(name: string = '', value: string = '', id: string | null = null): HTMLElement {
-	const templateProperties = document.getElementById('template-properties');
-	if (!templateProperties) {
-		console.error('Template properties container not found');
-		// Return a dummy element to satisfy the return type
-		return document.createElement('div');
-	}
-
-	const propertyId = id || Date.now().toString() + Math.random().toString(36).slice(2, 11);
-	const propertyDiv = createElementWithClass('div', 'property-editor');
-	propertyDiv.dataset.id = propertyId;
-
-	const propertyRow = createElementWithClass('div', 'property-row');
-
-	const dragHandle = createElementWithClass('div', 'drag-handle');
-	dragHandle.appendChild(createElementWithHTML('i', '', { 'data-lucide': 'grip-vertical' }));
-	propertyRow.appendChild(dragHandle);
-
-	const propertySelectDiv = createElementWithClass('div', 'property-select');
-	const propertySelectedDiv = createElementWithClass('div', 'property-selected');
-	const propertyType = generalSettings.propertyTypes.find(p => p.name === name)?.type || 'text';
-	propertySelectedDiv.dataset.value = propertyType;
-	propertySelectedDiv.appendChild(createElementWithHTML('i', '', { 'data-lucide': getPropertyTypeIcon(propertyType) }));
-	propertySelectDiv.appendChild(propertySelectedDiv);
-
-	const select = document.createElement('select');
-	select.className = 'property-type';
-	select.id = `${propertyId}-type`;
-	['text', 'multitext', 'number', 'checkbox', 'date', 'datetime'].forEach(optionValue => {
-		const option = document.createElement('option');
-		option.value = optionValue;
-		const messageKey = `propertyType${optionValue.charAt(0).toUpperCase() + optionValue.slice(1)}`;
-		option.textContent = getMessage(messageKey);
-		select.appendChild(option);
-	});
-	select.value = propertyType;
-	propertySelectDiv.appendChild(select);
-	propertyRow.appendChild(propertySelectDiv);
-
-	const nameInput = createElementWithHTML('input', '', {
-		type: 'text',
-		class: 'property-name',
-		id: `${propertyId}-name`,
-		value: name,
-		placeholder: getMessage('propertyName'),
-		autocapitalize: 'off',
-		autocomplete: 'off',
-		list: 'property-name-suggestions'
-	});
-	propertyRow.appendChild(nameInput);
-
-	// Create datalist for autocomplete if it doesn't exist
-	let datalist = document.getElementById('property-name-suggestions');
-	if (!datalist) {
-		datalist = document.createElement('datalist');
-		datalist.id = 'property-name-suggestions';
-		document.body.appendChild(datalist);
-	}
-
-	// Populate datalist with existing property types
-	updatePropertyNameSuggestions();
-
-	const valueInput = createElementWithHTML('input', '', {
-		type: 'text',
-		class: 'property-value',
-		id: `${propertyId}-value`,
-		value: unescapeValue(value),
-		placeholder: getMessage('propertyValue')
-	}) as HTMLInputElement;
-	propertyRow.appendChild(valueInput);
-
-	const removeBtn = createElementWithClass('button', 'remove-property-btn clickable-icon');
-	removeBtn.setAttribute('type', 'button');
-	removeBtn.setAttribute('aria-label', getMessage('removeProperty'));
-	removeBtn.appendChild(createElementWithHTML('i', '', { 'data-lucide': 'trash-2' }));
-	propertyRow.appendChild(removeBtn);
-	propertyDiv.appendChild(propertyRow);
-
-	// Add validation for property value (will appear after the row, inside propertyDiv)
-	valueInput.addEventListener('blur', () => validateTemplateField(valueInput, false, propertyDiv));
-	// Validate on load if there's a value
-	if (value) {
-		validateTemplateField(valueInput, false, propertyDiv);
-	}
-
-	templateProperties.appendChild(propertyDiv);
-
-	propertyDiv.addEventListener('mousedown', (event) => {
-		const target = event.target as HTMLElement;
-		if (!target.closest('input, select, button')) {
-			propertyDiv.setAttribute('draggable', 'true');
-			templateProperties.querySelectorAll('.property-editor').forEach((el) => {
-				if (el !== propertyDiv) {
-					el.setAttribute('draggable', 'true');
-				}
-			});
-		}
-	});
-
-	const resetDraggable = () => {
-		propertyDiv.removeAttribute('draggable');
-		templateProperties.querySelectorAll('.property-editor').forEach((el) => {
-			el.removeAttribute('draggable');
-		});
-	};
-
-	propertyDiv.addEventListener('dragend', resetDraggable);
-	propertyDiv.addEventListener('mouseup', resetDraggable);
-
-	if (select) {
-		select.addEventListener('change', function() {
-			if (propertySelectedDiv) updateSelectedOption(this.value, propertySelectedDiv);
-			
-			// Get the current name of the property
-			const nameInput = propertyDiv.querySelector('.property-name') as HTMLInputElement;
-			const currentName = nameInput.value;
-
-			// Update the global property type
-			updatePropertyType(currentName, this.value).then(() => {
-				console.log(`Property type for ${currentName} updated to ${this.value}`);
-			}).catch(error => {
-				console.error(`Failed to update property type for ${currentName}:`, error);
-			});
-
-			updateTemplateFromForm();
-		});
-	}
-
-	if (removeBtn) {
-		removeBtn.addEventListener('click', () => {
-			templateProperties.removeChild(propertyDiv);
-		});
-	}
-
-	propertyDiv.addEventListener('dragstart', handleDragStart);
-	propertyDiv.addEventListener('dragover', handleDragOver);
-	propertyDiv.addEventListener('drop', handleDrop);
-	propertyDiv.addEventListener('dragend', handleDragEnd);
-
-	updateSelectedOption(propertyType, propertySelectedDiv);
-
-	initializeIcons(propertyDiv);
-
-	nameInput.addEventListener('input', function(this: HTMLInputElement) {
-		const selectedType = generalSettings.propertyTypes.find(pt => pt.name === this.value);
-		if (selectedType) {
-			select.value = selectedType.type;
-			updateSelectedOption(selectedType.type, propertySelectedDiv);
-			
-			// Only update the property type if the name is not empty
-			if (this.value.trim() !== '') {
-				updatePropertyType(this.value, selectedType.type).then(() => {
-					console.log(`Property type for ${this.value} updated to ${selectedType.type}`);
-				}).catch(error => {
-					console.error(`Failed to update property type for ${this.value}:`, error);
-				});
-			}
-			
-			// Fill in the default value if it exists and the value input is empty
-			if (selectedType.defaultValue && !valueInput.value) {
-				valueInput.value = selectedType.defaultValue;
-			}
-
-			// Immediately update the template form
-			updateTemplateFromForm();
-		}
-	});
-
-	// Add a change event listener to handle selection from autocomplete
-	nameInput.addEventListener('change', function(this: HTMLInputElement) {
-		const selectedType = generalSettings.propertyTypes.find(pt => pt.name === this.value);
-		if (selectedType) {
-			// Fill in the default value if it exists, regardless of current value
-			if (selectedType.defaultValue) {
-				valueInput.value = selectedType.defaultValue;
-			}
-		}
-	});
-
-	return propertyDiv; // Return the created propertyDiv
-}
-
-function updateSelectedOption(value: string, propertySelected: HTMLElement): void {
-	const iconName = getPropertyTypeIcon(value);
-	
-	// Clear existing content
-	propertySelected.textContent = '';
-	
-	// Create and append the new icon element
-	const iconElement = createElementWithHTML('i', '', { 'data-lucide': iconName });
-	propertySelected.appendChild(iconElement);
-	
-	propertySelected.setAttribute('data-value', value);
-	initializeIcons(propertySelected);
-}
-
 export function updateTemplateFromForm(): void {
 	if (editingTemplateIndex === -1) return;
 
@@ -530,12 +286,11 @@ export function updateTemplateFromForm(): void {
 	template.properties = Array.from(propertyElements).map(prop => {
 		const nameInput = prop.querySelector('.property-name') as HTMLInputElement;
 		const valueInput = prop.querySelector('.property-value') as HTMLInputElement;
-		const typeSelect = prop.querySelector('.property-select .property-selected') as HTMLElement;
 		return {
 			id: (prop as HTMLElement).dataset.id || Date.now().toString() + Math.random().toString(36).slice(2, 11),
 			name: nameInput.value,
 			value: escapeValue(valueInput.value),
-			type: typeSelect.getAttribute('data-value') || 'text'
+			type: (prop as HTMLElement).dataset.type || 'text'
 		};
 	}).filter(prop => prop.name.trim() !== ''); // Filter out properties with empty names
 
@@ -555,9 +310,21 @@ function clearTemplateEditor(): void {
 	const templateProperties = document.getElementById('template-properties');
 	if (templateEditorTitle) templateEditorTitle.textContent = getMessage('newTemplate');
 	if (templateName) templateName.value = '';
-	if (templateProperties) templateProperties.textContent = '';
+	if (templateProperties) {
+		renderTemplateProperties(templateProperties, {
+			initialRows: [],
+			propertyTypes: generalSettings.propertyTypes,
+			typeLabels: {
+				text: getMessage('propertyTypeText'), multitext: getMessage('propertyTypeMultitext'), number: getMessage('propertyTypeNumber'),
+				checkbox: getMessage('propertyTypeCheckbox'), date: getMessage('propertyTypeDate'), datetime: getMessage('propertyTypeDatetime')
+			},
+			labels: { propertyName: getMessage('propertyName'), propertyValue: getMessage('propertyValue'), propertyType: getMessage('propertyType'), removeProperty: getMessage('removeProperty') },
+			onTypeChange: (name, type) => { void updatePropertyType(name, type) },
+			onValidate: (input, container) => validateTemplateField(input, false, container)
+		});
+	}
 	const pathInput = document.getElementById('template-path-name') as HTMLInputElement;
-	if (pathInput) pathInput.value = 'Clippings';
+	if (pathInput) pathInput.value = 'Clips';
 	const triggersTextarea = document.getElementById('url-patterns') as HTMLTextAreaElement;
 	if (triggersTextarea) triggersTextarea.value = '';
 	const templateEditor = document.getElementById('template-editor');
@@ -576,24 +343,7 @@ export function initializeAddPropertyButton(): void {
 }
 
 function handleAddProperty(): void {
-	const templateProperties = document.getElementById('template-properties');
-	if (templateProperties) {
-		const newPropertyDiv = addPropertyToEditor();
-		if (newPropertyDiv.parentElement !== templateProperties) {
-			templateProperties.appendChild(newPropertyDiv);
-		}
-		const nameInput = newPropertyDiv.querySelector('.property-name') as HTMLInputElement;
-		if (nameInput) {
-			nameInput.focus();
-			nameInput.addEventListener('blur', () => {
-				if (nameInput.value.trim() === '') {
-					templateProperties.removeChild(newPropertyDiv);
-				} else {
-					updateTemplateFromForm();
-				}
-			}, { once: true });
-		}
-	}
+	window.dispatchEvent(new Event('aria-add-template-property'));
 }
 
 function getUniqueTemplateName(baseName: string): string {

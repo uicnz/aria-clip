@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Links kleuren"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Standaard"
-	},
 	"readerCurrentPosition": {
 		"message": "Huidige positie"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS die automatisch wordt toegepast in leesweergave."
 	},
-	"readerDarkTheme": {
-		"message": "Thema voor donkere modus"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Gebruik een ander thema in donkere modus."
-	},
 	"readerError": {
 		"message": "Kan inhoud niet extraheren."
 	},
-	"readerFont": {
-		"message": "Lettertype-opties"
-	},
-	"readerFontDefault": {
-		"message": "Standaard"
-	},
-	"readerFontDescription": {
-		"message": "Voeg lettertypen toe die op je systeem zijn geïnstalleerd. Druk op Enter om een lettertype toe te voegen."
-	},
-	"readerFontNotFound": {
-		"message": "Niet gevonden"
-	},
-	"readerFontPlaceholder": {
-		"message": "Druk op Enter om een lettertype toe te voegen"
-	},
-	"readerFontSetDefault": {
-		"message": "Als standaard instellen"
-	},
 	"readerFontSize": {
 		"message": "Basislettergrootte"
-	},
-	"readerFontSystem": {
-		"message": "Systeem"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Dit lettertype is hier niet beschikbaar — je browser blokkeert mogelijk aangepaste lettertypen."
-	},
-	"readerFonts": {
-		"message": "Lettertypen"
 	},
 	"readerFootnotes": {
 		"message": "Voetnoten"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Lezerinstellingen"
-	},
-	"readerTheme": {
-		"message": "Thema"
-	},
-	"readerThemeDescription": {
-		"message": "Kies de kleuren die in leesweergave worden gebruikt."
-	},
-	"readerThemeSection": {
-		"message": "Thema"
 	},
 	"readerTranscripts": {
 		"message": "Transcripties"

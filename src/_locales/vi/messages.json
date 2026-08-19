@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Tô màu liên kết"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Mặc định"
-	},
 	"readerCurrentPosition": {
 		"message": "Vị trí hiện tại"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS được tự động áp dụng trong chế độ đọc."
 	},
-	"readerDarkTheme": {
-		"message": "Chủ đề chế độ tối"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Dùng một chủ đề khác trong chế độ tối."
-	},
 	"readerError": {
 		"message": "Không thể trích xuất nội dung."
 	},
-	"readerFont": {
-		"message": "Tùy chọn phông chữ"
-	},
-	"readerFontDefault": {
-		"message": "Mặc định"
-	},
-	"readerFontDescription": {
-		"message": "Thêm các phông chữ đã cài trên hệ thống của bạn. Nhấn Enter để thêm một phông chữ."
-	},
-	"readerFontNotFound": {
-		"message": "Không tìm thấy"
-	},
-	"readerFontPlaceholder": {
-		"message": "Nhấn Enter để thêm một phông chữ"
-	},
-	"readerFontSetDefault": {
-		"message": "Đặt làm mặc định"
-	},
 	"readerFontSize": {
 		"message": "Cỡ chữ cơ bản"
-	},
-	"readerFontSystem": {
-		"message": "Hệ thống"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Phông chữ này không khả dụng ở đây — trình duyệt của bạn có thể đang chặn phông chữ tùy chỉnh."
-	},
-	"readerFonts": {
-		"message": "Phông chữ"
 	},
 	"readerFootnotes": {
 		"message": "Chú thích"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Cài đặt chế độ đọc"
-	},
-	"readerTheme": {
-		"message": "Chủ đề"
-	},
-	"readerThemeDescription": {
-		"message": "Chọn màu sắc dùng trong chế độ đọc."
-	},
-	"readerThemeSection": {
-		"message": "Chủ đề"
 	},
 	"readerTranscripts": {
 		"message": "Bản chép lời"

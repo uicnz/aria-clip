@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Färga länkar"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Standard"
-	},
 	"readerCurrentPosition": {
 		"message": "Aktuell position"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS som tillämpas automatiskt i läsvyn."
 	},
-	"readerDarkTheme": {
-		"message": "Tema för mörkt läge"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Använd ett annat tema i mörkt läge."
-	},
 	"readerError": {
 		"message": "Det gick inte att extrahera innehåll."
 	},
-	"readerFont": {
-		"message": "Teckensnittsalternativ"
-	},
-	"readerFontDefault": {
-		"message": "Standard"
-	},
-	"readerFontDescription": {
-		"message": "Lägg till teckensnitt som är installerade på ditt system. Tryck på Enter för att lägga till ett teckensnitt."
-	},
-	"readerFontNotFound": {
-		"message": "Hittades inte"
-	},
-	"readerFontPlaceholder": {
-		"message": "Tryck på Enter för att lägga till ett teckensnitt"
-	},
-	"readerFontSetDefault": {
-		"message": "Ange som standard"
-	},
 	"readerFontSize": {
 		"message": "Grundläggande teckenstorlek"
-	},
-	"readerFontSystem": {
-		"message": "System"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Det här teckensnittet är inte tillgängligt här — din webbläsare kan blockera anpassade teckensnitt."
-	},
-	"readerFonts": {
-		"message": "Teckensnitt"
 	},
 	"readerFootnotes": {
 		"message": "Fotnoter"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Läsarinställningar"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Välj färgerna som används i läsvyn."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Transkriptioner"

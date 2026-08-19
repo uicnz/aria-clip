@@ -25,11 +25,7 @@ export let generalSettings: Settings = {
 		fontSize: 16,
 		lineHeight: 1.6,
 		maxWidth: 38,
-		lightTheme: 'default',
-		darkTheme: 'same',
 		appearance: 'auto',
-		fonts: [],
-		defaultFont: '',
 		blendImages: true,
 		colorLinks: false,
 		followLinks: true,
@@ -77,11 +73,7 @@ interface StorageData {
 		fontSize?: number;
 		lineHeight?: number;
 		maxWidth?: number;
-		lightTheme?: string;
-		darkTheme?: string;
 		appearance?: 'auto' | 'light' | 'dark';
-		fonts?: string[];
-		defaultFont?: string;
 		blendImages?: boolean;
 		colorLinks?: boolean;
 		followLinks?: boolean;
@@ -139,11 +131,7 @@ export async function loadSettings(): Promise<Settings> {
 			fontSize: 16,
 			lineHeight: 1.6,
 			maxWidth: 38,
-			lightTheme: 'default',
-			darkTheme: 'same',
 			appearance: 'auto',
-			fonts: [],
-			defaultFont: '',
 			blendImages: true,
 			colorLinks: false,
 			followLinks: true,
@@ -202,11 +190,7 @@ export async function loadSettings(): Promise<Settings> {
 			fontSize: data.reader_settings?.fontSize ?? defaultSettings.readerSettings.fontSize,
 			lineHeight: data.reader_settings?.lineHeight ?? defaultSettings.readerSettings.lineHeight,
 			maxWidth: data.reader_settings?.maxWidth ?? defaultSettings.readerSettings.maxWidth,
-			lightTheme: data.reader_settings?.lightTheme ?? defaultSettings.readerSettings.lightTheme,
-			darkTheme: data.reader_settings?.darkTheme ?? defaultSettings.readerSettings.darkTheme,
 			appearance: data.reader_settings?.appearance as 'auto' | 'light' | 'dark' ?? defaultSettings.readerSettings.appearance,
-			fonts: data.reader_settings?.fonts ?? defaultSettings.readerSettings.fonts,
-			defaultFont: data.reader_settings?.defaultFont ?? defaultSettings.readerSettings.defaultFont,
 			blendImages: data.reader_settings?.blendImages ?? defaultSettings.readerSettings.blendImages,
 			colorLinks: data.reader_settings?.colorLinks ?? defaultSettings.readerSettings.colorLinks,
 			followLinks: data.reader_settings?.followLinks ?? defaultSettings.readerSettings.followLinks,
@@ -259,11 +243,7 @@ export async function saveSettings(settings?: Partial<Settings>): Promise<void> 
 			fontSize: generalSettings.readerSettings.fontSize,
 			lineHeight: generalSettings.readerSettings.lineHeight,
 			maxWidth: generalSettings.readerSettings.maxWidth,
-			lightTheme: generalSettings.readerSettings.lightTheme,
-			darkTheme: generalSettings.readerSettings.darkTheme,
 			appearance: generalSettings.readerSettings.appearance,
-			fonts: generalSettings.readerSettings.fonts,
-			defaultFont: generalSettings.readerSettings.defaultFont,
 			blendImages: generalSettings.readerSettings.blendImages,
 			colorLinks: generalSettings.readerSettings.colorLinks,
 			followLinks: generalSettings.readerSettings.followLinks,

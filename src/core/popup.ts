@@ -1,16 +1,16 @@
 import { Template, Property } from '../types/types.js';
 import { incrementStat } from '../utils/storage-utils.js';
-import { generateFrontmatter, saveToAria } from '../utils/aria-note-creator.js';
-import { extractPageContent, initializePageContent } from '../utils/content-extractor.js';
+import { type AriaClipCapture, deliverCaptureToAria } from '../utils/aria-clip-delivery.js';
+import { type ContentResponse, extractPageContent, initializePageContent } from '../utils/content-extractor.js';
+import { generateFrontmatter } from '../utils/frontmatter.js';
 import { compileTemplate } from '../utils/template-compiler.js';
-import { initializeIcons, getPropertyTypeIcon } from '../icons/icons.js';
+import { initializeIcons } from '../icons/icons.js';
 import { findMatchingTemplate, initializeTriggers } from '../utils/triggers.js';
 import { getLocalStorage, setLocalStorage, loadSettings, generalSettings, Settings } from '../utils/storage-utils.js';
 import { unescapeValue } from '../utils/string-utils.js';
 import { loadTemplates } from '../managers/template-manager.js';
 import browser from '../utils/browser-polyfill.js';
 import { addBrowserClassToHtml, detectBrowser } from '../utils/browser-detection.js';
-import { createElementWithClass } from '../utils/dom-utils.js';
 import { initializeInterpreter, handleInterpreterUI, collectPromptVariables } from '../utils/interpreter.js';
 import { adjustNoteNameHeight } from '../utils/ui-utils.js';
 import { debugLog } from '../utils/debug.js';
@@ -23,6 +23,11 @@ import { saveFile } from '../utils/file-utils.js';
 import { translatePage, getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
 import { formatPropertyValue } from '../utils/shared.js';
 import { addRuntimeMessageListener } from '../utils/runtime-messaging.js';
+import { initializeExtensionTheme } from '../utils/theme-utils.js';
+import { mountPopupShell } from '../components/popup/popup-shell.js';
+import { renderMetadataProperties } from '../components/popup/metadata-properties.js';
+
+void initializeExtensionTheme();
 
 interface ReaderModeResponse {
 	success: boolean;
@@ -35,10 +40,13 @@ let templates: Template[] = [];
 let currentVariables: { [key: string]: string } = {};
 let currentTabId: number | undefined;
 let lastSelectedVault: string | null = null;
+let latestExtractedData: ContentResponse | null = null;
 
 const isSidePanel = window.location.pathname.includes('side-panel.html');
 const urlParams = new URLSearchParams(window.location.search);
 const isIframe = urlParams.get('context') === 'iframe';
+
+mountPopupShell(isSidePanel);
 
 // Memoize compileTemplate with a short expiration and URL-sensitive key
 const memoizedCompileTemplate = memoizeWithExpiration(
@@ -62,12 +70,13 @@ const memoizedGenerateFrontmatter = memoizeWithExpiration(
 void memoizedGenerateFrontmatter;
 
 function getPropertiesFromDOM(): Property[] {
-	return Array.from(document.querySelectorAll('.metadata-property input')).map(input => {
-		const inputElement = input as HTMLInputElement;
+	return Array.from(document.querySelectorAll<HTMLElement>('[data-property-input]')).map(control => {
+		const isCheckbox = control.getAttribute('role') === 'checkbox';
 		return {
-			id: inputElement.dataset.id || Date.now().toString() + Math.random().toString(36).slice(2, 11),
-			name: inputElement.id,
-			value: inputElement.type === 'checkbox' ? inputElement.checked : inputElement.value
+			id: control.dataset.id || Date.now().toString() + Math.random().toString(36).slice(2, 11),
+			name: control.id,
+			value: isCheckbox ? control.getAttribute('aria-checked') === 'true' : (control as HTMLInputElement).value,
+			type: control.dataset.type,
 		};
 	}) as Property[];
 }
@@ -609,24 +618,33 @@ async function initializeUI() {
 }
 
 function showError(messageKey: string): void {
+	showErrorMessage(getMessage(messageKey));
+}
+
+function showErrorMessage(message: string): void {
 	const errorMessage = document.querySelector('.error-message') as HTMLElement;
 	const clip = document.querySelector('.clip') as HTMLElement;
 
 	if (errorMessage && clip) {
-		errorMessage.textContent = getMessage(messageKey);
+		errorMessage.textContent = message;
 		errorMessage.style.display = 'flex';
 		clip.style.display = 'none';
 
 		document.body.classList.add('has-error');
 	}
 }
+
+function triggerClipAria(): void {
+	void handleClipAria().catch(() => {});
+}
+
 function clearError(): void {
 	const errorMessage = document.querySelector('.error-message') as HTMLElement;
 	const clip = document.querySelector('.clip') as HTMLElement;
 
 	if (errorMessage && clip) {
 		errorMessage.style.display = 'none';
-		clip.style.display = 'block';
+		clip.style.display = 'flex';
 
 		document.body.classList.remove('has-error');
 	}
@@ -705,6 +723,7 @@ async function refreshFields(tabId: number, { checkTemplateTriggers = true, rebu
 
 		const extractedData = await extractionPromise;
 		if (extractedData) {
+			latestExtractedData = extractedData;
 			const currentUrl = tab.url;
 
 			const initializedContent = await initializePageContent(
@@ -786,57 +805,13 @@ function buildTemplateFieldsSkeleton(template: Template | null) {
 		}
 	}
 
-	const existingTemplateProperties = document.querySelector('.metadata-properties') as HTMLElement;
-
-	const newTemplateProperties = createElementWithClass('div', 'metadata-properties');
-
-	if (Array.isArray(template.properties)) {
-		for (const property of template.properties) {
-			const propertyDiv = createElementWithClass('div', 'metadata-property');
-			const propertyType = generalSettings.propertyTypes.find(p => p.name === property.name)?.type || 'text';
-
-			// Create metadata property key container
-			const metadataPropertyKey = document.createElement('div');
-			metadataPropertyKey.className = 'metadata-property-key';
-
-			const propertyIconSpan = document.createElement('span');
-			propertyIconSpan.className = 'metadata-property-icon';
-			const iconElement = document.createElement('i');
-			iconElement.setAttribute('data-lucide', getPropertyTypeIcon(propertyType));
-			propertyIconSpan.appendChild(iconElement);
-
-			const propertyLabel = document.createElement('label');
-			propertyLabel.setAttribute('for', property.name);
-			propertyLabel.textContent = property.name;
-
-			metadataPropertyKey.appendChild(propertyIconSpan);
-			metadataPropertyKey.appendChild(propertyLabel);
-
-			// Create metadata property value container with empty input
-			const metadataPropertyValue = document.createElement('div');
-			metadataPropertyValue.className = 'metadata-property-value';
-
-			const inputElement = document.createElement('input');
-			inputElement.id = property.name;
-			inputElement.setAttribute('data-type', propertyType);
-			inputElement.setAttribute('data-template-value', property.value);
-			inputElement.type = propertyType === 'checkbox' ? 'checkbox' : 'text';
-
-			metadataPropertyValue.appendChild(inputElement);
-
-			propertyDiv.appendChild(metadataPropertyKey);
-			propertyDiv.appendChild(metadataPropertyValue);
-			newTemplateProperties.appendChild(propertyDiv);
-		}
+	const metadataProperties = document.querySelector('.metadata-properties') as HTMLElement;
+	if (metadataProperties && Array.isArray(template.properties)) {
+		renderMetadataProperties(metadataProperties, template.properties.map((property) => ({
+			...property,
+			type: generalSettings.propertyTypes.find(item => item.name === property.name)?.type || 'text'
+		})));
 	}
-
-	// Replace the existing element
-	if (existingTemplateProperties && existingTemplateProperties.parentNode) {
-		existingTemplateProperties.parentNode.replaceChild(newTemplateProperties, existingTemplateProperties);
-		existingTemplateProperties.remove();
-	}
-
-	initializeIcons(newTemplateProperties);
 
 	// Set up note name and path fields with template values
 	const noteNameField = document.getElementById('note-name-field') as HTMLTextAreaElement;
@@ -910,7 +885,7 @@ async function fillTemplateFieldValues(currentTabId: number, template: Template 
 	// Fill property values into existing DOM elements
 	for (let i = 0; i < template.properties.length; i++) {
 		const property = template.properties[i];
-		const inputElement = document.getElementById(property.name) as HTMLInputElement;
+		const inputElement = document.getElementById(property.name) as HTMLElement;
 		if (!inputElement) continue;
 
 		let value = compiledPropertyValues[i];
@@ -920,9 +895,11 @@ async function fillTemplateFieldValues(currentTabId: number, template: Template 
 		value = formatPropertyValue(value, propertyType, property.value);
 
 		if (propertyType === 'checkbox') {
-			inputElement.checked = value === 'true';
+			window.dispatchEvent(new CustomEvent('aria-popup-property-value', {
+				detail: { id: property.name, value: value === 'true' }
+			}));
 		} else {
-			inputElement.value = value;
+			(inputElement as HTMLInputElement).value = value;
 		}
 	}
 
@@ -1295,19 +1272,19 @@ function determineMainAction() {
 			mainButton.textContent = getMessage('copyToClipboard');
 			mainButton.onclick = () => copyContent();
 			// Add direct actions to secondary
-			addSecondaryAction(secondaryActions, 'addToAria', () => handleClipAria());
+			addSecondaryAction(secondaryActions, 'addToAria', triggerClipAria);
 			addSecondaryAction(secondaryActions, 'saveFile', handleSaveToDownloads);
 			break;
 		case 'saveFile':
 			mainButton.textContent = getMessage('saveFile');
 			mainButton.onclick = () => handleSaveToDownloads();
 			// Add direct actions to secondary
-			addSecondaryAction(secondaryActions, 'addToAria', () => handleClipAria());
+			addSecondaryAction(secondaryActions, 'addToAria', triggerClipAria);
 			addSecondaryAction(secondaryActions, 'copyToClipboard', copyContent);
 			break;
 		default: // 'addToAria'
 			mainButton.textContent = getMessage('addToAria');
-			mainButton.onclick = () => handleClipAria();
+			mainButton.onclick = triggerClipAria;
 			// Add direct actions to secondary
 			addSecondaryAction(secondaryActions, 'copyToClipboard', copyContent);
 			addSecondaryAction(secondaryActions, 'saveFile', handleSaveToDownloads);
@@ -1317,13 +1294,11 @@ function determineMainAction() {
 async function handleClipAria(): Promise<void> {
 	if (!currentTemplate) return;
 
-	const vaultDropdown = document.getElementById('vault-select') as HTMLSelectElement;
 	const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement;
 	const noteNameField = document.getElementById('note-name-field') as HTMLInputElement;
-	const pathField = document.getElementById('path-name-field') as HTMLInputElement;
 	const interpretBtn = document.getElementById('interpret-btn') as HTMLButtonElement;
 
-	if (!vaultDropdown || !noteContentField) {
+	if (!noteContentField) {
 		showError('Some required fields are missing. Please try reloading the extension.');
 		return;
 	}
@@ -1339,42 +1314,88 @@ async function handleClipAria(): Promise<void> {
 			}
 		}
 
-		// Gather content
+		// Gather the rendered capture and every extraction field before crossing the native boundary.
 		const properties = getPropertiesFromDOM();
-
 		const frontmatter = await generateFrontmatter(properties);
 		const fileContent = frontmatter + noteContentField.value;
+		if (!currentTabId || !latestExtractedData) throw new Error('The current page capture is unavailable.');
+		const tabInfo = await getTabInfo(currentTabId);
+		const browserName = await detectBrowser();
+		const noteName = noteNameField?.value || latestExtractedData.title;
+		const capture: AriaClipCapture = {
+			version: 1,
+			captureId: crypto.randomUUID().replaceAll('-', ''),
+			capturedAt: new Date().toISOString(),
+			producer: {
+				name: 'Aria Clip',
+				version: browser.runtime.getManifest().version,
+				browser: browserName,
+			},
+			source: {
+				url: tabInfo.url,
+				title: latestExtractedData.title,
+				description: latestExtractedData.description,
+				domain: latestExtractedData.domain,
+				site: latestExtractedData.site,
+				author: latestExtractedData.author,
+				published: latestExtractedData.published,
+				language: latestExtractedData.language,
+				favicon: latestExtractedData.favicon,
+				image: latestExtractedData.image,
+			},
+			capture: {
+				renderedMarkdown: fileContent,
+				articleHtml: latestExtractedData.content,
+				selectedHtml: latestExtractedData.selectedHtml,
+				cleanedDocumentHtml: latestExtractedData.fullHtml,
+				highlights: latestExtractedData.highlights,
+				extractedContent: latestExtractedData.extractedContent,
+				extractedVariables: currentVariables,
+				schemaOrg: latestExtractedData.schemaOrgData ?? null,
+				metaTags: latestExtractedData.metaTags.map(tag => ({
+					name: tag.name ?? null,
+					property: tag.property ?? null,
+					content: tag.content ?? null,
+				})),
+				wordCount: latestExtractedData.wordCount,
+				parseDurationMilliseconds: latestExtractedData.parseTime,
+			},
+			rendering: {
+				title: noteName,
+				templateId: currentTemplate.id,
+				templateName: currentTemplate.name,
+				templateContext: currentTemplate.context ?? '',
+				properties: properties.map(property => ({
+					name: property.name,
+					type: property.type ?? null,
+					value: String(property.value),
+				})),
+			},
+			resources: [],
+		};
 
-		// Save to Aria
-		const selectedVault = vaultDropdown.value || currentTemplate.vault || '';
-		const isDailyNote = currentTemplate.behavior === 'append-daily' || currentTemplate.behavior === 'prepend-daily';
-		const noteName = isDailyNote ? '' : noteNameField?.value || '';
-		const path = isDailyNote ? '' : pathField?.value || '';
+		await deliverCaptureToAria(capture);
 
-		await saveToAria(fileContent, noteName, path, selectedVault, currentTemplate.behavior);
-		const tabInfo = await getCurrentTabInfo();
-		await incrementStat('addToAria', selectedVault, path, tabInfo.url, tabInfo.title);
-
-		lastSelectedVault = selectedVault;
-		await setLocalStorage('lastSelectedVault', lastSelectedVault);
+		await incrementStat('addToAria', '', '', tabInfo.url, latestExtractedData.title);
 
 		if (!isSidePanel) {
 			setTimeout(() => window.close(), 500);
 		}
 	} catch (error) {
 		console.error('Error in handleClipAria:', error);
-		showError('failedToSaveFile');
+		showErrorMessage(error instanceof Error ? error.message : 'Aria could not receive this capture.');
 		throw error;
 	}
 }
 
 function addSecondaryAction(container: Element, actionType: string, handler: () => void) {
-	const menuItem = document.createElement('div');
-	menuItem.className = 'menu-item';
+	const menuItem = document.createElement('button');
+	menuItem.type = 'button';
+	menuItem.className = 'menu-item flex h-7 w-full items-center gap-2 rounded-md px-2 text-left text-xs/relaxed outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground';
 	
 	// Create menu item icon container
 	const menuItemIcon = document.createElement('div');
-	menuItemIcon.className = 'menu-item-icon';
+	menuItemIcon.className = 'menu-item-icon flex size-4 items-center justify-center [&_svg]:size-3.5';
 	
 	const iconElement = document.createElement('i');
 	iconElement.setAttribute('data-lucide', getActionIcon(actionType));
@@ -1382,7 +1403,7 @@ function addSecondaryAction(container: Element, actionType: string, handler: () 
 	
 	// Create menu item title
 	const menuItemTitle = document.createElement('div');
-	menuItemTitle.className = 'menu-item-title';
+	menuItemTitle.className = 'menu-item-title flex-1';
 	menuItemTitle.setAttribute('data-i18n', actionType);
 	menuItemTitle.textContent = getMessage(actionType);
 	

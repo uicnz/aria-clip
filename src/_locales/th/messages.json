@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "ใส่สีให้ลิงก์"
 	},
-	"readerColorSchemeDefault": {
-		"message": "ค่าเริ่มต้น"
-	},
 	"readerCurrentPosition": {
 		"message": "ตำแหน่งปัจจุบัน"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS ที่นำไปใช้โดยอัตโนมัติในมุมมองการอ่าน"
 	},
-	"readerDarkTheme": {
-		"message": "ธีมโหมดมืด"
-	},
-	"readerDarkThemeDescription": {
-		"message": "ใช้ธีมอื่นในโหมดมืด"
-	},
 	"readerError": {
 		"message": "ไม่สามารถดึงเนื้อหาได้"
 	},
-	"readerFont": {
-		"message": "ตัวเลือกแบบอักษร"
-	},
-	"readerFontDefault": {
-		"message": "ค่าเริ่มต้น"
-	},
-	"readerFontDescription": {
-		"message": "เพิ่มแบบอักษรที่ติดตั้งบนระบบของคุณ กด Enter เพื่อเพิ่มแบบอักษร"
-	},
-	"readerFontNotFound": {
-		"message": "ไม่พบ"
-	},
-	"readerFontPlaceholder": {
-		"message": "กด Enter เพื่อเพิ่มแบบอักษร"
-	},
-	"readerFontSetDefault": {
-		"message": "ตั้งเป็นค่าเริ่มต้น"
-	},
 	"readerFontSize": {
 		"message": "ขนาดแบบอักษรพื้นฐาน"
-	},
-	"readerFontSystem": {
-		"message": "ระบบ"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "ฟอนต์นี้ไม่พร้อมใช้งานที่นี่ — เบราว์เซอร์ของคุณอาจบล็อกฟอนต์ที่กำหนดเอง"
-	},
-	"readerFonts": {
-		"message": "แบบอักษร"
 	},
 	"readerFootnotes": {
 		"message": "เชิงอรรถ"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "การตั้งค่าโหมดอ่าน"
-	},
-	"readerTheme": {
-		"message": "ธีม"
-	},
-	"readerThemeDescription": {
-		"message": "เลือกสีที่ใช้ในมุมมองการอ่าน"
-	},
-	"readerThemeSection": {
-		"message": "ธีม"
 	},
 	"readerTranscripts": {
 		"message": "บทถอดเสียง"

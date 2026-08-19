@@ -56,11 +56,7 @@ export interface ReaderSettings {
 	fontSize: number;
 	lineHeight: number;
 	maxWidth: number;
-	lightTheme: string;
-	darkTheme: string;
 	appearance: 'auto' | 'light' | 'dark';
-	fonts: string[];
-	defaultFont: string;
 	blendImages: boolean;
 	colorLinks: boolean;
 	followLinks: boolean;

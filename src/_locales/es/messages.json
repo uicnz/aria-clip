@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Colorear enlaces"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Predeterminado"
-	},
 	"readerCurrentPosition": {
 		"message": "Posición actual"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS aplicado automáticamente en la vista de lectura."
 	},
-	"readerDarkTheme": {
-		"message": "Tema del modo oscuro"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Usa un tema diferente en el modo oscuro."
-	},
 	"readerError": {
 		"message": "No se pudo extraer el contenido."
 	},
-	"readerFont": {
-		"message": "Opciones de fuente"
-	},
-	"readerFontDefault": {
-		"message": "Predeterminado"
-	},
-	"readerFontDescription": {
-		"message": "Añade fuentes instaladas en tu sistema. Pulsa Intro para añadir una fuente."
-	},
-	"readerFontNotFound": {
-		"message": "No encontrado"
-	},
-	"readerFontPlaceholder": {
-		"message": "Pulsa Intro para añadir una fuente"
-	},
-	"readerFontSetDefault": {
-		"message": "Establecer como predeterminado"
-	},
 	"readerFontSize": {
 		"message": "Tamaño de fuente base"
-	},
-	"readerFontSystem": {
-		"message": "Sistema"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Esta fuente no está disponible aquí: es posible que tu navegador esté bloqueando las fuentes personalizadas."
-	},
-	"readerFonts": {
-		"message": "Fuentes"
 	},
 	"readerFootnotes": {
 		"message": "Notas al pie"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Ajustes del lector"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Elige los colores usados en la vista de lectura."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Transcripciones"

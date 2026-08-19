@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "लिंक रंगीन करें"
 	},
-	"readerColorSchemeDefault": {
-		"message": "डिफ़ॉल्ट"
-	},
 	"readerCurrentPosition": {
 		"message": "वर्तमान स्थिति"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "रीडिंग व्यू में अपने-आप लागू होने वाला CSS।"
 	},
-	"readerDarkTheme": {
-		"message": "डार्क मोड थीम"
-	},
-	"readerDarkThemeDescription": {
-		"message": "डार्क मोड में अलग थीम का उपयोग करें।"
-	},
 	"readerError": {
 		"message": "सामग्री निकालने में विफल।"
 	},
-	"readerFont": {
-		"message": "फ़ॉन्ट विकल्प"
-	},
-	"readerFontDefault": {
-		"message": "डिफ़ॉल्ट"
-	},
-	"readerFontDescription": {
-		"message": "अपने सिस्टम में इंस्टॉल किए गए फ़ॉन्ट जोड़ें। फ़ॉन्ट जोड़ने के लिए Enter दबाएँ।"
-	},
-	"readerFontNotFound": {
-		"message": "नहीं मिला"
-	},
-	"readerFontPlaceholder": {
-		"message": "फ़ॉन्ट जोड़ने के लिए Enter दबाएँ"
-	},
-	"readerFontSetDefault": {
-		"message": "डिफ़ॉल्ट सेट करें"
-	},
 	"readerFontSize": {
 		"message": "आधार फ़ॉन्ट आकार"
-	},
-	"readerFontSystem": {
-		"message": "सिस्टम"
-	},
-	"readerFontSystemSans": {
-		"message": "सैंस-सेरिफ़"
-	},
-	"readerFontSystemSerif": {
-		"message": "सेरिफ़"
-	},
-	"readerFontUnavailable": {
-		"message": "यह फ़ॉन्ट यहाँ उपलब्ध नहीं है — हो सकता है आपका ब्राउज़र कस्टम फ़ॉन्ट ब्लॉक कर रहा हो।"
-	},
-	"readerFonts": {
-		"message": "फ़ॉन्ट"
 	},
 	"readerFootnotes": {
 		"message": "पादटिप्पणियाँ"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "रीडर सेटिंग्स"
-	},
-	"readerTheme": {
-		"message": "थीम"
-	},
-	"readerThemeDescription": {
-		"message": "रीडिंग व्यू में उपयोग होने वाले रंग चुनें।"
-	},
-	"readerThemeSection": {
-		"message": "थीम"
 	},
 	"readerTranscripts": {
 		"message": "ट्रांसक्रिप्ट"

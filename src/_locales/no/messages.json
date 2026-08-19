@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "Fargelegg lenker"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Standard"
-	},
 	"readerCurrentPosition": {
 		"message": "Gjeldende posisjon"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS som brukes automatisk i lesevisning."
 	},
-	"readerDarkTheme": {
-		"message": "Tema for mørk modus"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Bruk et annet tema i mørk modus."
-	},
 	"readerError": {
 		"message": "Kunne ikke hente ut innhold."
 	},
-	"readerFont": {
-		"message": "Skriftalternativer"
-	},
-	"readerFontDefault": {
-		"message": "Standard"
-	},
-	"readerFontDescription": {
-		"message": "Legg til skrifter som er installert på systemet ditt. Trykk Enter for å legge til en skrift."
-	},
-	"readerFontNotFound": {
-		"message": "Ikke funnet"
-	},
-	"readerFontPlaceholder": {
-		"message": "Trykk Enter for å legge til en skrift"
-	},
-	"readerFontSetDefault": {
-		"message": "Angi som standard"
-	},
 	"readerFontSize": {
 		"message": "Grunnleggende skriftstørrelse"
-	},
-	"readerFontSystem": {
-		"message": "System"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Denne skriften er ikke tilgjengelig her — nettleseren din blokkerer kanskje egendefinerte skrifter."
-	},
-	"readerFonts": {
-		"message": "Skrifter"
 	},
 	"readerFootnotes": {
 		"message": "Fotnoter"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "Leserinnstillinger"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Velg fargene som brukes i lesevisning."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Transkripsjoner"

@@ -726,13 +726,13 @@
 		"message": "Appearance"
 	},
 	"readerAppearanceAuto": {
-		"message": "Auto"
+		"message": "System"
 	},
 	"readerAppearanceDark": {
 		"message": "Dark"
 	},
 	"readerAppearanceDescription": {
-		"message": "Choose light or dark appearance."
+		"message": "Use the system appearance or choose light or dark mode."
 	},
 	"readerAppearanceLight": {
 		"message": "Light"
@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Color links"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Default"
-	},
 	"readerCurrentPosition": {
 		"message": "Current position"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS applied automatically in reading view."
 	},
-	"readerDarkTheme": {
-		"message": "Dark mode theme"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Use a different theme in dark mode."
-	},
 	"readerError": {
 		"message": "Failed to extract content."
 	},
-	"readerFont": {
-		"message": "Font options"
-	},
-	"readerFontDefault": {
-		"message": "Default"
-	},
-	"readerFontDescription": {
-		"message": "Add fonts installed on your system. Press enter to add a font."
-	},
-	"readerFontNotFound": {
-		"message": "Not found"
-	},
-	"readerFontPlaceholder": {
-		"message": "Press enter to add a font"
-	},
-	"readerFontSetDefault": {
-		"message": "Set default"
-	},
 	"readerFontSize": {
 		"message": "Base font size"
-	},
-	"readerFontSystem": {
-		"message": "System"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "This font isn't available here — your browser may be blocking custom fonts."
-	},
-	"readerFonts": {
-		"message": "Fonts"
 	},
 	"readerFootnotes": {
 		"message": "Footnotes"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Reader settings"
-	},
-	"readerTheme": {
-		"message": "Theme"
-	},
-	"readerThemeDescription": {
-		"message": "Choose the colors used in reading view."
-	},
-	"readerThemeSection": {
-		"message": "Theme"
 	},
 	"readerTranscripts": {
 		"message": "Transcripts"

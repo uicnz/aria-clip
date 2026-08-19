@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "Warnai tautan"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Default"
-	},
 	"readerCurrentPosition": {
 		"message": "Posisi saat ini"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS diterapkan secara otomatis dalam tampilan baca."
 	},
-	"readerDarkTheme": {
-		"message": "Tema mode gelap"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Gunakan tema yang berbeda dalam mode gelap."
-	},
 	"readerError": {
 		"message": "Gagal mengekstrak konten."
 	},
-	"readerFont": {
-		"message": "Opsi font"
-	},
-	"readerFontDefault": {
-		"message": "Default"
-	},
-	"readerFontDescription": {
-		"message": "Tambahkan font yang terinstal di sistem Anda. Tekan Enter untuk menambahkan font."
-	},
-	"readerFontNotFound": {
-		"message": "Tidak ditemukan"
-	},
-	"readerFontPlaceholder": {
-		"message": "Tekan Enter untuk menambahkan font"
-	},
-	"readerFontSetDefault": {
-		"message": "Jadikan default"
-	},
 	"readerFontSize": {
 		"message": "Ukuran font dasar"
-	},
-	"readerFontSystem": {
-		"message": "Sistem"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Font ini tidak tersedia di sini — browser Anda mungkin memblokir font kustom."
-	},
-	"readerFonts": {
-		"message": "Font"
 	},
 	"readerFootnotes": {
 		"message": "Catatan kaki"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "Pengaturan pembaca"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Pilih warna yang digunakan dalam tampilan baca."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Transkrip"

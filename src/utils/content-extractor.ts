@@ -42,7 +42,7 @@ function normalizeText(html: string): string {
 	return stripHtml(html).replace(/\s+/g, ' ').trim();
 }
 
-interface ContentResponse {
+export interface ContentResponse {
 	content: string;
 	selectedHtml: string;
 	extractedContent: ExtractedContent;

@@ -5,23 +5,8 @@ import { initializePropertyTypesManager } from './property-types-manager.js';
 export type SettingsSection = 'general' | 'properties' | 'highlighter' | 'interpreter' | 'reader' | 'templates';
 
 export function showSettingsSection(section: SettingsSection, templateId?: string): void {
-	const sections = document.querySelectorAll('.settings-section');
-	const sidebarItems = document.querySelectorAll('#sidebar li[data-section]');
-
-	sections.forEach(s => s.classList.remove('active'));
-	sidebarItems.forEach(item => item.classList.remove('active'));
-
-	const selectedSection = document.getElementById(`${section}-section`);
-	const selectedSidebarItem = document.querySelector(`#sidebar li[data-section="${section}"]`);
-
-	if (selectedSection) {
-		selectedSection.classList.add('active');
-	}
-	if (selectedSidebarItem) {
-		selectedSidebarItem.classList.add('active');
-	}
-
 	updateUrl(section, templateId);
+	window.dispatchEvent(new PopStateEvent('popstate'));
 
 	if (section === 'properties') {
 		initializePropertyTypesManager();
@@ -38,9 +23,9 @@ export function showSettingsSection(section: SettingsSection, templateId?: strin
 }
 
 function updateSidebarActiveState(activeSection: string): void {
-	document.querySelectorAll('#sidebar li').forEach(item => item.classList.remove('active'));
+	document.querySelectorAll('#sidebar li').forEach(item => item.querySelector('[data-sidebar="menu-button"]')?.removeAttribute('data-active'));
 	const activeItem = document.querySelector(`#sidebar li[data-section="${activeSection}"]`);
-	if (activeItem) activeItem.classList.add('active');
+	if (activeItem) activeItem.querySelector('[data-sidebar="menu-button"]')?.setAttribute('data-active', '');
 }
 
 function updateTemplateListActiveState(templateId: string): void {

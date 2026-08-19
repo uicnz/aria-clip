@@ -21,9 +21,12 @@ import { createIcons } from 'lucide';
 import { icons } from '../icons/icons.js';
 import { updateUrl, getUrlParameters } from '../utils/routing.js';
 import { addBrowserClassToHtml } from '../utils/browser-detection.js';
-import { initializeMenu } from '../managers/menu.js';
-import { addMenuItemListener } from '../managers/menu.js';
 import { translatePage, getCurrentLanguage, setLanguage, getAvailableLanguages, getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
+import { initializeExtensionTheme } from '../utils/theme-utils.js';
+import { mountSettingsShell } from '../components/settings/settings-shell.js';
+
+void initializeExtensionTheme();
+mountSettingsShell();
 
 declare global {
 	interface Window {
@@ -37,14 +40,6 @@ window.rebuildTemplateList = rebuildTemplateList;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	const newTemplateBtn = document.getElementById('new-template-btn') as HTMLButtonElement;
-
-	// Apply section from URL params immediately to avoid flash (DOM only, no side effects)
-	const { section: initialSection } = getUrlParameters();
-	const targetSection = (initialSection === 'general' || initialSection === 'interpreter' || initialSection === 'properties' || initialSection === 'highlighter' || initialSection === 'reader') ? initialSection : 'general';
-	document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
-	document.querySelectorAll('#sidebar li[data-section]').forEach(i => i.classList.remove('active'));
-	document.getElementById(`${targetSection}-section`)?.classList.add('active');
-	document.querySelector(`#sidebar li[data-section="${targetSection}"]`)?.classList.add('active');
 
 	async function initializeSettings(): Promise<void> {
 		try {
@@ -74,8 +69,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 			await handleUrlParameters();
 			initializeSidebar();
 			initializeAutoSave();
-			initializeMenu('more-actions-btn', 'template-actions-menu');
-
 			createIcons({ icons });
 
 			// Initialize language selector
@@ -158,11 +151,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 			});
 		}
 
-		addMenuItemListener('#duplicate-template-btn', 'template-actions-menu', duplicateCurrentTemplate);
-		addMenuItemListener('#delete-template-btn', 'template-actions-menu', deleteCurrentTemplate);
-		addMenuItemListener('.export-template-btn', 'template-actions-menu', exportTemplate);
-		addMenuItemListener('.import-template-btn', 'template-actions-menu', showTemplateImportModal);
-		addMenuItemListener('#copy-template-json-btn', 'template-actions-menu', copyCurrentTemplateToClipboard);
+		window.addEventListener('aria-template-duplicate', duplicateCurrentTemplate);
+		window.addEventListener('aria-template-delete', deleteCurrentTemplate);
+		window.addEventListener('aria-template-export', () => void exportTemplate());
+		window.addEventListener('aria-template-import', showTemplateImportModal);
+		window.addEventListener('aria-template-copy', copyCurrentTemplateToClipboard);
 	}
 
 	function duplicateCurrentTemplate(): void {

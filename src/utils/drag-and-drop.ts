@@ -59,19 +59,20 @@ export function handleDrop(e: DragEvent): void {
 	e.preventDefault();
 	if (!e.dataTransfer) return;
 	const draggedItemId = e.dataTransfer.getData('text/plain');
-	const list = (e.target as HTMLElement).closest('ul, #template-properties, #model-list');
+	const list = (e.target as HTMLElement).closest('ul, #template-properties, #model-list, [data-slot="item-group"]');
 	
 	if (list && draggedElement) {
 		const items = Array.from(list.children);
 		const newIndex = items.indexOf(draggedElement);
+		const listId = list.id || list.parentElement?.id;
 		
-		if (list.id === 'template-list') {
+		if (listId === 'template-list') {
 			handleTemplateReorder(draggedItemId, newIndex);
-		} else if (list.id === 'template-properties') {
+		} else if (listId === 'template-properties') {
 			handlePropertyReorder(draggedItemId, newIndex);
-		} else if (list.id === 'vault-list') {
+		} else if (listId === 'vault-list') {
 			handleVaultReorder(newIndex);
-		} else if (list.id === 'model-list') {
+		} else if (listId === 'model-list') {
 			handleModelReorder(newIndex);
 		}
 		

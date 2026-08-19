@@ -1,10 +1,6 @@
-import { handleDragStart, handleDragOver, handleDrop, handleDragEnd } from '../utils/drag-and-drop.js';
-import { initializeIcons } from '../icons/icons.js';
 import { getCommands } from '../utils/hotkeys.js';
-import { initializeToggles, initializeSettingToggle } from '../utils/ui-utils.js';
 import { generalSettings, loadSettings, saveSettings, setLocalStorage, getLocalStorage } from '../utils/storage-utils.js';
 import { detectBrowser } from '../utils/browser-detection.js';
-import { createElementWithClass, createElementWithHTML } from '../utils/dom-utils.js';
 import { createDefaultTemplate, getTemplates, saveTemplateSettings } from '../managers/template-manager.js';
 import { updateTemplateList, showTemplateEditor } from '../managers/template-ui.js';
 import { exportAllSettings, importAllSettings } from '../utils/import-export.js';
@@ -18,6 +14,7 @@ import { getClipHistory } from '../utils/storage-utils.js';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear.js';
 import { showModal, hideModal } from '../utils/modal-utils.js';
+import { renderShortcutList, renderShortcutMessage, renderVaultList } from '../components/settings/general-lists.js';
 
 dayjs.extend(weekOfYear);
 
@@ -32,39 +29,7 @@ export function updateVaultList(): void {
 	const vaultList = document.getElementById('vault-list') as HTMLUListElement;
 	if (!vaultList) return;
 
-	// Clear existing vaults
-	vaultList.textContent = '';
-	generalSettings.vaults.forEach((vault, index) => {
-		const li = document.createElement('li');
-		li.dataset.index = index.toString();
-		li.draggable = true;
-
-		const dragHandle = createElementWithClass('div', 'drag-handle');
-		dragHandle.appendChild(createElementWithHTML('i', '', { 'data-lucide': 'grip-vertical' }));
-		li.appendChild(dragHandle);
-
-		const span = document.createElement('span');
-		span.textContent = vault;
-		li.appendChild(span);
-
-		const removeBtn = createElementWithClass('button', 'setting-item-list-remove clickable-icon');
-		removeBtn.setAttribute('type', 'button');
-		removeBtn.setAttribute('aria-label', getMessage('removeVault'));
-		removeBtn.appendChild(createElementWithHTML('i', '', { 'data-lucide': 'trash-2' }));
-		li.appendChild(removeBtn);
-
-		li.addEventListener('dragstart', handleDragStart);
-		li.addEventListener('dragover', handleDragOver);
-		li.addEventListener('drop', handleDrop);
-		li.addEventListener('dragend', handleDragEnd);
-		removeBtn.addEventListener('click', (e) => {
-			e.stopPropagation();
-			removeVault(index);
-		});
-		vaultList.appendChild(li);
-	});
-
-	initializeIcons(vaultList);
+	renderVaultList(vaultList, generalSettings.vaults, getMessage('removeVault'), removeVault);
 }
 
 export function addVault(vault: string): void {
@@ -212,14 +177,9 @@ export function initializeGeneralSettings(): void {
 		}
 
 		updateVaultList();
-		initializeShowMoreActionsToggle();
-		initializeBetaFeaturesToggle();
-		initializeLegacyModeToggle();
-		initializeSilentOpenToggle();
 		initializeVaultInput();
 		initializeOpenBehaviorDropdown();
 		initializeKeyboardShortcuts();
-		initializeToggles();
 		setShortcutInstructions();
 		initializeAutoSave();
 		initializeResetDefaultTemplateButton();
@@ -272,12 +232,6 @@ function saveSettingsFromForm(): void {
 	saveSettings(updatedSettings);
 }
 
-function initializeShowMoreActionsToggle(): void {
-	initializeSettingToggle('show-more-actions-toggle', generalSettings.showMoreActionsButton, (checked) => {
-		saveSettings({ ...generalSettings, showMoreActionsButton: checked });
-	});
-}
-
 function initializeVaultInput(): void {
 	const vaultInput = document.getElementById('vault-input') as HTMLInputElement;
 	if (vaultInput) {
@@ -301,47 +255,15 @@ async function initializeKeyboardShortcuts(): Promise<void> {
 	const browser = await detectBrowser();
 
 	if (browser === 'mobile-safari') {
-		// For Safari, display a message about keyboard shortcuts not being available
-		const messageItem = document.createElement('div');
-		messageItem.className = 'shortcut-item';
-		messageItem.textContent = getMessage('shortcutInstructionsSafari');
-		shortcutsList.appendChild(messageItem);
+		renderShortcutMessage(shortcutsList, getMessage('shortcutInstructionsSafari'));
 	} else {
-		// For other browsers, proceed with displaying the shortcuts
 		getCommands().then(commands => {
-			commands.forEach(command => {
-				const shortcutItem = createElementWithClass('div', 'shortcut-item');
-				
-				const descriptionSpan = document.createElement('span');
-				descriptionSpan.textContent = command.description;
-				shortcutItem.appendChild(descriptionSpan);
-
-				const hotkeySpan = createElementWithClass('span', 'setting-hotkey');
-				hotkeySpan.textContent = command.shortcut || getMessage('shortcutNotSet');
-				shortcutItem.appendChild(hotkeySpan);
-
-				shortcutsList.appendChild(shortcutItem);
-			});
+			renderShortcutList(shortcutsList, commands.map(command => ({
+				description: command.description,
+				shortcut: command.shortcut || getMessage('shortcutNotSet')
+			})));
 		});
 	}
-}
-
-function initializeBetaFeaturesToggle(): void {
-	initializeSettingToggle('beta-features-toggle', generalSettings.betaFeatures, (checked) => {
-		saveSettings({ ...generalSettings, betaFeatures: checked });
-	});
-}
-
-function initializeLegacyModeToggle(): void {
-	initializeSettingToggle('legacy-mode-toggle', generalSettings.legacyMode, (checked) => {
-		saveSettings({ ...generalSettings, legacyMode: checked });
-	});
-}
-
-function initializeSilentOpenToggle(): void {
-	initializeSettingToggle('silent-open-toggle', generalSettings.silentOpen, (checked) => {
-		saveSettings({ ...generalSettings, silentOpen: checked });
-	});
 }
 
 function initializeOpenBehaviorDropdown(): void {
@@ -417,14 +339,6 @@ function initializeExportHighlightsButton(): void {
 }
 
 function initializeHighlighterSettings(): void {
-	initializeSettingToggle('highlighter-toggle', generalSettings.highlighterEnabled, (checked) => {
-		saveSettings({ ...generalSettings, highlighterEnabled: checked });
-	});
-
-	initializeSettingToggle('highlighter-visibility', generalSettings.alwaysShowHighlights, (checked) => {
-		saveSettings({ ...generalSettings, alwaysShowHighlights: checked });
-	});
-
 	const highlightBehaviorSelect = document.getElementById('highlighter-behavior') as HTMLSelectElement;
 	if (highlightBehaviorSelect) {
 		highlightBehaviorSelect.value = generalSettings.highlightBehavior;
@@ -503,8 +417,7 @@ async function handleRating(rating: number) {
 		window.open(storeUrl, '_blank');
 	} else {
 		// Show feedback modal for ratings < 4
-		const modal = document.getElementById('feedback-modal');
-		showModal(modal);
+		showModal('feedback-modal');
 	}
 }
 

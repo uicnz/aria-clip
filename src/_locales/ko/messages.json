@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "링크 색상"
 	},
-	"readerColorSchemeDefault": {
-		"message": "기본값"
-	},
 	"readerCurrentPosition": {
 		"message": "현재 위치"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "읽기 보기에서 자동으로 적용되는 CSS입니다."
 	},
-	"readerDarkTheme": {
-		"message": "다크 모드 테마"
-	},
-	"readerDarkThemeDescription": {
-		"message": "다크 모드에서 다른 테마를 사용합니다."
-	},
 	"readerError": {
 		"message": "콘텐츠를 추출하지 못했습니다."
 	},
-	"readerFont": {
-		"message": "글꼴 옵션"
-	},
-	"readerFontDefault": {
-		"message": "기본값"
-	},
-	"readerFontDescription": {
-		"message": "시스템에 설치된 글꼴을 추가하세요. Enter를 눌러 글꼴을 추가합니다."
-	},
-	"readerFontNotFound": {
-		"message": "찾을 수 없음"
-	},
-	"readerFontPlaceholder": {
-		"message": "Enter를 눌러 글꼴을 추가하세요"
-	},
-	"readerFontSetDefault": {
-		"message": "기본값으로 설정"
-	},
 	"readerFontSize": {
 		"message": "기본 글꼴 크기"
-	},
-	"readerFontSystem": {
-		"message": "시스템"
-	},
-	"readerFontSystemSans": {
-		"message": "산세리프"
-	},
-	"readerFontSystemSerif": {
-		"message": "세리프"
-	},
-	"readerFontUnavailable": {
-		"message": "이 글꼴은 여기에서 사용할 수 없습니다. 브라우저가 사용자 지정 글꼴을 차단하고 있을 수 있습니다."
-	},
-	"readerFonts": {
-		"message": "글꼴"
 	},
 	"readerFootnotes": {
 		"message": "각주"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "리더 설정"
-	},
-	"readerTheme": {
-		"message": "테마"
-	},
-	"readerThemeDescription": {
-		"message": "읽기 보기에서 사용할 색상을 선택하세요."
-	},
-	"readerThemeSection": {
-		"message": "테마"
 	},
 	"readerTranscripts": {
 		"message": "스크립트"

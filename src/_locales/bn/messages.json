@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "লিংকের রঙ"
 	},
-	"readerColorSchemeDefault": {
-		"message": "ডিফল্ট"
-	},
 	"readerCurrentPosition": {
 		"message": "বর্তমান অবস্থান"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "রিডিং ভিউতে স্বয়ংক্রিয়ভাবে প্রয়োগ হওয়া CSS।"
 	},
-	"readerDarkTheme": {
-		"message": "ডার্ক মোড থিম"
-	},
-	"readerDarkThemeDescription": {
-		"message": "ডার্ক মোডে ভিন্ন থিম ব্যবহার করুন।"
-	},
 	"readerError": {
 		"message": "কনটেন্ট বের করতে ব্যর্থ হয়েছে।"
 	},
-	"readerFont": {
-		"message": "ফন্ট অপশন"
-	},
-	"readerFontDefault": {
-		"message": "ডিফল্ট"
-	},
-	"readerFontDescription": {
-		"message": "আপনার সিস্টেমে ইনস্টল করা ফন্ট যোগ করুন। ফন্ট যোগ করতে এন্টার চাপুন।"
-	},
-	"readerFontNotFound": {
-		"message": "পাওয়া যায়নি"
-	},
-	"readerFontPlaceholder": {
-		"message": "ফন্ট যোগ করতে এন্টার চাপুন"
-	},
-	"readerFontSetDefault": {
-		"message": "ডিফল্ট সেট করুন"
-	},
 	"readerFontSize": {
 		"message": "বেস ফন্ট সাইজ"
-	},
-	"readerFontSystem": {
-		"message": "সিস্টেম"
-	},
-	"readerFontSystemSans": {
-		"message": "স্যান্স-সেরিফ"
-	},
-	"readerFontSystemSerif": {
-		"message": "সেরিফ"
-	},
-	"readerFontUnavailable": {
-		"message": "এই ফন্টটি এখানে উপলব্ধ নয় — আপনার ব্রাউজার কাস্টম ফন্ট ব্লক করতে পারে।"
-	},
-	"readerFonts": {
-		"message": "ফন্ট"
 	},
 	"readerFootnotes": {
 		"message": "পাদটীকা"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "রিডার সেটিংস"
-	},
-	"readerTheme": {
-		"message": "থিম"
-	},
-	"readerThemeDescription": {
-		"message": "রিডিং ভিউতে ব্যবহৃত রঙ বেছে নিন।"
-	},
-	"readerThemeSection": {
-		"message": "থিম"
 	},
 	"readerTranscripts": {
 		"message": "ট্রান্সক্রিপ্ট"

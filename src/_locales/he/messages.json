@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "צבע קישורים"
 	},
-	"readerColorSchemeDefault": {
-		"message": "ברירת מחדל"
-	},
 	"readerCurrentPosition": {
 		"message": "מיקום נוכחי"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS מוחל אוטומטית בתצוגת קריאה."
 	},
-	"readerDarkTheme": {
-		"message": "ערכת נושא למצב כהה"
-	},
-	"readerDarkThemeDescription": {
-		"message": "השתמשו בערכת נושא שונה במצב כהה."
-	},
 	"readerError": {
 		"message": "חילוץ התוכן נכשל."
 	},
-	"readerFont": {
-		"message": "אפשרויות גופן"
-	},
-	"readerFontDefault": {
-		"message": "ברירת מחדל"
-	},
-	"readerFontDescription": {
-		"message": "הוסיפו גופנים המותקנים במערכת שלכם. לחצו Enter כדי להוסיף גופן."
-	},
-	"readerFontNotFound": {
-		"message": "לא נמצא"
-	},
-	"readerFontPlaceholder": {
-		"message": "לחצו Enter כדי להוסיף גופן"
-	},
-	"readerFontSetDefault": {
-		"message": "הגדר כברירת מחדל"
-	},
 	"readerFontSize": {
 		"message": "גודל גופן בסיסי"
-	},
-	"readerFontSystem": {
-		"message": "מערכת"
-	},
-	"readerFontSystemSans": {
-		"message": "ללא תגים"
-	},
-	"readerFontSystemSerif": {
-		"message": "עם תגים"
-	},
-	"readerFontUnavailable": {
-		"message": "הגופן הזה אינו זמין כאן — ייתכן שהדפדפן שלך חוסם גופנים מותאמים אישית."
-	},
-	"readerFonts": {
-		"message": "גופנים"
 	},
 	"readerFootnotes": {
 		"message": "הערות שוליים"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "הגדרות קורא"
-	},
-	"readerTheme": {
-		"message": "ערכת נושא"
-	},
-	"readerThemeDescription": {
-		"message": "בחרו את הצבעים המשמשים בתצוגת קריאה."
-	},
-	"readerThemeSection": {
-		"message": "ערכת נושא"
 	},
 	"readerTranscripts": {
 		"message": "תמלולים"

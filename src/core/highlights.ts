@@ -5,13 +5,17 @@ import { addBrowserClassToHtml, detectBrowser } from '../utils/browser-detection
 import DOMPurify from 'dompurify';
 import { Defuddle } from '../utils/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { getFontCss } from '../utils/font-utils.js';
 import { ReaderSettings } from '../types/types.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import { createIcons } from 'lucide';
 import { icons } from '../icons/icons.js';
 import { initializeMenu } from '../managers/menu.js';
+import { initializeExtensionTheme } from '../utils/theme-utils.js';
+import { mountHighlightsShell } from '../components/highlights/highlights-shell.js';
+
+void initializeExtensionTheme();
+mountHighlightsShell();
 
 dayjs.extend(relativeTime);
 
@@ -152,8 +156,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // --- Reader theme ---
 
-let highlightThemeClasses: string[] = [];
-let highlightThemeAttr: { name: string; value: string } | null = null;
+let highlightAppearanceClasses: string[] = [];
 
 async function applyReaderTheme() {
 	const data = await browser.storage.sync.get('reader_settings');
@@ -163,34 +166,21 @@ async function applyReaderTheme() {
 		? settings.appearance === 'dark' || (settings.appearance === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 		: window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-	highlightThemeClasses = ['aria-reader-active', isDark ? 'theme-dark' : 'theme-light'];
+	highlightAppearanceClasses = ['aria-reader-active', isDark ? 'theme-dark' : 'theme-light'];
 
 	if (settings) {
-		const effectiveTheme = isDark && settings.darkTheme !== 'same' ? settings.darkTheme : settings.lightTheme;
-		highlightThemeAttr = effectiveTheme && effectiveTheme !== 'default'
-			? { name: 'data-reader-theme', value: effectiveTheme }
-			: null;
-
 		// Font settings apply globally
 		const html = document.documentElement;
 		html.style.setProperty('--font-text-size', `${settings.fontSize}px`);
 		html.style.setProperty('--line-height-normal', settings.lineHeight.toString());
 
-		const fontCss = getFontCss(settings.defaultFont);
-		if (fontCss) {
-			document.body.style.setProperty('--font-text', fontCss);
-		}
 	}
 }
 
 function applyThemeToElement(el: HTMLElement) {
 	el.classList.remove('theme-dark', 'theme-light');
-	el.removeAttribute('data-reader-theme');
-	for (const cls of highlightThemeClasses) {
+	for (const cls of highlightAppearanceClasses) {
 		el.classList.add(cls);
-	}
-	if (highlightThemeAttr) {
-		el.setAttribute(highlightThemeAttr.name, highlightThemeAttr.value);
 	}
 }
 
@@ -435,17 +425,17 @@ function createPageSubItems(group: DomainGroup): HTMLElement[] {
 			&& (currentNav as { url: string }).url === page.url;
 
 		const pageLi = document.createElement('li');
-		pageLi.className = 'nav-page' + (isPageActive ? ' active' : '');
+		pageLi.className = 'nav-page ml-6 flex h-7 cursor-pointer items-center gap-2 rounded-md px-2 text-xs/relaxed text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&.active]:bg-sidebar-accent [&.active]:font-medium' + (isPageActive ? ' active' : '');
 		pageLi.setAttribute('data-url', page.url);
 
 		const pageName = document.createElement('span');
-		pageName.className = 'nav-page-name';
+		pageName.className = 'nav-page-name min-w-0 flex-1 truncate';
 		pageName.textContent = page.title || displayPath(page.path);
 		pageName.title = page.url;
 		pageLi.appendChild(pageName);
 
 		const pageCount = document.createElement('span');
-		pageCount.className = 'nav-count';
+		pageCount.className = 'nav-count text-[0.625rem] tabular-nums text-muted-foreground';
 		pageCount.textContent = String(page.highlights.length);
 		pageLi.appendChild(pageCount);
 
@@ -543,11 +533,11 @@ function renderSidebar() {
 
 function createDomainNode(domain: string): CachedDomainNode {
 	const li = document.createElement('li');
-	li.className = 'nav-domain';
+	li.className = 'nav-domain flex h-7 cursor-pointer items-center gap-1 rounded-md px-1 text-xs/relaxed text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&.active]:bg-sidebar-accent [&.active]:font-medium';
 	li.setAttribute('data-domain', domain);
 
 	const chevronWrap = document.createElement('div');
-	chevronWrap.className = 'nav-chevron-wrap';
+	chevronWrap.className = 'nav-chevron-wrap flex size-5 shrink-0 items-center justify-center text-muted-foreground transition-transform [&.is-expanded]:rotate-90 [&_svg]:size-3';
 	const chevronIcon = document.createElement('i');
 	chevronIcon.setAttribute('data-lucide', 'chevron-right');
 	chevronWrap.appendChild(chevronIcon);
@@ -561,13 +551,13 @@ function createDomainNode(domain: string): CachedDomainNode {
 		let favicon = faviconCache.get(normalized);
 		if (!favicon) {
 			favicon = document.createElement('img');
-			favicon.className = 'nav-domain-favicon';
+			favicon.className = 'nav-domain-favicon size-4 shrink-0 rounded-sm';
 			favicon.src = domainSettings.favicon;
 			favicon.width = 16;
 			favicon.height = 16;
 			favicon.onerror = () => {
 				const globe = document.createElement('i');
-				globe.className = 'nav-domain-favicon';
+				globe.className = 'nav-domain-favicon size-3.5 shrink-0 text-muted-foreground';
 				globe.setAttribute('data-lucide', 'globe');
 				favicon!.replaceWith(globe);
 				createIcons({ icons });
@@ -577,19 +567,19 @@ function createDomainNode(domain: string): CachedDomainNode {
 		li.appendChild(favicon.cloneNode(true));
 	} else {
 		const globe = document.createElement('i');
-		globe.className = 'nav-domain-favicon';
+		globe.className = 'nav-domain-favicon size-3.5 shrink-0 text-muted-foreground';
 		globe.setAttribute('data-lucide', 'globe');
 		li.appendChild(globe);
 	}
 
 	const name = document.createElement('span');
-	name.className = 'nav-domain-name';
+	name.className = 'nav-domain-name min-w-0 flex-1 truncate';
 	name.textContent = siteName || displayDomain(domain);
 	if (siteName) name.title = displayDomain(domain);
 	li.appendChild(name);
 
 	const count = document.createElement('span');
-	count.className = 'nav-count';
+	count.className = 'nav-count px-1 text-[0.625rem] tabular-nums text-muted-foreground';
 	li.appendChild(count);
 
 	chevronWrap.addEventListener('click', (e) => {
@@ -839,7 +829,7 @@ function renderMain() {
 
 function createPageGroupWrapper(pageUrl: string): HTMLElement {
 	const wrapper = document.createElement('div');
-	wrapper.className = 'highlight-page-group';
+	wrapper.className = 'highlight-page-group grid gap-2';
 	wrapper.setAttribute('data-page-url', pageUrl);
 	applyThemeToElement(wrapper);
 	return wrapper;
@@ -888,7 +878,7 @@ function renderBreadcrumb() {
 
 	if (nav.type === 'all') {
 		const span = document.createElement('span');
-		span.className = 'breadcrumb-current';
+		span.className = 'breadcrumb-current truncate font-medium';
 		span.textContent = getMessage('allHighlights');
 		breadcrumbEl.appendChild(span);
 		return;
@@ -896,7 +886,7 @@ function renderBreadcrumb() {
 
 	// "All" link
 	const allLink = document.createElement('a');
-	allLink.className = 'breadcrumb-link';
+	allLink.className = 'breadcrumb-link shrink-0 text-muted-foreground transition-colors hover:text-foreground';
 	allLink.href = '#';
 	allLink.textContent = getMessage('allHighlights');
 	allLink.addEventListener('click', (e) => {
@@ -909,12 +899,12 @@ function renderBreadcrumb() {
 
 	if (nav.type === 'domain') {
 		const span = document.createElement('span');
-		span.className = 'breadcrumb-current';
+		span.className = 'breadcrumb-current truncate font-medium';
 		span.textContent = siteNameOrDomain(nav.domain);
 		breadcrumbEl.appendChild(span);
 	} else if (nav.type === 'page') {
 		const domainSpan = document.createElement('span');
-		domainSpan.className = 'breadcrumb-current';
+		domainSpan.className = 'breadcrumb-current truncate font-medium';
 		domainSpan.textContent = siteNameOrDomain(nav.domain);
 		domainSpan.style.cursor = 'pointer';
 		domainSpan.addEventListener('click', () => {
@@ -926,7 +916,7 @@ function renderBreadcrumb() {
 
 function createBreadcrumbSeparator(): HTMLElement {
 	const sep = document.createElement('span');
-	sep.className = 'breadcrumb-separator';
+	sep.className = 'breadcrumb-separator text-muted-foreground';
 	sep.textContent = '/';
 	return sep;
 }
@@ -1016,7 +1006,7 @@ function getLatestTimestamp(url: string): dayjs.Dayjs | null {
 
 function createPageHeader(url: string, domain: string, title?: string): HTMLElement {
 	const header = document.createElement('div');
-	header.className = 'highlight-page-header';
+	header.className = 'highlight-page-header relative mb-1 flex items-end justify-between gap-3 border-b pb-3';
 
 	const titleText = title || (() => {
 		try {
@@ -1028,10 +1018,10 @@ function createPageHeader(url: string, domain: string, title?: string): HTMLElem
 	})();
 
 	const titleRow = document.createElement('div');
-	titleRow.className = 'highlight-page-title-row';
+	titleRow.className = 'highlight-page-title-row flex min-w-0 items-center gap-2';
 
 	const titleLink = document.createElement('a');
-	titleLink.className = 'highlight-page-title';
+	titleLink.className = 'highlight-page-title min-w-0 truncate text-base font-medium hover:underline';
 	titleLink.href = '#';
 	titleLink.title = url;
 	titleLink.textContent = titleText;
@@ -1042,7 +1032,7 @@ function createPageHeader(url: string, domain: string, title?: string): HTMLElem
 	titleRow.appendChild(titleLink);
 
 	const readerBtn = document.createElement('a');
-	readerBtn.className = 'highlight-reader-btn clickable-icon';
+	readerBtn.className = 'highlight-reader-btn flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground [&_svg]:size-3';
 	readerBtn.href = `reader.html?url=${encodeURIComponent(url)}`;
 	readerBtn.target = '_blank';
 	readerBtn.title = getMessage('loadArticle') || 'Read article';
@@ -1055,10 +1045,10 @@ function createPageHeader(url: string, domain: string, title?: string): HTMLElem
 
 	// Site name and latest timestamp
 	const metaLine = document.createElement('div');
-	metaLine.className = 'highlight-page-meta';
+	metaLine.className = 'highlight-page-meta flex shrink-0 items-center gap-2 text-xs text-muted-foreground';
 
 	const siteSpan = document.createElement('a');
-	siteSpan.className = 'highlight-page-site';
+	siteSpan.className = 'highlight-page-site hover:text-foreground';
 	siteSpan.href = '#';
 	siteSpan.textContent = siteNameOrDomain(domain);
 	siteSpan.addEventListener('click', (e) => {
@@ -1070,7 +1060,7 @@ function createPageHeader(url: string, domain: string, title?: string): HTMLElem
 	const latestTime = getLatestTimestamp(url);
 	if (latestTime) {
 		const timeSpan = document.createElement('span');
-		timeSpan.className = 'highlight-page-time';
+		timeSpan.className = 'highlight-page-time before:mr-2 before:content-["·"]';
 		timeSpan.textContent = latestTime.fromNow();
 		timeSpan.title = latestTime.format('YYYY-MM-DD HH:mm');
 		metaLine.appendChild(timeSpan);
@@ -1081,7 +1071,7 @@ function createPageHeader(url: string, domain: string, title?: string): HTMLElem
 	// Only show sync button if page has no title yet
 	if (!title) {
 		const syncBtn = document.createElement('button');
-		syncBtn.className = 'highlight-sync-btn clickable-icon';
+		syncBtn.className = 'highlight-sync-btn absolute right-0 -bottom-8 flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground [&.is-syncing_svg]:animate-spin [&_svg]:size-3';
 		const syncIcon = document.createElement('i');
 		syncIcon.setAttribute('data-lucide', 'rotate-cw');
 		syncBtn.appendChild(syncIcon);
@@ -1207,11 +1197,11 @@ function unitKey(entries: HighlightEntry[]): string {
 
 function createHighlightItem(entries: HighlightEntry[], pageUrl: string): HTMLElement {
 	const item = document.createElement('div');
-	item.className = 'highlight-item';
+	item.className = 'highlight-item group/highlight rounded-lg bg-card p-4 text-card-foreground ring-1 ring-foreground/10';
 	item.setAttribute('data-unit-key', unitKey(entries));
 
 	const content = document.createElement('div');
-	content.className = 'highlight-item-content';
+	content.className = 'highlight-item-content text-sm leading-relaxed [&_a]:text-foreground [&_a]:underline [&_a]:underline-offset-3 [&_blockquote]:border-l-2 [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground [&_code]:rounded-sm [&_code]:bg-muted [&_code]:px-1 [&_li]:ml-4 [&_li]:list-disc [&_p+p]:mt-3';
 
 	const joined = entries.map(e => e.data.content || '').join('\n');
 	content.replaceChildren(DOMPurify.sanitize(joined, { RETURN_DOM_FRAGMENT: true }));
@@ -1224,19 +1214,19 @@ function createHighlightItem(entries: HighlightEntry[], pageUrl: string): HTMLEl
 	const mergedNotes = entries.flatMap(e => e.data.notes ?? []);
 	for (const note of mergedNotes) {
 		const noteEl = document.createElement('div');
-		noteEl.className = 'highlight-item-note';
+		noteEl.className = 'highlight-item-note mt-3 rounded-md bg-muted px-3 py-2 text-xs/relaxed text-muted-foreground';
 		noteEl.textContent = note;
 		item.appendChild(noteEl);
 	}
 
 	const footer = document.createElement('div');
-	footer.className = 'highlight-item-actions-container';
+	footer.className = 'highlight-item-actions-container mt-3 flex justify-end';
 
 	const actions = document.createElement('div');
-	actions.className = 'highlight-item-actions';
+	actions.className = 'highlight-item-actions flex items-center gap-1 opacity-0 transition-opacity group-hover/highlight:opacity-100 focus-within:opacity-100';
 
 	const copyBtn = document.createElement('button');
-	copyBtn.className = 'highlight-action-btn clickable-icon';
+	copyBtn.className = 'highlight-action-btn flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground [&_svg]:size-3';
 	copyBtn.title = getMessage('copyToClipboard');
 	const copyIcon = document.createElement('i');
 	copyIcon.setAttribute('data-lucide', 'copy');
@@ -1254,7 +1244,7 @@ function createHighlightItem(entries: HighlightEntry[], pageUrl: string): HTMLEl
 	actions.appendChild(copyBtn);
 
 	const deleteBtn = document.createElement('button');
-	deleteBtn.className = 'highlight-action-btn clickable-icon';
+	deleteBtn.className = 'highlight-action-btn flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive [&_svg]:size-3';
 	deleteBtn.title = getMessage('delete');
 	const deleteItemIcon = document.createElement('i');
 	deleteItemIcon.setAttribute('data-lucide', 'trash-2');

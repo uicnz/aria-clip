@@ -31,9 +31,9 @@ bun run add-locale fr
 ./scripts/bump-version.sh 1.0.1
 ```
 
-- Updates `version` in `package.json`, all browser manifests, and `dev/manifest.json`
-- Updates `MARKETING_VERSION` in the Xcode project
-- Increments `CURRENT_PROJECT_VERSION` by 1
+- Updates the single authored version in `package.json`
+- Regenerates Xcode's inherited version setting
+- Browser manifests receive the package version automatically during builds
 
 ### Changelog
 

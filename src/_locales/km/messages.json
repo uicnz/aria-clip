@@ -758,9 +758,6 @@
 	"readerColorLinks": {
 		"message": "ដាក់ពណ៌តំណភ្ជាប់"
 	},
-	"readerColorSchemeDefault": {
-		"message": "លំនាំដើម"
-	},
 	"readerCurrentPosition": {
 		"message": "ទីតាំងបច្ចុប្បន្ន"
 	},
@@ -770,50 +767,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS ដែលអនុវត្តដោយស្វ័យប្រវត្តិក្នុងទិដ្ឋភាពអាន។"
 	},
-	"readerDarkTheme": {
-		"message": "ស្បែករបៀបងងឹត"
-	},
-	"readerDarkThemeDescription": {
-		"message": "ប្រើស្បែកផ្សេងនៅក្នុងរបៀបងងឹត។"
-	},
 	"readerError": {
 		"message": "បានបរាជ័យក្នុងការស្រង់មាតិកា។"
 	},
-	"readerFont": {
-		"message": "ជម្រើសពុម្ពអក្សរ"
-	},
-	"readerFontDefault": {
-		"message": "លំនាំដើម"
-	},
-	"readerFontDescription": {
-		"message": "បន្ថែមពុម្ពអក្សរដែលបានដំឡើងលើប្រព័ន្ធរបស់អ្នក។ ចុច Enter ដើម្បីបន្ថែមពុម្ពអក្សរ។"
-	},
-	"readerFontNotFound": {
-		"message": "រកមិនឃើញ"
-	},
-	"readerFontPlaceholder": {
-		"message": "ចុច Enter ដើម្បីបន្ថែមពុម្ពអក្សរ"
-	},
-	"readerFontSetDefault": {
-		"message": "កំណត់ជាលំនាំដើម"
-	},
 	"readerFontSize": {
 		"message": "ទំហំពុម្ពអក្សរមូលដ្ឋាន"
-	},
-	"readerFontSystem": {
-		"message": "ប្រព័ន្ធ"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "ពុម្ពអក្សរនេះមិនមាននៅទីនេះទេ — កម្មវិធីរុករករបស់អ្នកអាចកំពុងទប់ស្កាត់ពុម្ពអក្សរផ្ទាល់ខ្លួន។"
-	},
-	"readerFonts": {
-		"message": "ពុម្ពអក្សរ"
 	},
 	"readerFootnotes": {
 		"message": "កំណត់សម្គាល់ជើងទំព័រ"
@@ -850,15 +808,6 @@
 	},
 	"readerSettings": {
 		"message": "ការកំណត់របៀបអាន"
-	},
-	"readerTheme": {
-		"message": "ស្បែក"
-	},
-	"readerThemeDescription": {
-		"message": "ជ្រើសរើសពណ៌ដែលប្រើក្នុងទិដ្ឋភាពអាន។"
-	},
-	"readerThemeSection": {
-		"message": "ស្បែក"
 	},
 	"readerTranscripts": {
 		"message": "អត្ថបទបកស្រាយ"

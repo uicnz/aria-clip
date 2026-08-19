@@ -73,7 +73,7 @@ export async function createUsageChart(container: HTMLElement, data: WeeklyUsage
 
 	// Create chart container
 	const lineContainer = document.createElement('div');
-	lineContainer.className = 'chart-line';
+	lineContainer.className = 'chart-line relative h-28';
 
 	// Create SVG for line chart
 	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -90,12 +90,18 @@ export async function createUsageChart(container: HTMLElement, data: WeeklyUsage
 	verticalLine.classList.add('chart-vertical-line');
 	verticalLine.setAttribute('y1', '0');
 	verticalLine.setAttribute('y2', chartHeight.toString());
+	verticalLine.setAttribute('stroke', 'var(--border)');
+	verticalLine.setAttribute('stroke-width', '1');
 	verticalLine.style.display = 'none';
 	svg.appendChild(verticalLine);
 
 	// Create path for the chart line
 	const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	path.classList.add('chart-line-path');
+	path.setAttribute('fill', 'none');
+	path.setAttribute('stroke', 'var(--foreground)');
+	path.setAttribute('stroke-width', '2');
+	path.setAttribute('vector-effect', 'non-scaling-stroke');
 
 	// Generate smooth curve path
 	const points: ChartPoint[] = data.map((d, i) => ({
@@ -126,7 +132,7 @@ export async function createUsageChart(container: HTMLElement, data: WeeklyUsage
 
 	// Date labels
 	const labelsContainer = document.createElement('div');
-	labelsContainer.className = 'chart-labels';
+	labelsContainer.className = 'chart-labels mt-2 flex justify-between text-[0.625rem] text-muted-foreground';
 
 	const startLabel = document.createElement('div');
 	startLabel.className = 'chart-date-label';
@@ -142,13 +148,13 @@ export async function createUsageChart(container: HTMLElement, data: WeeklyUsage
 
 	// Tooltip
 	const tooltip = document.createElement('div');
-	tooltip.className = 'chart-tooltip';
+	tooltip.className = 'chart-tooltip pointer-events-none absolute z-10 flex-col rounded-md bg-foreground px-2 py-1 text-[0.625rem] text-background shadow-md';
 	tooltip.style.display = 'none';
 	lineContainer.appendChild(tooltip);
 
 	// Add invisible overlay for mouse tracking
 	const overlay = document.createElement('div');
-	overlay.className = 'chart-overlay';
+	overlay.className = 'chart-overlay absolute inset-x-0 top-0 h-20';
 
 	// Handle mouse movement
 	overlay.addEventListener('mousemove', (e) => {

@@ -750,9 +750,6 @@
 	"readerColorLinks": {
 		"message": "Farvelæg links"
 	},
-	"readerColorSchemeDefault": {
-		"message": "Standard"
-	},
 	"readerCurrentPosition": {
 		"message": "Nuværende position"
 	},
@@ -762,50 +759,11 @@
 	"readerCustomCssDescription": {
 		"message": "CSS anvendes automatisk i læsevisning."
 	},
-	"readerDarkTheme": {
-		"message": "Tema til mørk tilstand"
-	},
-	"readerDarkThemeDescription": {
-		"message": "Brug et andet tema i mørk tilstand."
-	},
 	"readerError": {
 		"message": "Kunne ikke udtrække indhold."
 	},
-	"readerFont": {
-		"message": "Skrifttypeindstillinger"
-	},
-	"readerFontDefault": {
-		"message": "Standard"
-	},
-	"readerFontDescription": {
-		"message": "Tilføj skrifttyper installeret på dit system. Tryk på Enter for at tilføje en skrifttype."
-	},
-	"readerFontNotFound": {
-		"message": "Ikke fundet"
-	},
-	"readerFontPlaceholder": {
-		"message": "Tryk på Enter for at tilføje en skrifttype"
-	},
-	"readerFontSetDefault": {
-		"message": "Angiv som standard"
-	},
 	"readerFontSize": {
 		"message": "Grundskriftstørrelse"
-	},
-	"readerFontSystem": {
-		"message": "System"
-	},
-	"readerFontSystemSans": {
-		"message": "Sans-serif"
-	},
-	"readerFontSystemSerif": {
-		"message": "Serif"
-	},
-	"readerFontUnavailable": {
-		"message": "Denne skrifttype er ikke tilgængelig her — din browser blokerer muligvis brugerdefinerede skrifttyper."
-	},
-	"readerFonts": {
-		"message": "Skrifttyper"
 	},
 	"readerFootnotes": {
 		"message": "Fodnoter"
@@ -842,15 +800,6 @@
 	},
 	"readerSettings": {
 		"message": "Læserindstillinger"
-	},
-	"readerTheme": {
-		"message": "Tema"
-	},
-	"readerThemeDescription": {
-		"message": "Vælg de farver, der bruges i læsevisning."
-	},
-	"readerThemeSection": {
-		"message": "Tema"
 	},
 	"readerTranscripts": {
 		"message": "Transskriptioner"
