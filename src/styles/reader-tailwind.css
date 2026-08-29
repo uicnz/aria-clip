@@ -526,7 +526,7 @@
 	}
 
 	.aria-reader-outline-item {
-		@apply max-w-56 cursor-pointer rounded-md px-2 py-1 leading-tight text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+		@apply max-w-56 truncate cursor-pointer rounded-md px-2 py-1 leading-tight text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
 	}
 
 	.aria-reader-outline-item.active {
