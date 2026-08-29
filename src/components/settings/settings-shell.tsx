@@ -280,9 +280,8 @@ export function SettingsShell() {
               </div>
               <Card id="reader-preview" className="aria-reader-active">
                 <CardContent className="space-y-2 pt-1">
-                  <p className="reader-preview-title text-lg font-semibold">File over app</p>
-                  <p className="reader-preview-meta text-xs text-muted-foreground">Steph Ango · July 1, 2023 · stephango.com</p>
-                  <p className="reader-preview-body max-w-2xl text-sm leading-relaxed"><em>File over app</em> is a philosophy: if you want to create <strong>digital artifacts that last</strong>, they must be files you can control, in formats that are easy to retrieve and read.</p>
+                  <p className="reader-preview-title text-lg font-semibold">The web, saved as Markdown</p>
+                  <p className="reader-preview-body max-w-2xl text-sm leading-relaxed"><em>Aria Clip</em> turns any source on the web into a portable Markdown file you can keep and use <strong>anywhere, anytime</strong>.</p>
                 </CardContent>
               </Card>
               <form id="reader-settings-form" className="space-y-8">
