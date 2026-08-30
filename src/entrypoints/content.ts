@@ -4,7 +4,7 @@ import { removeExistingHighlights } from '../features/highlights/highlighter-ove
 import { loadSettings, generalSettings } from '../platform/browser/storage-utils.js';
 import { getDomain } from '../shared/text/string-utils.js';
 import { extractContentBySelector as extractContentBySelectorShared } from '../core/clipping/shared.js';
-import { Defuddle } from '../core/clipping/defuddle.js';
+import { extract } from '../core/clipping/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
 import { flattenShadowDom } from '../platform/browser/flatten-shadow-dom.js';
 import { serializeChildren } from '../shared/dom/dom-utils.js';
@@ -96,7 +96,7 @@ declare global {
 		content: string;
 		selectedHtml: string;
 		extractedContent: { [key: string]: string };
-		schemaOrgData: any;
+		schemaOrgData: unknown;
 		fullHtml: string;
 		highlights: string[];
 		title: string;
@@ -156,9 +156,9 @@ declare global {
 		}
 
 		if (request.action === "copyMarkdownToClipboard") {
-			flattenShadowDom(document).then(() => {
+			flattenShadowDom(document).then(async () => {
 				try {
-					const defuddled = parseForClip(document);
+					const defuddled = await parseForClip(document);
 
 					// Convert HTML content to markdown
 					const markdown = createMarkdownContent(defuddled.content, document.URL);
@@ -183,7 +183,7 @@ declare global {
 		if (request.action === "saveMarkdownToFile") {
 			flattenShadowDom(document).then(async () => {
 				try {
-					const defuddled = parseForClip(document);
+					const defuddled = await parseForClip(document);
 					const markdown = createMarkdownContent(defuddled.content, document.URL);
 					const title = defuddled.title || document.title || 'Untitled';
 					await saveFile({
@@ -215,14 +215,9 @@ declare global {
 					selectedHtml = serializeChildren(div);
 				}
 
-				// Use parseAsync to ensure async variables like {{transcript}} are available.
-				// If it hangs (e.g. another extension has corrupted fetch), fall back to sync parse.
-				const defuddle = new Defuddle(document, { url: document.URL });
-				const parseTimeout = new Promise<never>((_, reject) =>
-					setTimeout(() => reject(new Error('parseAsync timeout')), 8000)
-				);
-				const defuddled = await Promise.race([defuddle.parseAsync(), parseTimeout])
-					.catch(() => defuddle.parse());
+				// Async extraction is required for complete sources such as video transcripts.
+				// Never replace a failed full extraction with a silently truncated sync result.
+				const defuddled = await extract(document, { url: document.URL });
 				const pageMetadata = enrichPageMetadata(document, document.URL, {
 					author: defuddled.author,
 					published: defuddled.published,
