@@ -1,4 +1,5 @@
 import { createRoot, type Root } from "react-dom/client"
+import { useEffect, useState } from "react"
 import {
   AlertTriangleIcon,
   CopyPlusIcon,
@@ -56,7 +57,49 @@ type ModelSelectionOption = {
   recommended?: boolean
 }
 
+type ModelSelectionProps = {
+  labels: { recommended: string; custom: string }
+  onValueChange: (value: string) => void
+  options: ModelSelectionOption[]
+  value: string
+}
+
 const roots = new WeakMap<HTMLElement, Root>()
+
+function ModelSelection({ labels, onValueChange, options, value }: ModelSelectionProps) {
+  const [selectedValue, setSelectedValue] = useState(value)
+
+  useEffect(() => {
+    setSelectedValue(value)
+  }, [value])
+
+  return (
+    <RadioGroup
+      value={selectedValue}
+      onValueChange={(nextValue) => {
+        setSelectedValue(nextValue)
+        onValueChange(nextValue)
+      }}
+    >
+      {options.map((option, index) => {
+        const id = `pop-model-${index}`
+        return (
+          <Field key={option.id} orientation="horizontal">
+            <RadioGroupItem id={id} value={option.id} />
+            <Label htmlFor={id}>
+              {option.name}
+              {option.recommended && <Badge variant="secondary">{labels.recommended}</Badge>}
+            </Label>
+          </Field>
+        )
+      })}
+      <Field orientation="horizontal">
+        <RadioGroupItem id="model-other" value="other" />
+        <Label htmlFor="model-other">{labels.custom}</Label>
+      </Field>
+    </RadioGroup>
+  )
+}
 
 function render(container: HTMLElement, node: React.ReactNode) {
   let root = roots.get(container)
@@ -157,24 +200,12 @@ export function renderModelSelection(
 ) {
   render(
     container,
-    <RadioGroup value={value} onValueChange={onValueChange}>
-      {options.map((option, index) => {
-        const id = `pop-model-${index}`
-        return (
-          <Field key={option.id} orientation="horizontal">
-            <RadioGroupItem id={id} value={option.id} />
-            <Label htmlFor={id}>
-              {option.name}
-              {option.recommended && <Badge variant="secondary">{labels.recommended}</Badge>}
-            </Label>
-          </Field>
-        )
-      })}
-      <Field orientation="horizontal">
-        <RadioGroupItem id="model-other" value="other" />
-        <Label htmlFor="model-other">{labels.custom}</Label>
-      </Field>
-    </RadioGroup>
+    <ModelSelection
+      labels={labels}
+      onValueChange={onValueChange}
+      options={options}
+      value={value}
+    />
   )
 }
 
