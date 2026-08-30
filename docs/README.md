@@ -10,6 +10,6 @@ Start with [Aria Clip](operator/introduction.md).
 
 ## Developer
 
-[`developer/`](developer/) records release and store-review operations for Chrome, Firefox, and Safari, including the canonical Chrome permission justifications.
+[`developer/`](developer/) records release and store-review operations for Chrome, Firefox, and Safari, including the canonical Chrome permission justifications and architecture RFCs.
 
 These runbooks describe current repository behavior and current submission state. Re-audit them against source and store policy whenever permissions, data flows, packaging, or public URLs change.
