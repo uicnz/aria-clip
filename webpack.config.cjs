@@ -60,6 +60,7 @@ module.exports = (env, argv) => {
 		output: {
 			path: path.resolve(__dirname, outputDir),
 			filename: '[name].js',
+			assetModuleFilename: 'fonts/[hash][ext][query]',
 			module: false,
 			clean: true,
 		},
@@ -162,11 +163,16 @@ module.exports = (env, argv) => {
 					{ from: "src/pages/settings.html", to: "settings.html" },
 					{ from: "src/pages/highlights.html", to: "highlights.html" },
 					{ from: "src/pages/reader.html", to: "reader.html" },
-					{ from: "src/icons", to: "icons" },
+					{
+						from: "src/icons",
+						to: "icons",
+						globOptions: { ignore: ["**/*.ts", "**/.DS_Store"] }
+					},
 					{ from: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js", to: "browser-polyfill.min.js" },
 					{
 						from: 'src/_locales',
-						to: '_locales'
+						to: '_locales',
+						globOptions: { ignore: ['**/.DS_Store'] }
 					}
 				],
 			}),
@@ -182,7 +188,8 @@ module.exports = (env, argv) => {
 			},
 			new webpack.DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify(argv.mode),
-				'DEBUG_MODE': JSON.stringify(!isProduction)
+				'DEBUG_MODE': JSON.stringify(!isProduction),
+				'BUILD_BROWSER': JSON.stringify(browserName)
 			}),
 			...(isProduction ? [
 				new ZipPlugin({

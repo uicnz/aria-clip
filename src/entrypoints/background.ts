@@ -8,6 +8,8 @@ import { debugLog } from '../platform/browser/debug.js';
 import { incrementStat } from '../platform/browser/storage-utils.js';
 import { addRuntimeMessageListener } from '../platform/browser/runtime-messaging.js';
 
+declare const BUILD_BROWSER: 'chrome' | 'firefox' | 'safari';
+
 const YOUTUBE_EMBED_RULE_ID = 9001;
 const YOUTUBE_INNERTUBE_RULE_ID = 9002;
 
@@ -836,13 +838,15 @@ const debouncedUpdateContextMenu = debounce(async (tabId: number) => {
 				}
 			];
 
-		const browserType = await detectBrowser();
-		if (browserType === 'chrome') {
-			menuItems.push({
-				id: 'open-side-panel',
-				title: browser.i18n.getMessage('openSidePanel'),
-				contexts: ["page", "selection"]
-			});
+		if (BUILD_BROWSER === 'chrome') {
+			const browserType = await detectBrowser();
+			if (browserType === 'chrome') {
+				menuItems.push({
+					id: 'open-side-panel',
+					title: browser.i18n.getMessage('openSidePanel'),
+					contexts: ["page", "selection"]
+				});
+			}
 		}
 
 		for (const item of menuItems) {
@@ -877,7 +881,7 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 	} else if (info.menuItemId === 'open-embedded' && tab && tab.id) {
 		await ensureContentScriptLoadedInBackground(tab.id);
 		await browser.tabs.sendMessage(tab.id, { action: "toggle-iframe" });
-	} else if (info.menuItemId === 'open-side-panel' && tab && tab.id && tab.windowId) {
+	} else if (BUILD_BROWSER === 'chrome' && info.menuItemId === 'open-side-panel' && tab && tab.id && tab.windowId) {
 		chrome.sidePanel.open({ tabId: tab.id });
 		sidePanelOpenWindows.add(tab.windowId);
 		await ensureContentScriptLoadedInBackground(tab.id);

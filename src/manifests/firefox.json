@@ -49,7 +49,7 @@
 	],
 	"web_accessible_resources": [
 		{
-			"resources": ["reader.css", "reader-script.js", "browser-polyfill.min.js", "style.css", "side-panel.html", "flatten-shadow-dom.js", "highlighter.css"],
+			"resources": ["reader.css", "reader-script.js", "browser-polyfill.min.js", "style.css", "side-panel.html", "flatten-shadow-dom.js", "highlighter.css", "fonts/*"],
 			"extension_ids": ["*"],
    			"matches": [ "*://*/*" ]
 		}
@@ -83,13 +83,13 @@
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "clip@aria.bot",
-			"strict_min_version": "113.0",
+			"strict_min_version": "142.0",
 			"data_collection_permissions": {
 				"required": ["none"]
 			}
 		},
 		"gecko_android": {
-			"strict_min_version": "113.0",
+			"strict_min_version": "142.0",
 			"data_collection_permissions": {
 				"required": ["none"]
 			}

@@ -71,6 +71,8 @@
 		AFA233A62F63522E00F39577 /* flatten-shadow-dom.js in Resources */ = {isa = PBXBuildFile; fileRef = AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */; };
 		AFA233A72F63522E00F39577 /* flatten-shadow-dom.js in Resources */ = {isa = PBXBuildFile; fileRef = AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */; };
 		AFA233A82F63522E00F39577 /* flatten-shadow-dom.js in Resources */ = {isa = PBXBuildFile; fileRef = AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */; };
+		AFB000013100000000000001 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = AFB000003100000000000001 /* fonts */; };
+		AFB000023100000000000001 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = AFB000003100000000000001 /* fonts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +162,7 @@
 		AF3D6D442F8B297F004F2D8D /* reader-page.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "reader-page.js"; path = "../../../dist/safari/reader-page.js"; sourceTree = "<group>"; };
 		AF4F759A2F9C1AD80072BA9B /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "flatten-shadow-dom.js"; path = "../../../dist/safari/flatten-shadow-dom.js"; sourceTree = "<group>"; };
+		AFB000003100000000000001 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../../../dist/safari/fonts; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,6 +311,7 @@
 				7A6535C82D8B530300DDF54C /* reader-script.js */,
 				7AEF05DA2CA0F50D005FFBC2 /* settings.js */,
 				AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */,
+				AFB000003100000000000001 /* fonts */,
 				AF3D6D412F8B297F004F2D8D /* highlights.html */,
 				AF3D6D422F8B297F004F2D8D /* highlights.js */,
 				AF3D6D432F8B297F004F2D8D /* reader.html */,
@@ -490,6 +494,7 @@
 				7AEF05EB2CA0F50D005FFBC2 /* popup.js in Resources */,
 				7A64805A2D820A9800A5924D /* reader.css in Resources */,
 				AFA233A82F63522E00F39577 /* flatten-shadow-dom.js in Resources */,
+				AFB000023100000000000001 /* fonts in Resources */,
 				7AEF05EF2CA0F50D005FFBC2 /* icons in Resources */,
 				7AEF05F52CA0F50D005FFBC2 /* settings.js in Resources */,
 			);
@@ -516,6 +521,7 @@
 				7AEF05DE2CA0F50D005FFBC2 /* popup.js in Resources */,
 				7A6480592D820A9800A5924D /* reader.css in Resources */,
 				AFA233A62F63522E00F39577 /* flatten-shadow-dom.js in Resources */,
+				AFB000013100000000000001 /* fonts in Resources */,
 				7AEF05E22CA0F50D005FFBC2 /* icons in Resources */,
 				7AEF05E82CA0F50D005FFBC2 /* settings.js in Resources */,
 			);
