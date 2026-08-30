@@ -1,7 +1,7 @@
 import { ExtractedContent } from '../../types/types.js';
 import { createMarkdownContent } from 'defuddle/full';
 import { sanitizeFilename } from '../../core/artifacts/filename.js';
-import { buildVariables } from '../../core/clipping/shared.js';
+import { buildVariableCatalog } from '../../core/clipping/shared.js';
 import browser from '../../platform/browser/browser-polyfill.js';
 import { debugLog } from '../../platform/browser/debug.js';
 import { AnyHighlightData, TextHighlightData, HighlightData, collapseGroupsForExport } from '../highlights/highlighter.js';
@@ -162,7 +162,7 @@ export async function initializePageContent(
 
 		const noteName = sanitizeFilename(title);
 
-		const currentVariables = buildVariables({
+		const variableCatalog = buildVariableCatalog({
 			title,
 			author,
 			content: markdownBody,
@@ -183,12 +183,14 @@ export async function initializePageContent(
 			metaTags,
 			extractedContent,
 		});
+		const currentVariables = variableCatalog.values;
 
 		debugLog('Variables', 'Available variables:', currentVariables);
 
 		return {
 			noteName,
-			currentVariables
+			currentVariables,
+			variableCatalog,
 		};
 	} catch (error: unknown) {
 		console.error('Error in initializePageContent:', error);

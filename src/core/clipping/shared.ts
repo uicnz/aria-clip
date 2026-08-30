@@ -3,137 +3,23 @@
 // storage-utils, browser globals). All browser-dependent behavior is injected
 // via parameters.
 
-import { getDomain, escapeDoubleQuotes } from '../../shared/text/string-utils.js';
-import { sanitizeFilename } from '../artifacts/filename.js';
+import { escapeDoubleQuotes } from '../../shared/text/string-utils.js';
 import { Property } from '../../types/types.js';
 import dayjs from 'dayjs';
 
-// ---------------------------------------------------------------------------
-// Variable building
-// ---------------------------------------------------------------------------
-
-export interface BuildVariablesParams {
-	title: string;
-	author: string;
-	content: string;
-	contentHtml: string;
-	url: string;
-	fullHtml: string;
-	description: string;
-	favicon: string;
-	image: string;
-	published: string;
-	site: string;
-	language: string;
-	wordCount: number;
-	selection?: string;
-	selectionHtml?: string;
-	highlights?: string;
-	schemaOrgData?: any;
-	metaTags?: { name?: string | null; property?: string | null; content: string | null }[];
-	extractedContent?: Record<string, string>;
-}
-
-/**
- * Build the template variable dictionary from extracted page data.
- * Pure function — no browser dependencies.
- */
-export function buildVariables(params: BuildVariablesParams): Record<string, string> {
-	const currentUrl = params.url.replace(/#:~:text=[^&]+(&|$)/, '');
-	const noteName = sanitizeFilename(params.title);
-
-	const timestamp = dayjs().format('YYYY-MM-DDTHH:mm:ssZ');
-	const variables: Record<string, string> = {
-		'{{author}}': (params.author || '').trim(),
-		'{{content}}': (params.content || '').trim(),
-		'{{contentHtml}}': (params.contentHtml || '').trim(),
-		'{{selection}}': (params.selection || '').trim(),
-		'{{selectionHtml}}': (params.selectionHtml || '').trim(),
-		'{{date}}': timestamp,
-		'{{time}}': timestamp,
-		'{{description}}': (params.description || '').trim(),
-		'{{domain}}': getDomain(currentUrl),
-		'{{favicon}}': params.favicon || '',
-		'{{fullHtml}}': (params.fullHtml || '').trim(),
-		'{{highlights}}': params.highlights || '',
-		'{{image}}': params.image || '',
-		'{{noteName}}': noteName.trim(),
-		'{{published}}': (params.published || '').split(',')[0].trim(),
-		'{{site}}': (params.site || '').trim(),
-		'{{title}}': (params.title || '').trim(),
-		'{{url}}': currentUrl.trim(),
-		'{{language}}': (params.language || '').trim(),
-		'{{words}}': (params.wordCount ?? 0).toString(),
-	};
-
-	// Add extracted content (e.g. defuddle variables like transcript)
-	if (params.extractedContent) {
-		for (const [key, value] of Object.entries(params.extractedContent)) {
-			variables[`{{${key}}}`] = value;
-		}
-	}
-
-	// Add meta tags
-	if (params.metaTags) {
-		for (const meta of params.metaTags) {
-			if (meta.name && meta.content) {
-				variables[`{{meta:name:${meta.name}}}`] = meta.content;
-			}
-			if (meta.property && meta.content) {
-				variables[`{{meta:property:${meta.property}}}`] = meta.content;
-			}
-		}
-	}
-
-	// Add schema.org data
-	if (params.schemaOrgData) {
-		addSchemaOrgDataToVariables(params.schemaOrgData, variables);
-	}
-
-	return variables;
-}
-
-// ---------------------------------------------------------------------------
-// Schema.org data processing
-// ---------------------------------------------------------------------------
-
-export function addSchemaOrgDataToVariables(schemaData: any, variables: Record<string, string>, prefix: string = ''): void {
-	if (Array.isArray(schemaData)) {
-		schemaData.forEach((item, index) => {
-			if (!item || typeof item !== 'object') return;
-			if (item['@type']) {
-				if (Array.isArray(item['@type'])) {
-					item['@type'].forEach((type: string) => {
-						addSchemaOrgDataToVariables(item, variables, `@${type}:`);
-					});
-				} else {
-					addSchemaOrgDataToVariables(item, variables, `@${item['@type']}:`);
-				}
-			} else {
-				addSchemaOrgDataToVariables(item, variables, `[${index}]:`);
-			}
-		});
-	} else if (typeof schemaData === 'object' && schemaData !== null) {
-		const objectKey = `{{schema:${prefix.replace(/\.$/, '')}}}`;
-		variables[objectKey] = JSON.stringify(schemaData);
-
-		Object.entries(schemaData).forEach(([key, value]) => {
-			if (key === '@type') return;
-
-			const variableKey = `{{schema:${prefix}${key}}}`;
-			if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-				variables[variableKey] = String(value);
-			} else if (Array.isArray(value)) {
-				variables[variableKey] = JSON.stringify(value);
-				value.forEach((item, index) => {
-					addSchemaOrgDataToVariables(item, variables, `${prefix}${key}[${index}].`);
-				});
-			} else if (typeof value === 'object' && value !== null) {
-				addSchemaOrgDataToVariables(value, variables, `${prefix}${key}.`);
-			}
-		});
-	}
-}
+export {
+	addSchemaOrgDataToVariables,
+	buildVariableCatalog,
+	buildVariables,
+} from './variables.js';
+export type {
+	BuildVariablesParams,
+	CanonicalVariableDefinition,
+	TemplateVariableCatalog,
+	TemplateVariableDescriptor,
+	TemplateVariableKind,
+	TemplateVariableOrigin,
+} from './variables.js';
 
 // ---------------------------------------------------------------------------
 // Frontmatter generation

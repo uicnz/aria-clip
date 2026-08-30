@@ -1,6 +1,7 @@
 import { Template } from '../../types/types.js';
 import { getMessage } from '../../platform/browser/i18n.js';
 import { copyToClipboard } from '../../platform/browser/clipboard-utils.js';
+import type { TemplateVariableCatalog } from '../../core/clipping/variables.js';
 
 type VariableGroup = 'page' | 'meta' | 'schema';
 
@@ -12,6 +13,7 @@ export interface InspectableVariable {
 	preview: string;
 	searchText: string;
 	group: VariableGroup;
+	entity?: string;
 }
 
 const HIDDEN_VARIABLES = new Set(['content', 'contentHtml', 'fullHtml']);
@@ -19,6 +21,7 @@ const PREVIEW_LENGTH = 160;
 
 let variablesPanel: HTMLElement | null = null;
 let currentVariables: Record<string, string> = {};
+let currentCatalog: TemplateVariableCatalog | null = null;
 let isPanelOpen = false;
 
 function cleanVariableName(key: string): string {
@@ -58,7 +61,28 @@ function formatPreview(value: string): string {
 		: compact;
 }
 
-export function buildInspectableVariables(variables: Record<string, string>): InspectableVariable[] {
+export function buildInspectableVariables(
+	variables: Record<string, string>,
+	catalog?: TemplateVariableCatalog | null,
+): InspectableVariable[] {
+	if (catalog) {
+		return catalog.entries.flatMap(entry => {
+			if (!entry.inspectable || entry.large) return [];
+			const group = entry.origin === 'schema' ? 'schema' : entry.origin === 'meta' ? 'meta' : 'page';
+			const preview = formatPreview(entry.value);
+			return [{
+				variable: entry.variable,
+				name: entry.name,
+				displayName: group === 'schema' ? entry.schemaPath || entry.name.slice('schema:'.length) : entry.name,
+				value: entry.value,
+				preview,
+				searchText: `${entry.name} ${entry.schemaType ?? ''} ${preview}`.toLowerCase(),
+				group,
+				entity: entry.schemaType,
+			}];
+		});
+	}
+
 	return Object.entries(variables).flatMap(([variable, rawValue]) => {
 		const name = cleanVariableName(variable);
 		if (HIDDEN_VARIABLES.has(name)) return [];
@@ -80,7 +104,7 @@ export function buildInspectableVariables(variables: Record<string, string>): In
 	});
 }
 
-function createVariableRow(item: InspectableVariable): HTMLButtonElement {
+function createVariableRow(item: InspectableVariable, showSchemaBadge = true): HTMLButtonElement {
 	const row = document.createElement('button');
 	row.type = 'button';
 	row.className = 'group/variable grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
@@ -93,7 +117,7 @@ function createVariableRow(item: InspectableVariable): HTMLButtonElement {
 
 	const nameLine = document.createElement('span');
 	nameLine.className = 'flex min-w-0 items-center gap-1.5';
-	if (item.group === 'schema') {
+	if (item.group === 'schema' && showSchemaBadge) {
 		const badge = document.createElement('span');
 		badge.className = 'inline-flex shrink-0 items-center rounded-md border bg-muted px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted-foreground';
 		badge.textContent = 'schema';
@@ -116,6 +140,63 @@ function createVariableRow(item: InspectableVariable): HTMLButtonElement {
 	content.append(nameLine, value);
 	row.append(content, copyHint);
 	return row;
+}
+
+function createRows(items: InspectableVariable[], showSchemaBadge = true): HTMLDivElement {
+	const itemList = document.createElement('div');
+	itemList.className = 'grid gap-0.5 pb-2';
+	items.forEach(item => itemList.appendChild(createVariableRow(item, showSchemaBadge)));
+	return itemList;
+}
+
+function createSchemaRows(items: InspectableVariable[]): HTMLDivElement {
+	const container = document.createElement('div');
+	const entities = new Map<string, InspectableVariable[]>();
+	for (const item of items) {
+		const entity = item.entity || 'Schema';
+		const entityItems = entities.get(entity) ?? [];
+		entityItems.push(item);
+		entities.set(entity, entityItems);
+	}
+
+	if (entities.size <= 1) {
+		container.appendChild(createRows(items));
+		return container;
+	}
+
+	container.className = 'grid gap-1 pb-2';
+	let index = 0;
+	for (const [entity, entityItems] of entities) {
+		const details = document.createElement('details');
+		details.className = 'group/schema-entity rounded-md border bg-muted/20 px-2';
+		details.open = index === 0;
+
+		const summary = document.createElement('summary');
+		summary.className = 'flex cursor-pointer list-none items-center gap-1.5 py-2 text-xs [&::-webkit-details-marker]:hidden';
+
+		const badge = document.createElement('span');
+		badge.className = 'inline-flex shrink-0 items-center rounded-md border bg-muted px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted-foreground';
+		badge.textContent = 'schema';
+
+		const name = document.createElement('code');
+		name.className = 'min-w-0 flex-1 truncate font-mono text-[11px]';
+		name.textContent = entity;
+
+		const count = document.createElement('span');
+		count.className = 'text-muted-foreground';
+		count.textContent = String(entityItems.length);
+
+		const chevron = document.createElement('span');
+		chevron.className = 'text-base leading-none text-muted-foreground transition-transform group-open/schema-entity:rotate-90';
+		chevron.textContent = '›';
+
+		summary.append(badge, name, count, chevron);
+		details.append(summary, createRows(entityItems, false));
+		container.appendChild(details);
+		index++;
+	}
+
+	return container;
 }
 
 function groupLabel(group: VariableGroup): string {
@@ -147,11 +228,7 @@ function createVariableGroup(group: VariableGroup, items: InspectableVariable[])
 
 	summary.append(label, count, chevron);
 
-	const itemList = document.createElement('div');
-	itemList.className = 'grid gap-0.5 pb-2';
-	items.forEach(item => itemList.appendChild(createVariableRow(item)));
-
-	details.append(summary, itemList);
+	details.append(summary, group === 'schema' ? createSchemaRows(items) : createRows(items));
 	return details;
 }
 
@@ -177,7 +254,7 @@ function populateVariableList(): void {
 	const list = variablesPanel?.querySelector<HTMLElement>('#variable-list');
 	if (!list) return;
 
-	const items = buildInspectableVariables(currentVariables);
+	const items = buildInspectableVariables(currentVariables, currentCatalog);
 	const fragment = document.createDocumentFragment();
 	for (const group of ['page', 'meta', 'schema'] as const) {
 		const groupItems = items.filter(item => item.group === group);
@@ -220,9 +297,15 @@ async function handleVariableClick(event: Event): Promise<void> {
 	setTimeout(() => row.classList.remove('bg-accent'), 800);
 }
 
-export function initializeVariablesPanel(panel: HTMLElement, _template: Template | null, variables: Record<string, string>): void {
+export function initializeVariablesPanel(
+	panel: HTMLElement,
+	_template: Template | null,
+	variables: Record<string, string>,
+	catalog?: TemplateVariableCatalog | null,
+): void {
 	variablesPanel = panel;
 	currentVariables = variables;
+	currentCatalog = catalog ?? null;
 	if (panel.dataset.initialized === 'true') return;
 
 	panel.dataset.initialized = 'true';
@@ -234,8 +317,13 @@ export function initializeVariablesPanel(panel: HTMLElement, _template: Template
 	});
 }
 
-export function updateVariablesPanel(_template: Template | null, variables: Record<string, string>): void {
+export function updateVariablesPanel(
+	_template: Template | null,
+	variables: Record<string, string>,
+	catalog?: TemplateVariableCatalog | null,
+): void {
 	currentVariables = variables;
+	currentCatalog = catalog ?? null;
 	if (isPanelOpen) populateVariableList();
 }
 

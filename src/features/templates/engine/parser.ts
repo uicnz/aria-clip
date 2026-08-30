@@ -9,6 +9,7 @@
 
 import { Token, TokenType, tokenize } from './tokenizer.js';
 import { filterMetadata, validFilterNames } from './filters/index.js';
+import { CANONICAL_VARIABLE_NAMES, DYNAMIC_VARIABLE_PREFIXES } from '../../../core/clipping/variables.js';
 
 // ============================================================================
 // AST Node Types
@@ -1448,41 +1449,12 @@ export function formatParserError(error: ParserError): string {
 /**
  * Known preset variables that are always available
  */
-const PRESET_VARIABLES = new Set([
-	'author',
-	'content',
-	'contentHtml',
-	'date',
-	'description',
-	'domain',
-	'favicon',
-	'fullHtml',
-	'highlights',
-	'image',
-	'language',
-	'model',
-	'modelId',
-	'modelProvider',
-	'published',
-	'transcript',
-	'selection',
-	'selectionHtml',
-	'site',
-	'title',
-	'time',
-	'url',
-	'words',
-]);
+const PRESET_VARIABLES = CANONICAL_VARIABLE_NAMES;
 
 /**
  * Special variable prefixes that indicate dynamic variables
  */
-const SPECIAL_PREFIXES = [
-	'schema:',
-	'selector:',
-	'selectorHtml:',
-	'meta:',
-];
+const SPECIAL_PREFIXES = DYNAMIC_VARIABLE_PREFIXES;
 
 /**
  * Calculate Levenshtein distance between two strings (for fuzzy matching)
@@ -1545,7 +1517,7 @@ function isValidVariable(name: string, definedVariables: Set<string>): boolean {
 	// Special prefix variables
 	for (const prefix of SPECIAL_PREFIXES) {
 		if (name.startsWith(prefix)) {
-			return true;
+			return name.length > prefix.length;
 		}
 	}
 
@@ -1697,7 +1669,10 @@ export function validateVariables(ast: ASTNode[]): ParserError[] {
 	for (const ref of references) {
 		if (!isValidVariable(ref.name, ref.scope)) {
 			const similar = findSimilarVariable(ref.name);
-			let message = `Unknown variable "${ref.name}"`;
+			const incompletePrefix = SPECIAL_PREFIXES.find(prefix => ref.name === prefix);
+			let message = incompletePrefix
+				? `Incomplete variable "${ref.name}"`
+				: `Unknown variable "${ref.name}"`;
 			if (similar) {
 				message += `. Did you mean "${similar}"?`;
 			}

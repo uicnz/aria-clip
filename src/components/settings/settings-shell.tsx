@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { createRoot } from "react-dom/client"
 import {
   ArchiveIcon,
   BookOpenIcon,
+  BracesIcon,
   HighlighterIcon,
   MenuIcon,
   PaperclipIcon,
@@ -62,6 +63,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { generalSettings, loadSettings, saveSettings } from "@/platform/browser/storage-utils"
 import { getPresetProviders, type PresetProvider } from "@/features/interpreter/interpreter-settings"
+import { VariablePicker } from "@/components/settings/variable-picker"
+import { insertVariableAtCursor, isTemplateValueField } from "@/features/templates/insert"
+import { copyToClipboard } from "@/platform/browser/clipboard-utils"
+import { getMessage } from "@/platform/browser/i18n"
 
 export function SettingsShell() {
   const requestedSection = new URLSearchParams(window.location.search).get("section")
@@ -73,6 +78,16 @@ export function SettingsShell() {
     readerSettings: { ...generalSettings.readerSettings },
   }))
   const [providerPresets, setProviderPresets] = useState<Record<string, PresetProvider>>({})
+  const lastTemplateField = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
+
+  useEffect(() => {
+    const rememberTemplateField = (event: FocusEvent) => {
+      const target = event.target instanceof Element ? event.target : null
+      if (isTemplateValueField(target)) lastTemplateField.current = target
+    }
+    document.addEventListener("focusin", rememberTemplateField)
+    return () => document.removeEventListener("focusin", rememberTemplateField)
+  }, [])
 
   useEffect(() => {
     let mounted = true
@@ -370,7 +385,7 @@ export function SettingsShell() {
             </section>
 
             <section id="templates-section" className={cn("settings-section space-y-8", activeSection !== "templates" && "hidden")}>
-              <div className="flex items-center justify-between gap-4"><h1 id="template-editor-title" className="font-heading text-xl font-semibold tracking-tight" data-i18n="editTemplate">Edit template</h1><div className="flex items-center gap-2"><Button type="button" variant="outline" onClick={() => window.dispatchEvent(new Event("aria-template-export"))} data-i18n="export">Export</Button><Button type="button" variant="outline" onClick={() => window.dispatchEvent(new Event("aria-template-import"))} data-i18n="import">Import</Button><DropdownMenu><DropdownMenuTrigger render={<Button type="button" variant="outline" />}><span data-i18n="more">More</span></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => window.dispatchEvent(new Event("aria-template-duplicate"))} data-i18n="duplicate">Duplicate</DropdownMenuItem><DropdownMenuItem onClick={() => window.dispatchEvent(new Event("aria-template-copy"))} data-i18n="copyAsJson">Copy as JSON</DropdownMenuItem><DropdownMenuItem variant="destructive" onClick={() => window.dispatchEvent(new Event("aria-template-delete"))} data-i18n="delete">Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div></div>
+              <div className="flex items-center justify-between gap-4"><h1 id="template-editor-title" className="font-heading text-xl font-semibold tracking-tight" data-i18n="editTemplate">Edit template</h1><div className="flex items-center gap-2"><Button type="button" variant="outline" size="icon" aria-label={getMessage("pageVariables")} title={getMessage("pageVariables")} onClick={() => setOpenDialog("template-variables")}><BracesIcon /></Button><Button type="button" variant="outline" onClick={() => window.dispatchEvent(new Event("aria-template-export"))} data-i18n="export">Export</Button><Button type="button" variant="outline" onClick={() => window.dispatchEvent(new Event("aria-template-import"))} data-i18n="import">Import</Button><DropdownMenu><DropdownMenuTrigger render={<Button type="button" variant="outline" />}><span data-i18n="more">More</span></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => window.dispatchEvent(new Event("aria-template-duplicate"))} data-i18n="duplicate">Duplicate</DropdownMenuItem><DropdownMenuItem onClick={() => window.dispatchEvent(new Event("aria-template-copy"))} data-i18n="copyAsJson">Copy as JSON</DropdownMenuItem><DropdownMenuItem variant="destructive" onClick={() => window.dispatchEvent(new Event("aria-template-delete"))} data-i18n="delete">Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div></div>
               <form id="template-settings-form" className="space-y-8">
                 <div id="template-editor" className="space-y-8">
                   <div id="template-error-summary" className="hidden" />
@@ -391,7 +406,6 @@ export function SettingsShell() {
                   </FieldGroup></CardContent></Card></FieldSet>
                   <div id="template-advanced-section"><FieldSet><FieldLegend data-i18n="advanced">Advanced</FieldLegend><Card><CardContent><div id="prompt-context-container"><Field><FieldTitle data-i18n="promptContext">Prompt context</FieldTitle><Textarea id="prompt-context" rows={4} className="font-mono" /></Field></div></CardContent></Card></FieldSet></div>
                   <datalist id="property-name-suggestions" />
-                  <div id="variables-search" className="hidden" /><button id="show-variables" type="button" className="hidden" />
                 </div>
               </form>
             </section>
@@ -412,6 +426,17 @@ export function SettingsShell() {
           <DialogFooter><Button type="button" variant="outline" className="model-cancel-btn" data-i18n="cancel">Cancel</Button><Button type="button" className="model-confirm-btn" data-i18n="save">Save</Button></DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <VariablePicker
+        open={openDialog === "template-variables"}
+        onOpenChange={(open) => setOpenDialog(open ? "template-variables" : null)}
+        onChoose={(variable) => {
+          const field = lastTemplateField.current
+          setOpenDialog(null)
+          if (field?.isConnected) requestAnimationFrame(() => insertVariableAtCursor(field, variable))
+          else void copyToClipboard(variable)
+        }}
+      />
 
       <Dialog open={openDialog === "provider-modal"} onOpenChange={(open) => setOpenDialog(open ? "provider-modal" : null)}>
         <DialogContent id="provider-modal">

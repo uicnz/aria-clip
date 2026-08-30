@@ -24,6 +24,7 @@ import { normalizeMarkdownOutput } from '../core/markdown/markdown-output.js';
 import { saveFile } from '../platform/browser/file-utils.js';
 import { translatePage, getMessage, setupLanguageAndDirection } from '../platform/browser/i18n.js';
 import { formatPropertyValue } from '../core/clipping/shared.js';
+import type { TemplateVariableCatalog } from '../core/clipping/variables.js';
 import { addRuntimeMessageListener } from '../platform/browser/runtime-messaging.js';
 import { initializeExtensionTheme } from '../platform/browser/theme-utils.js';
 import { mountPopupShell } from '../components/popup/popup-shell.js';
@@ -40,6 +41,7 @@ let loadedSettings: Settings;
 let currentTemplate: Template | null = null;
 let templates: Template[] = [];
 let currentVariables: { [key: string]: string } = {};
+let currentVariableCatalog: TemplateVariableCatalog | null = null;
 let currentTabId: number | undefined;
 let lastSelectedVault: string | null = null;
 let latestExtractedData: ContentResponse | null = null;
@@ -601,10 +603,10 @@ async function initializeUI() {
 	const variablesPanel = document.getElementById('variables-panel');
 
 	if (showMoreActionsButton && variablesPanel) {
-		initializeVariablesPanel(variablesPanel, currentTemplate, currentVariables);
+		initializeVariablesPanel(variablesPanel, currentTemplate, currentVariables, currentVariableCatalog);
 		showMoreActionsButton.addEventListener('click', (e) => {
 			e.preventDefault();
-			initializeVariablesPanel(variablesPanel, currentTemplate, currentVariables);
+			initializeVariablesPanel(variablesPanel, currentTemplate, currentVariables, currentVariableCatalog);
 			showVariables();
 		});
 	}
@@ -748,6 +750,7 @@ async function refreshFields(tabId: number, { checkTemplateTriggers = true, rebu
 			);
 			if (initializedContent) {
 				currentVariables = initializedContent.currentVariables;
+				currentVariableCatalog = initializedContent.variableCatalog;
 				console.log('Updated currentVariables:', currentVariables);
 				await fillTemplateFieldValues(
 					tabId,
@@ -757,7 +760,7 @@ async function refreshFields(tabId: number, { checkTemplateTriggers = true, rebu
 				);
 
 				// Update variables panel if it's open
-				updateVariablesPanel(currentTemplate, currentVariables);
+				updateVariablesPanel(currentTemplate, currentVariables, currentVariableCatalog);
 			} else {
 				throw new Error('Unable to initialize page content.');
 			}

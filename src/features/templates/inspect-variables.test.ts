@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { buildInspectableVariables } from './inspect-variables.js';
+import { buildVariableCatalog } from '../../core/clipping/variables.js';
 
 describe('buildInspectableVariables', () => {
 	test('excludes large content payloads from the inspector', () => {
@@ -49,5 +50,24 @@ describe('buildInspectableVariables', () => {
 		expect(item?.variable).toBe('{{description}}');
 		expect(item?.preview.length).toBe(160);
 		expect(item?.preview.endsWith('…')).toBe(true);
+	});
+
+	test('uses typed catalog metadata instead of re-parsing schema values', () => {
+		const catalog = buildVariableCatalog({
+			title: 'Example', author: '', content: '# Hidden', contentHtml: '<h1>Hidden</h1>',
+			url: 'https://example.com', fullHtml: '<html></html>', description: '', favicon: '', image: '',
+			published: '', site: '', language: '', wordCount: 1,
+			schemaOrgData: [{ '@type': 'NewsArticle', author: [{ '@type': 'Person', name: 'Ada' }] }],
+		});
+		const items = buildInspectableVariables(catalog.values, catalog);
+		const author = items.find(item => item.name === 'schema:@NewsArticle:author[0].name');
+
+		expect(items.some(item => item.name === 'content')).toBe(false);
+		expect(author).toMatchObject({
+			group: 'schema',
+			entity: '@NewsArticle',
+			displayName: 'author[0].name',
+			preview: 'Ada',
+		});
 	});
 });

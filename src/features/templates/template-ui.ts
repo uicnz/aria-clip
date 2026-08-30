@@ -521,6 +521,11 @@ function validateTemplateField(field: HTMLInputElement | HTMLTextAreaElement, sh
  */
 function addValidationListener(field: HTMLInputElement | HTMLTextAreaElement | null, showLineNumbers: boolean = false): void {
 	if (field) {
+		let timer: ReturnType<typeof setTimeout> | undefined;
+		field.addEventListener('input', () => {
+			if (timer) clearTimeout(timer);
+			timer = setTimeout(() => validateTemplateField(field, showLineNumbers), 180);
+		});
 		field.addEventListener('blur', () => validateTemplateField(field, showLineNumbers));
 	}
 }
@@ -544,4 +549,20 @@ export function initializeTemplateValidation(): void {
 	// Prompt context (multiline, show line numbers)
 	const promptContext = document.getElementById('prompt-context') as HTMLTextAreaElement;
 	addValidationListener(promptContext, true);
+
+	const properties = document.getElementById('template-properties');
+	if (properties && properties.dataset.validationInitialized !== 'true') {
+		properties.dataset.validationInitialized = 'true';
+		const timers = new WeakMap<HTMLInputElement, ReturnType<typeof setTimeout>>();
+		properties.addEventListener('input', event => {
+			const field = event.target;
+			if (!(field instanceof HTMLInputElement) || !field.classList.contains('property-value')) return;
+			const existing = timers.get(field);
+			if (existing) clearTimeout(existing);
+			timers.set(field, setTimeout(() => {
+				const container = field.closest('.property-editor');
+				validateTemplateField(field, false, container instanceof HTMLElement ? container : undefined);
+			}, 180));
+		});
+	}
 }
