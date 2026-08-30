@@ -4,6 +4,7 @@ export const PAGE_SUMMARY_TEMPLATE_ID = 'builtin-page-summary';
 export const PAGE_SUMMARY_TEMPLATE_NAME = 'Page Summary';
 export const NEWS_BRIEF_TEMPLATE_ID = 'builtin-news-brief';
 export const RESEARCH_BRIEF_TEMPLATE_ID = 'builtin-research-brief';
+export const PAPER_NOTES_TEMPLATE_ID = 'builtin-paper-notes';
 export const RECIPE_CARD_TEMPLATE_ID = 'builtin-recipe-card';
 export const TUTORIAL_GUIDE_TEMPLATE_ID = 'builtin-tutorial-guide';
 export const VIDEO_NOTES_TEMPLATE_ID = 'builtin-video-notes';
@@ -130,6 +131,45 @@ Use the headings in this order. Omit a headed section only when it is unsupporte
 		'Preserve quantitative results, sample sizes, uncertainty, cited authors, publication details, and identifiers such as a DOI.',
 		'Distinguish results from the authors’ interpretation and from your synthesis.',
 		'State clearly when evidence is preliminary, observational, preprint, or not peer reviewed.',
+	],
+});
+
+const PAPER_NOTES_PROMPT = createInterpreterPrompt({
+	task: 'Turn the supplied source metadata and Markdown into rigorous notes for a single scholarly paper.',
+	outputStructure: `## Citation
+Record the available title, authors, venue, publication or revision date, DOI or repository identifier, and canonical URL.
+
+## Research Question
+State the question, hypothesis, or objective investigated by the paper.
+
+## Central Claim
+Summarize the paper’s principal claim and the evidence the authors use to support it.
+
+## Contributions
+- Identify the novel methods, datasets, findings, systems, or theoretical contributions claimed by the authors.
+
+## Methods
+Describe the design, data, sample, baselines, comparisons, implementation, and analytical approach.
+
+## Findings
+Present the principal results with their measurements, uncertainty, and comparisons.
+
+## Limitations
+- Record stated limitations, confounders, assumptions, failure modes, and evidence gaps.
+
+## Implications
+Explain only the implications supported by the paper’s findings.
+
+## Key Terms
+- Define specialized terms needed to understand the paper.
+
+Use the headings in this order. Omit a headed section only when it is unsupported.`,
+	qualityBar: [
+		'Preserve authorship, publication status, version information, venue, dates, DOI, repository identifiers, and canonical links when available.',
+		'Preserve datasets, sample sizes, baselines, model names, measurements, uncertainty, and quantitative results exactly.',
+		'Distinguish empirical results, the authors’ interpretation, claimed contributions, and your synthesis.',
+		'State clearly when the work is a preprint, preliminary, observational, not peer reviewed, or otherwise qualified by the source.',
+		'Do not infer reproducibility, causality, generality, or scientific consensus beyond the evidence supplied by the paper.',
 	],
 });
 
@@ -411,6 +451,7 @@ interface StructuredTemplateOptions {
 	path: string;
 	prompt: string;
 	tags: string;
+	triggers?: readonly string[];
 }
 
 function createProperties(templateId: string, tags: string): Template['properties'] {
@@ -436,7 +477,7 @@ function createStructuredTemplate(options: StructuredTemplateOptions): Template 
 		noteContentFormat: options.prompt,
 		context: SOURCE_MARKDOWN_CONTEXT,
 		properties: createProperties(options.id, options.tags),
-		triggers: [],
+		triggers: [...(options.triggers ?? [])],
 	};
 }
 
@@ -463,6 +504,7 @@ export function createNewsBriefTemplate(): Template {
 		path: 'Clips/News',
 		prompt: NEWS_BRIEF_PROMPT,
 		tags: 'clips, news',
+		triggers: ['schema:@NewsArticle'],
 	});
 }
 
@@ -474,6 +516,23 @@ export function createResearchBriefTemplate(): Template {
 		path: 'Clips/Research',
 		prompt: RESEARCH_BRIEF_PROMPT,
 		tags: 'clips, research',
+		triggers: [],
+	});
+}
+
+export function createPaperNotesTemplate(): Template {
+	return createStructuredTemplate({
+		id: PAPER_NOTES_TEMPLATE_ID,
+		name: 'Paper Notes',
+		artifactType: 'paper-notes',
+		path: 'Clips/Papers',
+		prompt: PAPER_NOTES_PROMPT,
+		tags: 'clips, papers',
+		triggers: [
+			'https://arxiv.org/html/',
+			'schema:@ScholarlyArticle',
+			'schema:@MedicalScholarlyArticle',
+		],
 	});
 }
 
@@ -485,6 +544,7 @@ export function createRecipeCardTemplate(): Template {
 		path: 'Clips/Recipes',
 		prompt: RECIPE_CARD_PROMPT,
 		tags: 'clips, recipes',
+		triggers: ['schema:@Recipe'],
 	});
 }
 
@@ -496,6 +556,7 @@ export function createTutorialGuideTemplate(): Template {
 		path: 'Clips/Tutorials',
 		prompt: TUTORIAL_GUIDE_PROMPT,
 		tags: 'clips, tutorials',
+		triggers: ['schema:@HowTo'],
 	});
 }
 
@@ -507,6 +568,11 @@ export function createVideoNotesTemplate(): Template {
 		path: 'Clips/Videos',
 		prompt: VIDEO_NOTES_PROMPT,
 		tags: 'clips, videos',
+		triggers: [
+			'https://www.youtube.com/watch?v=',
+			'/^https:\/\/(?:www\.)?youtube\.com\/(?:watch|shorts)\//',
+			'https://youtu.be/',
+		],
 	});
 }
 
@@ -518,6 +584,7 @@ export function createProductBriefTemplate(): Template {
 		path: 'Clips/Products',
 		prompt: PRODUCT_BRIEF_PROMPT,
 		tags: 'clips, products',
+		triggers: ['schema:@Product'],
 	});
 }
 
@@ -529,6 +596,7 @@ export function createTravelGuideTemplate(): Template {
 		path: 'Clips/Travel',
 		prompt: TRAVEL_GUIDE_PROMPT,
 		tags: 'clips, travel',
+		triggers: ['schema:@TouristDestination'],
 	});
 }
 
@@ -540,6 +608,7 @@ export function createEventDetailsTemplate(): Template {
 		path: 'Clips/Events',
 		prompt: EVENT_DETAILS_PROMPT,
 		tags: 'clips, events',
+		triggers: ['schema:@Event'],
 	});
 }
 
@@ -562,6 +631,7 @@ export function createCodeReferenceTemplate(): Template {
 		path: 'Clips/Code',
 		prompt: CODE_REFERENCE_PROMPT,
 		tags: 'clips, code',
+		triggers: ['schema:@SoftwareSourceCode'],
 	});
 }
 
@@ -573,6 +643,7 @@ export const BUILTIN_TEMPLATES: readonly BuiltinTemplateDefinition[] = [
 	},
 	{ id: NEWS_BRIEF_TEMPLATE_ID, name: 'News Brief', create: createNewsBriefTemplate },
 	{ id: RESEARCH_BRIEF_TEMPLATE_ID, name: 'Research Brief', create: createResearchBriefTemplate },
+	{ id: PAPER_NOTES_TEMPLATE_ID, name: 'Paper Notes', create: createPaperNotesTemplate },
 	{ id: RECIPE_CARD_TEMPLATE_ID, name: 'Recipe Card', create: createRecipeCardTemplate },
 	{ id: TUTORIAL_GUIDE_TEMPLATE_ID, name: 'Tutorial Guide', create: createTutorialGuideTemplate },
 	{ id: VIDEO_NOTES_TEMPLATE_ID, name: 'Video Notes', create: createVideoNotesTemplate },

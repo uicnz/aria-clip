@@ -3,7 +3,13 @@ import { beforeEach, describe, expect, test } from 'vitest';
 import browser from '../../platform/browser/browser-polyfill.js';
 import { generalSettings } from '../../platform/browser/storage-utils.js';
 import type { Template } from '../../types/types.js';
-import { BUILTIN_TEMPLATES, PAGE_SUMMARY_TEMPLATE_ID } from './builtin-templates.js';
+import {
+	BUILTIN_TEMPLATES,
+	NEWS_BRIEF_TEMPLATE_ID,
+	PAGE_SUMMARY_TEMPLATE_ID,
+	RESEARCH_BRIEF_TEMPLATE_ID,
+	VIDEO_NOTES_TEMPLATE_ID,
+} from './builtin-templates.js';
 import { loadTemplates, saveTemplateSettings, templates } from './template-manager.js';
 
 const storage: Record<string, unknown> = {};
@@ -112,7 +118,7 @@ describe('template manager builtin installation', () => {
 			value: '{{description}}',
 			type: 'text',
 		});
-		expect(storage.builtin_template_metadata_version).toBe(3);
+		expect(storage.builtin_template_metadata_version).toBe(5);
 
 		migrated.properties = migrated.properties.filter(property => property.name !== 'description');
 		await saveTemplateSettings();
@@ -136,7 +142,7 @@ describe('template manager builtin installation', () => {
 		expect(templates[0].noteContentFormat).toContain('<task>');
 		expect(templates[0].noteContentFormat).toContain('<output-structure>');
 		expect(templates[0].context).toBe('<source-markdown>\n{{content}}\n</source-markdown>');
-		expect(storage.builtin_template_metadata_version).toBe(3);
+		expect(storage.builtin_template_metadata_version).toBe(5);
 	});
 
 	test('preserves customized builtin prompts and contexts during the structured migration', async () => {
@@ -152,7 +158,59 @@ describe('template manager builtin installation', () => {
 
 		expect(templates[0].noteContentFormat).toBe('{{"Keep my custom prompt."}}');
 		expect(templates[0].context).toBe('<my-source>\n{{content}}\n</my-source>');
-		expect(storage.builtin_template_metadata_version).toBe(3);
+		expect(storage.builtin_template_metadata_version).toBe(5);
+	});
+
+	test('adds conservative triggers to stored builtins that do not have trigger rules', async () => {
+		const newsBrief = BUILTIN_TEMPLATES.find(template => template.id === NEWS_BRIEF_TEMPLATE_ID)!.create();
+		newsBrief.triggers = [];
+		storage.template_list = [NEWS_BRIEF_TEMPLATE_ID];
+		storage[`template_${NEWS_BRIEF_TEMPLATE_ID}`] = [compressToUTF16(JSON.stringify(newsBrief))];
+		storage.installed_builtin_template_ids = BUILTIN_TEMPLATES.map(template => template.id);
+		storage.builtin_template_metadata_version = 3;
+
+		await loadTemplates();
+
+		expect(templates[0].triggers).toEqual(['schema:@NewsArticle']);
+		expect(storage.builtin_template_metadata_version).toBe(5);
+	});
+
+	test('preserves customized builtin triggers while adding missing builtin rules', async () => {
+		const videoNotes = BUILTIN_TEMPLATES.find(template => template.id === VIDEO_NOTES_TEMPLATE_ID)!.create();
+		videoNotes.triggers = ['https://videos.example.com/'];
+		storage.template_list = [VIDEO_NOTES_TEMPLATE_ID];
+		storage[`template_${VIDEO_NOTES_TEMPLATE_ID}`] = [compressToUTF16(JSON.stringify(videoNotes))];
+		storage.installed_builtin_template_ids = BUILTIN_TEMPLATES.map(template => template.id);
+		storage.builtin_template_metadata_version = 3;
+
+		await loadTemplates();
+
+		expect(templates[0].triggers).toEqual([
+			'https://videos.example.com/',
+			'https://www.youtube.com/watch?v=',
+			'/^https:\/\/(?:www\.)?youtube\.com\/(?:watch|shorts)\//',
+			'https://youtu.be/',
+		]);
+		expect(storage.builtin_template_metadata_version).toBe(5);
+	});
+
+	test('moves scholarly triggers from Research Brief to Paper Notes without losing custom rules', async () => {
+		const researchBrief = BUILTIN_TEMPLATES
+			.find(template => template.id === RESEARCH_BRIEF_TEMPLATE_ID)!.create();
+		researchBrief.triggers = [
+			'https://research.example.com/',
+			'schema:@ScholarlyArticle',
+			'schema:@MedicalScholarlyArticle',
+		];
+		storage.template_list = [RESEARCH_BRIEF_TEMPLATE_ID];
+		storage[`template_${RESEARCH_BRIEF_TEMPLATE_ID}`] = [compressToUTF16(JSON.stringify(researchBrief))];
+		storage.installed_builtin_template_ids = BUILTIN_TEMPLATES.map(template => template.id);
+		storage.builtin_template_metadata_version = 4;
+
+		await loadTemplates();
+
+		expect(templates[0].triggers).toEqual(['https://research.example.com/']);
+		expect(storage.builtin_template_metadata_version).toBe(5);
 	});
 
 	test('adds artifact types without replaying earlier builtin metadata migrations', async () => {
@@ -170,6 +228,6 @@ describe('template manager builtin installation', () => {
 		expect(templates[0].artifactType).toBe('page-summary');
 		expect(templates[0].properties.find(property => property.name === 'author')?.value).toBe('{{author}}');
 		expect(templates[0].properties.some(property => property.name === 'description')).toBe(false);
-		expect(storage.builtin_template_metadata_version).toBe(3);
+		expect(storage.builtin_template_metadata_version).toBe(5);
 	});
 });

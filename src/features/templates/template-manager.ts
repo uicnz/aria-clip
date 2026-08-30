@@ -4,7 +4,11 @@ import browser from '../../platform/browser/browser-polyfill.js';
 import { generalSettings } from '../../platform/browser/storage-utils.js';
 import { addPropertyType } from './property-types-manager.js';
 import { getMessage } from '../../platform/browser/i18n.js';
-import { BUILTIN_TEMPLATES, migrateBuiltinPromptStructure } from './builtin-templates.js';
+import {
+	BUILTIN_TEMPLATES,
+	RESEARCH_BRIEF_TEMPLATE_ID,
+	migrateBuiltinPromptStructure,
+} from './builtin-templates.js';
 
 export let templates: Template[] = [];
 export let editingTemplateIndex = -1;
@@ -13,12 +17,39 @@ const STORAGE_KEY_PREFIX = 'template_';
 const TEMPLATE_LIST_KEY = 'template_list';
 const INSTALLED_BUILTIN_TEMPLATE_IDS_KEY = 'installed_builtin_template_ids';
 const BUILTIN_TEMPLATE_METADATA_VERSION_KEY = 'builtin_template_metadata_version';
-const BUILTIN_TEMPLATE_METADATA_VERSION = 3;
+const BUILTIN_TEMPLATE_METADATA_VERSION = 5;
 const CHUNK_SIZE = 8000;
 const SIZE_WARNING_THRESHOLD = 6000;
 
 function migrateBuiltinTemplateMetadata(template: Template, fromVersion: number): boolean {
 	let changed = false;
+	if (fromVersion < 5 && template.id === RESEARCH_BRIEF_TEMPLATE_ID) {
+		const retiredPaperTriggers = new Set([
+			'schema:@ScholarlyArticle',
+			'schema:@MedicalScholarlyArticle',
+		]);
+		const existingTriggers = template.triggers ?? [];
+		const retainedTriggers = existingTriggers.filter(trigger => !retiredPaperTriggers.has(trigger));
+		if (retainedTriggers.length !== existingTriggers.length) {
+			template.triggers = retainedTriggers;
+			changed = true;
+		}
+	}
+
+	if (fromVersion < 4) {
+		const builtinTriggers = BUILTIN_TEMPLATES
+			.find(definition => definition.id === template.id)
+			?.create().triggers;
+		if (builtinTriggers && builtinTriggers.length > 0) {
+			const existingTriggers = template.triggers ?? [];
+			const missingTriggers = builtinTriggers.filter(trigger => !existingTriggers.includes(trigger));
+			if (missingTriggers.length > 0) {
+				template.triggers = [...existingTriggers, ...missingTriggers];
+				changed = true;
+			}
+		}
+	}
+
 	if (fromVersion < 3 && migrateBuiltinPromptStructure(template)) {
 		changed = true;
 	}
