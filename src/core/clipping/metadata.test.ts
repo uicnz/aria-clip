@@ -1,5 +1,5 @@
 import { parseHTML } from 'linkedom';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'bun:test';
 import { enrichPageMetadata, extractPageMetadata } from './metadata.js';
 
 const ARXIV_HTML = `
@@ -22,6 +22,15 @@ const ARXIV_HTML = `
 	</article>
 `;
 
+const NASA_HTML = `
+	<div class="article-meta-item">
+		<div><p class="font-weight-bold">Jessica Taveau</p></div>
+	</div>
+	<div class="article-meta-item">
+		<span class="heading-12 text-uppercase">Jul 22, 2026</span>
+	</div>
+`;
+
 describe('page metadata', () => {
 	test('extracts arXiv authors, version date, and abstract', () => {
 		const { document } = parseHTML(ARXIV_HTML);
@@ -37,6 +46,18 @@ describe('page metadata', () => {
 		const { document } = parseHTML(ARXIV_HTML);
 
 		expect(extractPageMetadata(document, 'https://example.com/paper')).toEqual({});
+	});
+
+	test('extracts NASA news byline and release date', () => {
+		const { document } = parseHTML(NASA_HTML);
+
+		expect(extractPageMetadata(
+			document,
+			'https://www.nasa.gov/news-release/example/',
+		)).toEqual({
+			author: 'Jessica Taveau',
+			published: '2026-07-22',
+		});
 	});
 
 	test('uses arXiv values only when ordinary metadata is missing', () => {

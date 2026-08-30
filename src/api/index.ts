@@ -2,7 +2,7 @@
 // Environment-agnostic — no Node.js or browser dependencies.
 // The caller provides a DocumentParser for their environment.
 
-import { Defuddle as DefuddleClass } from '../core/clipping/defuddle.js';
+import { extract } from '../core/clipping/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
 import { compileTemplate, SelectorProcessor } from '../features/templates/engine/template-compiler.js';
 import { AsyncResolver, RenderContext } from '../features/templates/engine/renderer.js';
@@ -11,14 +11,15 @@ import { buildVariables, generateFrontmatter, extractContentBySelector, selector
 import { sanitizeFilename } from '../core/artifacts/filename.js';
 import { normalizeMarkdownOutput } from '../core/markdown/markdown-output.js';
 import { enrichPageMetadata } from '../core/clipping/metadata.js';
-import { Template, Property } from '../types/types.js';
+import type { Template, Property, ValueKind } from '../types/types.js';
+import type { DefuddleResponse } from 'defuddle';
 
 // ---------------------------------------------------------------------------
 // Public types
 // ---------------------------------------------------------------------------
 
 export interface DocumentParser {
-	parseFromString(html: string, mimeType: string): any;
+	parseFromString(html: string, mimeType: string): Document;
 }
 
 export interface ClipOptions {
@@ -26,9 +27,13 @@ export interface ClipOptions {
 	url: string;
 	template: Template;
 	documentParser: DocumentParser;
-	propertyTypes?: Record<string, string>;
+	propertyTypes?: Record<string, ValueKind>;
 	/** Pre-parsed document to skip re-parsing (e.g. when already parsed for trigger matching). */
-	parsedDocument?: any;
+	parsedDocument?: Document;
+	/** Pre-extracted source data when template matching already required Defuddle. */
+	extracted?: DefuddleResponse;
+	/** Keep prompt and model placeholders for a later Interpreter stage. */
+	deferInterpreter?: boolean;
 }
 
 export interface ClipResult {
@@ -44,10 +49,12 @@ export interface ClipResult {
 // Selector resolvers (work on any { querySelectorAll } document)
 // ---------------------------------------------------------------------------
 
-type DocLike = { querySelectorAll: (selector: string) => any };
+type DocLike = {
+	querySelectorAll: (selector: string) => ArrayLike<Pick<Element, 'getAttribute' | 'outerHTML' | 'textContent'>>;
+};
 
 export function createAsyncResolver(doc: DocLike): AsyncResolver {
-	return async (name: string, _context: RenderContext): Promise<any> => {
+	return async (name: string, _context: RenderContext) => {
 		if (name.startsWith('selector:') || name.startsWith('selectorHtml:')) {
 			const extractHtml = name.startsWith('selectorHtml:');
 			const prefix = extractHtml ? 'selectorHtml:' : 'selector:';
@@ -86,84 +93,6 @@ export function createSelectorProcessor(doc: DocLike): SelectorProcessor {
 }
 
 // ---------------------------------------------------------------------------
-// Template trigger matching
-// ---------------------------------------------------------------------------
-
-function matchTriggerPattern(pattern: string, url: string): boolean {
-	if (pattern.startsWith('/') && pattern.endsWith('/')) {
-		try {
-			return new RegExp(pattern.slice(1, -1)).test(url);
-		} catch {
-			return false;
-		}
-	}
-	return url.startsWith(pattern);
-}
-
-function matchSchemaPattern(pattern: string, schemaOrgData: any): boolean {
-	const match = pattern.match(/^schema:(@\w+)?(?:\.(.+?))?(?:=(.+))?$/);
-	if (!match) return false;
-	const [, schemaType, schemaKey, expectedValue] = match;
-	if (!schemaType && !schemaKey) return false;
-
-	const schemaArray = Array.isArray(schemaOrgData) ? schemaOrgData : [schemaOrgData];
-	const flattened = schemaArray.flatMap((s: any) => Array.isArray(s) ? s : [s]);
-
-	for (const schema of flattened) {
-		if (!schema || typeof schema !== 'object') continue;
-		if (schemaType) {
-			const types = Array.isArray(schema['@type']) ? schema['@type'] : [schema['@type']];
-			if (!types.includes(schemaType.slice(1))) continue;
-		}
-		if (schemaKey) {
-			const keys = schemaKey.split('.');
-			let val = schema;
-			for (const k of keys) {
-				val = val && typeof val === 'object' && k in val ? val[k] : undefined;
-			}
-			if (expectedValue) {
-				if (Array.isArray(val) ? val.includes(expectedValue) : val === expectedValue) return true;
-			} else if (val !== undefined) {
-				return true;
-			}
-		} else {
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
- * Find the first template whose triggers match the given URL (and optionally schema data).
- * URL prefix and regex triggers are checked first, then schema triggers.
- */
-export function matchTemplate(templates: Template[], url: string, schemaOrgData?: any): Template | undefined {
-	// First pass: URL prefix and regex triggers
-	for (const template of templates) {
-		if (!template.triggers) continue;
-		for (const trigger of template.triggers) {
-			if (!trigger.startsWith('schema:') && matchTriggerPattern(trigger, url)) {
-				return template;
-			}
-		}
-	}
-
-	// Second pass: schema triggers
-	if (schemaOrgData) {
-		for (const template of templates) {
-			if (!template.triggers) continue;
-			for (const trigger of template.triggers) {
-				if (trigger.startsWith('schema:') && matchSchemaPattern(trigger, schemaOrgData)) {
-					return template;
-				}
-			}
-		}
-	}
-
-	return undefined;
-}
-
-// ---------------------------------------------------------------------------
 // Core clipping function
 // ---------------------------------------------------------------------------
 
@@ -176,17 +105,14 @@ export function matchTemplate(templates: Template[], url: string, schemaOrgData?
  * - Writing the output (file, vault API, etc.)
  */
 export async function clip(options: ClipOptions): Promise<ClipResult> {
-	const { html, url, template, documentParser, propertyTypes, parsedDocument } = options;
+	const { html, url, template, documentParser, propertyTypes, parsedDocument, extracted, deferInterpreter } = options;
 
 	// Use pre-parsed document if provided, otherwise parse
 	const doc = parsedDocument ?? documentParser.parseFromString(html, 'text/html');
-	const documentElement = doc.documentElement || doc;
 
 	// Extract content with defuddle
-	// Cast through unknown: linkedom's Document is structurally compatible but not nominally typed as DOM Document
-	const defuddle = new DefuddleClass(documentElement as unknown as Document, { url });
-	const defuddleResult = defuddle.parse();
-	const pageMetadata = enrichPageMetadata(doc as Document, url, {
+	const defuddleResult = extracted ?? await extract(doc, { url });
+	const pageMetadata = enrichPageMetadata(doc, url, {
 		author: defuddleResult.author,
 		published: defuddleResult.published,
 		description: defuddleResult.description,
@@ -220,7 +146,9 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 	const selectorProcessor = createSelectorProcessor(doc);
 
 	const compile = (text: string) =>
-		compileTemplate(0, text, variables, url, asyncResolver, selectorProcessor);
+		compileTemplate(0, text, variables, url, asyncResolver, selectorProcessor, {
+			preserveInterpreterVariables: deferInterpreter ?? false,
+		});
 
 	// Compile note name
 	const compiledNoteName = await compile(template.noteNameFormat);
@@ -237,7 +165,7 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 	);
 
 	// Build property type map
-	const typeMap: Record<string, string> = {};
+	const typeMap: Record<string, ValueKind> = {};
 	for (const prop of template.properties) {
 		if (prop.type) {
 			typeMap[prop.name] = prop.type;
@@ -268,3 +196,4 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 
 // Re-export types that consumers may need
 export type { Template, Property } from '../types/types.js';
+export { matchTemplate } from '../features/templates/engine/triggers.js';

@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { length } from './length.js';
 
 describe('length filter', () => {

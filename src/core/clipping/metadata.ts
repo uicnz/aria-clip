@@ -34,6 +34,15 @@ function isArxivHtml(url: string): boolean {
 	}
 }
 
+function isNasaNews(url: string): boolean {
+	try {
+		const parsed = new URL(url);
+		return /^(?:www\.)?nasa\.gov$/i.test(parsed.hostname) && parsed.pathname.startsWith('/news-release/');
+	} catch {
+		return false;
+	}
+}
+
 function extractArxivAuthors(document: Document): string {
 	const authors: string[] = [];
 	for (const element of document.querySelectorAll('.ltx_authors .ltx_personname')) {
@@ -60,13 +69,35 @@ function extractArxivAbstract(document: Document): string {
 		.join(' ');
 }
 
-export function extractPageMetadata(document: Document, url: string): PartialPageMetadata {
-	if (!isArxivHtml(url)) return {};
+function nasaDate(document: Document): string {
+	for (const element of document.querySelectorAll('.article-meta-item .heading-12')) {
+		const value = cleanText(element.textContent);
+		const match = value.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})$/);
+		if (match) {
+			const [, month, day, year] = match;
+			return `${year}-${ARXIV_MONTHS[month]}-${day.padStart(2, '0')}`;
+		}
+	}
+	return '';
+}
+
+function extractNasaMetadata(document: Document): PartialPageMetadata {
 	return {
-		author: extractArxivAuthors(document),
-		published: extractArxivVersionDate(document),
-		description: extractArxivAbstract(document),
+		author: cleanText(document.querySelector('.article-meta-item p.font-weight-bold')?.textContent),
+		published: nasaDate(document),
 	};
+}
+
+export function extractPageMetadata(document: Document, url: string): PartialPageMetadata {
+	if (isArxivHtml(url)) {
+		return {
+			author: extractArxivAuthors(document),
+			published: extractArxivVersionDate(document),
+			description: extractArxivAbstract(document),
+		};
+	}
+	if (isNasaNews(url)) return extractNasaMetadata(document);
+	return {};
 }
 
 export function enrichPageMetadata(

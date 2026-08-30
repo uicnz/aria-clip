@@ -1,4 +1,4 @@
-import { DefuddleFull as Defuddle } from '../../core/clipping/defuddle.js';
+import { extractFull } from '../../core/clipping/defuddle-full.js';
 import { setElementHTML } from '../../shared/dom/dom-utils.js';
 
 // Parse document content for clipping. In reader mode, extracts from
@@ -15,7 +15,7 @@ export function parseForClip(doc: Document) {
 				...Array.from(readerArticle.childNodes).map(n => readerDoc.importNode(n, true))
 			);
 		}
-		return new Defuddle(readerDoc, { url: '' }).parse();
+		return extractFull(readerDoc, { url: '' });
 	}
-	return new Defuddle(doc, { url: doc.URL }).parse();
+	return extractFull(doc, { url: doc.URL });
 }

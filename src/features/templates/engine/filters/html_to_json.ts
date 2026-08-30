@@ -1,5 +1,16 @@
 export const html_to_json = (input: string): string => {
-	const parseNode = (node: Node): any => {
+	type JsonNode = JsonText | JsonElement;
+	type JsonText = { type: 'text'; content: string };
+	type JsonElement = {
+		type: 'element';
+		tag: string;
+		attributes?: Record<string, string>;
+		children?: JsonNode[];
+	};
+
+	if (input === '') return '';
+
+	const parseNode = (node: Node): JsonNode | null => {
 		if (node.nodeType === Node.TEXT_NODE) {
 			const text = node.textContent?.trim();
 			return text ? { type: 'text', content: text } : null;
@@ -7,7 +18,7 @@ export const html_to_json = (input: string): string => {
 		
 		if (node.nodeType === Node.ELEMENT_NODE) {
 			const element = node as Element;
-			const result: any = {
+			const result: JsonElement = {
 				type: 'element',
 				tag: element.tagName.toLowerCase(),
 			};

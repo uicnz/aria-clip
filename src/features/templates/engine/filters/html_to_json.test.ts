@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { html_to_json } from './html_to_json.js';
 
 describe('html_to_json filter', () => {

@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'bun:test';
 
 import type { Property } from '../../types/types.js';
 import { addInterpretationArtifactMetadata, isValidArtifactType } from './artifact.js';

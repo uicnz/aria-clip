@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { nth, validateNthParams } from './nth.js';
 import { render } from '../renderer.js';
 import { applyFilters } from './index.js';

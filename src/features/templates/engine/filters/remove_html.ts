@@ -1,4 +1,4 @@
-import { debugLog } from '../../../../platform/browser/debug.js';
+import { debugLog } from '../../../../shared/logging/debug.js';
 
 export const remove_html = (html: string, params: string = ''): string => {
 	debugLog('RemoveHTML', 'Input:', { html, params });

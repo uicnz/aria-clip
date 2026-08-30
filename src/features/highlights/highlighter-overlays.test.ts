@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { describe, test, expect, beforeAll, beforeEach } from 'vitest';
+import '@/test/dom.js';
+import { describe, test, expect, beforeAll, beforeEach } from 'bun:test';
 import { renderTextHighlight, clearTextHighlights } from './highlighter-overlays.js';
 import { getElementXPath } from '../../shared/dom/dom-utils.js';
 

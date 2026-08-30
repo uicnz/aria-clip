@@ -1,5 +1,5 @@
 import { FilterFunction } from '../../../../types/types.js';
-import { debugLog } from '../../../../platform/browser/debug.js';
+import { debugLog } from '../../../../shared/logging/debug.js';
 import { createParserState, processCharacter } from '../parser-utils.js';
 
 import { blockquote } from './blockquote.js';

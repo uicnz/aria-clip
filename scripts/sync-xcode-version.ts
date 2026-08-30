@@ -15,4 +15,18 @@ const output = [
 ].join('\n');
 
 await Bun.write(resolve(root, 'xcode/Aria Clip/Version.xcconfig'), output);
+
+const appScript = await Bun.build({
+	entrypoints: [resolve(root, 'src/entrypoints/safari-app.ts')],
+	format: 'iife',
+	minify: false,
+	target: 'browser',
+});
+if (!appScript.success || appScript.outputs.length !== 1) {
+	throw new AggregateError(appScript.logs, 'Could not compile the Safari containing-app script.');
+}
+await Bun.write(
+	resolve(root, 'xcode/Aria Clip/Shared (App)/Resources/Script.js'),
+	appScript.outputs[0],
+);
 console.log(`Synced Xcode marketing version ${packageJson.version}`);

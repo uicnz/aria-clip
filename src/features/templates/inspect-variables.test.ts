@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'bun:test';
 import { buildInspectableVariables } from './inspect-variables.js';
 import { buildVariableCatalog } from '../../core/clipping/variables.js';
 

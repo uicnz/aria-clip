@@ -1,7 +1,7 @@
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readdirSync, rmSync, statSync, symlinkSync } from 'node:fs';
 import { homedir, platform, tmpdir } from 'node:os';
 import { basename, join, resolve, sep } from 'node:path';
-import { parse as parseDotEnv } from 'dotenv';
+import { loadEnv } from '../src/platform/node/env.js';
 
 type Options = {
 	dryRun: boolean;
@@ -35,10 +35,14 @@ function usage(): string {
 		'  --help            Show this help',
 		'',
 		'Environment:',
-		'  ARIA_CLIP_APPLE_TEAM_ID    Apple team ID (default: N68C9LUA5B)',
-		'  ARIA_CLIP_SIGN_IDENTITY    Developer ID Application identity override',
-		'  ARIA_CLIP_NOTARY_PROFILE   notarytool Keychain profile (default: aria-notarytool)',
-		'  ARIA_NOTARY_KEYCHAIN       Optional Keychain path passed to notarytool',
+		'  ARIA_NOTARY_KEYCHAIN             Optional Keychain path used by notarytool',
+		'  ARIA_NOTARY_KEYCHAIN_PASSWORD    Optional password used to unlock that Keychain',
+		'  ARIA_NOTARY_BOOTSTRAP_APPLE_ID   Apple ID used to restore a missing profile',
+		'  ARIA_NOTARY_BOOTSTRAP_TEAM_ID    Apple team used to restore a missing profile',
+		'  ARIA_NOTARY_BOOTSTRAP_PASSWORD   App-specific password used to restore a missing profile',
+		'  ARIA_NOTARY_BOOTSTRAP_API_KEY_PATH  App Store Connect private key alternative',
+		'  ARIA_NOTARY_BOOTSTRAP_API_KEY_ID    App Store Connect key ID',
+		'  ARIA_NOTARY_BOOTSTRAP_API_ISSUER    App Store Connect issuer ID',
 	].join('\n');
 }
 
@@ -110,25 +114,6 @@ async function capture(command: string[]): Promise<CommandResult> {
 	return { stdout, stderr, exitCode };
 }
 
-function loadReleaseEnvironment(): void {
-	const inherited = new Set(Object.keys(process.env));
-	const loaded: Record<string, string> = {};
-	const paths = [
-		join(homedir(), '.aria', '.env'),
-		join(ROOT, '.env'),
-		join(ROOT, '.aria', '.env'),
-	];
-
-	for (const path of paths) {
-		if (!existsSync(path)) continue;
-		Object.assign(loaded, parseDotEnv(readFileSync(path)));
-	}
-
-	for (const [name, value] of Object.entries(loaded)) {
-		if (!inherited.has(name)) process.env[name] = value;
-	}
-}
-
 async function readVersion(): Promise<string> {
 	const packageJson = (await Bun.file(join(ROOT, 'package.json')).json()) as { version?: unknown };
 	if (typeof packageJson.version !== 'string' || !/^\d+\.\d+\.\d+$/.test(packageJson.version)) {
@@ -144,9 +129,6 @@ function requireTools(tools: string[]): void {
 }
 
 async function resolveSignIdentity(teamId: string): Promise<string> {
-	const configured = process.env.ARIA_CLIP_SIGN_IDENTITY?.trim();
-	if (configured) return configured;
-
 	const result = await capture(['security', 'find-identity', '-v', '-p', 'codesigning']);
 	if (result.exitCode !== 0) {
 		throw new Error(`Unable to inspect signing identities: ${result.stderr.trim()}`);
@@ -157,7 +139,7 @@ async function resolveSignIdentity(teamId: string): Promise<string> {
 	if (!identity) {
 		throw new Error(
 			`No Developer ID Application identity was found for team ${teamId}. ` +
-				'Set ARIA_CLIP_SIGN_IDENTITY to override automatic discovery.'
+				'Install the uic.nz Developer ID Application certificate in Keychain Access.'
 		);
 	}
 	return identity;
@@ -165,19 +147,80 @@ async function resolveSignIdentity(teamId: string): Promise<string> {
 
 function notaryAuthArgs(profile: string): string[] {
 	const args = ['--keychain-profile', profile];
-	const keychain = process.env.ARIA_NOTARY_KEYCHAIN?.trim();
+	const keychain = notaryKeychain();
 	if (keychain) args.push('--keychain', keychain);
 	return args;
 }
 
-async function preflightNotary(profile: string): Promise<void> {
-	const result = await capture(['xcrun', 'notarytool', 'history', ...notaryAuthArgs(profile), '--output-format', 'json']);
+function notaryKeychain(): string | undefined {
+	const value = process.env.ARIA_NOTARY_KEYCHAIN?.trim();
+	if (!value) return undefined;
+	return value === '~' ? homedir() : value.startsWith('~/') ? join(homedir(), value.slice(2)) : value;
+}
+
+async function unlockNotaryKeychain(): Promise<void> {
+	const keychain = notaryKeychain();
+	const password = process.env.ARIA_NOTARY_KEYCHAIN_PASSWORD?.trim();
+	if (!keychain || !password) return;
+	const result = await capture(['security', 'unlock-keychain', '-p', password, keychain]);
 	if (result.exitCode !== 0) {
-		throw new Error(
-			`notarytool could not use Keychain profile "${profile}". ` +
-			`${(result.stderr || result.stdout).trim()}`
-		);
+		throw new Error(`Unable to unlock notary Keychain "${keychain}": ${(result.stderr || result.stdout).trim()}`);
 	}
+}
+
+function notaryBootstrapArgs(teamId: string): string[] | undefined {
+	const keyPath = process.env.ARIA_NOTARY_BOOTSTRAP_API_KEY_PATH?.trim();
+	const keyId = process.env.ARIA_NOTARY_BOOTSTRAP_API_KEY_ID?.trim();
+	const issuer = process.env.ARIA_NOTARY_BOOTSTRAP_API_ISSUER?.trim();
+	const apiSupplied = [keyPath, keyId, issuer].filter(Boolean).length;
+	if (apiSupplied > 0) {
+		if (!keyPath || !keyId) {
+			throw new Error('Notary API bootstrap requires ARIA_NOTARY_BOOTSTRAP_API_KEY_PATH and ARIA_NOTARY_BOOTSTRAP_API_KEY_ID together.');
+		}
+		const args = ['--key', keyPath, '--key-id', keyId];
+		if (issuer) args.push('--issuer', issuer);
+		return args;
+	}
+
+	const appleId = process.env.ARIA_NOTARY_BOOTSTRAP_APPLE_ID?.trim();
+	const bootstrapTeam = process.env.ARIA_NOTARY_BOOTSTRAP_TEAM_ID?.trim();
+	const password = process.env.ARIA_NOTARY_BOOTSTRAP_PASSWORD?.trim();
+	const appleSupplied = [appleId, bootstrapTeam, password].filter(Boolean).length;
+	if (appleSupplied === 0) return undefined;
+	if (!appleId || !bootstrapTeam || !password) {
+		throw new Error('Notary Apple ID bootstrap requires ARIA_NOTARY_BOOTSTRAP_APPLE_ID, ARIA_NOTARY_BOOTSTRAP_TEAM_ID, and ARIA_NOTARY_BOOTSTRAP_PASSWORD together.');
+	}
+	if (bootstrapTeam !== teamId) {
+		throw new Error(`ARIA_NOTARY_BOOTSTRAP_TEAM_ID is ${bootstrapTeam}; expected the Aria signing team ${teamId}.`);
+	}
+	return ['--apple-id', appleId, '--team-id', bootstrapTeam, '--password', password];
+}
+
+async function preflightNotary(profile: string, teamId: string): Promise<void> {
+	await unlockNotaryKeychain();
+	let result = await capture(['xcrun', 'notarytool', 'history', ...notaryAuthArgs(profile), '--output-format', 'json']);
+	if (result.exitCode === 0) return;
+
+	const bootstrap = notaryBootstrapArgs(teamId);
+	if (bootstrap) {
+		const command = [
+			'xcrun', 'notarytool', 'store-credentials', profile,
+			...bootstrap,
+		];
+		const keychain = notaryKeychain();
+		if (keychain) command.push('--keychain', keychain);
+		const stored = await capture(command);
+		if (stored.exitCode !== 0) {
+			throw new Error(`Unable to restore notary profile "${profile}": ${(stored.stderr || stored.stdout).trim()}`);
+		}
+		result = await capture(['xcrun', 'notarytool', 'history', ...notaryAuthArgs(profile), '--output-format', 'json']);
+		if (result.exitCode === 0) return;
+	}
+
+	throw new Error(
+		`notarytool could not use Keychain profile "${profile}". ` +
+		`${(result.stderr || result.stdout).trim()}`
+	);
 }
 
 async function verifyWebArchive(path: string, version: string): Promise<void> {
@@ -372,22 +415,22 @@ async function sha256(path: string): Promise<string> {
 
 async function main(): Promise<void> {
 	const options = parseOptions(process.argv.slice(2));
-	loadReleaseEnvironment();
+	loadEnv();
 
 	if (platform() !== 'darwin' && !options.dryRun) {
 		throw new Error('The complete release requires macOS because Safari packaging uses Xcode and Apple signing.');
 	}
 
 	const version = await readVersion();
-	const teamId = process.env.ARIA_CLIP_APPLE_TEAM_ID?.trim() || DEFAULT_TEAM_ID;
-	const notaryProfile = process.env.ARIA_CLIP_NOTARY_PROFILE?.trim() || DEFAULT_NOTARY_PROFILE;
+	const teamId = DEFAULT_TEAM_ID;
+	const notaryProfile = DEFAULT_NOTARY_PROFILE;
 	const signIdentity = options.dryRun
-		? process.env.ARIA_CLIP_SIGN_IDENTITY?.trim() || `Developer ID Application (${teamId})`
+		? `Developer ID Application (${teamId})`
 		: await resolveSignIdentity(teamId);
 
 	if (!options.dryRun) {
 		requireTools(['bun', 'codesign', 'diskutil', 'ditto', 'hdiutil', 'security', 'unzip', 'xcodebuild', 'xcrun']);
-		if (!options.skipNotarize) await preflightNotary(notaryProfile);
+		if (!options.skipNotarize) await preflightNotary(notaryProfile, teamId);
 		mkdirSync(BUILDS, { recursive: true });
 	}
 

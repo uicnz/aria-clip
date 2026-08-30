@@ -1,6 +1,6 @@
-// @vitest-environment jsdom
+import '@/test/dom.js';
 import { act } from "react"
-import { describe, expect, test, vi } from "vitest"
+import { describe, expect, test, vi } from "bun:test"
 
 import type { Template } from "@/types/types"
 import { renderTemplateList } from "./template-list"

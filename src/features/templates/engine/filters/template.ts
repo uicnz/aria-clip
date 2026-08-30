@@ -1,4 +1,4 @@
-import { debugLog } from '../../../../platform/browser/debug.js';
+import { debugLog } from '../../../../shared/logging/debug.js';
 import type { ParamValidationResult } from './index.js';
 
 export const validateTemplateParams = (param: string | undefined): ParamValidationResult => {

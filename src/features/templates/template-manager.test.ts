@@ -1,5 +1,5 @@
 import { compressToUTF16 } from 'lz-string';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'bun:test';
 import browser from '../../platform/browser/browser-polyfill.js';
 import { generalSettings } from '../../platform/browser/storage-utils.js';
 import type { Template } from '../../types/types.js';
@@ -82,8 +82,14 @@ describe('template manager builtin installation', () => {
 		await loadTemplates();
 
 		expect(templates.filter(template => template.id === PAGE_SUMMARY_TEMPLATE_ID)).toHaveLength(1);
-		expect(templates.map(template => template.id)).toEqual(BUILTIN_TEMPLATES.map(template => template.id));
-		expect(storage.installed_builtin_template_ids).toEqual(BUILTIN_TEMPLATES.map(template => template.id));
+		expect(templates.map(template => template.id)).toEqual([
+			PAGE_SUMMARY_TEMPLATE_ID,
+			...BUILTIN_TEMPLATES.map(template => template.id).filter(id => id !== PAGE_SUMMARY_TEMPLATE_ID),
+		]);
+		expect(storage.installed_builtin_template_ids).toEqual([
+			PAGE_SUMMARY_TEMPLATE_ID,
+			...BUILTIN_TEMPLATES.map(template => template.id).filter(id => id !== PAGE_SUMMARY_TEMPLATE_ID),
+		]);
 	});
 
 	test('does not reinstall a builtin after it is deliberately removed', async () => {
@@ -118,7 +124,7 @@ describe('template manager builtin installation', () => {
 			value: '{{description}}',
 			type: 'text',
 		});
-		expect(storage.builtin_template_metadata_version).toBe(5);
+		expect(storage.builtin_template_metadata_version).toBe(7);
 
 		migrated.properties = migrated.properties.filter(property => property.name !== 'description');
 		await saveTemplateSettings();
@@ -142,7 +148,7 @@ describe('template manager builtin installation', () => {
 		expect(templates[0].noteContentFormat).toContain('<task>');
 		expect(templates[0].noteContentFormat).toContain('<output-structure>');
 		expect(templates[0].context).toBe('<source-markdown>\n{{content}}\n</source-markdown>');
-		expect(storage.builtin_template_metadata_version).toBe(5);
+		expect(storage.builtin_template_metadata_version).toBe(7);
 	});
 
 	test('preserves customized builtin prompts and contexts during the structured migration', async () => {
@@ -158,7 +164,26 @@ describe('template manager builtin installation', () => {
 
 		expect(templates[0].noteContentFormat).toBe('{{"Keep my custom prompt."}}');
 		expect(templates[0].context).toBe('<my-source>\n{{content}}\n</my-source>');
-		expect(storage.builtin_template_metadata_version).toBe(5);
+		expect(storage.builtin_template_metadata_version).toBe(7);
+	});
+
+	test('upgrades untouched source depth and context from metadata version six', async () => {
+		const news = BUILTIN_TEMPLATES.find(template => template.id === NEWS_BRIEF_TEMPLATE_ID)!.create();
+		news.noteContentFormat = news.noteContentFormat.replace(
+			'- Make coverage and detail proportional to the source breadth; do not replace substantive source material with a generic summary.\n',
+			'',
+		);
+		news.context = '<source-metadata>\n- Title: {{title}}\n- URL: {{url}}\n- Author: {{author}}\n- Published: {{published}}\n</source-metadata>\n\n<source-markdown>\n{{content}}\n</source-markdown>';
+		storage.template_list = [NEWS_BRIEF_TEMPLATE_ID];
+		storage[`template_${NEWS_BRIEF_TEMPLATE_ID}`] = [compressToUTF16(JSON.stringify(news))];
+		storage.installed_builtin_template_ids = BUILTIN_TEMPLATES.map(template => template.id);
+		storage.builtin_template_metadata_version = 6;
+
+		await loadTemplates();
+
+		expect(templates[0].noteContentFormat).toContain('Make coverage and detail proportional to the source breadth');
+		expect(templates[0].context).toContain('<source-description>\n{{description}}\n</source-description>');
+		expect(storage.builtin_template_metadata_version).toBe(7);
 	});
 
 	test('adds conservative triggers to stored builtins that do not have trigger rules', async () => {
@@ -171,8 +196,11 @@ describe('template manager builtin installation', () => {
 
 		await loadTemplates();
 
-		expect(templates[0].triggers).toEqual(['schema:@NewsArticle']);
-		expect(storage.builtin_template_metadata_version).toBe(5);
+		expect(templates[0].triggers).toEqual([
+			'https://www.nasa.gov/news-release/',
+			'schema:@NewsArticle',
+		]);
+		expect(storage.builtin_template_metadata_version).toBe(7);
 	});
 
 	test('preserves customized builtin triggers while adding missing builtin rules', async () => {
@@ -191,7 +219,25 @@ describe('template manager builtin installation', () => {
 			'/^https:\/\/(?:www\.)?youtube\.com\/(?:watch|shorts)\//',
 			'https://youtu.be/',
 		]);
-		expect(storage.builtin_template_metadata_version).toBe(5);
+		expect(storage.builtin_template_metadata_version).toBe(7);
+	});
+
+	test('adds new site triggers without replacing existing builtin rules', async () => {
+		const newsBrief = BUILTIN_TEMPLATES.find(template => template.id === NEWS_BRIEF_TEMPLATE_ID)!.create();
+		newsBrief.triggers = ['schema:@NewsArticle', 'https://news.example.com/'];
+		storage.template_list = [NEWS_BRIEF_TEMPLATE_ID];
+		storage[`template_${NEWS_BRIEF_TEMPLATE_ID}`] = [compressToUTF16(JSON.stringify(newsBrief))];
+		storage.installed_builtin_template_ids = BUILTIN_TEMPLATES.map(template => template.id);
+		storage.builtin_template_metadata_version = 5;
+
+		await loadTemplates();
+
+		expect(templates[0].triggers).toEqual([
+			'schema:@NewsArticle',
+			'https://news.example.com/',
+			'https://www.nasa.gov/news-release/',
+		]);
+		expect(storage.builtin_template_metadata_version).toBe(7);
 	});
 
 	test('moves scholarly triggers from Research Brief to Paper Notes without losing custom rules', async () => {
@@ -210,7 +256,7 @@ describe('template manager builtin installation', () => {
 		await loadTemplates();
 
 		expect(templates[0].triggers).toEqual(['https://research.example.com/']);
-		expect(storage.builtin_template_metadata_version).toBe(5);
+		expect(storage.builtin_template_metadata_version).toBe(7);
 	});
 
 	test('adds artifact types without replaying earlier builtin metadata migrations', async () => {
@@ -228,6 +274,6 @@ describe('template manager builtin installation', () => {
 		expect(templates[0].artifactType).toBe('page-summary');
 		expect(templates[0].properties.find(property => property.name === 'author')?.value).toBe('{{author}}');
 		expect(templates[0].properties.some(property => property.name === 'description')).toBe(false);
-		expect(storage.builtin_template_metadata_version).toBe(5);
+		expect(storage.builtin_template_metadata_version).toBe(7);
 	});
 });

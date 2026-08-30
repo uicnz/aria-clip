@@ -27,9 +27,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import type { PropertyType } from "@/types/types"
-
-type PropertyTypeName = "text" | "multitext" | "number" | "checkbox" | "date" | "datetime"
+import type { PropertyType, ValueKind } from "@/types/types"
 
 type PropertyTypeRow = {
   propertyType: PropertyType
@@ -37,10 +35,10 @@ type PropertyTypeRow = {
 }
 
 type PropertyTypeListActions = {
-  changeType: (property: PropertyType, type: PropertyTypeName) => void
+  changeType: (property: PropertyType, type: ValueKind) => void
   changeDefaultValue: (property: PropertyType, value: string) => void
   remove: (property: PropertyType) => void
-  typeLabels: Record<PropertyTypeName, string>
+  typeLabels: Record<ValueKind, string>
 }
 
 const roots = new WeakMap<HTMLElement, Root>()
@@ -52,7 +50,7 @@ const propertyIcons = {
   checkbox: SquareCheckBigIcon,
   date: CalendarIcon,
   datetime: ClockIcon,
-} satisfies Record<PropertyTypeName, typeof AlignLeftIcon>
+} satisfies Record<ValueKind, typeof AlignLeftIcon>
 
 function render(container: HTMLElement, node: React.ReactNode) {
   let root = roots.get(container)
@@ -72,7 +70,7 @@ export function renderPropertyTypeList(
     container,
     <ItemGroup className="has-data-[size=xs]:gap-0">
       {rows.map(({ propertyType, usageCount }) => {
-        const propertyTypeName = propertyType.type as PropertyTypeName
+        const propertyTypeName = propertyType.type
         const Icon = propertyType.name === "tags" ? TagsIcon : propertyIcons[propertyTypeName] || AlignLeftIcon
         const locked = propertyType.name === "tags"
 
@@ -91,7 +89,7 @@ export function renderPropertyTypeList(
                   <Icon />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                  {(Object.keys(propertyIcons) as PropertyTypeName[]).map((type) => {
+                  {(Object.keys(propertyIcons) as ValueKind[]).map((type) => {
                     const TypeIcon = propertyIcons[type]
                     return (
                       <DropdownMenuItem key={type} onClick={() => actions.changeType(propertyType, type)}>

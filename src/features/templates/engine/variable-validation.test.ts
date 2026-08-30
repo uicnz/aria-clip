@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { parse, validateVariables } from './parser.js';
 
 function warningsFor(template: string): string[] {

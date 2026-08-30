@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { describe, test, expect } from 'vitest';
+import '@/test/dom.js';
+import { describe, test, expect } from 'bun:test';
 import { createTextQuoteAnchor } from './highlighter.js';
 
 function container(text: string): Element {

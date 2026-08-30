@@ -1,11 +1,10 @@
-// @vitest-environment jsdom
+import '@/test/dom.js';
 // Tests for interpreter model variables ({{model}}, {{modelId}}, {{modelProvider}}).
 // These are preserved through template compilation and filled in by the
 // interpreter once a model has actually been used (issue #360).
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, test, expect, beforeEach } from 'bun:test';
 import { compileTemplate } from './template-compiler.js';
 import { replaceModelVariables } from '../../interpreter/interpreter.js';
-import { generalSettings } from '../../../platform/browser/storage-utils.js';
 import { ModelConfig, Provider } from '../../../types/types.js';
 
 const modelConfig: ModelConfig = {
@@ -25,13 +24,19 @@ const provider: Provider = {
 
 describe('Model variables in templates', () => {
 	test('are preserved through compilation when interpreter is enabled', async () => {
-		generalSettings.interpreterEnabled = true;
-		const output = await compileTemplate(0, 'Summarized by {{model}} ({{modelId}}) from {{modelProvider}}', {}, 'https://example.com');
+		const output = await compileTemplate(
+			0,
+			'Summarized by {{model}} ({{modelId}}) from {{modelProvider}}',
+			{},
+			'https://example.com',
+			undefined,
+			undefined,
+			{ preserveInterpreterVariables: true },
+		);
 		expect(output).toBe('Summarized by {{model}} ({{modelId}}) from {{modelProvider}}');
 	});
 
 	test('are removed when interpreter is disabled', async () => {
-		generalSettings.interpreterEnabled = false;
 		const output = await compileTemplate(0, 'Summarized by {{model}}', {}, 'https://example.com');
 		expect(output).toBe('Summarized by ');
 	});

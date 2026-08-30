@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { describe, test, expect } from 'vitest';
+import '@/test/dom.js';
+import { describe, test, expect } from 'bun:test';
 import { processHighlights } from './content-extractor.js';
 import { TextHighlightData } from '../highlights/highlighter.js';
 

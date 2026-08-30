@@ -26,23 +26,21 @@ import {
   ItemGroup,
   ItemMedia,
 } from "@/components/ui/item"
-import type { PropertyType } from "@/types/types"
-
-type PropertyTypeName = "text" | "multitext" | "number" | "checkbox" | "date" | "datetime"
+import type { PropertyType, ValueKind } from "@/types/types"
 
 export type TemplatePropertyRow = {
   id: string
   name: string
   value: string
-  type: PropertyTypeName
+  type: ValueKind
 }
 
 type TemplatePropertyEditorProps = {
   initialRows: TemplatePropertyRow[]
   propertyTypes: PropertyType[]
-  typeLabels: Record<PropertyTypeName, string>
+  typeLabels: Record<ValueKind, string>
   labels: { propertyName: string; propertyValue: string; propertyType: string; removeProperty: string }
-  onTypeChange: (name: string, type: PropertyTypeName) => void
+  onTypeChange: (name: string, type: ValueKind) => void
   onValidate: (input: HTMLInputElement, container: HTMLElement) => void
 }
 
@@ -55,7 +53,7 @@ const propertyIcons = {
   checkbox: SquareCheckBigIcon,
   date: CalendarIcon,
   datetime: ClockIcon,
-} satisfies Record<PropertyTypeName, typeof AlignLeftIcon>
+} satisfies Record<ValueKind, typeof AlignLeftIcon>
 
 function notifyFormChanged() {
   setTimeout(() => {
@@ -111,7 +109,7 @@ function TemplatePropertyEditor({
                 <Icon />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                {(Object.keys(propertyIcons) as PropertyTypeName[]).map((type) => {
+                {(Object.keys(propertyIcons) as ValueKind[]).map((type) => {
                   const TypeIcon = propertyIcons[type]
                   return (
                     <DropdownMenuItem
@@ -142,7 +140,7 @@ function TemplatePropertyEditor({
                   const name = event.currentTarget.value
                   const selectedType = propertyTypes.find((propertyType) => propertyType.name === name)
                   if (selectedType) {
-                    const type = selectedType.type as PropertyTypeName
+					const type = selectedType.type
                     const value = selectedType.defaultValue && !row.value ? selectedType.defaultValue : row.value
                     updateRow(row.id, { name, type, value })
                     onTypeChange(name, type)

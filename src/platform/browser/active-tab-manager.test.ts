@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { isValidUrl, isBlankPage, isRestrictedUrl } from './active-tab-manager.js';
 
 describe('isValidUrl', () => {

@@ -1,10 +1,10 @@
 import type { Property } from '../../types/types.js';
+import { ArtifactTypeSchema, MAX_ARTIFACT_TYPE_LENGTH } from '../../schemas/artifact.js';
 
-export const MAX_ARTIFACT_TYPE_LENGTH = 80;
+export { MAX_ARTIFACT_TYPE_LENGTH };
 
 export function isValidArtifactType(value: string): boolean {
-	return value.length <= MAX_ARTIFACT_TYPE_LENGTH
-		&& /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
+	return ArtifactTypeSchema.safeParse(value).success;
 }
 
 export function addInterpretationArtifactMetadata(properties: Property[], artifactType?: string): Property[] {

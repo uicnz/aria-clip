@@ -1,4 +1,6 @@
-import { Template } from '../../types/types.js';
+import type { Template, ValueKind } from '../../types/types.js';
+import { TemplateImportSchema, TemplateSchema, type TemplateImport } from '../../schemas/template.js';
+import { ChunksSchema, IdsSchema, StoreSchema, type Store } from '../../schemas/store.js';
 import { templates, saveTemplateSettings, editingTemplateIndex, loadTemplates } from '../templates/template-manager.js';
 import { showTemplateEditor, updateTemplateList } from '../templates/template-ui.js';
 import { sanitizeFilename } from '../../core/artifacts/filename.js';
@@ -11,14 +13,33 @@ import { saveFile } from '../../platform/browser/file-utils.js';
 import { copyToClipboard } from '../../platform/browser/clipboard-utils.js';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { getMessage } from '../../platform/browser/i18n.js';
-import { isValidArtifactType } from '../../core/artifacts/artifact.js';
 
 const SCHEMA_VERSION = '0.1.0';
 
-// Add these type definitions at the top
-interface StorageData {
-	[key: string]: any;
-	template_list?: string[];
+function newId(): string {
+	return Date.now().toString() + Math.random().toString(36).slice(2, 9);
+}
+
+function fileFrom(template: Template): TemplateImport {
+	const daily = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
+	const properties = template.properties.map(({ name, value, type }) => ({
+		name,
+		value,
+		type: type ?? generalSettings.propertyTypes.find(item => item.name === name)?.type ?? 'text',
+	}));
+
+	return TemplateImportSchema.parse({
+		schemaVersion: SCHEMA_VERSION,
+		name: template.name,
+		behavior: template.behavior,
+		noteContentFormat: template.noteContentFormat,
+		properties,
+		triggers: template.triggers,
+		artifactType: template.artifactType,
+		noteNameFormat: daily ? undefined : template.noteNameFormat,
+		path: daily ? undefined : template.path,
+		context: template.context || undefined,
+	});
 }
 
 export async function exportTemplate(): Promise<void> {
@@ -27,38 +48,11 @@ export async function exportTemplate(): Promise<void> {
 		return;
 	}
 
-	const template = templates[editingTemplateIndex] as Template;
+	const template = templates[editingTemplateIndex];
+	if (!template) return;
 	const sanitizedName = sanitizeFilename(template.name);
 	const fileName = `${sanitizedName}-clip.json`;
-
-	const isDailyNote = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
-
-	const orderedTemplate: Partial<Template> & { schemaVersion: string } = {
-		schemaVersion: SCHEMA_VERSION,
-		name: template.name,
-		behavior: template.behavior,
-		noteContentFormat: template.noteContentFormat,
-		properties: template.properties.map(({ name, value, type }) => ({
-			name,
-			value,
-			type: type || generalSettings.propertyTypes.find(pt => pt.name === name)?.type || 'text'
-		})),
-		triggers: template.triggers,
-	};
-	if (template.artifactType) orderedTemplate.artifactType = template.artifactType;
-
-	// Only include noteNameFormat and path for non-daily note behaviors
-	if (!isDailyNote) {
-		orderedTemplate.noteNameFormat = template.noteNameFormat;
-		orderedTemplate.path = template.path;
-	}
-
-	// Include context only if it has a value
-	if (template.context) {
-		orderedTemplate.context = template.context;
-	}
-
-	const content = JSON.stringify(orderedTemplate, null, '\t');
+	const content = JSON.stringify(fileFrom(template), null, '\t');
 	
 	await saveFile({
 		content,
@@ -75,103 +69,17 @@ export function importTemplate(input?: HTMLInputElement): void {
 		input.accept = '.json';
 	}
 
-	const handleFile = (file: File) => {
-		const reader = new FileReader();
-		reader.onload = async (e: ProgressEvent<FileReader>) => {
-			try {
-				const importedTemplate = JSON.parse(e.target?.result as string) as Partial<Template>;
-				console.log('Imported template:', importedTemplate);
-
-				if (!validateImportedTemplate(importedTemplate)) {
-					throw new Error('Invalid template file');
-				}
-
-				importedTemplate.id = Date.now().toString() + Math.random().toString(36).slice(2, 9);
-				
-				// Handle property types and preserve existing IDs or generate new ones
-				if (importedTemplate.properties) {
-					importedTemplate.properties = await Promise.all(importedTemplate.properties.map(async (prop: any) => {
-						console.log('Processing property:', prop);
-						// Add or update the property type
-						await addPropertyType(prop.name, prop.type || 'text', prop.value || '');
-						
-						// Use the type from generalSettings, which will be either the existing type or the newly added one
-						const type = generalSettings.propertyTypes.find(pt => pt.name === prop.name)?.type || 'text';
-						console.log(`Property ${prop.name} type after processing:`, type);
-						return {
-							id: prop.id || (Date.now().toString() + Math.random().toString(36).slice(2, 9)),
-							name: prop.name,
-							value: prop.value,
-							type: type
-						};
-					}));
-				}
-
-				console.log('Processed template properties:', importedTemplate.properties);
-
-				// Keep the context if it exists in the imported template
-				if (importedTemplate.context) {
-					importedTemplate.context = importedTemplate.context;
-				}
-
-				let newName = importedTemplate.name as string;
-				let counter = 1;
-				while (templates.some(t => t.name === newName)) {
-					newName = `${importedTemplate.name} (${counter++})`;
-				}
-				importedTemplate.name = newName;
-
-				console.log('Final imported template:', importedTemplate);
-				templates.unshift(importedTemplate as Template);
-
-				saveTemplateSettings();
-				updateTemplateList();
-				showTemplateEditor(importedTemplate as Template);
-				hideModal(document.getElementById('import-modal'));
-			} catch (error) {
-				console.error('Error parsing imported template:', error);
-				alert(getMessage('failedToImportTemplate'));
-			}
-		};
-		reader.readAsText(file);
-	};
-
 	if (input.files && input.files.length > 0) {
-		handleFile(input.files[0]);
+		importTemplateFile(input.files[0]);
 	} else {
 		input.onchange = (event: Event) => {
 			const file = (event.target as HTMLInputElement).files?.[0];
 			if (file) {
-				handleFile(file);
+				importTemplateFile(file);
 			}
 		};
 		input.click();
 	}
-}
-
-function validateImportedTemplate(template: Partial<Template>): boolean {
-	const requiredFields: (keyof Template)[] = ['name', 'behavior', 'properties', 'noteContentFormat'];
-	const validTypes = ['text', 'multitext', 'number', 'checkbox', 'date', 'datetime'];
-	
-	const isDailyNote = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
-
-	const hasRequiredFields = requiredFields.every(field => template.hasOwnProperty(field));
-	const hasValidProperties = Array.isArray(template.properties) &&
-		template.properties!.every((prop: any) => 
-			prop.hasOwnProperty('name') && 
-			prop.hasOwnProperty('value') && 
-			(!prop.hasOwnProperty('type') || validTypes.includes(prop.type))
-		);
-
-	// Check for noteNameFormat and path only if it's not a daily note template
-	const hasValidNoteNameAndPath = isDailyNote || (template.hasOwnProperty('noteNameFormat') && template.hasOwnProperty('path'));
-
-	// Add optional check for context
-	const hasValidContext = !template.context || typeof template.context === 'string';
-	const hasValidArtifactType = !template.artifactType
-		|| (typeof template.artifactType === 'string' && isValidArtifactType(template.artifactType));
-
-	return hasRequiredFields && hasValidProperties && hasValidNoteNameAndPath && hasValidContext && hasValidArtifactType;
 }
 
 function preventDefaults(e: Event): void {
@@ -194,74 +102,59 @@ function handleFiles(files: FileList): void {
 	Array.from(files).forEach(importTemplateFile);
 }
 
-async function processImportedTemplate(importedTemplate: Partial<Template>): Promise<Template> {
-	console.log('Processing imported template:', importedTemplate);
-
-	if (!validateImportedTemplate(importedTemplate)) {
-		throw new Error('Invalid template file');
-	}
-
-	importedTemplate.id = Date.now().toString() + Math.random().toString(36).slice(2, 9);
-	
-	// Process property types
-	if (importedTemplate.properties) {
-		console.log('Processing properties:', importedTemplate.properties);
-		for (const prop of importedTemplate.properties) {
-			console.log(`Processing property: ${prop.name}, type: ${prop.type || 'text'}, value: ${prop.value}`);
-			const existingPropertyType = generalSettings.propertyTypes.find(pt => pt.name === prop.name);
-			if (!existingPropertyType) {
-				// Only add the property type if it doesn't exist
-				await addPropertyType(prop.name, prop.type || 'text', prop.value || '');
-			} else {
-				console.log(`Property type ${prop.name} already exists, keeping existing type: ${existingPropertyType.type}`);
-			}
+async function processImportedTemplate(input: TemplateImport): Promise<Template> {
+	const properties = [];
+	for (const prop of input.properties) {
+		const existing = generalSettings.propertyTypes.find(item => item.name === prop.name);
+		const type: ValueKind = existing?.type ?? prop.type ?? 'text';
+		if (!existing) {
+			await addPropertyType(prop.name, type, prop.value);
 		}
-		
-		// Reassign properties with existing or new types
-		importedTemplate.properties = importedTemplate.properties.map(prop => {
-			const existingPropertyType = generalSettings.propertyTypes.find(pt => pt.name === prop.name);
-			return {
-				id: prop.id || (Date.now().toString() + Math.random().toString(36).slice(2, 9)),
-				name: prop.name,
-				value: prop.value,
-				type: existingPropertyType ? existingPropertyType.type : (prop.type || 'text')
-			};
+		properties.push({
+			id: prop.id ?? newId(),
+			name: prop.name,
+			value: prop.value,
+			type,
 		});
 	}
 
-	console.log('Processed template properties:', importedTemplate.properties);
-
-	// Ensure unique name
-	let newName = importedTemplate.name as string;
+	let newName = input.name;
 	let counter = 1;
 	while (templates.some(t => t.name === newName)) {
-		newName = `${importedTemplate.name} (${counter++})`;
+		newName = `${input.name} (${counter++})`;
 	}
-	importedTemplate.name = newName;
 
-	console.log('Final imported template:', importedTemplate);
-	return importedTemplate as Template;
+	return TemplateSchema.parse({
+		id: newId(),
+		name: newName,
+		behavior: input.behavior,
+		noteNameFormat: input.noteNameFormat ?? '',
+		path: input.path ?? '',
+		noteContentFormat: input.noteContentFormat,
+		properties,
+		triggers: input.triggers,
+		vault: input.vault,
+		context: input.context,
+		artifactType: input.artifactType,
+	});
 }
 
 export function importTemplateFile(file: File): void {
-	const reader = new FileReader();
-	reader.onload = async (e: ProgressEvent<FileReader>) => {
+	void file.text().then(async (content) => {
 		try {
-			console.log('Starting template import');
-			const importedTemplate = JSON.parse(e.target?.result as string) as Partial<Template>;
-			const processedTemplate = await processImportedTemplate(importedTemplate);
+			const imported = TemplateImportSchema.parse(JSON.parse(content));
+			const processedTemplate = await processImportedTemplate(imported);
 			
 			templates.unshift(processedTemplate);
 			await saveTemplateSettings();
 			updateTemplateList();
 			showTemplateEditor(processedTemplate);
-			console.log('Template import completed');
+			hideModal(document.getElementById('import-modal'));
 		} catch (error) {
 			console.error('Error parsing imported template:', error);
 			alert(getMessage('failedToImportTemplate'));
 		}
-	};
-	reader.readAsText(file);
+	});
 }
 
 export function showTemplateImportModal(): void {
@@ -276,8 +169,8 @@ export function showTemplateImportModal(): void {
 
 async function importTemplateFromJson(jsonContent: string): Promise<void> {
 	try {
-		const importedTemplate = JSON.parse(jsonContent) as Partial<Template>;
-		const processedTemplate = await processImportedTemplate(importedTemplate);
+		const imported = TemplateImportSchema.parse(JSON.parse(jsonContent));
+		const processedTemplate = await processImportedTemplate(imported);
 		
 		templates.unshift(processedTemplate);
 		await saveTemplateSettings();
@@ -290,34 +183,7 @@ async function importTemplateFromJson(jsonContent: string): Promise<void> {
 }
 
 export function copyTemplateToClipboard(template: Template): void {
-	const isDailyNote = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
-
-	const orderedTemplate: Partial<Template> & { schemaVersion: string } = {
-		schemaVersion: SCHEMA_VERSION,
-		name: template.name,
-		behavior: template.behavior,
-		noteContentFormat: template.noteContentFormat,
-		properties: template.properties.map(({ name, value, type }) => ({
-			name,
-			value,
-			type: type || generalSettings.propertyTypes.find(pt => pt.name === name)?.type || 'text'
-		})),
-		triggers: template.triggers,
-	};
-	if (template.artifactType) orderedTemplate.artifactType = template.artifactType;
-
-	// Only include noteNameFormat and path for non-daily note behaviors
-	if (!isDailyNote) {
-		orderedTemplate.noteNameFormat = template.noteNameFormat;
-		orderedTemplate.path = template.path;
-	}
-
-	// Include context only if it has a value
-	if (template.context) {
-		orderedTemplate.context = template.context;
-	}
-
-	const jsonContent = JSON.stringify(orderedTemplate, null, 2);
+	const jsonContent = JSON.stringify(fileFrom(template), null, 2);
 	
 	copyToClipboard(
 		jsonContent
@@ -334,22 +200,23 @@ export async function exportAllSettings(): Promise<void> {
 	console.log('Starting exportAllSettings function');
 	try {
 		console.log('Fetching all data from browser storage');
-		const allData = await browser.storage.sync.get(null) as StorageData;
+		const allData = StoreSchema.parse(await browser.storage.sync.get(null));
 		console.log('All data fetched:', allData);
 
 		// Create a copy of the data to modify
-		const exportData: StorageData = { ...allData };
+		const exportData: Store = { ...allData };
 
 		// Decompress all templates
-		const templateIds = exportData.template_list || [];
+		const templateIds = IdsSchema.catch([]).parse(exportData.template_list);
 		for (const id of templateIds) {
 			const key = `template_${id}`;
-			if (exportData[key] && Array.isArray(exportData[key])) {
+			const chunks = ChunksSchema.safeParse(exportData[key]);
+			if (chunks.success) {
 				try {
 					// Join chunks and decompress
-					const compressedData = (exportData[key] as string[]).join('');
+					const compressedData = chunks.data.join('');
 					const decompressedData = decompressFromUTF16(compressedData);
-					exportData[key] = JSON.parse(decompressedData);
+					exportData[key] = TemplateSchema.parse(JSON.parse(decompressedData));
 				} catch (error) {
 					console.error(`Failed to decompress template ${id}:`, error);
 				}
@@ -388,25 +255,25 @@ export function importAllSettings(): void {
 
 async function importAllSettingsFromJson(jsonContent: string): Promise<void> {
 	try {
-		const settings = JSON.parse(jsonContent) as StorageData;
+		const settings = StoreSchema.parse(JSON.parse(jsonContent));
 		
 		if (confirm(getMessage('confirmReplaceSettings'))) {
 			// Create a copy of the settings to modify
-			const importData: StorageData = { ...settings };
+			const importData: Store = { ...settings };
 			
 			// Compress all templates
-			const templateIds = importData.template_list || [];
+			const templateIds = IdsSchema.catch([]).parse(importData.template_list);
 			for (const id of templateIds) {
 				const key = `template_${id}`;
-				if (importData[key]) {
+				const value = importData[key];
+				if (value !== undefined) {
 					try {
 						// Check if the data is already compressed (will be an array of strings)
-						const isAlreadyCompressed = Array.isArray(importData[key]) && 
-							importData[key].every((chunk: any) => typeof chunk === 'string');
+						const chunks = ChunksSchema.safeParse(value);
 
-						if (!isAlreadyCompressed) {
+						if (!chunks.success) {
 							// Compress the template data
-							const templateStr = JSON.stringify(importData[key]);
+							const templateStr = JSON.stringify(TemplateSchema.parse(value));
 							const compressedData = compressToUTF16(templateStr);
 							
 							// Split into chunks

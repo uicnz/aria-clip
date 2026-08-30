@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { decode_uri } from './decode_uri.js';
 
 describe('decode_uri filter', () => {

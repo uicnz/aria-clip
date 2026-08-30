@@ -1,6 +1,6 @@
 {
 	"name": "aria-clip",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"type": "module",
 	"description": "Browser clip for Aria.",
 	"bin": {
@@ -15,22 +15,24 @@
 		"./api": "./dist/api.mjs"
 	},
 	"scripts": {
-		"dev:chrome": "webpack --config webpack.config.cjs --watch --env BROWSER=chrome --mode development",
-		"dev:firefox": "webpack --config webpack.config.cjs --watch --env BROWSER=firefox --mode development",
-		"dev:safari": "bun run sync:version && webpack --config webpack.config.cjs --watch --env BROWSER=safari --mode development",
+		"dev:chrome": "bunx --bun webpack --config webpack.config.ts --watch --env BROWSER=chrome --mode development",
+		"dev:firefox": "bunx --bun webpack --config webpack.config.ts --watch --env BROWSER=firefox --mode development",
+		"dev:safari": "bun run sync:version && bunx --bun webpack --config webpack.config.ts --watch --env BROWSER=safari --mode development",
 		"build:chrome-assets": "bun run scripts/generate-chrome-assets.ts",
-		"build:chrome": "webpack --config webpack.config.cjs --env BROWSER=chrome --mode production",
-		"build:firefox": "webpack --config webpack.config.cjs --env BROWSER=firefox --mode production",
+		"build:chrome": "bunx --bun webpack --config webpack.config.ts --env BROWSER=chrome --mode production",
+		"build:firefox": "bunx --bun webpack --config webpack.config.ts --env BROWSER=firefox --mode production",
 		"build:firefox-source": "bun run scripts/package-firefox-source.ts",
-		"build:safari": "bun run sync:version && webpack --config webpack.config.cjs --env BROWSER=safari --mode production",
+		"build:safari": "bun run sync:version && bunx --bun webpack --config webpack.config.ts --env BROWSER=safari --mode production",
 		"build": "bun run build:chrome && bun run build:firefox && bun run build:safari",
 		"release": "bun run scripts/release.ts",
-		"build:cli": "bun run scripts/build-cli.mjs",
-		"build:api": "bun run scripts/build-api.mjs",
+		"build:cli": "bun run scripts/build-cli.ts",
+		"build:api": "bun run scripts/build-api.ts",
+		"package:cli": "bun run build:cli && bun run build:api && bun run scripts/package-cli.ts",
 		"dev": "bun run dev:chrome",
 		"typecheck": "bunx tsc --noEmit && bunx tsc --noEmit -p scripts/tsconfig.json",
-		"test": "vitest run",
-		"test:watch": "vitest",
+		"test": "bun test --parallel",
+		"test:package": "bun run package:cli && bun run scripts/test-cli-package.ts",
+		"test:watch": "bun test --watch",
 		"update-locales": "bun run scripts/update-locales.ts",
 		"check-strings": "bun run scripts/check-unused-strings.ts",
 		"add-locale": "bun run scripts/add-locale.ts",
@@ -42,6 +44,7 @@
 		"@tailwindcss/postcss": "4.3.3",
 		"@types/chrome": "^0.2.7",
 		"@types/dompurify": "^3.2.0",
+		"@types/jsdom": "^30.0.0",
 		"@types/node": "^26.4.0",
 		"@types/react": "^19.2.18",
 		"@types/react-dom": "^19.2.5",
@@ -62,7 +65,6 @@
 		"terser-webpack-plugin": "^5.6.1",
 		"tw-animate-css": "1.4.0",
 		"typescript": "^7.0.2",
-		"vitest": "^4.1.11",
 		"webextension-polyfill": "^0.12.0",
 		"webpack": "^5.110.1",
 		"webpack-cli": "^7.2.3",
@@ -77,6 +79,7 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"cmdk": "^1.1.1",
+		"commander": "^15.0.0",
 		"date-fns": "^4.4.0",
 		"dayjs": "^1.11.23",
 		"defuddle": "^0.19.3",
@@ -89,16 +92,19 @@
 		"lucide-react": "^1.37.0",
 		"lz-string": "^1.5.0",
 		"next-themes": "^0.4.6",
+		"picocolors": "^1.1.1",
 		"react": "^19.2.8",
 		"react-day-picker": "^10.0.1",
 		"react-dom": "^19.2.8",
 		"react-resizable-panels": "^4.12.3",
 		"recharts": "3.10.1",
 		"sonner": "^2.0.8",
-		"tailwind-merge": "^3.6.0"
+		"tailwind-merge": "^3.6.0",
+		"zod": "^4.5.4"
 	},
 	"packageManager": "bun@1.4.0",
 	"engines": {
-		"bun": ">=1.4.0"
+		"bun": ">=1.4.0",
+		"node": ">=24.0.0"
 	}
 }

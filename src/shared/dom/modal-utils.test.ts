@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import '@/test/dom.js';
+import { afterEach, describe, expect, test, vi } from 'bun:test';
 import { showModal } from './modal-utils.js';
 
 describe('showModal', () => {

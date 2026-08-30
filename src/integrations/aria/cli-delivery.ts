@@ -1,145 +1,94 @@
-import { execFile } from 'child_process';
-import { promisify } from 'util';
-import { sanitizeFilename } from '../../core/artifacts/filename.js';
-import { Template } from '../../types/types.js';
+import { execFile, spawn } from 'node:child_process';
+import { promisify } from 'node:util';
+import { CaptureAckSchema, CaptureSchema, type Capture, type CaptureAck } from '../../schemas/capture.js';
 
-const execFileAsync = promisify(execFile);
+const exec = promisify(execFile);
+const SUPPORT = 'clip.capture.v1';
 
-/**
- * Check if the `aria` CLI is available on PATH.
- */
-async function hasAriaCli(): Promise<boolean> {
+export interface AriaInfo {
+	installed: boolean;
+	available: boolean;
+	version: string | null;
+}
+
+export interface AriaRun {
+	bin: string;
+	args: readonly string[];
+}
+
+const DEFAULT_RUN: AriaRun = { bin: 'aria', args: [] };
+
+async function output(args: string[], run: AriaRun): Promise<string | null> {
 	try {
-		await execFileAsync('aria', ['version']);
-		return true;
+		const result = await exec(run.bin, [...run.args, ...args], { timeout: 5_000 });
+		return result.stdout.trim();
 	} catch {
-		return false;
+		return null;
 	}
 }
 
-/**
- * Create/append/prepend a note via the Aria CLI.
- */
-async function openViaAriaCli(
-	fileContent: string,
-	noteName: string,
-	path: string,
-	vault: string,
-	behavior: Template['behavior'],
-	_silent: boolean
-): Promise<string> {
-	const isDailyNote = behavior === 'append-daily' || behavior === 'prepend-daily';
-	const vaultArgs = vault ? [`vault=${vault}`] : [];
-
-	if (isDailyNote) {
-		const command = behavior === 'append-daily' ? 'daily:append' : 'daily:prepend';
-		const { stdout } = await execFileAsync('aria', [
-			command,
-			`content=${fileContent}`,
-			...vaultArgs,
-		]);
-		return stdout.trim();
-	}
-
-	const normalizedPath = path && !path.endsWith('/') ? path + '/' : path;
-	const formattedNoteName = sanitizeFilename(noteName);
-	const filePath = normalizedPath + formattedNoteName + '.md';
-
-	if (behavior === 'append-specific' || behavior === 'prepend-specific') {
-		const command = behavior === 'append-specific' ? 'append' : 'prepend';
-		const { stdout } = await execFileAsync('aria', [
-			command,
-			`path=${filePath}`,
-			`content=${fileContent}`,
-			...vaultArgs,
-		]);
-		return stdout.trim();
-	}
-
-	// create or overwrite
-	const args = [
-		'create',
-		`path=${filePath}`,
-		`content=${fileContent}`,
-		'open',
-		...vaultArgs,
-	];
-	if (behavior === 'overwrite') {
-		args.push('overwrite');
-	}
-
-	const { stdout } = await execFileAsync('aria', args);
-	return stdout.trim();
+/** Inspect the downstream Aria Agent without invoking its interactive UI. */
+export async function ariaInfo(run: AriaRun = DEFAULT_RUN): Promise<AriaInfo> {
+	const version = await output(['--version'], run);
+	if (!version) return { installed: false, available: false, version: null };
+	const supported = await output(['--supports', SUPPORT], run);
+	return {
+		installed: true,
+		available: supported?.toLowerCase() === 'true',
+		version,
+	};
 }
 
-/**
- * Open a note in Aria via URI scheme (fallback / legacy mode).
- */
-async function openViaUri(
-	fileContent: string,
-	noteName: string,
-	path: string,
-	vault: string,
-	behavior: Template['behavior'],
-	silent: boolean
-): Promise<void> {
-	const isDailyNote = behavior === 'append-daily' || behavior === 'prepend-daily';
-
-	let ariaUrl: string;
-	if (isDailyNote) {
-		ariaUrl = `aria://daily?`;
-	} else {
-		const normalizedPath = path && !path.endsWith('/') ? path + '/' : path;
-		const formattedNoteName = sanitizeFilename(noteName);
-		ariaUrl = `aria://new?file=${encodeURIComponent(normalizedPath + formattedNoteName)}`;
-	}
-
-	if (behavior.startsWith('append')) {
-		ariaUrl += '&append=true';
-	} else if (behavior.startsWith('prepend')) {
-		ariaUrl += '&prepend=true';
-	} else if (behavior === 'overwrite') {
-		ariaUrl += '&overwrite=true';
-	}
-
-	if (vault) {
-		ariaUrl += `&vault=${encodeURIComponent(vault)}`;
-	}
-
-	if (silent) {
-		ariaUrl += '&silent=true';
-	}
-
-	ariaUrl += `&content=${encodeURIComponent(fileContent)}`;
-
-	const platform = process.platform;
-	if (platform === 'darwin') {
-		await execFileAsync('open', [ariaUrl]);
-	} else if (platform === 'win32') {
-		await execFileAsync('powershell', ['-Command', 'Start-Process', '-Uri', ariaUrl]);
-	} else {
-		await execFileAsync('xdg-open', [ariaUrl]);
-	}
+/** Retained as a small compatibility helper for callers that only need a version. */
+export async function ariaVersion(): Promise<string | null> {
+	return (await ariaInfo()).version;
 }
 
-/**
- * Send a note to Aria. Uses the Aria CLI by default,
- * falls back to URI scheme if --uri is set or CLI is not available.
- */
-export async function openInAria(
-	fileContent: string,
-	noteName: string,
-	path: string,
-	vault: string,
-	behavior: Template['behavior'],
-	silent: boolean,
-	forceUri: boolean
-): Promise<string> {
-	if (!forceUri && await hasAriaCli()) {
-		const result = await openViaAriaCli(fileContent, noteName, path, vault, behavior, silent);
-		return result;
-	}
+function ingest(capture: Capture, timeout: number, run: AriaRun): Promise<CaptureAck> {
+	return new Promise((resolve, reject) => {
+		const child = spawn(run.bin, [...run.args, 'clip', 'add', '--input', '-', '--json'], {
+			stdio: ['pipe', 'pipe', 'pipe'],
+		});
+		let stdout = '';
+		let stderr = '';
+		let settled = false;
+		const timer = setTimeout(() => {
+			child.kill();
+			reject(new Error(`Aria intake timed out after ${timeout}ms.`));
+		}, timeout);
 
-	await openViaUri(fileContent, noteName, path, vault, behavior, silent);
-	return `Opened in Aria${vault ? ` (vault: ${vault})` : ''}`;
+		child.stdout.setEncoding('utf8');
+		child.stderr.setEncoding('utf8');
+		child.stdout.on('data', (chunk: string) => { stdout += chunk; });
+		child.stderr.on('data', (chunk: string) => { stderr += chunk; });
+		child.once('error', (error) => {
+			if (settled) return;
+			settled = true;
+			clearTimeout(timer);
+			reject(error);
+		});
+		child.once('close', (code) => {
+			if (settled) return;
+			settled = true;
+			clearTimeout(timer);
+			if (code !== 0) {
+				reject(new Error(stderr.trim() || `Aria intake exited with status ${code ?? 'unknown'}.`));
+				return;
+			}
+			try {
+				resolve(CaptureAckSchema.parse(JSON.parse(stdout)));
+			} catch (error) {
+				reject(new Error(`Aria returned an invalid capture acknowledgement: ${error instanceof Error ? error.message : 'unknown error'}`));
+			}
+		});
+
+		child.stdin.end(`${JSON.stringify(CaptureSchema.parse(capture))}\n`);
+	});
+}
+
+/** Deliver a versioned capture envelope through Aria's capability-gated intake. */
+export async function sendAria(capture: Capture, timeout: number, run: AriaRun = DEFAULT_RUN): Promise<Extract<CaptureAck, { ok: true }>> {
+	const ack = await ingest(capture, timeout, run);
+	if (!ack.ok) throw new Error(`${ack.message} (${ack.code})`);
+	return ack;
 }

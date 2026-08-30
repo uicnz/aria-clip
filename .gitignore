@@ -16,6 +16,7 @@ assets/shared
 *.xcuserstate
 *.xcuserdatad
 xcode/Aria Clip/Version.xcconfig
+xcode/Aria Clip/Shared (App)/Resources/Script.js
 
 .context
 .cursorrules

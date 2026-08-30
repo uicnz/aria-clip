@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { strip_md } from './strip_md.js';
 
 describe('strip_md filter', () => {

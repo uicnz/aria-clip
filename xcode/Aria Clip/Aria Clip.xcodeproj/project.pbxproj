@@ -73,6 +73,8 @@
 		AFA233A82F63522E00F39577 /* flatten-shadow-dom.js in Resources */ = {isa = PBXBuildFile; fileRef = AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */; };
 		AFB000013100000000000001 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = AFB000003100000000000001 /* fonts */; };
 		AFB000023100000000000001 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = AFB000003100000000000001 /* fonts */; };
+		AFB100013200000000000001 /* providers.json in Resources */ = {isa = PBXBuildFile; fileRef = AFB100003200000000000001 /* providers.json */; };
+		AFB100023200000000000001 /* providers.json in Resources */ = {isa = PBXBuildFile; fileRef = AFB100003200000000000001 /* providers.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +165,7 @@
 		AF4F759A2F9C1AD80072BA9B /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		AFA233A42F63522E00F39577 /* flatten-shadow-dom.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "flatten-shadow-dom.js"; path = "../../../dist/safari/flatten-shadow-dom.js"; sourceTree = "<group>"; };
 		AFB000003100000000000001 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../../../dist/safari/fonts; sourceTree = "<group>"; };
+		AFB100003200000000000001 /* providers.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = providers.json; path = ../../../dist/safari/providers.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -306,6 +309,7 @@
 				7AEF05D42CA0F50D005FFBC2 /* style.css */,
 				7A6480582D820A9800A5924D /* reader.css */,
 				7AEF05D52CA0F50D005FFBC2 /* manifest.json */,
+				AFB100003200000000000001 /* providers.json */,
 				7AEF05D62CA0F50D005FFBC2 /* content.js */,
 				7AEF05D82CA0F50D005FFBC2 /* settings.html */,
 				7A6535C82D8B530300DDF54C /* reader-script.js */,
@@ -491,6 +495,7 @@
 				7AEF05EE2CA0F50D005FFBC2 /* browser-polyfill.min.js in Resources */,
 				7AEF05F22CA0F50D005FFBC2 /* content.js in Resources */,
 				7AEF05F12CA0F50D005FFBC2 /* manifest.json in Resources */,
+				AFB100013200000000000001 /* providers.json in Resources */,
 				7AEF05EB2CA0F50D005FFBC2 /* popup.js in Resources */,
 				7A64805A2D820A9800A5924D /* reader.css in Resources */,
 				AFA233A82F63522E00F39577 /* flatten-shadow-dom.js in Resources */,
@@ -518,6 +523,7 @@
 				7AEF05E12CA0F50D005FFBC2 /* browser-polyfill.min.js in Resources */,
 				7AEF05E52CA0F50D005FFBC2 /* content.js in Resources */,
 				7AEF05E42CA0F50D005FFBC2 /* manifest.json in Resources */,
+				AFB100023200000000000001 /* providers.json in Resources */,
 				7AEF05DE2CA0F50D005FFBC2 /* popup.js in Resources */,
 				7A6480592D820A9800A5924D /* reader.css in Resources */,
 				AFA233A62F63522E00F39577 /* flatten-shadow-dom.js in Resources */,

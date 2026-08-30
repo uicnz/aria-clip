@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { remove_tags } from './remove_tags.js';
 
 describe('remove_tags filter', () => {

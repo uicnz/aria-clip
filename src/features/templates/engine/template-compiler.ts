@@ -5,7 +5,6 @@
 import { render, RenderContext, AsyncResolver } from './renderer.js';
 import { applyFilterDirect } from './filters/index.js';
 import { processSimpleVariable } from './variables/simple.js';
-import { processSelector, resolveSelector } from './variables/selector.js';
 import { processSchema } from './variables/schema.js';
 import { processPrompt } from './variables/prompt.js';
 import { isModelVariable, processModelVariable } from './variables/model.js';
@@ -16,6 +15,11 @@ import { isModelVariable, processModelVariable } from './variables/model.js';
  */
 export type SelectorProcessor = (match: string, currentUrl: string) => Promise<string>;
 
+export interface CompileTemplateOptions {
+	/** Keep prompt and model placeholders for a later Interpreter stage. */
+	preserveInterpreterVariables?: boolean;
+}
+
 /**
  * Main function to compile a template with the given variables.
  *
@@ -23,7 +27,7 @@ export type SelectorProcessor = (match: string, currentUrl: string) => Promise<s
  * @param text - Template string to compile
  * @param variables - Variables available in the template
  * @param currentUrl - Current page URL for filter processing
- * @param customAsyncResolver - Optional async resolver override (defaults to browser selector resolver)
+ * @param customAsyncResolver - Optional environment-specific async resolver
  * @param customSelectorProcessor - Optional selector processor override for post-processing
  * @returns Compiled template string
  */
@@ -33,18 +37,11 @@ export async function compileTemplate(
 	variables: { [key: string]: any },
 	currentUrl: string,
 	customAsyncResolver?: AsyncResolver,
-	customSelectorProcessor?: SelectorProcessor
+	customSelectorProcessor?: SelectorProcessor,
+	options: CompileTemplateOptions = {}
 ): Promise<string> {
 	// Strip text fragment from URL
 	currentUrl = currentUrl.replace(/#:~:text=[^&]+(&|$)/, '');
-
-	// Use provided resolver or default browser-based one
-	const asyncResolver = customAsyncResolver ?? (async (name: string, ctx: RenderContext): Promise<any> => {
-		if (name.startsWith('selector:') || name.startsWith('selectorHtml:')) {
-			return resolveSelector(ctx.tabId!, name);
-		}
-		return undefined;
-	});
 
 	// Create render context with custom variable resolver
 	const context: RenderContext = {
@@ -52,7 +49,7 @@ export async function compileTemplate(
 		currentUrl,
 		tabId,
 		applyFilterDirect,
-		asyncResolver,
+		asyncResolver: customAsyncResolver,
 	};
 
 	// Render the template using the AST-based renderer
@@ -71,7 +68,13 @@ export async function compileTemplate(
 
 	// Post-process: handle special variable types that weren't processed by the renderer
 	// The renderer handles basic variables, but special prefixes need custom processing
-	const processedText = await processVariables(tabId, result.output, variables, currentUrl, customSelectorProcessor);
+	const processedText = await processVariables(
+		result.output,
+		variables,
+		currentUrl,
+		customSelectorProcessor,
+		options,
+	);
 
 	return processedText;
 }
@@ -84,11 +87,11 @@ export async function compileTemplate(
  * variable interpolations that need special processing.
  */
 export async function processVariables(
-	tabId: number,
 	text: string,
 	variables: { [key: string]: any },
 	currentUrl: string,
-	customSelectorProcessor?: SelectorProcessor
+	customSelectorProcessor?: SelectorProcessor,
+	options: CompileTemplateOptions = {}
 ): Promise<string> {
 	const regex = /{{([\s\S]*?)}}/g;
 	let result = text;
@@ -104,14 +107,16 @@ export async function processVariables(
 			if (customSelectorProcessor) {
 				replacement = await customSelectorProcessor(fullMatch, currentUrl);
 			} else {
-				replacement = await processSelector(tabId, fullMatch, currentUrl);
+				// Environment-independent compilation cannot query a browser tab.
+				// Preserve the selector so a caller-specific stage can resolve it.
+				replacement = fullMatch;
 			}
 		} else if (trimmedMatch.startsWith('schema:')) {
 			replacement = await processSchema(fullMatch, variables, currentUrl);
 		} else if (trimmedMatch.startsWith('"') || trimmedMatch.startsWith('prompt:')) {
-			replacement = await processPrompt(fullMatch, variables, currentUrl);
+			replacement = await processPrompt(fullMatch, options.preserveInterpreterVariables ?? false);
 		} else if (isModelVariable(trimmedMatch)) {
-			replacement = await processModelVariable(fullMatch);
+			replacement = await processModelVariable(fullMatch, options.preserveInterpreterVariables ?? false);
 		} else {
 			replacement = await processSimpleVariable(trimmedMatch, variables, currentUrl);
 		}
@@ -122,4 +127,3 @@ export async function processVariables(
 
 	return result;
 }
-

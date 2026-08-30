@@ -1,4 +1,5 @@
-import { PropertyType } from '../../types/types.js';
+import type { PropertyType, ValueKind } from '../../types/types.js';
+import { TypesFileSchema } from '../../schemas/template.js';
 import { generalSettings, saveSettings } from '../../platform/browser/storage-utils.js';
 import { templates } from './template-manager.js';
 import { refreshPropertyNameSuggestions } from './template-ui.js';
@@ -134,21 +135,14 @@ function showTypesImportModal(): void {
 
 async function importTypesFromJson(jsonContent: string): Promise<void> {
 	try {
-		const content = JSON.parse(jsonContent);
-		if (content && typeof content === 'object' && 'types' in content && typeof content.types === 'object') {
-			const newTypes = Object.entries(content.types).map(([name, type]) => {
-				if (typeof type !== 'string') {
-					console.warn(`Invalid type for property "${name}". Using 'text' as default.`);
-					return { name, type: 'text', defaultValue: '' };
-				}
-				return { name, type, defaultValue: '' };
-			});
+		const content = TypesFileSchema.parse(JSON.parse(jsonContent));
+		const newTypes: PropertyType[] = Object.entries(content.types).map(([name, type]) => ({
+			name,
+			type,
+		}));
 
-			await mergePropertyTypes(newTypes);
-			updatePropertyTypesList();
-		} else {
-			throw new Error('Invalid types.json format: "types" property not found or is not an object');
-		}
+		await mergePropertyTypes(newTypes);
+		updatePropertyTypesList();
 	} catch (error) {
 		console.error('Error parsing types.json:', error);
 		throw new Error(`Error importing types.json: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -167,7 +161,7 @@ async function mergePropertyTypes(newTypes: PropertyType[]): Promise<void> {
 			if (existingType) {
 				console.log(`Existing type found for ${newType.name}: ${existingType.type}`);
 				if (existingType.type !== newType.type) {
-					const useNewType = await resolveConflict(newType.name, 'type', existingType.type, newType.type);
+					const useNewType = await confirmType(newType.name, existingType.type, newType.type);
 					if (useNewType) {
 						console.log(`Updating existing type: ${newType.name} to ${newType.type}`);
 						await updatePropertyType(newType.name, newType.type, existingType.defaultValue);
@@ -188,9 +182,9 @@ async function mergePropertyTypes(newTypes: PropertyType[]): Promise<void> {
 	console.log('Property types merged and saved');
 }
 
-async function resolveConflict(name: string, field: string, existingValue: string, newValue: string): Promise<boolean> {
+async function confirmType(name: string, existingValue: ValueKind, newValue: ValueKind): Promise<boolean> {
 	return new Promise<boolean>((resolve) => {
-		const message = `Property "${name}" has a conflict:\n${field}: "${existingValue}" -> "${newValue}"\nDo you want to update this ${field}?`;
+		const message = `Property "${name}" has a conflict:\ntype: "${existingValue}" -> "${newValue}"\nDo you want to update this type?`;
 		if (confirm(message)) {
 			resolve(true);
 		} else {
@@ -203,7 +197,7 @@ async function exportTypesJson(): Promise<void> {
 	const typesObject = generalSettings.propertyTypes.reduce((acc, { name, type }) => {
 		acc[name] = type;
 		return acc;
-	}, {} as Record<string, string>);
+	}, {} as Record<string, ValueKind>);
 
 	const content = JSON.stringify({ types: typesObject }, null, 2);
 	const fileName = 'types.json';
@@ -216,7 +210,7 @@ async function exportTypesJson(): Promise<void> {
 	});
 }
 
-export async function addPropertyType(name: string, type: string = 'text', defaultValue: string = ''): Promise<void> {
+export async function addPropertyType(name: string, type: ValueKind = 'text', defaultValue: string = ''): Promise<void> {
 	console.log(`addPropertyType called with: name=${name}, type=${type}, defaultValue=${defaultValue}`);
 	const existingPropertyType = generalSettings.propertyTypes.find(pt => pt.name === name);
 	if (!existingPropertyType) {
@@ -242,7 +236,7 @@ export async function addPropertyType(name: string, type: string = 'text', defau
 	console.log('Current property types:', JSON.stringify(generalSettings.propertyTypes, null, 2));
 }
 
-export async function updatePropertyType(name: string, newType: string, newDefaultValue?: string): Promise<void> {
+export async function updatePropertyType(name: string, newType: ValueKind, newDefaultValue?: string): Promise<void> {
 	const index = generalSettings.propertyTypes.findIndex(p => p.name === name);
 	if (index !== -1) {
 		generalSettings.propertyTypes[index].type = newType;

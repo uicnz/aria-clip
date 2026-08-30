@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'bun:test';
 import { BUILTIN_TEMPLATES } from '../builtin-templates.js';
 import { findMatchingTemplate, initializeTriggers } from './triggers.js';
 
@@ -16,6 +16,20 @@ describe('builtin template triggers', () => {
 		['https://youtu.be/abc123', 'Video Notes'],
 	])('selects Video Notes for %s', async (url, expectedName) => {
 		const match = await findMatchingTemplate(url, async () => []);
+
+		expect(match?.name).toBe(expectedName);
+	});
+
+	test.each([
+		['https://www.nasa.gov/news-release/example/', 'News Brief'],
+		['https://www.allrecipes.com/recipe/10813/example/', 'Recipe Card'],
+		['https://www.eventbrite.com/e/example-tickets-123', 'Event Details'],
+	])('uses an unambiguous site path for %s', async (url, expectedName) => {
+		const match = await findMatchingTemplate(url, async () => [
+			{ '@type': 'NewsArticle' },
+			{ '@type': 'Recipe' },
+			{ '@type': 'Event' },
+		]);
 
 		expect(match?.name).toBe(expectedName);
 	});

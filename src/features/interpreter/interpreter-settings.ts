@@ -5,27 +5,12 @@ import { showModal, hideModal } from '../../shared/dom/modal-utils.js';
 import { getMessage, translatePage } from '../../platform/browser/i18n.js';
 import { debugLog } from '../../platform/browser/debug.js';
 import { clearModelSelection, renderModelList, renderModelSelection, renderProviderList } from '../../components/settings/interpreter-lists.js';
+import browser from '../../platform/browser/browser-polyfill.js';
+import { CatalogSchema, type Preset as PresetProvider } from '../../schemas/model.js';
 
-export interface PresetProvider {
-	id: string;
-	name: string;
-	baseUrl: string;
-	apiKeyUrl?: string;
-	apiKeyRequired?: boolean;
-	modelsList?: string;
-	popularModels?: Array<{
-		id: string;
-		name: string;
-		recommended?: boolean;
-	}>;
-}
+export type { Preset as PresetProvider } from '../../schemas/model.js';
 
-interface ProviderPresets {
-	version: string;
-	[key: string]: PresetProvider | string;
-}
-
-const PROVIDERS_URL = 'https://raw.githubusercontent.com/uicnz/aria-clip/refs/heads/main/providers.json';
+const PROVIDERS_URL = browser.runtime.getURL('providers.json');
 
 let cachedPresets: Record<string, PresetProvider> | null = null;
 
@@ -42,16 +27,9 @@ export async function getPresetProviders(): Promise<Record<string, PresetProvide
 		if (!response.ok) {
 			throw new Error(`Unable to load provider catalog (${response.status})`);
 		}
-		const data = await response.json() as ProviderPresets;
-		const providers: Record<string, PresetProvider> = {};
-
-		for (const [id, value] of Object.entries(data)) {
-			if (id === 'version' || typeof value === 'string') continue;
-			providers[id] = { ...value, id };
-		}
-
-		cachedPresets = providers;
-		debugLog('Providers', 'Loaded provider catalog:', providers);
+		const data = CatalogSchema.parse(await response.json());
+		cachedPresets = data.providers;
+		debugLog('Providers', 'Loaded provider catalog:', data.providers);
 		return cachedPresets;
 	} catch (error) {
 		console.error('Failed to load provider catalog:', error);
@@ -355,7 +333,7 @@ async function showProviderModal(provider: Provider, index?: number) {
 			name: name,
 			baseUrl: baseUrl,
 			apiKey: apiKey,
-			apiKeyRequired: true
+			apiKeyRequired: true,
 		};
 
 		debugLog('Providers', 'Saving provider:', updatedProvider);
@@ -369,6 +347,8 @@ async function showProviderModal(provider: Provider, index?: number) {
 			const providerPreset = cachedPresetProviders[presetId];
 			
 			updatedProvider.name = providerPreset.name;
+			updatedProvider.api = providerPreset.api;
+			updatedProvider.presetId = providerPreset.id;
 			
 			const providerPresetBaseUrl = providerPreset.baseUrl;
 			// Use the user-provided baseUrl if it's different from the preset baseUrl

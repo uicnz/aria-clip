@@ -1,10 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 import I18nAutomation from './i18n-automation.js';
-import dotenv from 'dotenv';
+import { loadEnv } from '../src/platform/node/env.js';
 
-// Load environment variables
-dotenv.config();
+loadEnv();
 
 interface Language {
 	code: string;

@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { beforeEach, describe, expect, test } from 'vitest';
+import '@/test/dom.js';
+import { beforeEach, describe, expect, test } from 'bun:test';
 import type { PromptVariable } from '../../types/types.js';
 import { replacePromptVariables, replacePromptVariablesInText } from './interpreter.js';
 

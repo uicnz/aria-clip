@@ -1,5 +1,6 @@
 import type { Template } from '../../types/types.js';
 
+export const DEFAULT_TEMPLATE_ID = 'builtin-default';
 export const PAGE_SUMMARY_TEMPLATE_ID = 'builtin-page-summary';
 export const PAGE_SUMMARY_TEMPLATE_NAME = 'Page Summary';
 export const NEWS_BRIEF_TEMPLATE_ID = 'builtin-news-brief';
@@ -20,6 +21,7 @@ interface InterpreterPromptDefinition {
 	outputStructure: string;
 	qualityBar: readonly string[];
 	responseContract?: readonly string[];
+	terse?: boolean;
 }
 
 const BASE_SOURCE_POLICY = [
@@ -35,16 +37,22 @@ const BASE_RESPONSE_CONTRACT = [
 	'Do not include a preamble, explanation, process notes, or commentary about the task.',
 ] as const;
 
+const COVERAGE_RULE =
+	'Make coverage and detail proportional to the source breadth; do not replace substantive source material with a generic summary.';
+
 function promptList(items: readonly string[]): string {
 	return items.map(item => `- ${item}`).join('\n');
 }
 
 function createInterpreterPrompt(definition: InterpreterPromptDefinition): string {
+	const quality = definition.terse
+		? definition.qualityBar
+		: [COVERAGE_RULE, ...definition.qualityBar];
 	const prompt = [
 		`<task>\n${definition.task}\n</task>`,
 		`<source-policy>\n${promptList([...BASE_SOURCE_POLICY, ...(definition.sourcePolicy ?? [])])}\n</source-policy>`,
 		`<output-structure>\n${definition.outputStructure.trim()}\n</output-structure>`,
-		`<quality-bar>\n${promptList(definition.qualityBar)}\n</quality-bar>`,
+		`<quality-bar>\n${promptList(quality)}\n</quality-bar>`,
 		`<response-contract>\n${promptList(definition.responseContract ?? BASE_RESPONSE_CONTRACT)}\n</response-contract>`,
 	].join('\n\n');
 
@@ -72,10 +80,14 @@ Sentence flow:
 		'Return only the finished paragraph in Markdown.',
 		'Do not include a heading, bullets, preamble, or commentary.',
 	],
+	terse: true,
 });
 
-const SOURCE_MARKDOWN_CONTEXT =
+const PREVIOUS_SOURCE_MARKDOWN_CONTEXT =
 	'<source-metadata>\n- Title: {{title}}\n- URL: {{url}}\n- Author: {{author}}\n- Published: {{published}}\n</source-metadata>\n\n<source-markdown>\n{{content}}\n</source-markdown>';
+
+const SOURCE_MARKDOWN_CONTEXT =
+	'<source-metadata>\n- Title: {{title}}\n- URL: {{url}}\n- Author: {{author}}\n- Published: {{published}}\n</source-metadata>\n\n<source-description>\n{{description}}\n</source-description>\n\n<source-markdown>\n{{content}}\n</source-markdown>';
 
 const PAGE_MARKDOWN_CONTEXT = '<source-markdown>\n{{content}}\n</source-markdown>';
 
@@ -230,7 +242,7 @@ Use the headings in this order. Omit a headed section only when it is unsupporte
 	],
 });
 
-const VIDEO_NOTES_PROMPT = createInterpreterPrompt({
+const PREVIOUS_VIDEO_NOTES_PROMPT = createInterpreterPrompt({
 	task: 'Turn the supplied source metadata and Markdown or transcript into useful video notes.',
 	outputStructure: `## Overview
 Summarize the video’s subject, argument, and value in 2–4 sentences.
@@ -252,6 +264,41 @@ Use the headings in this order. Omit a headed section only when it is unsupporte
 		'Keep every timestamp attached to the correct topic or demonstration.',
 		'Identify speakers only when the source supports the identification.',
 		'Preserve important examples and clearly attributed viewpoints.',
+		'Do not invent timestamps, quotations, speakers, demonstrations, or claims.',
+	],
+	terse: true,
+});
+
+const VIDEO_NOTES_PROMPT = createInterpreterPrompt({
+	task: 'Turn the complete supplied video source into durable notes whose coverage reflects the video’s breadth and duration.',
+	sourcePolicy: [
+		'Treat the description, chapter markers, and transcript as evidence with different precision: a chapter title supports its topic, while detailed claims require transcript or description support.',
+	],
+	outputStructure: `## Overview
+Summarize the video’s subject, central argument, scope, and practical value in 3–5 sentences.
+
+## Timeline
+- When timestamped chapters or transcript markers exist, preserve every supplied chapter marker in source order.
+- Format each item as **timestamp** — topic, followed by a concise source-supported explanation when detail exists.
+- Never collapse a supplied chapter list into a smaller sample.
+
+## Key Ideas
+- Explain the principal claims, concepts, distinctions, examples, and supporting reasoning across the beginning, middle, and end of the source.
+- Group closely related material, but retain materially distinct subjects.
+
+## Demonstrations
+- Record meaningful walkthroughs, experiments, tools, workflows, or worked examples with their timestamps when available.
+
+## Followups
+- List source-supported references, questions, or actions worth pursuing.
+
+Use the headings in this order. Omit a headed section only when it is unsupported. A supplied timeline is always sufficient support for the Timeline section.`,
+	qualityBar: [
+		'Keep every supplied chapter timestamp attached to the correct topic and preserve its order.',
+		'For long videos, cover substantive themes across the full runtime rather than concentrating only on the opening.',
+		'Identify speakers only when the source supports the identification.',
+		'Preserve important examples, named tools, contrasts, and clearly attributed viewpoints.',
+		'Do not infer a claim or conclusion from a chapter title alone.',
 		'Do not invent timestamps, quotations, speakers, demonstrations, or claims.',
 	],
 });
@@ -466,6 +513,19 @@ function createProperties(templateId: string, tags: string): Template['propertie
 	];
 }
 
+export function createDefaultTemplate(): Template {
+	return {
+		id: DEFAULT_TEMPLATE_ID,
+		name: 'Default',
+		behavior: 'create',
+		noteNameFormat: '{{title}}',
+		path: 'Clips',
+		noteContentFormat: '{{content}}',
+		properties: createProperties(DEFAULT_TEMPLATE_ID, 'clips'),
+		triggers: [],
+	};
+}
+
 function createStructuredTemplate(options: StructuredTemplateOptions): Template {
 	return {
 		id: options.id,
@@ -504,7 +564,10 @@ export function createNewsBriefTemplate(): Template {
 		path: 'Clips/News',
 		prompt: NEWS_BRIEF_PROMPT,
 		tags: 'clips, news',
-		triggers: ['schema:@NewsArticle'],
+		triggers: [
+			'https://www.nasa.gov/news-release/',
+			'schema:@NewsArticle',
+		],
 	});
 }
 
@@ -544,7 +607,10 @@ export function createRecipeCardTemplate(): Template {
 		path: 'Clips/Recipes',
 		prompt: RECIPE_CARD_PROMPT,
 		tags: 'clips, recipes',
-		triggers: ['schema:@Recipe'],
+		triggers: [
+			'https://www.allrecipes.com/recipe/',
+			'schema:@Recipe',
+		],
 	});
 }
 
@@ -608,7 +674,10 @@ export function createEventDetailsTemplate(): Template {
 		path: 'Clips/Events',
 		prompt: EVENT_DETAILS_PROMPT,
 		tags: 'clips, events',
-		triggers: ['schema:@Event'],
+		triggers: [
+			'https://www.eventbrite.com/e/',
+			'schema:@Event',
+		],
 	});
 }
 
@@ -636,6 +705,7 @@ export function createCodeReferenceTemplate(): Template {
 }
 
 export const BUILTIN_TEMPLATES: readonly BuiltinTemplateDefinition[] = [
+	{ id: DEFAULT_TEMPLATE_ID, name: 'Default', create: createDefaultTemplate },
 	{
 		id: PAGE_SUMMARY_TEMPLATE_ID,
 		name: PAGE_SUMMARY_TEMPLATE_NAME,
@@ -671,6 +741,29 @@ export function migrateBuiltinPromptStructure(template: Template): boolean {
 		? '{{content}}'
 		: LEGACY_SOURCE_MARKDOWN_CONTEXT;
 	if (template.context === legacyContext) {
+		template.context = current.context;
+		changed = true;
+	}
+
+	return changed;
+}
+
+export function migrateBuiltinDepth(template: Template): boolean {
+	const definition = BUILTIN_TEMPLATES.find(candidate => candidate.id === template.id);
+	if (!definition) return false;
+
+	const current = definition.create();
+	const previousPrompt = template.id === VIDEO_NOTES_TEMPLATE_ID
+		? PREVIOUS_VIDEO_NOTES_PROMPT
+		: current.noteContentFormat.replace(`- ${COVERAGE_RULE}\n`, '');
+	let changed = false;
+
+	if (previousPrompt !== current.noteContentFormat && template.noteContentFormat === previousPrompt) {
+		template.noteContentFormat = current.noteContentFormat;
+		changed = true;
+	}
+
+	if (template.context === PREVIOUS_SOURCE_MARKDOWN_CONTEXT && current.context !== template.context) {
 		template.context = current.context;
 		changed = true;
 	}

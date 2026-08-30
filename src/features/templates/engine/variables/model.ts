@@ -1,4 +1,3 @@
-import { generalSettings } from '../../../../platform/browser/storage-utils.js';
 import { MODEL_VARIABLE_NAMES } from '../renderer.js';
 
 // Returns true if the variable string (e.g. `model` or `modelId|lower`)
@@ -10,6 +9,6 @@ export function isModelVariable(variableString: string): boolean {
 
 // Model variables are only known once the interpreter runs, so keep them
 // in place until then — like prompt variables
-export async function processModelVariable(match: string): Promise<string> {
-	return generalSettings.interpreterEnabled ? match : '';
+export async function processModelVariable(match: string, preserveInterpreterVariables: boolean): Promise<string> {
+	return preserveInterpreterVariables ? match : '';
 }

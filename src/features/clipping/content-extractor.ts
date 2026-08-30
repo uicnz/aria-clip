@@ -46,7 +46,7 @@ export interface ContentResponse {
 	content: string;
 	selectedHtml: string;
 	extractedContent: ExtractedContent;
-	schemaOrgData: any;
+	schemaOrgData: unknown;
 	fullHtml: string;
 	highlights: AnyHighlightData[];
 	title: string;
@@ -108,7 +108,7 @@ export async function extractPageContent(tabId: number): Promise<ContentResponse
 		// extension update when a zombie content script (runtime invalidated)
 		// responded to ping, preventing re-injection. Force a fresh injection
 		// so the new generation's listener takes over, then retry.
-		debugLog('Clip', 'First extraction attempt failed, retrying...', firstError);
+		debugLog('Clip', 'First extraction attempt failed, retrying...', firstError instanceof Error ? firstError : String(firstError));
 		try {
 			await browser.runtime.sendMessage({ action: "forceInjectContentScript", tabId });
 		} catch {
@@ -128,7 +128,7 @@ export async function initializePageContent(
 	selectedHtml: string,
 	extractedContent: ExtractedContent,
 	currentUrl: string,
-	schemaOrgData: any,
+	schemaOrgData: unknown,
 	fullHtml: string,
 	highlights: AnyHighlightData[],
 	title: string,
@@ -281,7 +281,7 @@ function processHighlight(highlight: TextHighlightData | ElementHighlightData, t
 			processContentBasedHighlight(highlight, tempDiv);
 		}
 	} catch (error) {
-		debugLog('Highlights', 'Error processing highlight:', error);
+		debugLog('Highlights', 'Error processing highlight:', error instanceof Error ? error : String(error));
 	}
 }
 

@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { render, renderTemplate, RenderContext } from './renderer.js';
 
 // Simple filter implementation for testing (direct invocation)

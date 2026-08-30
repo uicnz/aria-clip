@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { uncamel } from './uncamel.js';
 
 describe('uncamel filter', () => {

@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { describe, expect, test } from 'vitest';
+import '@/test/dom.js';
+import { describe, expect, test } from 'bun:test';
 
 describe('flatten shadow DOM page-world entry', () => {
 	test('stamps open shadow-root HTML onto its host', async () => {

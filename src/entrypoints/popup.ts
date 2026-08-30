@@ -1,9 +1,9 @@
 import { Template, Property } from '../types/types.js';
 import { incrementStat } from '../platform/browser/storage-utils.js';
-import { type AriaClipCapture, deliverCaptureToAria } from '../integrations/aria/aria-clip-delivery.js';
+import { deliverCaptureToAria } from '../integrations/aria/aria-clip-delivery.js';
 import { type ContentResponse, extractPageContent, initializePageContent } from '../features/clipping/content-extractor.js';
 import { generateFrontmatter } from '../features/clipping/frontmatter.js';
-import { compileTemplate } from '../features/templates/engine/template-compiler.js';
+import { compileBrowserTemplate as compileTemplate } from '../features/templates/engine/browser-template-compiler.js';
 import { initializeIcons } from '../icons/icons.js';
 import { findMatchingTemplate, initializeTriggers } from '../features/templates/engine/triggers.js';
 import { getLocalStorage, setLocalStorage, loadSettings, generalSettings, Settings } from '../platform/browser/storage-utils.js';
@@ -29,6 +29,8 @@ import { addRuntimeMessageListener } from '../platform/browser/runtime-messaging
 import { initializeExtensionTheme } from '../platform/browser/theme-utils.js';
 import { mountPopupShell } from '../components/popup/popup-shell.js';
 import { renderMetadataProperties } from '../components/popup/metadata-properties.js';
+import { ValueKindSchema } from '../schemas/template.js';
+import { CaptureSchema } from '../schemas/capture.js';
 
 void initializeExtensionTheme();
 
@@ -45,6 +47,11 @@ let currentVariableCatalog: TemplateVariableCatalog | null = null;
 let currentTabId: number | undefined;
 let lastSelectedVault: string | null = null;
 let latestExtractedData: ContentResponse | null = null;
+
+async function hash(value: string): Promise<string> {
+	const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+	return `sha256:${Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('')}`;
+}
 
 const isSidePanel = window.location.pathname.includes('side-panel.html');
 const urlParams = new URLSearchParams(window.location.search);
@@ -892,7 +899,7 @@ function buildTemplateFieldsSkeleton(template: Template | null) {
 	}
 }
 
-async function fillTemplateFieldValues(currentTabId: number, template: Template | null, variables: { [key: string]: string }, _schemaOrgData?: any) {
+async function fillTemplateFieldValues(currentTabId: number, template: Template | null, variables: { [key: string]: string }, _schemaOrgData?: unknown) {
 	if (!template) return;
 
 	const currentUrl = currentTabId ? (await getTabInfo(currentTabId)).url || '' : '';
@@ -920,7 +927,7 @@ async function fillTemplateFieldValues(currentTabId: number, template: Template 
 		if (!inputElement) continue;
 
 		let value = compiledPropertyValues[i];
-		const propertyType = inputElement.getAttribute('data-type') || 'text';
+		const propertyType = ValueKindSchema.catch('text').parse(inputElement.getAttribute('data-type'));
 
 		// Apply type-specific parsing
 		value = formatPropertyValue(value, propertyType, property.value);
@@ -1357,14 +1364,18 @@ async function handleClipAria(): Promise<void> {
 		const tabInfo = await getTabInfo(currentTabId);
 		const browserName = await detectBrowser();
 		const noteName = noteNameField?.value || latestExtractedData.title;
-		const capture: AriaClipCapture = {
+		const artifactType = getCompletedArtifactType() ?? null;
+		const fileName = createArtifactMarkdownFilename(noteName, artifactType ?? undefined);
+		const pathField = document.getElementById('path-name-field') as HTMLInputElement | null;
+		const vaultSelect = document.getElementById('vault-select') as HTMLSelectElement | null;
+		const rawCapture = {
 			version: 1,
 			captureId: crypto.randomUUID().replaceAll('-', ''),
 			capturedAt: new Date().toISOString(),
 			producer: {
 				name: 'Aria Clip',
 				version: browser.runtime.getManifest().version,
-				browser: browserName,
+				runtime: browserName,
 			},
 			source: {
 				url: tabInfo.url,
@@ -1377,6 +1388,7 @@ async function handleClipAria(): Promise<void> {
 				language: latestExtractedData.language,
 				favicon: latestExtractedData.favicon,
 				image: latestExtractedData.image,
+				hash: await hash(latestExtractedData.fullHtml),
 			},
 			capture: {
 				renderedMarkdown: fileContent,
@@ -1397,18 +1409,28 @@ async function handleClipAria(): Promise<void> {
 			},
 			rendering: {
 				title: noteName,
-				artifactType: getCompletedArtifactType() ?? null,
+				fileName,
+				artifactType,
 				templateId: currentTemplate.id,
 				templateName: currentTemplate.name,
 				templateContext: currentTemplate.context ?? '',
+				templateHash: await hash(JSON.stringify(currentTemplate)),
 				properties: properties.map(property => ({
 					name: property.name,
 					type: property.type ?? null,
 					value: String(property.value),
 				})),
 			},
+			location: {
+				behavior: currentTemplate.behavior,
+				noteName,
+				folder: pathField?.value ?? currentTemplate.path,
+				vault: vaultSelect?.value ?? currentTemplate.vault ?? '',
+			},
 			resources: [],
 		};
+		const wire: unknown = JSON.parse(JSON.stringify(rawCapture));
+		const capture = CaptureSchema.parse(wire);
 
 		await deliverCaptureToAria(capture);
 

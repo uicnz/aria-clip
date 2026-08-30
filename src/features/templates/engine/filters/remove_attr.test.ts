@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { remove_attr } from './remove_attr.js';
 
 describe('remove_attr filter', () => {

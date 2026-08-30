@@ -156,6 +156,19 @@ function metaValue(params: BuildVariablesParams, ...keys: string[]): string {
 	return '';
 }
 
+function publishedValue(...values: unknown[]): string {
+	for (const value of values) {
+		if (typeof value !== 'string') continue;
+		const raw = value.trim();
+		if (!raw) continue;
+		const match = raw.match(
+			/\b\d{4}-\d{2}-\d{2}(?:T[\d:.+-]+Z?)?|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}\b|\b\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{4}\b|\b\d{1,2}[/-]\d{1,2}[/-]\d{4}\b/i,
+		);
+		if (match) return match[0];
+	}
+	return '';
+}
+
 function canonicalValues(params: BuildVariablesParams): Record<string, string> {
 	const schema = primarySchemaObject(params.schemaOrgData);
 	const publisher = schema?.publisher;
@@ -192,13 +205,13 @@ function canonicalValues(params: BuildVariablesParams): Record<string, string> {
 			metaValue(params, 'property:og:image', 'name:twitter:image'),
 		),
 		noteName: sanitizeFilename(firstNonEmpty(params.title, schema?.headline, schema?.name, 'untitled')).trim(),
-		published: firstNonEmpty(
+		published: publishedValue(
 			params.published,
 			schema?.datePublished,
 			schema?.uploadDate,
 			schema?.startDate,
 			metaValue(params, 'property:article:published_time', 'name:date', 'name:pubdate'),
-		).split(',')[0].trim(),
+		),
 		site: firstNonEmpty(params.site, publisherName, metaValue(params, 'property:og:site_name')),
 		title: firstNonEmpty(params.title, schema?.headline, schema?.name, metaValue(params, 'property:og:title', 'name:twitter:title')),
 		url: currentUrl.trim(),

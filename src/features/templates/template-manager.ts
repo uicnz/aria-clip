@@ -1,28 +1,54 @@
-import { Template, PropertyType } from '../../types/types.js';
+import type { Property, PropertyType, Template } from '../../types/types.js';
+import { TemplateSchema } from '../../schemas/template.js';
+import { ChunksSchema, IdsSchema } from '../../schemas/store.js';
+import { z } from 'zod';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import browser from '../../platform/browser/browser-polyfill.js';
 import { generalSettings } from '../../platform/browser/storage-utils.js';
 import { addPropertyType } from './property-types-manager.js';
-import { getMessage } from '../../platform/browser/i18n.js';
 import {
 	BUILTIN_TEMPLATES,
+	EVENT_DETAILS_TEMPLATE_ID,
+	NEWS_BRIEF_TEMPLATE_ID,
+	RECIPE_CARD_TEMPLATE_ID,
 	RESEARCH_BRIEF_TEMPLATE_ID,
+	createDefaultTemplate,
+	migrateBuiltinDepth,
 	migrateBuiltinPromptStructure,
 } from './builtin-templates.js';
 
 export let templates: Template[] = [];
 export let editingTemplateIndex = -1;
+export { createDefaultTemplate };
 
 const STORAGE_KEY_PREFIX = 'template_';
 const TEMPLATE_LIST_KEY = 'template_list';
 const INSTALLED_BUILTIN_TEMPLATE_IDS_KEY = 'installed_builtin_template_ids';
 const BUILTIN_TEMPLATE_METADATA_VERSION_KEY = 'builtin_template_metadata_version';
-const BUILTIN_TEMPLATE_METADATA_VERSION = 5;
+const BUILTIN_TEMPLATE_METADATA_VERSION = 7;
 const CHUNK_SIZE = 8000;
 const SIZE_WARNING_THRESHOLD = 6000;
+const VersionSchema = z.number().int().nonnegative();
 
 function migrateBuiltinTemplateMetadata(template: Template, fromVersion: number): boolean {
 	let changed = false;
+	if (fromVersion < 7 && migrateBuiltinDepth(template)) {
+		changed = true;
+	}
+	if (fromVersion < 6) {
+		const triggers: Readonly<Record<string, string>> = {
+			[NEWS_BRIEF_TEMPLATE_ID]: 'https://www.nasa.gov/news-release/',
+			[RECIPE_CARD_TEMPLATE_ID]: 'https://www.allrecipes.com/recipe/',
+			[EVENT_DETAILS_TEMPLATE_ID]: 'https://www.eventbrite.com/e/',
+		};
+		const trigger = triggers[template.id];
+		const existingTriggers = template.triggers ?? [];
+		if (trigger && !existingTriggers.includes(trigger)) {
+			template.triggers = [...existingTriggers, trigger];
+			changed = true;
+		}
+	}
+
 	if (fromVersion < 5 && template.id === RESEARCH_BRIEF_TEMPLATE_ID) {
 		const retiredPaperTriggers = new Set([
 			'schema:@ScholarlyArticle',
@@ -72,7 +98,7 @@ function migrateBuiltinTemplateMetadata(template: Template, fromVersion: number)
 		}
 
 		if (!template.properties.some(property => property.name === 'description')) {
-			const description = {
+				const description: Property = {
 				id: `${template.id}-description`,
 				name: 'description',
 				value: '{{description}}',
@@ -102,23 +128,18 @@ export async function loadTemplates(): Promise<Template[]> {
 			INSTALLED_BUILTIN_TEMPLATE_IDS_KEY,
 			BUILTIN_TEMPLATE_METADATA_VERSION_KEY,
 		]);
-		let templateIds = data.template_list as string[] || [];
-
-		// Filter out any null or undefined values
-		templateIds = templateIds.filter(id => id != null);
+			let templateIds = IdsSchema.catch([]).parse(data.template_list);
 
 		if (templateIds.length > 0) {
 			const loadedTemplates = await Promise.all(templateIds.map(async (id: string) => {
 				try {
 					const result = await browser.storage.sync.get(`template_${id}`);
-					const compressedChunks = result[`template_${id}`] as string[];
-					if (compressedChunks) {
-						const decompressedData = decompressFromUTF16(compressedChunks.join(''));
-						const template = JSON.parse(decompressedData);
-						if (template && Array.isArray(template.properties)) {
-							return template;
+						const chunks = ChunksSchema.safeParse(result[`template_${id}`]);
+						if (chunks.success) {
+							const decompressedData = decompressFromUTF16(chunks.data.join(''));
+							const template = TemplateSchema.safeParse(JSON.parse(decompressedData));
+							if (template.success) return template.data;
 						}
-					}
 					console.warn(`Template ${id} is invalid or missing`);
 					return null;
 				} catch (error) {
@@ -138,9 +159,7 @@ export async function loadTemplates(): Promise<Template[]> {
 			templatesChanged = true;
 		}
 
-		const installedBuiltinTemplateIds = Array.isArray(data[INSTALLED_BUILTIN_TEMPLATE_IDS_KEY])
-			? (data[INSTALLED_BUILTIN_TEMPLATE_IDS_KEY] as unknown[]).filter((id): id is string => typeof id === 'string')
-			: [];
+			const installedBuiltinTemplateIds = IdsSchema.catch([]).parse(data[INSTALLED_BUILTIN_TEMPLATE_IDS_KEY]);
 		const installedBuiltinTemplateIdSet = new Set(installedBuiltinTemplateIds);
 		let builtinInstallStateChanged = false;
 
@@ -159,9 +178,7 @@ export async function loadTemplates(): Promise<Template[]> {
 			builtinInstallStateChanged = true;
 		}
 
-		const builtinMetadataVersion = typeof data[BUILTIN_TEMPLATE_METADATA_VERSION_KEY] === 'number'
-			? data[BUILTIN_TEMPLATE_METADATA_VERSION_KEY] as number
-			: 0;
+			const builtinMetadataVersion = VersionSchema.catch(0).parse(data[BUILTIN_TEMPLATE_METADATA_VERSION_KEY]);
 		let builtinMetadataVersionChanged = false;
 		if (builtinMetadataVersion < BUILTIN_TEMPLATE_METADATA_VERSION) {
 			const builtinIds = new Set(BUILTIN_TEMPLATES.map(template => template.id));
@@ -229,7 +246,7 @@ export async function saveTemplateSettings(): Promise<string[]> {
 }
 
 async function prepareTemplateForSave(template: Template): Promise<[string[], string | null]> {
-	const compressedData = compressToUTF16(JSON.stringify(template));
+	const compressedData = compressToUTF16(JSON.stringify(TemplateSchema.parse(template)));
 	const chunks = [];
 	for (let i = 0; i < compressedData.length; i += CHUNK_SIZE) {
 		chunks.push(compressedData.slice(i, i + CHUNK_SIZE));
@@ -240,28 +257,6 @@ async function prepareTemplateForSave(template: Template): Promise<[string[], st
 		return [chunks, `Warning: Template "${template.name}" is ${(compressedData.length / 1024).toFixed(2)}KB, which is approaching the storage limit.`];
 	}
 	return [chunks, null];
-}
-
-export function createDefaultTemplate(): Template {
-	return {
-		id: Date.now().toString() + Math.random().toString(36).slice(2, 11),
-		name: getMessage('defaultTemplateName'),
-		behavior: 'create',
-		noteNameFormat: '{{title}}',
-		path: 'Clips',
-		noteContentFormat: '{{content}}',
-		context: "",
-		properties: [
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'title', value: '{{title}}' },
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'source', value: '{{url}}' },
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'author', value: '{{author|split:", "|wikilink|join}}' },
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'published', value: '{{published}}' },
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'created', value: '{{date}}' },
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'description', value: '{{description}}' },
-			{ id: Date.now().toString() + Math.random().toString(36).slice(2, 11), name: 'tags', value: 'clips' }
-		],
-		triggers: []
-	};
 }
 
 export function getEditingTemplateIndex(): number {
@@ -282,7 +277,7 @@ export function duplicateTemplate(templateId: string): Template {
 		throw new Error('Template not found');
 	}
 
-	const newTemplate: Template = JSON.parse(JSON.stringify(originalTemplate));
+	const newTemplate = structuredClone(originalTemplate);
 	newTemplate.id = Date.now().toString() + Math.random().toString(36).slice(2, 11);
 	newTemplate.name = getUniqueTemplateName(originalTemplate.name);
 	
@@ -318,7 +313,7 @@ export async function deleteTemplate(templateId: string): Promise<boolean> {
 
 			// Get the current template_list
 			const data = await browser.storage.sync.get('template_list');
-			let templateIds = data.template_list as string[] || [];
+				let templateIds = IdsSchema.catch([]).parse(data.template_list);
 
 			// Remove the deleted template ID from the list
 			templateIds = templateIds.filter(id => id !== templateId);
@@ -341,7 +336,7 @@ async function updateGlobalPropertyTypes(templates: Template[]): Promise<void> {
 	const existingTypes = new Set(generalSettings.propertyTypes.map(p => p.name));
 	const newTypes: PropertyType[] = [];
 
-	const defaultTypes: { [key: string]: { type: string, defaultValue: string } } = {
+	const defaultTypes: Record<string, Omit<PropertyType, 'name'>> = {
 		'title': { type: 'text', defaultValue: '{{title}}' },
 		'source': { type: 'text', defaultValue: '{{url}}' },
 		'author': { type: 'multitext', defaultValue: '{{author|split:", "|wikilink|join}}' },

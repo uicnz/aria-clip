@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { tokenize, Token, TokenType } from './tokenizer.js';
 
 // Helper functions

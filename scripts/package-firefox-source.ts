@@ -53,7 +53,7 @@ async function verifyArchive(path: string): Promise<void> {
 	]);
 	if (exitCode !== 0) throw new Error(`Unable to inspect review source: ${stderr.trim()}`);
 	const entries = stdout.split('\n').filter(Boolean);
-	for (const required of ['AMO_BUILD.md', 'bun.lock', 'package.json', 'webpack.config.cjs']) {
+	for (const required of ['docs/developer/amo.md', 'bun.lock', 'package.json', 'webpack.config.ts']) {
 		if (!entries.some(entry => entry.endsWith(`/${required}`))) {
 			throw new Error(`Firefox review source is missing ${required}`);
 		}
@@ -73,8 +73,12 @@ async function main(): Promise<void> {
 	const outputPath = join(reviewRoot, `aria-clip-${packageJson.version}-firefox-source.zip`);
 	const temporaryRoot = mkdtempSync(join(tmpdir(), 'aria-clip-firefox-source-'));
 	const sourceRoot = join(temporaryRoot, `aria-clip-${packageJson.version}-source`);
+	const reviewerGuide = join(ROOT, 'docs', 'developer', 'amo.md');
 
 	try {
+		if (!existsSync(reviewerGuide)) {
+			throw new Error('Firefox reviewer instructions are missing: docs/developer/amo.md');
+		}
 		for (const path of await trackedAndUntrackedFiles()) {
 			const source = join(ROOT, path);
 			const destination = join(sourceRoot, path);
@@ -86,7 +90,6 @@ async function main(): Promise<void> {
 				copyFileSync(source, destination);
 			}
 		}
-
 		mkdirSync(reviewRoot, { recursive: true });
 		if (existsSync(outputPath)) rmSync(outputPath);
 		await run([

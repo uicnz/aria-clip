@@ -1,17 +1,17 @@
-// @vitest-environment jsdom
+import '@/test/dom.js';
 // createMarkdownContent() runs turndown, which needs a DOM (document/DOMParser) to
 // parse the HTML it converts — same as the extension and CLI provide at runtime.
 // Without it, {{content}} fixtures (minimal, edge-cases) get turndown's error
 // fallback instead of real markdown. jsdom supplies those globals for this file.
-import { describe, test, expect, vi, beforeAll, afterAll } from 'vitest';
+import { describe, test, expect, vi, beforeAll, afterAll } from 'bun:test';
 import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, basename, extname } from 'path';
-import { parseHTML } from 'linkedom';
 import { Defuddle as DefuddleClass } from '../../../core/clipping/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
 import { buildVariables, generateFrontmatter, formatPropertyValue } from '../../../core/clipping/shared.js';
 import { compileTemplate } from './template-compiler.js';
 import { createAsyncResolver, createSelectorProcessor } from '../../../api/index.js';
+import type { ValueKind } from '../../../types/types.js';
 
 // ---------------------------------------------------------------------------
 // Freeze time so {{date}} is deterministic in expected output
@@ -29,11 +29,11 @@ afterAll(() => { vi.useRealTimers(); });
 interface FixtureTemplate {
 	noteNameFormat: string;
 	noteContentFormat: string;
-	properties: { name: string; value: string; type: string }[];
+	properties: { name: string; value: string; type: ValueKind }[];
 }
 
 async function runFixture(html: string, url: string, template: FixtureTemplate): Promise<string> {
-	const { document } = parseHTML(html);
+	const document = new DOMParser().parseFromString(html, 'text/html');
 
 	// Run defuddle — same as CLI
 	const defuddle = new DefuddleClass(document as unknown as Document, { url });
@@ -76,7 +76,7 @@ async function runFixture(html: string, url: string, template: FixtureTemplate):
 	);
 
 	// Build type map from template properties
-	const typeMap: Record<string, string> = {};
+	const typeMap: Record<string, ValueKind> = {};
 	for (const prop of template.properties) {
 		if (prop.type) {
 			typeMap[prop.name] = prop.type;

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { buildVariableCatalog, CANONICAL_VARIABLE_NAMES } from './variables.js';
 
 function baseParams() {
@@ -59,6 +59,16 @@ describe('buildVariableCatalog', () => {
 		expect(catalog.values['{{image}}']).toBe('https://example.com/image.webp');
 		expect(catalog.values['{{site}}']).toBe('Example News');
 		expect(catalog.values['{{language}}']).toBe('en-NZ');
+	});
+
+	it('rejects a weekday label and uses the structured event date', () => {
+		const catalog = buildVariableCatalog({
+			...baseParams(),
+			published: 'Thursday',
+			schemaOrgData: [{ '@type': 'Event', startDate: '2026-10-01T10:00:00+03:00' }],
+		});
+
+		expect(catalog.values['{{published}}']).toBe('2026-10-01T10:00:00+03:00');
 	});
 
 	it('retains schema containers for compatibility but exposes typed leaves for inspection', () => {

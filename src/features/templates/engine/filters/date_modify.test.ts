@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { date_modify, validateDateModifyParams } from './date_modify.js';
 
 describe('date_modify filter', () => {

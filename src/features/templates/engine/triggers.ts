@@ -1,201 +1,104 @@
-import { Template } from '../../../types/types.js';
-import { memoize, memoizeWithExpiration } from '../../../shared/async/memoize.js';
+import type { Template } from '../../../types/types.js';
 
-// Modify the memoized function to handle regex patterns correctly
-const memoizedInternalMatchPattern = memoize(
-	(pattern: string, url: string, schemaOrgData: any): boolean => {
-		if (pattern.startsWith('schema:')) {
-			return matchSchemaPattern(pattern, schemaOrgData);
-		} else if (pattern.startsWith('/') && pattern.endsWith('/')) {
-			try {
-				const regexPattern = new RegExp(pattern.slice(1, -1));
-				const result = regexPattern.test(url);
-				return result;
-			} catch (error) {
-				console.error(`Invalid regex pattern: ${pattern}`, error);
-				return false;
-			}
-		} else {
-			return url.startsWith(pattern);
-		}
-	},
-	{
-		resolver: (pattern: string, url: string) => {
-			if (pattern.startsWith('/') && pattern.endsWith('/')) {
-				return `${pattern}:${url}`;
-			}
-			return `${pattern}:${url.split('/').slice(0, 3).join('/')}`;
-		}
+let templates: readonly Template[] = [];
+
+function object(value: unknown): value is Record<string, unknown> {
+	return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function schemas(value: unknown): unknown[] {
+	if (!Array.isArray(value)) return [value];
+	return value.flatMap(item => Array.isArray(item) ? item : [item]);
+}
+
+function nested(value: unknown, path: string): unknown {
+	let current = value;
+	for (const key of path.split('.')) {
+		if (!object(current) || !(key in current)) return undefined;
+		current = current[key];
 	}
-);
-
-interface TriggerMatch {
-	template: Template;
-	priority: number;
+	return current;
 }
 
-class TrieNode {
-	children: Map<string, TrieNode> = new Map();
-	templates: TriggerMatch[] = [];
-}
-
-class Trie {
-	root: TrieNode = new TrieNode();
-
-	insert(url: string, template: Template, priority: number) {
-		let node = this.root;
-		for (const char of url) {
-			if (!node.children.has(char)) {
-				node.children.set(char, new TrieNode());
-			}
-			node = node.children.get(char)!;
-		}
-		node.templates.push({ template, priority });
-	}
-
-	findLongestMatch(url: string, schemaOrgData: any): TriggerMatch | null {
-		let node = this.root;
-		let lastMatch: TriggerMatch | null = null;
-		for (const char of url) {
-			if (!node.children.has(char)) break;
-			node = node.children.get(char)!;
-			if (node.templates.length > 0) {
-				const matchingTemplate = node.templates.find(_t =>
-					memoizedInternalMatchPattern(url.slice(0, url.indexOf(char) + 1), url, schemaOrgData)
-				);
-				if (matchingTemplate) {
-					lastMatch = matchingTemplate;
-				}
-			}
-		}
-		return lastMatch;
-	}
-}
-
-const urlTrie = new Trie();
-const regexTriggers: Array<{ template: Template; regex: RegExp; priority: number }> = [];
-const schemaTriggers: Array<{ template: Template; pattern: string; priority: number }> = [];
-
-let isInitialized = false;
-
-export function initializeTriggers(templates: Template[]): void {
-	urlTrie.root = new TrieNode(); // Reset trie
-	regexTriggers.length = 0;
-	schemaTriggers.length = 0;
-
-	templates.forEach((template, index) => {
-		if (template.triggers) {
-			template.triggers.forEach(trigger => {
-				const priority = templates.length - index; // Higher priority for earlier templates
-				if (trigger.startsWith('/') && trigger.endsWith('/')) {
-					regexTriggers.push({ template, regex: new RegExp(trigger.slice(1, -1)), priority });
-				} else if (trigger.startsWith('schema:')) {
-					schemaTriggers.push({ template, pattern: trigger, priority });
-				} else {
-					urlTrie.insert(trigger, template, priority);
-				}
-			});
-		}
-	});
-
-	isInitialized = true;
-}
-
-const memoizedFindMatchingTemplate = memoizeWithExpiration(
-	async (url: string, getSchemaOrgData: () => Promise<any>): Promise<Template | undefined> => {
-		if (!isInitialized) {
-			console.warn('Triggers not initialized. Call initializeTriggers first.');
-			return undefined;
-		}
-
-		// Check URL trie first (without awaiting schema data)
-		const urlMatch = urlTrie.findLongestMatch(url, null);
-		if (urlMatch) {
-			return urlMatch.template;
-		}
-
-		// Then check regex triggers (no schema data needed)
-		for (const { template, regex } of regexTriggers) {
-			if (regex.test(url)) {
-				return template;
-			}
-		}
-
-		// Only fetch schema data if there are schema triggers to check
-		if (schemaTriggers.length > 0) {
-			const schemaOrgData = await getSchemaOrgData();
-			for (const { template, pattern } of schemaTriggers) {
-				if (matchSchemaPattern(pattern, schemaOrgData)) {
-					console.log('Schema match found:', template);
-					return template;
-				}
-			}
-		}
-
-		return undefined;
-	},
-	{
-		expirationMs: 30000, // Cache for 30 seconds
-		keyFn: (url: string) => url // Use the full URL as the cache key
-	}
-);
-
-export const findMatchingTemplate = memoizedFindMatchingTemplate;
-
-export function matchPattern(pattern: string, url: string, schemaOrgData: any): boolean {
-	return memoizedInternalMatchPattern(pattern, url, schemaOrgData);
-}
-
-function matchSchemaPattern(pattern: string, schemaOrgData: any): boolean {
-	const [, schemaType, schemaKey, expectedValue] = pattern.match(/schema:(@\w+)?(?:\.(.+?))?(?:=(.+))?$/) || [];
-	
+function matchSchema(pattern: string, data: unknown): boolean {
+	const parsed = pattern.match(/^schema:(@\w+)?(?:\.(.+?))?(?:=(.+))?$/);
+	if (!parsed) return false;
+	const [, schemaType, schemaKey, expected] = parsed;
 	if (!schemaType && !schemaKey) return false;
 
-	// Ensure schemaOrgData is always an array
-	const schemaArray = Array.isArray(schemaOrgData) ? schemaOrgData : [schemaOrgData];
-
-	const matchingSchemas = schemaArray.flatMap(schema => {
-		// Handle nested arrays of schemas
-		if (Array.isArray(schema)) {
-			return schema;
+	for (const schema of schemas(data)) {
+		if (!object(schema)) continue;
+		if (schemaType) {
+			const raw = schema['@type'];
+			const types = Array.isArray(raw) ? raw : [raw];
+			if (!types.includes(schemaType.slice(1))) continue;
 		}
-		return [schema];
-	}).filter((schema: any) => {
-		if (!schema || typeof schema !== 'object') return false;
-		if (!schemaType) return true;
-		const types = Array.isArray(schema['@type']) ? schema['@type'] : [schema['@type']];
-		return types.includes(schemaType.slice(1));
-	});
-
-	for (const schema of matchingSchemas) {
-		if (schemaKey) {
-			const actualValue = getSchemaValue(schema, schemaKey);
-			if (expectedValue) {
-				if (Array.isArray(actualValue)) {
-					if (actualValue.includes(expectedValue)) return true;
-				} else if (actualValue === expectedValue) {
-					return true;
-				}
-			} else if (actualValue !== undefined) {
-				return true;
-			}
-		} else {
-			return true; // Match if only schema type is specified and found
+		if (!schemaKey) return true;
+		const actual = nested(schema, schemaKey);
+		if (expected === undefined) {
+			if (actual !== undefined) return true;
+		} else if (Array.isArray(actual) ? actual.includes(expected) : actual === expected) {
+			return true;
 		}
 	}
 
 	return false;
 }
 
-function getSchemaValue(schemaData: any, key: string): any {
-	const keys = key.split('.');
-	let result = schemaData;
-	for (const k of keys) {
-		if (result && typeof result === 'object' && k in result) {
-			result = result[k];
-		} else {
-			return undefined;
+function matchRegex(pattern: string, url: string): boolean {
+	try {
+		return new RegExp(pattern.slice(1, -1)).test(url);
+	} catch {
+		return false;
+	}
+}
+
+export function matchPattern(pattern: string, url: string, data?: unknown): boolean {
+	if (pattern.startsWith('schema:')) return matchSchema(pattern, data);
+	if (pattern.startsWith('/') && pattern.endsWith('/')) return matchRegex(pattern, url);
+	return url.startsWith(pattern);
+}
+
+export function matchTemplate(items: readonly Template[], url: string, data?: unknown): Template | undefined {
+	let prefix: { template: Template; length: number } | undefined;
+	for (const template of items) {
+		for (const trigger of template.triggers ?? []) {
+			if (trigger.startsWith('schema:') || (trigger.startsWith('/') && trigger.endsWith('/'))) continue;
+			if (url.startsWith(trigger) && (!prefix || trigger.length > prefix.length)) {
+				prefix = { template, length: trigger.length };
+			}
 		}
 	}
-	return result;
+	if (prefix) return prefix.template;
+
+	for (const template of items) {
+		if ((template.triggers ?? []).some(trigger =>
+			trigger.startsWith('/') && trigger.endsWith('/') && matchRegex(trigger, url)
+		)) return template;
+	}
+
+	if (data !== undefined) {
+		for (const template of items) {
+			if ((template.triggers ?? []).some(trigger => trigger.startsWith('schema:') && matchSchema(trigger, data))) {
+				return template;
+			}
+		}
+	}
+
+	return undefined;
 }
+
+export function initializeTriggers(items: readonly Template[]): void {
+	templates = items;
+}
+
+async function find(url: string, getSchema: () => Promise<unknown>): Promise<Template | undefined> {
+	const byUrl = matchTemplate(templates, url);
+	if (byUrl) return byUrl;
+	const needsSchema = templates.some(template =>
+		(template.triggers ?? []).some(trigger => trigger.startsWith('schema:'))
+	);
+	return needsSchema ? matchTemplate(templates, url, await getSchema()) : undefined;
+}
+
+export const findMatchingTemplate = Object.assign(find, { clear: (): void => undefined });

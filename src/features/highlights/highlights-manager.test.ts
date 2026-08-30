@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import '@/test/dom.js';
+import { describe, test, expect, beforeEach } from 'bun:test';
 import browser from '../../platform/browser/browser-polyfill.js';
 import { AnyHighlightData, StoredData, TextHighlightData, buildExportedPage, collapseGroupsForExport } from './highlighter.js';
 import { importHighlightsFromJson } from './highlights-manager.js';
@@ -33,7 +33,6 @@ function highlightsFor(url: string): AnyHighlightData[] {
 
 beforeEach(() => {
 	stored = {};
-	vi.stubGlobal('alert', () => {});
 	browser.storage.local.get = (async () => ({ highlights: stored })) as typeof browser.storage.local.get;
 	browser.storage.local.set = (async (items: { highlights: Record<string, StoredData> }) => {
 		stored = items.highlights;

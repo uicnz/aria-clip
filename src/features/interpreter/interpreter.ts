@@ -1,12 +1,13 @@
 import { generalSettings, saveSettings } from '../../platform/browser/storage-utils.js';
 import { PromptVariable, Template, ModelConfig, Provider } from '../../types/types.js';
-import { compileTemplate } from '../templates/engine/template-compiler.js';
+import { compileBrowserTemplate as compileTemplate } from '../templates/engine/browser-template-compiler.js';
 import { applyFilters } from '../templates/engine/filters/index.js';
 import { formatDuration } from '../../shared/text/string-utils.js';
 import { adjustNoteNameHeight } from '../../shared/dom/ui-utils.js';
 import { debugLog } from '../../platform/browser/debug.js';
 import { getMessage } from '../../platform/browser/i18n.js';
 import { updateTokenCount } from './token-counter.js';
+import { complete } from '../../core/interpreter/client.js';
 
 const RATE_LIMIT_RESET_TIME = 60000; // 1 minute in milliseconds
 let lastRequestTime = 0;
@@ -14,16 +15,17 @@ let lastRequestTime = 0;
 // Store event listeners for cleanup
 const eventListeners = new WeakMap<HTMLElement, { [key: string]: EventListener }>();
 
-export async function sendToLLM(promptContext: string, _content: string, promptVariables: PromptVariable[], model: ModelConfig): Promise<{ promptResponses: any[] }> {
-	debugLog('Interpreter', 'Sending request to LLM...');
-	
-	// Find the provider for this model
-	const provider = generalSettings.providers.find(p => p.id === model.providerId);
-	if (!provider) {
-		throw new Error(`Provider not found for model ${model.name}`);
-	}
+interface PromptResponse {
+	key: string;
+	prompt: string;
+	user_response: string;
+}
 
-	// Only check for API key if the provider requires it
+export async function sendToLLM(promptContext: string, _content: string, promptVariables: PromptVariable[], model: ModelConfig): Promise<{ promptResponses: PromptResponse[] }> {
+	debugLog('Interpreter', 'Sending request to LLM...');
+
+	const provider = generalSettings.providers.find(item => item.id === model.providerId);
+	if (!provider) throw new Error(`Provider not found for model ${model.name}`);
 	if (provider.apiKeyRequired && !provider.apiKey) {
 		throw new Error(`API key is not set for provider ${provider.name}`);
 	}
@@ -33,266 +35,28 @@ export async function sendToLLM(promptContext: string, _content: string, promptV
 		throw new Error(`Rate limit cooldown. Please wait ${Math.ceil((RATE_LIMIT_RESET_TIME - (now - lastRequestTime)) / 1000)} seconds before trying again.`);
 	}
 
+	const system =
+		`Follow each supplied prompt’s requested depth and structure. Respond with one JSON object named \`prompts_responses\` — no explanatory text before or after. Use the keys provided, e.g. \`prompt_1\`, \`prompt_2\`, and fill in the values. Values should be Markdown strings unless otherwise specified. Do not compress the source unless the prompt explicitly requests concise output. For example: {"prompts_responses":{"prompt_1":"tag1, tag2, tag3","prompt_2":"- bullet1\\n- bullet 2\\n- bullet3"}}`;
+	const prompts = promptVariables.reduce<Record<string, string>>((result, variable) => {
+		result[variable.key] = variable.prompt;
+		return result;
+	}, {});
+
 	try {
-		const systemContent = 
-			`You are a helpful assistant. Please respond with one JSON object named \`prompts_responses\` — no explanatory text before or after. Use the keys provided, e.g. \`prompt_1\`, \`prompt_2\`, and fill in the values. Values should be Markdown strings unless otherwise specified. Make your responses concise. For example, your response should look like: {"prompts_responses":{"prompt_1":"tag1, tag2, tag3","prompt_2":"- bullet1\n- bullet 2\n- bullet3"}}`;
-		
-		const promptContent = {	
-			prompts: promptVariables.reduce((acc, { key, prompt }) => {
-				acc[key] = prompt;
-				return acc;
-			}, {} as { [key: string]: string })
-		};
-
-		let requestUrl: string;
-		let requestBody: any;
-		let headers: HeadersInit = {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
-		};
-
-		if (provider.name.toLowerCase().includes('hugging')) {
-			// Replace {model-id} in baseUrl with the actual model ID
-			requestUrl = provider.baseUrl.replace('{model-id}', model.providerModelId);
-			requestBody = {
-				model: model.providerModelId,
-				messages: [
-					{ role: 'system', content: systemContent },
-					{ role: 'user', content: `${promptContext}` },
-					{ role: 'user', content: `${JSON.stringify(promptContent)}` }
-				],
-				max_tokens: 1600,
-				stream: false
-			};					
-			headers = {
-				...headers,
-				'Authorization': `Bearer ${provider.apiKey}`
-			};
-		} else if (provider.baseUrl.includes('openai.azure.com')) {
-			// Azure routes by deployment in the URL, not by a model field in the body
-			requestUrl = provider.baseUrl.replace('{deployment-id}', model.providerModelId);
-			requestBody = {
-				messages: [
-					{ role: 'system', content: systemContent },
-					{ role: 'user', content: `${promptContext}` },
-					{ role: 'user', content: `${JSON.stringify(promptContent)}` }
-				],
-				max_completion_tokens: 8000,
-				stream: false
-			};
-			headers = {
-				...headers,
-				'api-key': provider.apiKey
-			};
-		} else if (provider.name.toLowerCase().includes('deepseek')) {
-			requestUrl = provider.baseUrl;
-			requestBody = {
-				model: model.providerModelId,
-				messages: [
-					{ role: 'system', content: systemContent },
-					{ role: 'user', content: `${promptContext}` },
-					{ role: 'user', content: `${JSON.stringify(promptContent)}` }
-				],
-				max_tokens: 8000,
-				thinking: {
-					type: 'disabled'
-				},
-				stream: false
-			};
-			headers = {
-				...headers,
-				'Authorization': `Bearer ${provider.apiKey}`
-			};
-		} else if (provider.baseUrl.includes('generativelanguage.googleapis.com')) {
-			// Use the native Gemini API — Google's OpenAI-compatible endpoint
-			// rejects the newer AQ-prefixed API keys
-			requestUrl = provider.baseUrl.includes('{model-id}')
-				? provider.baseUrl.replace('{model-id}', model.providerModelId)
-				: `https://generativelanguage.googleapis.com/v1beta/models/${model.providerModelId}:generateContent`;
-			requestBody = {
-				systemInstruction: { parts: [{ text: systemContent }] },
-				contents: [
-					{
-						role: 'user',
-						parts: [
-							{ text: `${promptContext}` },
-							{ text: `${JSON.stringify(promptContent)}` }
-						]
-					}
-				],
-				generationConfig: {
-					maxOutputTokens: 8000,
-					responseMimeType: 'application/json'
-				}
-			};
-			headers = {
-				...headers,
-				'X-goog-api-key': provider.apiKey
-			};
-		} else if (provider.name.toLowerCase().includes('anthropic')) {
-			requestUrl = provider.baseUrl;
-			requestBody = {
-				model: model.providerModelId,
-				max_tokens: 8000,
-				messages: [
-					{ role: 'user', content: `${promptContext}` },
-					{ role: 'user', content: `${JSON.stringify(promptContent)}` }
-				],
-				system: systemContent
-			};
-			headers = {
-				...headers,
-				'x-api-key': provider.apiKey,
-				'anthropic-version': '2023-06-01',
-				'anthropic-dangerous-direct-browser-access': 'true'
-			};
-		} else if (provider.name.toLowerCase().includes('perplexity')) {
-			requestUrl = provider.baseUrl;
-			requestBody = {
-				model: model.providerModelId,
-				max_tokens: 8000,
-				messages: [
-					{ role: 'system', content: systemContent },
-					{ role: 'user', content: `
-						"${promptContext}"
-						"${JSON.stringify(promptContent)}"`
-					}
-				]
-			};
-			headers = {
-				...headers,
-				'HTTP-Referer': 'https://aria.bot/',
-				'X-Title': 'Aria Clip',
-				'Authorization': `Bearer ${provider.apiKey}`
-			};
-		} else if (provider.name.toLowerCase().includes('ollama')) {
-			requestUrl = provider.baseUrl;
-			requestBody = {
-				model: model.providerModelId,
-				messages: [
-					{ role: 'system', content: systemContent },
-					{ role: 'user', content: `${promptContext}` },
-					{ role: 'user', content: `${JSON.stringify(promptContent)}` }
-				],
-				format: 'json',
-				num_ctx: 120000,
-				stream: false
-			};
-		} else {
-			// Default request format
-			requestUrl = provider.baseUrl;
-			requestBody = {
-				model: model.providerModelId,
-				messages: [
-					{ role: 'system', content: systemContent },
-					{ role: 'user', content: `${promptContext}` },
-					{ role: 'user', content: `${JSON.stringify(promptContent)}` }
-				],
-				stream: false
-			};
-			headers = {
-				...headers,
-				'HTTP-Referer': 'https://aria.bot/',
-				'X-Title': 'Aria Clip',
-				'Authorization': `Bearer ${provider.apiKey}`
-			};
-		}
-
-		debugLog('Interpreter', `Sending request to ${provider.name} API:`, requestBody);
-
-		const response = await fetch(requestUrl, {
-			method: 'POST',
-			headers: headers,
-			body: JSON.stringify(requestBody)
+		const text = await complete({
+			target: { api: provider.api, name: provider.name, baseUrl: provider.baseUrl },
+			model: model.providerModelId,
+			key: provider.apiKey,
+			system,
+			messages: [
+				{ role: 'user', content: promptContext },
+				{ role: 'user', content: JSON.stringify({ prompts }) },
+			],
+			json: true,
 		});
-
-		if (!response.ok) {
-			const errorText = await response.text();
-			console.error(`${provider.name} error response:`, errorText);
-			
-			// Add specific message for Ollama 403 errors
-			if (provider.name.toLowerCase().includes('ollama') && response.status === 403) {
-				throw new Error(
-					`Ollama cannot process requests originating from a browser extension without setting OLLAMA_ORIGINS. ` +
-					`See instructions at https://docs.aria.bot/interpreter`
-				);
-			}
-			
-			throw new Error(`${provider.name} error: ${response.statusText} ${errorText}`);
-		}
-
-		const responseText = await response.text();
-		debugLog('Interpreter', `Raw ${provider.name} response:`, responseText);
-
-		let data;
-		try {
-			data = JSON.parse(responseText);
-		} catch (error) {
-			console.error('Error parsing JSON response:', error);
-			throw new Error(`Failed to parse response from ${provider.name}`);
-		}
-
-		debugLog('Interpreter', `Parsed ${provider.name} response:`, data);
-
 		lastRequestTime = now;
-
-		// Surface truncated responses instead of silently saving incomplete output
-		const finishReason = data.stop_reason // Anthropic
-			?? data.done_reason // Ollama
-			?? data.candidates?.[0]?.finishReason // Gemini
-			?? data.choices?.[0]?.finish_reason; // OpenAI-compatible providers
-		if (finishReason === 'max_tokens' || finishReason === 'length' || finishReason === 'MAX_TOKENS') {
-			throw new Error(`${provider.name} response was cut off because it reached the output token limit. Try shorter prompts or a smaller prompt context.`);
-		}
-
-		let llmResponseContent: string;
-		if (provider.name.toLowerCase().includes('anthropic')) {
-			// Find the text block — newer models may return a thinking block first
-			const textContent = data.content?.find((block: any) => block.type === 'text')?.text;
-			if (textContent) {
-				try {
-					// Try to parse the inner content first
-					const parsed = JSON.parse(textContent);
-					llmResponseContent = JSON.stringify(parsed);
-				} catch {
-					// If parsing fails, use the raw text
-					llmResponseContent = textContent;
-				}
-			} else {
-				llmResponseContent = JSON.stringify(data);
-			}
-		} else if (provider.baseUrl.includes('generativelanguage.googleapis.com')) {
-			// Native Gemini responses carry text in candidate content parts
-			const parts = data.candidates?.[0]?.content?.parts;
-			const textContent = Array.isArray(parts) ? parts.map((part: any) => part.text || '').join('') : undefined;
-			if (textContent) {
-				try {
-					const parsed = JSON.parse(textContent);
-					llmResponseContent = JSON.stringify(parsed);
-				} catch {
-					llmResponseContent = textContent;
-				}
-			} else {
-				llmResponseContent = JSON.stringify(data);
-			}
-		} else if (provider.name.toLowerCase().includes('ollama')) {
-			const messageContent = data.message?.content;
-			if (messageContent) {
-				try {
-					const parsed = JSON.parse(messageContent);
-					llmResponseContent = JSON.stringify(parsed);
-				} catch {
-					llmResponseContent = messageContent;
-				}
-			} else {
-				llmResponseContent = JSON.stringify(data);
-			}
-		} else {
-			llmResponseContent = data.choices?.[0]?.message?.content || JSON.stringify(data);
-		}
-		debugLog('Interpreter', 'Processed LLM response:', llmResponseContent);
-
-		return parseLLMResponse(llmResponseContent, promptVariables);
+		debugLog('Interpreter', `Processed ${provider.name} response:`, text);
+		return parseLLMResponse(text, promptVariables);
 	} catch (error) {
 		console.error(`Error sending to ${provider.name} LLM:`, error);
 		throw error;
@@ -303,7 +67,7 @@ interface LLMResponse {
 	prompts_responses: { [key: string]: string };
 }
 
-function parseLLMResponse(responseContent: string, promptVariables: PromptVariable[]): { promptResponses: any[] } {
+function parseLLMResponse(responseContent: string, promptVariables: PromptVariable[]): { promptResponses: PromptResponse[] } {
 	try {
 		let parsedResponse: LLMResponse;
 		
@@ -755,7 +519,7 @@ export function replaceModelVariables(modelConfig: ModelConfig, provider: Provid
 export function replacePromptVariablesInText(
 	text: string,
 	promptVariables: PromptVariable[],
-	promptResponses: any[]
+	promptResponses: PromptResponse[]
 ): string {
 	return text.replace(/{{(?:prompt:)?"([\s\S]*?)"(\|[\s\S]*?)?}}/g, (match, promptText, filters) => {
 		const variable = promptVariables.find(v => v.prompt === promptText);
@@ -782,7 +546,7 @@ export function replacePromptVariablesInText(
 }
 
 // Similar to replaceVariables, but happens after the LLM response is received
-export function replacePromptVariables(promptVariables: PromptVariable[], promptResponses: any[]) {
+export function replacePromptVariables(promptVariables: PromptVariable[], promptResponses: PromptResponse[]) {
 	const allInputs = document.querySelectorAll('input, textarea');
 	allInputs.forEach((input) => {
 		if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {

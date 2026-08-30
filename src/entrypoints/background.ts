@@ -172,7 +172,7 @@ async function ensureContentScriptLoadedInBackground(tabId: number): Promise<voi
 		}
 
 		// If the message fails, the content script is not loaded, so inject it
-		debugLog('Clip', 'Ping failed, injecting content script...', error);
+		debugLog('Clip', 'Ping failed, injecting content script...', error instanceof Error ? error : String(error));
 		await injectContentScript(tabId);
 	}
 }

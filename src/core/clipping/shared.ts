@@ -4,7 +4,7 @@
 // via parameters.
 
 import { escapeDoubleQuotes } from '../../shared/text/string-utils.js';
-import { Property } from '../../types/types.js';
+import type { Property, ValueKind } from '../../types/types.js';
 import dayjs from 'dayjs';
 
 export {
@@ -31,7 +31,7 @@ export type {
  */
 export function generateFrontmatter(
 	properties: Property[],
-	propertyTypes: Record<string, string> = {}
+	propertyTypes: Record<string, ValueKind> = {}
 ): string {
 	let frontmatter = '---\n';
 	for (const property of properties) {
@@ -77,7 +77,7 @@ export function generateFrontmatter(
 				break;
 			}
 			case 'checkbox': {
-				const isChecked = typeof property.value === 'boolean' ? property.value : property.value === 'true';
+				const isChecked = property.value === 'true';
 				frontmatter += ` ${isChecked}\n`;
 				break;
 			}
@@ -110,7 +110,7 @@ export function generateFrontmatter(
  * @param type - Property type (text, number, checkbox, date, datetime, multitext)
  * @param templateValue - The raw template string (used to check for existing |date: filters)
  */
-export function formatPropertyValue(value: string, type: string, templateValue: string): string {
+export function formatPropertyValue(value: string, type: ValueKind, templateValue: string): string {
 	switch (type) {
 		case 'number': {
 			const numericValue = value.replace(/[^\d.-]/g, '');
@@ -142,7 +142,9 @@ export function formatPropertyValue(value: string, type: string, templateValue: 
  * Works with any document-like object (browser Document, linkedom, etc.).
  */
 export function extractContentBySelector(
-	doc: { querySelectorAll: (selector: string) => any },
+	doc: {
+		querySelectorAll: (selector: string) => ArrayLike<Pick<Element, 'getAttribute' | 'outerHTML' | 'textContent'>>;
+	},
 	selector: string,
 	attribute?: string,
 	extractHtml: boolean = false
@@ -154,7 +156,7 @@ export function extractContentBySelector(
 			return '';
 		}
 
-		return Array.from(elements).map((el: any) => {
+			return Array.from(elements).map((el) => {
 			if (attribute) {
 				return el.getAttribute(attribute) || '';
 			}

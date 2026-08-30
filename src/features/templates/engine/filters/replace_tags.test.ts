@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { replace_tags } from './replace_tags.js';
 
 describe('replace_tags filter', () => {

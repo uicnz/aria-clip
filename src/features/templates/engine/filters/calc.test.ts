@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'bun:test';
 import { calc, validateCalcParams } from './calc.js';
 
 describe('calc filter', () => {

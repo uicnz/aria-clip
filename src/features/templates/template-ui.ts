@@ -1,4 +1,5 @@
-import { Template } from '../../types/types.js';
+import type { Template } from '../../types/types.js';
+import { BehaviorSchema, ValueKindSchema } from '../../schemas/template.js';
 import { deleteTemplate, templates, editingTemplateIndex, saveTemplateSettings, setEditingTemplateIndex, loadTemplates } from './template-manager.js';
 import { initializeIcons } from '../../icons/icons.js';
 import { escapeValue, unescapeValue } from '../../shared/text/string-utils.js';
@@ -11,7 +12,7 @@ import { updatePropertyType } from './property-types-manager.js';
 import { getMessage } from '../../platform/browser/i18n.js';
 import { parse, validateVariables, validateFilters } from './engine/parser.js';
 import { renderTemplateList } from '../../components/settings/template-list.js';
-import { renderTemplateProperties, type TemplatePropertyRow } from '../../components/settings/template-properties.js';
+import { renderTemplateProperties } from '../../components/settings/template-properties.js';
 import { isValidArtifactType } from '../../core/artifacts/artifact.js';
 let hasUnsavedChanges = false;
 void hasUnsavedChanges;
@@ -150,7 +151,7 @@ export function showTemplateEditor(template: Template | null): void {
 				id: property.id || `${Date.now()}${Math.random().toString(36).slice(2, 11)}`,
 				name: property.name,
 				value: unescapeValue(property.value),
-				type: (property.type || generalSettings.propertyTypes.find(item => item.name === property.name)?.type || 'text') as TemplatePropertyRow['type']
+				type: property.type ?? generalSettings.propertyTypes.find(item => item.name === property.name)?.type ?? 'text'
 			})),
 			propertyTypes: generalSettings.propertyTypes,
 			typeLabels: {
@@ -259,7 +260,7 @@ export function updateTemplateFromForm(): void {
 	}
 
 	const behaviorSelect = document.getElementById('template-behavior') as HTMLSelectElement;
-	if (behaviorSelect) template.behavior = behaviorSelect.value as Template['behavior'];
+	if (behaviorSelect) template.behavior = BehaviorSchema.parse(behaviorSelect.value);
 
 	const artifactTypeInput = document.getElementById('artifact-type') as HTMLInputElement;
 	if (artifactTypeInput) {
@@ -303,7 +304,7 @@ export function updateTemplateFromForm(): void {
 			id: (prop as HTMLElement).dataset.id || Date.now().toString() + Math.random().toString(36).slice(2, 11),
 			name: nameInput.value,
 			value: escapeValue(valueInput.value),
-			type: (prop as HTMLElement).dataset.type || 'text'
+			type: ValueKindSchema.catch('text').parse((prop as HTMLElement).dataset.type)
 		};
 	}).filter(prop => prop.name.trim() !== ''); // Filter out properties with empty names
 

@@ -1,49 +1,26 @@
-export interface Template {
-	id: string;
-	name: string;
-	behavior: 'create' | 'append-specific' | 'append-daily' | 'prepend-specific' | 'prepend-daily' | 'overwrite';
-	noteNameFormat: string;
-	path: string;
-	noteContentFormat: string;
-	properties: Property[];
-	triggers?: string[];
-	vault?: string;
-	context?: string;
-	artifactType?: string;
-}
+import type { PropertyType } from '../schemas/template.js';
+import type { Model as ModelConfig, Provider } from '../schemas/model.js';
 
-export interface Property {
-	id?: string;
-	name: string;
-	value: string;
-	type?: string;
-}
+export type {
+	Property,
+	PropertyType,
+	Template,
+	Behavior,
+	ValueKind,
+} from '../schemas/template.js';
+
+export type { Model as ModelConfig, Provider } from '../schemas/model.js';
 
 export interface ExtractedContent {
 	[key: string]: string;
 }
 
-export type FilterFunction = (value: string, param?: string) => string | any[];
+export type FilterFunction = (value: string, param?: string) => string | unknown[];
 
 export interface PromptVariable {
 	key: string;
 	prompt: string;
 	filters?: string;
-}
-
-export interface PropertyType {
-	name: string;
-	type: string;
-	defaultValue?: string;
-}
-
-export interface Provider {
-	id: string;
-	name: string;
-	baseUrl: string;
-	apiKey: string;
-	apiKeyRequired?: boolean;
-	presetId?: string;
 }
 
 export interface Rating {
@@ -97,14 +74,6 @@ export interface Settings {
 	saveBehavior: 'addToAria' | 'saveFile' | 'copyToClipboard';
 }
 
-export interface ModelConfig {
-	id: string;
-	providerId: string;
-	providerModelId: string;
-	name: string;
-	enabled: boolean;
-}
-
 export interface HistoryEntry {
 	datetime: string;
 	url: string;
@@ -118,7 +87,7 @@ export interface ConversationMessage {
 	author: string;
 	content: string;
 	timestamp?: string;
-	metadata?: Record<string, any>;
+	metadata?: Record<string, unknown>;
 }
 
 export interface ConversationMetadata {

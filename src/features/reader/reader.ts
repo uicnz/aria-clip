@@ -1,4 +1,4 @@
-import { DefuddleFull as Defuddle } from '../../core/clipping/defuddle.js';
+import { DefuddleFull as Defuddle } from '../../core/clipping/defuddle-full.js';
 import browser from '../../platform/browser/browser-polyfill.js';
 import { detectBrowser } from '../../platform/browser/browser-detection.js';
 import { flattenShadowDom as flattenShadowDomUtil } from '../../platform/browser/flatten-shadow-dom.js';
@@ -2627,9 +2627,9 @@ export class Reader {
 		container.addEventListener('animationend', () => hl().repositionHighlights(), { once: true });
 	}
 
-	static copyMarkdownOnReaderPage(doc: Document): void {
+	static async copyMarkdownOnReaderPage(doc: Document): Promise<void> {
 		try {
-			const defuddled = parseForClip(doc);
+			const defuddled = await parseForClip(doc);
 			const markdown = createMarkdownContent(defuddled.content, doc.URL);
 			const normalizedMarkdown = normalizeMarkdownOutput(markdown);
 			navigator.clipboard.writeText(normalizedMarkdown).catch(() => {
@@ -2647,7 +2647,7 @@ export class Reader {
 
 	static async saveMarkdownOnReaderPage(doc: Document): Promise<void> {
 		try {
-			const defuddled = parseForClip(doc);
+			const defuddled = await parseForClip(doc);
 			const markdown = createMarkdownContent(defuddled.content, doc.URL);
 			const title = defuddled.title || doc.title || 'Untitled';
 			await saveFile({ content: markdown, fileName: title, mimeType: 'text/markdown' });

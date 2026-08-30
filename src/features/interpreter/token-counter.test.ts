@@ -1,5 +1,5 @@
-// @vitest-environment jsdom
-import { describe, expect, test } from 'vitest';
+import '@/test/dom.js';
+import { describe, expect, test } from 'bun:test';
 
 import { countTokens, updateTokenCount } from './token-counter';
 
