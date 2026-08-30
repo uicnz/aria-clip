@@ -45,7 +45,7 @@ The command runs type checking and tests before producing exactly three release 
 - `aria-clip-<version>-firefox.zip`
 - `aria-clip-<version>-safari.dmg`
 
-Upload the Firefox ZIP to Mozilla Add-ons as a listed extension owned by the `silo@uic.nz` account. Mozilla reviews, signs, hosts, and updates the extension for users. The Safari web ZIP is an intermediate file and is removed after a successful release.
+Upload the Firefox ZIP to Mozilla Add-ons as a listed extension owned by the `dev@uic.nz` account. Mozilla reviews, signs, hosts, and updates the extension for users. The Safari web ZIP is an intermediate file and is removed after a successful release.
 
 Because the Firefox JavaScript is generated from TypeScript with webpack, Mozilla also requires the matching reviewer source package. The release command creates it separately at `builds/review/aria-clip-<version>-firefox-source.zip`; it is not an end-user distributable.
 
