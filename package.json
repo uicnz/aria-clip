@@ -1,6 +1,6 @@
 {
 	"name": "aria-clip",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"description": "Browser clip for Aria.",
 	"bin": {
@@ -22,8 +22,10 @@
 		"dev:safari": "bun run sync:version && webpack --config webpack.config.cjs --watch --env BROWSER=safari --mode development",
 		"build:chrome": "webpack --config webpack.config.cjs --env BROWSER=chrome --mode production",
 		"build:firefox": "webpack --config webpack.config.cjs --env BROWSER=firefox --mode production",
+		"build:firefox-source": "bun run scripts/package-firefox-source.ts",
 		"build:safari": "bun run sync:version && webpack --config webpack.config.cjs --env BROWSER=safari --mode production",
 		"build": "bun run build:chrome && bun run build:firefox && bun run build:safari",
+		"release": "bun run scripts/release.ts",
 		"build:cli": "bun run scripts/build-cli.mjs",
 		"build:api": "bun run scripts/build-api.mjs",
 		"dev": "bun run dev:chrome",
