@@ -996,7 +996,7 @@
 		"message": "クリップしたノートの先頭に追加するプロパティです。変数を使用してページのデータを事前に入力できます。"
 	},
 	"templateTriggers": {
-		"message": "テンプレートトリガー"
+		"message": "トリガー"
 	},
 	"templateTriggersDescription": {
 		"message": "URLパターンやschema.orgデータに一致する場合に、このテンプレートを自動的に択するルールを定義します。1行に1つのルールを述してください。"

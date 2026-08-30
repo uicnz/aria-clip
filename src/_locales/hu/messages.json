@@ -996,7 +996,7 @@
 		"message": "A klipelt jegyzet tetejére hozzáadandó tulajdonságok. Használj változókat az oldal adataival való előkitöltéshez."
 	},
 	"templateTriggers": {
-		"message": "Sablonindítók"
+		"message": "Indítók"
 	},
 	"templateTriggersDescription": {
 		"message": "Szabályok megadása, hogy ez a sablon automatikusan kiválasztásra kerüljön, ha illeszkedik egy URL-mintára vagy schema.org adatokat tartalmaz. Soronként egy szabály."

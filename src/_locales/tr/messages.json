@@ -996,7 +996,7 @@
 		"message": "Kırpılan notun üstüne eklenecek özellikler. Sayfadan veri ön doldurmak için değişkenleri kullanın."
 	},
 	"templateTriggers": {
-		"message": "Şablon tetikleyicileri"
+		"message": "Tetikleyiciler"
 	},
 	"templateTriggersDescription": {
 		"message": "URL deseni eşleştiğinde veya schema.org verisi içerdiğinde bu şablonu otomatik olarak seçmek için kurallar tanımlayın. Her satıra bir kural."

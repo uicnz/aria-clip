@@ -996,7 +996,7 @@
 		"message": "Proprietà da aggiungere in cima alla nota ritagliata. Usa le variabili per pre-popolare i dati dalla pagina."
 	},
 	"templateTriggers": {
-		"message": "Trigger del modello"
+		"message": "Trigger"
 	},
 	"templateTriggersDescription": {
 		"message": "Definisci regole per selezionare automaticamente questo modello se corrisponde a un pattern URL o contiene dati schema.org. Una regola per riga."

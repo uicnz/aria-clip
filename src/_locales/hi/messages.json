@@ -996,7 +996,7 @@
 		"message": "Clipped note ke top par add karne ke liye properties. Page se data pre-populate karne ke liye variables ka upyog karein."
 	},
 	"templateTriggers": {
-		"message": "Template triggers"
+		"message": "ट्रिगर"
 	},
 	"templateTriggersDescription": {
 		"message": "URL pattern se match hone ya schema.org data hone par is template ko automatically select karne ke liye rules define karein. Ek line mein ek rule."

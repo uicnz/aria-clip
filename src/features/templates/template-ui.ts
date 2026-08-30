@@ -172,7 +172,7 @@ export function showTemplateEditor(template: Template | null): void {
 		});
 	}
 
-	const triggersTextarea = document.getElementById('url-patterns') as HTMLTextAreaElement;
+	const triggersTextarea = document.getElementById('triggers') as HTMLTextAreaElement;
 	if (triggersTextarea) triggersTextarea.value = editingTemplate && editingTemplate.triggers ? editingTemplate.triggers.join('\n') : '';
 
 	showSettingsSection('templates', editingTemplate.id);
@@ -307,7 +307,7 @@ export function updateTemplateFromForm(): void {
 		};
 	}).filter(prop => prop.name.trim() !== ''); // Filter out properties with empty names
 
-	const triggersTextarea = document.getElementById('url-patterns') as HTMLTextAreaElement;
+	const triggersTextarea = document.getElementById('triggers') as HTMLTextAreaElement;
 	if (triggersTextarea) template.triggers = triggersTextarea.value.split('\n').filter(Boolean);
 
 	const vaultSelect = document.getElementById('template-vault') as HTMLSelectElement;
@@ -340,7 +340,7 @@ function clearTemplateEditor(): void {
 	if (pathInput) pathInput.value = 'Clips';
 	const artifactTypeInput = document.getElementById('artifact-type') as HTMLInputElement;
 	if (artifactTypeInput) artifactTypeInput.value = '';
-	const triggersTextarea = document.getElementById('url-patterns') as HTMLTextAreaElement;
+	const triggersTextarea = document.getElementById('triggers') as HTMLTextAreaElement;
 	if (triggersTextarea) triggersTextarea.value = '';
 	const templateEditor = document.getElementById('template-editor');
 	if (templateEditor) templateEditor.style.display = 'none';

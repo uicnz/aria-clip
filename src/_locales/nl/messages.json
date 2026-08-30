@@ -996,7 +996,7 @@
 		"message": "Eigenschappen om toe te voegen aan de bovenkant van de geknipte notitie. Gebruik variabelen om gegevens van de pagina vooraf in te vullen."
 	},
 	"templateTriggers": {
-		"message": "Sjabloontriggers"
+		"message": "Triggers"
 	},
 	"templateTriggersDescription": {
 		"message": "Definieer regels om dit sjabloon automatisch te selecteren als het overeenkomt met een URL-patroon of schema.org-gegevens bevat. Één regel per regel."

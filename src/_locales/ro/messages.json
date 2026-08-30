@@ -988,7 +988,7 @@
 		"message": "Proprietăți care vor fi adăugate la începutul notei decupate. Folosește variabile pentru a pre-completa date din pagină."
 	},
 	"templateTriggers": {
-		"message": "Declanșatori șablon"
+		"message": "Declanșatori"
 	},
 	"templateTriggersDescription": {
 		"message": "Definește reguli pentru selectarea automată a acestui șablon dacă se potrivește cu modelul URL sau conține date schema.org. O regulă pe linie."

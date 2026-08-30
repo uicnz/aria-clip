@@ -996,7 +996,7 @@
 		"message": "Vlastnosti, ktoré sa pridajú na začiatok uloženej poznámky. Použite premenné na predvyplnenie údajov zo stránky."
 	},
 	"templateTriggers": {
-		"message": "Spúšťače šablóny"
+		"message": "Spúšťače"
 	},
 	"templateTriggersDescription": {
 		"message": "Definujte pravidlá na automatický výber tejto šablóny, ak zodpovedá vzoru URL alebo obsahuje údaje schema.org. Jedno pravidlo na riadok."

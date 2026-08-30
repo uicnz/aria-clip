@@ -988,7 +988,7 @@
 		"message": "Egenskaper som vil bli lagt til i starten av det klippede notatet. Bruk variabler for å forhåndsutfylle data fra siden."
 	},
 	"templateTriggers": {
-		"message": "Malutløsere"
+		"message": "Utløsere"
 	},
 	"templateTriggersDescription": {
 		"message": "Definer regler for automatisk valg av denne malen hvis den matcher URL-mønsteret eller inneholder schema.org-data. Én regel per linje."

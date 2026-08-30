@@ -392,7 +392,7 @@ export function SettingsShell() {
                   <FieldSet><FieldLegend data-i18n="template">Template</FieldLegend><Card><CardContent><FieldGroup>
                     <Field><FieldTitle data-i18n="templateName">Template name</FieldTitle><Input id="template-name" placeholder="Template name" /></Field>
                     <Field><FieldTitle data-i18n="artifact">Artifact</FieldTitle><Input id="artifact-type" placeholder="page-summary" pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={80} className="font-mono" /></Field>
-                    <Field><FieldTitle data-i18n="urlPatterns">URL patterns</FieldTitle><Textarea id="url-patterns" rows={2} placeholder="https://example.com/" className="font-mono" /></Field>
+                    <Field><FieldTitle data-i18n="templateTriggers">Triggers</FieldTitle><Textarea id="triggers" rows={2} placeholder="https://example.com/" className="font-mono" /></Field>
                   </FieldGroup></CardContent></Card></FieldSet>
                   <FieldSet><FieldLegend data-i18n="templateGroupLocation">Location</FieldLegend><Card><CardContent><FieldGroup>
                     <Field orientation="horizontal"><FieldTitle data-i18n="behavior">Behavior</FieldTitle><NativeSelect id="template-behavior"><NativeSelectOption value="create">Create</NativeSelectOption><NativeSelectOption value="append-specific">Append</NativeSelectOption><NativeSelectOption value="prepend-specific">Prepend</NativeSelectOption><NativeSelectOption value="overwrite">Overwrite</NativeSelectOption><NativeSelectOption value="append-daily">Append daily</NativeSelectOption><NativeSelectOption value="prepend-daily">Prepend daily</NativeSelectOption></NativeSelect></Field>

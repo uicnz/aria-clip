@@ -996,7 +996,7 @@
 		"message": "添加到剪藏笔记顶部的属性。使用变量预填充页面数据。"
 	},
 	"templateTriggers": {
-		"message": "模板触发器"
+		"message": "触发器"
 	},
 	"templateTriggersDescription": {
 		"message": "定义规则以在匹配 URL 模式或包含 schema.org 数据时自动选择此模板。每行一个规则。"

@@ -996,7 +996,7 @@
 		"message": "Propiedades para agregar en la parte superior de la nota guardada. Usa variables para pre-poblar datos de la página."
 	},
 	"templateTriggers": {
-		"message": "Activadores de plantilla"
+		"message": "Activadores"
 	},
 	"templateTriggersDescription": {
 		"message": "Define reglas para seleccionar automáticamente esta plantilla si coincide con un patrón de URL o contiene datos de schema.org. Una regla por línea."

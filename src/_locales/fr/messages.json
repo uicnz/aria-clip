@@ -996,7 +996,7 @@
 		"message": "Propriétés à ajouter en haut de la note enregistrée. Utilisez des variables pour pré-remplir les données de la page."
 	},
 	"templateTriggers": {
-		"message": "Déclencheurs de modèle"
+		"message": "Déclencheurs"
 	},
 	"templateTriggersDescription": {
 		"message": "Définissez des règles pour sélectionner automatiquement ce modèle s'il correspond à un modèle d'URL ou contient des données schema.org. Une règle par ligne."

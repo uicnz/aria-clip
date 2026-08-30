@@ -1004,7 +1004,7 @@
 		"message": "Ominaisuudet, jotka lisätään leikatun muistiinpanon alkuun. Käytä muuttujia täyttääksesi tiedot sivulta."
 	},
 	"templateTriggers": {
-		"message": "Mallin laukaisimet"
+		"message": "Laukaisimet"
 	},
 	"templateTriggersDescription": {
 		"message": "Määritä säännöt tämän mallin automaattiselle valinnalle, jos se vastaa URL-kaavaa tai sisältää schema.org-tietoja. Yksi sääntö per rivi."

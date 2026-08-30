@@ -996,7 +996,7 @@
 		"message": "Propriedades a adicionar no topo da nota recortada. Use variáveis para pré-preencher dados da página."
 	},
 	"templateTriggers": {
-		"message": "Acionadores do modelo"
+		"message": "Acionadores"
 	},
 	"templateTriggersDescription": {
 		"message": "Defina regras para selecionar automaticamente este modelo se corresponder a um padrão de URL ou contiver dados schema.org. Uma regra por linha."

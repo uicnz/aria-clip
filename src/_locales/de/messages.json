@@ -996,7 +996,7 @@
 		"message": "Eigenschaften, die oben zur ausgeschnittenen Notiz hinzugefügt werden sollen. Verwende Variablen, um Daten von der Seite vorab auszufüllen."
 	},
 	"templateTriggers": {
-		"message": "Vorlagen-Trigger"
+		"message": "Trigger"
 	},
 	"templateTriggersDescription": {
 		"message": "Definiere Regeln, um diese Vorlage automatisch auszuwählen, wenn sie mit einem URL-Muster übereinstimmt oder schema.org-Daten enthält. Eine Regel pro Zeile."

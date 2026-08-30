@@ -996,7 +996,7 @@
 		"message": "Egenskaper att lägga till överst i den klippta anteckningen. Använd variabler för att förfylla data från sidan."
 	},
 	"templateTriggers": {
-		"message": "Mallutlösare"
+		"message": "Utlösare"
 	},
 	"templateTriggersDescription": {
 		"message": "Definiera regler för att automatiskt välja denna mall om den matchar ett URL-mönster eller innehåller schema.org-data. En regel per rad."

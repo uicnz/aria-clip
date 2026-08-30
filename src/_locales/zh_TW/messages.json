@@ -996,7 +996,7 @@
 		"message": "要新增到擷取筆記頂部的屬性。使用變數從頁面預填資料。"
 	},
 	"templateTriggers": {
-		"message": "範本觸發器"
+		"message": "觸發器"
 	},
 	"templateTriggersDescription": {
 		"message": "定義規則以自動選擇此範本，如果它符合 URL 模式或包含 schema.org 資料。每行一個規則。"

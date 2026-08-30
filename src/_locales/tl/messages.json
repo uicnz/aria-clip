@@ -988,7 +988,7 @@
 		"message": "Mga property na idadagdag sa simula ng na-clip na note. Gumamit ng mga variable para i-prefill ang data mula sa pahina."
 	},
 	"templateTriggers": {
-		"message": "Mga Template Trigger"
+		"message": "Mga Trigger"
 	},
 	"templateTriggersDescription": {
 		"message": "Magtakda ng mga patakaran para awtomatikong piliin ang template na ito kung tumutugma sa URL pattern o naglalaman ng schema.org data. Isang patakaran bawat linya."

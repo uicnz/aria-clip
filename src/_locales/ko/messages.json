@@ -996,7 +996,7 @@
 		"message": "클립된 노트의 맨 위에 추가할 속성입니다. 변수를 사용하여 페이지에서 데이터를 미리 채울 수 있습니다."
 	},
 	"templateTriggers": {
-		"message": "템플릿 트리거"
+		"message": "트리거"
 	},
 	"templateTriggersDescription": {
 		"message": "이 템플릿을 자동으로 선택하도록 URL 패턴과 schema.org 데이터를 포함하는 경우에 대한 규칙을 정의하세요. 한 줄에 하나의 규칙을 작성하세요."

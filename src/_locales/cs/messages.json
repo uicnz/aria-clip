@@ -988,7 +988,7 @@
 		"message": "Vlastnosti, které se přidají na vrchol vybrané poznámky. Použijte proměnné k předvyplnění dat ze stránky."
 	},
 	"templateTriggers": {
-		"message": "Spouštěče šablon"
+		"message": "Spouštěče"
 	},
 	"templateTriggersDescription": {
 		"message": "Definujte pravidla pro automatický výběr této šablony, pokud odpovídá vzoru URL nebo obsahuje data schema.org. Jedno pravidlo na řádek."

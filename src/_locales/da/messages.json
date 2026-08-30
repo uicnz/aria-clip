@@ -988,7 +988,7 @@
 		"message": "Egenskaber der vil blive tilføjet i starten af den klippede note. Brug variabler til at forudfylde data fra siden."
 	},
 	"templateTriggers": {
-		"message": "Skabelonudløsere"
+		"message": "Udløsere"
 	},
 	"templateTriggersDescription": {
 		"message": "Definer regler for automatisk at vælge denne skabelon hvis den matcher URL-mønsteret eller indeholder schema.org-data. Én regel per linje."

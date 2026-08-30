@@ -996,7 +996,7 @@
 		"message": "Thuộc tính để thêm vào đầu ghi chú đã lưu. Sử dụng biến để điền trước dữ liệu từ trang."
 	},
 	"templateTriggers": {
-		"message": "Bộ kích hoạt mẫu"
+		"message": "Bộ kích hoạt"
 	},
 	"templateTriggersDescription": {
 		"message": "Xác định quy tắc để tự động chọn mẫu này nếu nó khớp với mẫu URL hoặc chứa dữ liệu schema.org. Một quy tắc mỗi dòng."

@@ -996,7 +996,7 @@
 		"message": "Atrybuty do dodania na górze notatki. Użyj zmiennych, aby wstępnie wypełnić dane ze strony."
 	},
 	"templateTriggers": {
-		"message": "Wyzwalacze szablonu"
+		"message": "Wyzwalacze"
 	},
 	"templateTriggersDescription": {
 		"message": "Zdefiniuj reguły umożliwiające automatyczne wybieranie tego szablonu, jeśli pasuje on do wzorca adresu URL lub zawiera dane schema.org. Jedna reguła na linię."

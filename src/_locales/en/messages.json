@@ -1002,7 +1002,7 @@
 		"message": "Properties to add to the top of the clipped note. Use variables to pre-populate data from the page."
 	},
 	"templateTriggers": {
-		"message": "Template triggers"
+		"message": "Triggers"
 	},
 	"templateTriggersDescription": {
 		"message": "Define rules to automatically select this template if it matches a URL pattern or contains schema.org data. One rule per line."

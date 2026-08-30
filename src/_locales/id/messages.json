@@ -996,7 +996,7 @@
 		"message": "Properti untuk ditambahkan ke bagian atas catatan yang diklip. Gunakan variabel untuk mengisi data yang tersedia dari laman web."
 	},
 	"templateTriggers": {
-		"message": "Pemicu template"
+		"message": "Pemicu"
 	},
 	"templateTriggersDescription": {
 		"message": "Tentukan aturan untuk memilih template ini secara otomatis jika sesuai dengan pola URL yang ditentukan atau memiliki data schema.org. Tuliskan satu aturan per baris."
