@@ -18,6 +18,7 @@
 		"dev:chrome": "webpack --config webpack.config.cjs --watch --env BROWSER=chrome --mode development",
 		"dev:firefox": "webpack --config webpack.config.cjs --watch --env BROWSER=firefox --mode development",
 		"dev:safari": "bun run sync:version && webpack --config webpack.config.cjs --watch --env BROWSER=safari --mode development",
+		"build:chrome-assets": "bun run scripts/generate-chrome-assets.ts",
 		"build:chrome": "webpack --config webpack.config.cjs --env BROWSER=chrome --mode production",
 		"build:firefox": "webpack --config webpack.config.cjs --env BROWSER=firefox --mode production",
 		"build:firefox-source": "bun run scripts/package-firefox-source.ts",
