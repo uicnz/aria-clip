@@ -16,7 +16,7 @@ Last source audit: 30 August 2026.
 - Privacy policy: <https://aria.bot/privacy>
 - Version source: [`package.json`](../../package.json)
 - Manifest source: [`src/manifests/firefox.json`](../../src/manifests/firefox.json)
-- Reviewer instructions: [`AMO_BUILD.md`](../../AMO_BUILD.md)
+- Reviewer instructions: [`AMO_BUILD.md`](./amo.md)
 
 ## Build both archives
 
