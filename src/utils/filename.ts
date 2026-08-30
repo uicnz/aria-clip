@@ -1,4 +1,7 @@
+import { MAX_ARTIFACT_TYPE_LENGTH } from './artifact.js';
+
 const MAX_FILENAME_STEM_BYTES = 240;
+const MAX_MARKDOWN_FILENAME_BYTES = 243;
 const WINDOWS_RESERVED_NAMES = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i;
 
 function truncateUtf8(value: string, maxBytes: number): string {
@@ -39,6 +42,19 @@ export function sanitizeFilename(value: string): string {
 }
 
 export function createMarkdownFilename(value: string): string {
+	return createArtifactMarkdownFilename(value);
+}
+
+export function createArtifactMarkdownFilename(value: string, artifactType?: string): string {
 	const withoutExtension = value.replace(/\.md$/i, '');
-	return `${sanitizeFilename(withoutExtension)}.md`;
+	const type = artifactType?.trim()
+		? truncateUtf8(sanitizeFilename(artifactType), MAX_ARTIFACT_TYPE_LENGTH).replace(/-+$/g, '')
+		: '';
+	const suffix = `${type ? `.${type}` : ''}.md`;
+	const suffixBytes = new TextEncoder().encode(suffix).length;
+	const stem = truncateUtf8(
+		sanitizeFilename(withoutExtension),
+		MAX_MARKDOWN_FILENAME_BYTES - suffixBytes,
+	).replace(/-+$/g, '') || 'untitled';
+	return `${stem}${suffix}`;
 }

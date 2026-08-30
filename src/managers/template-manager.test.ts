@@ -93,6 +93,7 @@ describe('template manager builtin installation', () => {
 
 	test('migrates stored builtin metadata once without replacing template edits', async () => {
 		const pageSummary = BUILTIN_TEMPLATES.find(template => template.id === PAGE_SUMMARY_TEMPLATE_ID)!.create();
+		delete pageSummary.artifactType;
 		pageSummary.path = 'My Vault/Summaries';
 		pageSummary.properties.find(property => property.name === 'author')!.value = '{{author}}';
 		pageSummary.properties = pageSummary.properties.filter(property => property.name !== 'description');
@@ -104,18 +105,37 @@ describe('template manager builtin installation', () => {
 
 		const migrated = templates[0];
 		expect(migrated.path).toBe('My Vault/Summaries');
+		expect(migrated.artifactType).toBe('page-summary');
 		expect(migrated.properties.find(property => property.name === 'author')?.value)
 			.toBe('{{author|split:", "|wikilink|join}}');
 		expect(migrated.properties.find(property => property.name === 'description')).toMatchObject({
 			value: '{{description}}',
 			type: 'text',
 		});
-		expect(storage.builtin_template_metadata_version).toBe(1);
+		expect(storage.builtin_template_metadata_version).toBe(2);
 
 		migrated.properties = migrated.properties.filter(property => property.name !== 'description');
 		await saveTemplateSettings();
 		await loadTemplates();
 
 		expect(templates[0].properties.some(property => property.name === 'description')).toBe(false);
+	});
+
+	test('adds artifact types without replaying earlier builtin metadata migrations', async () => {
+		const pageSummary = BUILTIN_TEMPLATES.find(template => template.id === PAGE_SUMMARY_TEMPLATE_ID)!.create();
+		delete pageSummary.artifactType;
+		pageSummary.properties.find(property => property.name === 'author')!.value = '{{author}}';
+		pageSummary.properties = pageSummary.properties.filter(property => property.name !== 'description');
+		storage.template_list = [PAGE_SUMMARY_TEMPLATE_ID];
+		storage[`template_${PAGE_SUMMARY_TEMPLATE_ID}`] = [compressToUTF16(JSON.stringify(pageSummary))];
+		storage.installed_builtin_template_ids = BUILTIN_TEMPLATES.map(template => template.id);
+		storage.builtin_template_metadata_version = 1;
+
+		await loadTemplates();
+
+		expect(templates[0].artifactType).toBe('page-summary');
+		expect(templates[0].properties.find(property => property.name === 'author')?.value).toBe('{{author}}');
+		expect(templates[0].properties.some(property => property.name === 'description')).toBe(false);
+		expect(storage.builtin_template_metadata_version).toBe(2);
 	});
 });

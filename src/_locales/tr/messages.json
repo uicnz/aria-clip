@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Mevcut nota, sona ekle"
 	},
+	"artifact": {
+		"message": "Yapıt"
+	},
 	"autoRunInterpreter": {
 		"message": "Otomatik çalıştır"
 	},

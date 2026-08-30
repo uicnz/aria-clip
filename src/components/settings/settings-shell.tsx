@@ -245,7 +245,7 @@ export function SettingsShell() {
                   <Card><CardContent><FieldGroup>
                   <Field orientation="horizontal"><FieldContent><FieldTitle data-i18n="saveBehaviorLabel">Save behavior</FieldTitle><FieldDescription data-i18n="saveBehaviorDescription">Choose the default option for saving pages.</FieldDescription></FieldContent>
                     <NativeSelect id="save-behavior-dropdown">
-                      <NativeSelectOption value="addToAria" data-i18n="addToAria">Add to Aria</NativeSelectOption>
+                      <NativeSelectOption value="addToAria" data-i18n="addToAria">Send to aria</NativeSelectOption>
                       <NativeSelectOption value="copyToClipboard" data-i18n="copyToClipboard">Copy to clipboard</NativeSelectOption>
                       <NativeSelectOption value="saveFile" data-i18n="saveFile">Save file</NativeSelectOption>
                     </NativeSelect>
@@ -376,6 +376,7 @@ export function SettingsShell() {
                   <div id="template-error-summary" className="hidden" />
                   <FieldSet><FieldLegend data-i18n="template">Template</FieldLegend><Card><CardContent><FieldGroup>
                     <Field><FieldTitle data-i18n="templateName">Template name</FieldTitle><Input id="template-name" placeholder="Template name" /></Field>
+                    <Field><FieldTitle data-i18n="artifact">Artifact</FieldTitle><Input id="artifact-type" placeholder="page-summary" pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={80} className="font-mono" /></Field>
                     <Field><FieldTitle data-i18n="urlPatterns">URL patterns</FieldTitle><Textarea id="url-patterns" rows={2} placeholder="https://example.com/" className="font-mono" /></Field>
                   </FieldGroup></CardContent></Card></FieldSet>
                   <FieldSet><FieldLegend data-i18n="templateGroupLocation">Location</FieldLegend><Card><CardContent><FieldGroup>

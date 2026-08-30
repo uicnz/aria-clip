@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "เพิ่มไปยังบันทึกที่มีอยู่ ที่ท้าย"
 	},
+	"artifact": {
+		"message": "ผลงาน"
+	},
 	"autoRunInterpreter": {
 		"message": "เรียกใช้อัตโนมัติ"
 	},

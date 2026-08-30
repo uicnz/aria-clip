@@ -18,7 +18,8 @@ import { showVariables, initializeVariablesPanel, updateVariablesPanel } from '.
 import { isBlankPage, isValidUrl, isRestrictedUrl } from '../utils/active-tab-manager.js';
 import { memoizeWithExpiration } from '../utils/memoize.js';
 import { debounce } from '../utils/debounce.js';
-import { createMarkdownFilename } from '../utils/filename.js';
+import { createArtifactMarkdownFilename } from '../utils/filename.js';
+import { addInterpretationArtifactMetadata } from '../utils/artifact.js';
 import { normalizeMarkdownOutput } from '../utils/markdown-output.js';
 import { saveFile } from '../utils/file-utils.js';
 import { translatePage, getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
@@ -80,6 +81,16 @@ function getPropertiesFromDOM(): Property[] {
 			type: control.dataset.type,
 		};
 	}) as Property[];
+}
+
+function getCompletedArtifactType(): string | undefined {
+	if (!currentTemplate?.artifactType) return undefined;
+	const interpretButton = document.getElementById('interpret-btn');
+	return interpretButton?.classList.contains('done') ? currentTemplate.artifactType : undefined;
+}
+
+function getOutputPropertiesFromDOM(): Property[] {
+	return addInterpretationArtifactMetadata(getPropertiesFromDOM(), getCompletedArtifactType());
 }
 
 // Helper function to get tab info from background script
@@ -477,7 +488,7 @@ function setupEventListeners(tabId: number) {
 
 	if (copyContentButton) {
 		copyContentButton.addEventListener('click', async () => {
-			const properties = getPropertiesFromDOM();
+			const properties = getOutputPropertiesFromDOM();
 
 			const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement;
 			const frontmatter = await generateFrontmatter(properties);
@@ -496,7 +507,7 @@ function setupEventListeners(tabId: number) {
 		shareButtons.forEach(button => {
 			button.addEventListener('click', async (_e) => {
 				// Get content synchronously
-				const properties = getPropertiesFromDOM();
+				const properties = getOutputPropertiesFromDOM();
 
 				const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement;
 				
@@ -509,7 +520,10 @@ function setupEventListeners(tabId: number) {
 					
 					// Call share directly from the click handler
 					const noteNameField = document.getElementById('note-name-field') as HTMLInputElement;
-					const fileName = createMarkdownFilename(noteNameField?.value || 'untitled');
+					const fileName = createArtifactMarkdownFilename(
+						noteNameField?.value || 'untitled',
+						getCompletedArtifactType(),
+					);
 
 					if (navigator.share && navigator.canShare) {
 						const blob = new Blob([fileContent], { type: 'text/markdown;charset=utf-8' });
@@ -856,7 +870,12 @@ function buildTemplateFieldsSkeleton(template: Template | null) {
 	const hasPromptVars = generalSettings.interpreterEnabled && collectPromptVariables(template).length > 0;
 	const sourceDisclosure = document.getElementById('source-disclosure') as HTMLDetailsElement | null;
 	if (interpreterContainer) interpreterContainer.style.display = hasPromptVars ? 'flex' : 'none';
-	if (interpretBtn) interpretBtn.style.display = hasPromptVars ? 'inline-block' : 'none';
+	if (interpretBtn) {
+		interpretBtn.style.display = hasPromptVars ? 'inline-block' : 'none';
+		interpretBtn.classList.remove('done', 'error', 'processing');
+		(interpretBtn as HTMLButtonElement).disabled = false;
+		interpretBtn.textContent = getMessage('interpret');
+	}
 	if (sourceDisclosure) {
 		sourceDisclosure.classList.toggle('hidden', !hasPromptVars);
 		sourceDisclosure.open = false;
@@ -1028,6 +1047,7 @@ async function getReplacedTemplate(template: Template, variables: { [key: string
 		schemaVersion: "0.1.0",
 		name: template.name,
 		behavior: template.behavior,
+		artifactType: template.artifactType,
 		noteNameFormat: await compileTemplate(tabId, template.noteNameFormat, variables, currentUrl),
 		path: template.path,
 		noteContentFormat: await compileTemplate(tabId, template.noteContentFormat, variables, currentUrl),
@@ -1255,7 +1275,7 @@ async function handleSaveToDownloads() {
 		const path = pathField?.value || '';
 		const vault = vaultDropdown?.value || '';
 		
-		const properties = getPropertiesFromDOM();
+		const properties = getOutputPropertiesFromDOM();
 
 		const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement;
 		const frontmatter = await generateFrontmatter(properties);
@@ -1266,6 +1286,7 @@ async function handleSaveToDownloads() {
 			fileName,
 			mimeType: 'text/markdown',
 			tabId: currentTabId,
+			artifactType: getCompletedArtifactType(),
 			onError: (_error) => showError('failedToSaveFile')
 		});
 
@@ -1336,7 +1357,7 @@ async function handleClipAria(): Promise<void> {
 		}
 
 		// Gather the rendered capture and every extraction field before crossing the native boundary.
-		const properties = getPropertiesFromDOM();
+		const properties = getOutputPropertiesFromDOM();
 		const frontmatter = await generateFrontmatter(properties);
 		const fileContent = normalizeMarkdownOutput(frontmatter + noteContentField.value);
 		if (!currentTabId || !latestExtractedData) throw new Error('The current page capture is unavailable.');
@@ -1383,6 +1404,7 @@ async function handleClipAria(): Promise<void> {
 			},
 			rendering: {
 				title: noteName,
+				artifactType: getCompletedArtifactType() ?? null,
 				templateId: currentTemplate.id,
 				templateName: currentTemplate.name,
 				templateContext: currentTemplate.context ?? '',
@@ -1447,7 +1469,7 @@ function getOperationIcon(operationType: string): string {
 }
 
 async function copyContent() {
-	const properties = getPropertiesFromDOM();
+	const properties = getOutputPropertiesFromDOM();
 
 	const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement;
 	const frontmatter = await generateFrontmatter(properties);

@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Idagdag sa umiiral na note, sa dulo"
 	},
+	"artifact": {
+		"message": "Artifact"
+	},
 	"autoRunInterpreter": {
 		"message": "Awtomatikong patakbuhin"
 	},

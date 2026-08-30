@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Tambah ke catatan yang telah ada, di bagian akhir"
 	},
+	"artifact": {
+		"message": "Artefak"
+	},
 	"autoRunInterpreter": {
 		"message": "Jalankan secara otomatis"
 	},

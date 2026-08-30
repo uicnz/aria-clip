@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "اضافه کردن به یادداشت موجود، در آخر آن"
 	},
+	"artifact": {
+		"message": "آرتیفکت"
+	},
 	"autoRunInterpreter": {
 		"message": "اجرای خودکار"
 	},

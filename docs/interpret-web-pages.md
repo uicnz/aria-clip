@@ -37,7 +37,7 @@ Interpreter works with almost any language model provider, including options tha
 
 ## How it works
 
-When Interpreter is enabled *and* your template contains [[Variables#Prompt variables|prompt variables]], a new Interpreter section is displayed in the extension window, above the **Add to Aria** button. This section lets you select a model and run Interpreter for the current page.
+When Interpreter is enabled *and* your template contains [[Variables#Prompt variables|prompt variables]], a new Interpreter section is displayed in the extension window, above the **Send to aria** button. This section lets you select a model and run Interpreter for the current page.
 
 When you click **interpret**, Interpreter sends the page context to your selected model, along with *all* the prompts in your template in one request. Depending on the model provider you choose, this can be an external call or local to your device. The model evaluates your prompts against the page context, and returns its responses. Interpreter then replaces the prompt variables with the response data.
 

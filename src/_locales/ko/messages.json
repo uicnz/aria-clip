@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "기존에 있는 노트 맨 아래에 추가"
 	},
+	"artifact": {
+		"message": "산출물"
+	},
 	"autoRunInterpreter": {
 		"message": "자동 실행"
 	},

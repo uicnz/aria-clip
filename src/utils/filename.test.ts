@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { createMarkdownFilename, sanitizeFilename } from './filename';
+import { createArtifactMarkdownFilename, createMarkdownFilename, sanitizeFilename } from './filename';
 
 describe('portable note filenames', () => {
 	test('uses lowercase words separated by dashes', () => {
@@ -29,8 +29,24 @@ describe('portable note filenames', () => {
 		expect(createMarkdownFilename('My Note.MD')).toBe('my-note.md');
 	});
 
+	test('places a stable artifact type before the Markdown extension', () => {
+		expect(createArtifactMarkdownFilename('My Note', 'Video Notes')).toBe('my-note.video-notes.md');
+	});
+
 	test('stays within a portable UTF-8 filename budget', () => {
 		const filename = createMarkdownFilename('界'.repeat(200));
 		expect(new TextEncoder().encode(filename).length).toBeLessThanOrEqual(243);
+	});
+
+	test('keeps typed Markdown filenames within the same byte budget', () => {
+		const filename = createArtifactMarkdownFilename('界'.repeat(200), 'research-brief');
+		expect(new TextEncoder().encode(filename).length).toBeLessThanOrEqual(243);
+		expect(filename).toMatch(/\.research-brief\.md$/);
+	});
+
+	test('bounds an abnormally long artifact type without losing the title or extension', () => {
+		const filename = createArtifactMarkdownFilename('My Note', 'type-'.repeat(100));
+		expect(new TextEncoder().encode(filename).length).toBeLessThanOrEqual(243);
+		expect(filename).toMatch(/^my-note\.[a-z0-9-]+\.md$/);
 	});
 });

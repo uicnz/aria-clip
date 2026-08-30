@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "إضافة إلى ملاحظة موجودة، في النهاية"
 	},
+	"artifact": {
+		"message": "مُنتَج"
+	},
 	"autoRunInterpreter": {
 		"message": "تشغيل تلقائي"
 	},

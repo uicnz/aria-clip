@@ -4,12 +4,6 @@
 
 Install the extension from the source. This won't be distributed publicly.
 
-## Contribute
-
-### Translations
-
-You can help translate Clip into your language. Submit your translation via pull request using the format found in the [/_locales](/src/_locales) folder.
-
 ## Roadmap
 
 In no particular order:
@@ -17,11 +11,11 @@ In no particular order:
 - [ ] Annotate highlights
 - [ ] Template directory
 - [ ] Sync settings across browsers
-- [x] A separate icon for Clip (1.6.3)
-- [x] Template validation (1.1.0)
-- [x] Template logic (if/for)  (1.1.0)
-- [x] Save images locally ([Aria 1.8.0](https://aria.bot/changelog/2024-12-18-desktop-v1.8.0/))
-- [x] Translate UI into more languages — help is welcomed
+- [x] A separate icon for Clip
+- [x] Template validation
+- [x] Template logic (if/for)
+- [x] Save images locally
+- [x] Translate UI into more languages
 
 ## Developers
 

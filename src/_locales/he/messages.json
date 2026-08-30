@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "הוסף לפתק קיים, בסוף"
 	},
+	"artifact": {
+		"message": "תוצר"
+	},
 	"autoRunInterpreter": {
 		"message": "הפעלה אוטומטית"
 	},

@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Добавлять в конец существующей заметки"
 	},
+	"artifact": {
+		"message": "Артефакт"
+	},
 	"autoRunInterpreter": {
 		"message": "Автоматический запуск"
 	},

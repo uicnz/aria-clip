@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Zum Ende einer bestehenden Notiz hinzufügen"
 	},
+	"artifact": {
+		"message": "Artefakt"
+	},
 	"autoRunInterpreter": {
 		"message": "Automatisch ausführen"
 	},

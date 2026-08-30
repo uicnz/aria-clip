@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "既存のノートの末尾に追加"
 	},
+	"artifact": {
+		"message": "成果物"
+	},
 	"autoRunInterpreter": {
 		"message": "自動実行"
 	},

@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "添加到现有笔记末尾"
 	},
+	"artifact": {
+		"message": "产物"
+	},
 	"autoRunInterpreter": {
 		"message": "自动运行"
 	},

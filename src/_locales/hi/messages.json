@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Maujuda note mein, ant mein jodein"
 	},
+	"artifact": {
+		"message": "आर्टिफ़ैक्ट"
+	},
 	"autoRunInterpreter": {
 		"message": "Automatic chalayein"
 	},

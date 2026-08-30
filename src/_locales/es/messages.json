@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Agregar a una nota existente, al final"
 	},
+	"artifact": {
+		"message": "Artefacto"
+	},
 	"autoRunInterpreter": {
 		"message": "Ejecutar automáticamente"
 	},

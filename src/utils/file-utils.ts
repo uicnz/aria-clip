@@ -1,6 +1,6 @@
 import browser from './browser-polyfill.js';
 import { detectBrowser } from './browser-detection.js';
-import { createMarkdownFilename } from './filename.js';
+import { createArtifactMarkdownFilename } from './filename.js';
 import { normalizeMarkdownOutput } from './markdown-output.js';
 
 export interface SaveFileOptions {
@@ -8,6 +8,7 @@ export interface SaveFileOptions {
 	fileName: string;
 	mimeType?: string;
 	tabId?: number;
+	artifactType?: string;
 	onError?: (error: Error) => void;
 }
 
@@ -23,11 +24,12 @@ export async function saveFile({
 	fileName,
 	mimeType = 'text/markdown',
 	tabId,
+	artifactType,
 	onError
 }: SaveFileOptions): Promise<void> {
 	try {
 		if (mimeType === 'text/markdown') {
-			fileName = createMarkdownFilename(fileName);
+			fileName = createArtifactMarkdownFilename(fileName, artifactType);
 			content = normalizeMarkdownOutput(content);
 		}
 

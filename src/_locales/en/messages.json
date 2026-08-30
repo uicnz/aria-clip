@@ -18,7 +18,7 @@
 		"message": "Add provider"
 	},
 	"addToAria": {
-		"message": "Add to Aria"
+		"message": "Send to aria"
 	},
 	"addVaultPlaceholder": {
 		"message": "Press enter to add a vault"
@@ -52,6 +52,9 @@
 	},
 	"appendToExisting": {
 		"message": "Add to an existing note, at the bottom"
+	},
+	"artifact": {
+		"message": "Artifact"
 	},
 	"autoRunInterpreter": {
 		"message": "Automatically run"

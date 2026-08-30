@@ -10,7 +10,7 @@ Once you install the [[Introduction to Aria Clip|Clip]] browser extension, you c
 2. Hotkeys, to activate the extension from your keyboard.
 3. Context menu, by right-clicking the web page you are visiting.
 
-To save a page to Aria click the **Add to Aria** button.
+To save a page to Aria click the **Send to aria** button.
 
 ## Capture a page
 
@@ -45,7 +45,7 @@ The Clip interface is divided into four sections:
 1. **Header** where you can switch templates, turn on [[Highlight web pages|highlighting]], and access settings.
 2. **Properties** shows the [[Properties|metadata]] extracted from the page that will be saved as [[Properties]] in Aria.
 3. **Note content** that will be saved to Aria.
-4. **Footer** allows you select the vault and folder, and add to Aria.
+4. **Footer** allows you select the vault and folder, and send to aria.
 
 Header functionality includes:
 
@@ -56,7 +56,7 @@ Header functionality includes:
 
 Footer functionality includes:
 
-- **Add to Aria** button to save data to Aria.
+- **Send to aria** button to save data to Aria.
 - **Vault** dropdown to switch between saved vaults added in Clip settings.
 - **Folder** field to define which folder to save to.
 - **Interpreter** to run [[Interpret web pages|natural language prompts]] on the page.

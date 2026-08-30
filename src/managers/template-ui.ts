@@ -12,6 +12,7 @@ import { getMessage } from '../utils/i18n.js';
 import { parse, validateVariables, validateFilters } from '../utils/parser.js';
 import { renderTemplateList } from '../components/settings/template-list.js';
 import { renderTemplateProperties, type TemplatePropertyRow } from '../components/settings/template-properties.js';
+import { isValidArtifactType } from '../utils/artifact.js';
 let hasUnsavedChanges = false;
 void hasUnsavedChanges;
 
@@ -105,6 +106,8 @@ export function showTemplateEditor(template: Template | null): void {
 
 	if (templateEditorTitle) templateEditorTitle.textContent = getMessage('editTemplate');
 	if (templateName) templateName.value = editingTemplate.name;
+	const artifactTypeInput = document.getElementById('artifact-type') as HTMLInputElement;
+	if (artifactTypeInput) artifactTypeInput.value = editingTemplate.artifactType || '';
 
 	const pathInput = document.getElementById('template-path-name') as HTMLInputElement;
 	if (pathInput) {
@@ -258,6 +261,16 @@ export function updateTemplateFromForm(): void {
 	const behaviorSelect = document.getElementById('template-behavior') as HTMLSelectElement;
 	if (behaviorSelect) template.behavior = behaviorSelect.value as Template['behavior'];
 
+	const artifactTypeInput = document.getElementById('artifact-type') as HTMLInputElement;
+	if (artifactTypeInput) {
+		const artifactType = artifactTypeInput.value.trim();
+		if (!artifactType) {
+			template.artifactType = undefined;
+		} else if (isValidArtifactType(artifactType)) {
+			template.artifactType = artifactType;
+		}
+	}
+
 	const isDailyNote = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
 
 	const pathInput = document.getElementById('template-path-name') as HTMLInputElement;
@@ -325,6 +338,8 @@ function clearTemplateEditor(): void {
 	}
 	const pathInput = document.getElementById('template-path-name') as HTMLInputElement;
 	if (pathInput) pathInput.value = 'Clips';
+	const artifactTypeInput = document.getElementById('artifact-type') as HTMLInputElement;
+	if (artifactTypeInput) artifactTypeInput.value = '';
 	const triggersTextarea = document.getElementById('url-patterns') as HTMLTextAreaElement;
 	if (triggersTextarea) triggersTextarea.value = '';
 	const templateEditor = document.getElementById('template-editor');

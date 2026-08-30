@@ -11,6 +11,7 @@ import { saveFile } from './file-utils.js';
 import { copyToClipboard } from './clipboard-utils.js';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { getMessage } from './i18n.js';
+import { isValidArtifactType } from './artifact.js';
 
 const SCHEMA_VERSION = '0.1.0';
 
@@ -44,6 +45,7 @@ export async function exportTemplate(): Promise<void> {
 		})),
 		triggers: template.triggers,
 	};
+	if (template.artifactType) orderedTemplate.artifactType = template.artifactType;
 
 	// Only include noteNameFormat and path for non-daily note behaviors
 	if (!isDailyNote) {
@@ -166,8 +168,10 @@ function validateImportedTemplate(template: Partial<Template>): boolean {
 
 	// Add optional check for context
 	const hasValidContext = !template.context || typeof template.context === 'string';
+	const hasValidArtifactType = !template.artifactType
+		|| (typeof template.artifactType === 'string' && isValidArtifactType(template.artifactType));
 
-	return hasRequiredFields && hasValidProperties && hasValidNoteNameAndPath && hasValidContext;
+	return hasRequiredFields && hasValidProperties && hasValidNoteNameAndPath && hasValidContext && hasValidArtifactType;
 }
 
 function preventDefaults(e: Event): void {
@@ -300,6 +304,7 @@ export function copyTemplateToClipboard(template: Template): void {
 		})),
 		triggers: template.triggers,
 	};
+	if (template.artifactType) orderedTemplate.artifactType = template.artifactType;
 
 	// Only include noteNameFormat and path for non-daily note behaviors
 	if (!isDailyNote) {

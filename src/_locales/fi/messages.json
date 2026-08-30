@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Lisää olemassa olevaan muistiinpanoon, loppuun"
 	},
+	"artifact": {
+		"message": "Artefakti"
+	},
 	"autoRunInterpreter": {
 		"message": "Suorita automaattisesti"
 	},

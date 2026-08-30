@@ -38,6 +38,7 @@ export interface AriaClipCapture {
 	};
 	rendering: {
 		title: string;
+		artifactType: string | null;
 		templateId: string;
 		templateName: string;
 		templateContext: string;

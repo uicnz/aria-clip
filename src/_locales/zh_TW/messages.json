@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "新增到現有筆記底部"
 	},
+	"artifact": {
+		"message": "產物"
+	},
 	"autoRunInterpreter": {
 		"message": "自動運行"
 	},

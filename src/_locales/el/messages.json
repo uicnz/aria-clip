@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Προσθήκη σε υπάρχουσα σημείωση, στο τέλος"
 	},
+	"artifact": {
+		"message": "Τέχνημα"
+	},
 	"autoRunInterpreter": {
 		"message": "Αυτόματη εκτέλεση"
 	},

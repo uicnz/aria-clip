@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "បន្ថែមទៅកំណត់ត្រាដែលមានស្រាប់ នៅខាងក្រោម"
 	},
+	"artifact": {
+		"message": "វត្ថុបង្កើត"
+	},
 	"autoRunInterpreter": {
 		"message": "ដំណើរការដោយស្វ័យប្រវត្តិ"
 	},

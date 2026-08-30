@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Pridať do existujúcej poznámky, na koniec"
 	},
+	"artifact": {
+		"message": "Artefakt"
+	},
 	"autoRunInterpreter": {
 		"message": "Spúšťať automaticky"
 	},

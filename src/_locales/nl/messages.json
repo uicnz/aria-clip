@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Toevoegen aan bestaande notitie, onderaan"
 	},
+	"artifact": {
+		"message": "Artefact"
+	},
 	"autoRunInterpreter": {
 		"message": "Automatisch uitvoeren"
 	},

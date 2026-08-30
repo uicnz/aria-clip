@@ -13,32 +13,44 @@ const STORAGE_KEY_PREFIX = 'template_';
 const TEMPLATE_LIST_KEY = 'template_list';
 const INSTALLED_BUILTIN_TEMPLATE_IDS_KEY = 'installed_builtin_template_ids';
 const BUILTIN_TEMPLATE_METADATA_VERSION_KEY = 'builtin_template_metadata_version';
-const BUILTIN_TEMPLATE_METADATA_VERSION = 1;
+const BUILTIN_TEMPLATE_METADATA_VERSION = 2;
 const CHUNK_SIZE = 8000;
 const SIZE_WARNING_THRESHOLD = 6000;
 
-function migrateBuiltinTemplateMetadata(template: Template): boolean {
+function migrateBuiltinTemplateMetadata(template: Template, fromVersion: number): boolean {
 	let changed = false;
-	const author = template.properties.find(property => property.name === 'author');
-	if (author?.value === '{{author}}') {
-		author.value = '{{author|split:", "|wikilink|join}}';
-		changed = true;
+	if (fromVersion < 2) {
+		const builtinArtifactType = BUILTIN_TEMPLATES
+			.find(definition => definition.id === template.id)
+			?.create().artifactType;
+		if (!template.artifactType && builtinArtifactType) {
+			template.artifactType = builtinArtifactType;
+			changed = true;
+		}
 	}
 
-	if (!template.properties.some(property => property.name === 'description')) {
-		const description = {
-			id: `${template.id}-description`,
-			name: 'description',
-			value: '{{description}}',
-			type: 'text',
-		};
-		const tagsIndex = template.properties.findIndex(property => property.name === 'tags');
-		if (tagsIndex === -1) {
-			template.properties.push(description);
-		} else {
-			template.properties.splice(tagsIndex, 0, description);
+	if (fromVersion < 1) {
+		const author = template.properties.find(property => property.name === 'author');
+		if (author?.value === '{{author}}') {
+			author.value = '{{author|split:", "|wikilink|join}}';
+			changed = true;
 		}
-		changed = true;
+
+		if (!template.properties.some(property => property.name === 'description')) {
+			const description = {
+				id: `${template.id}-description`,
+				name: 'description',
+				value: '{{description}}',
+				type: 'text',
+			};
+			const tagsIndex = template.properties.findIndex(property => property.name === 'tags');
+			if (tagsIndex === -1) {
+				template.properties.push(description);
+			} else {
+				template.properties.splice(tagsIndex, 0, description);
+			}
+			changed = true;
+		}
 	}
 
 	return changed;
@@ -119,7 +131,7 @@ export async function loadTemplates(): Promise<Template[]> {
 		if (builtinMetadataVersion < BUILTIN_TEMPLATE_METADATA_VERSION) {
 			const builtinIds = new Set(BUILTIN_TEMPLATES.map(template => template.id));
 			for (const template of templates) {
-				if (builtinIds.has(template.id) && migrateBuiltinTemplateMetadata(template)) {
+				if (builtinIds.has(template.id) && migrateBuiltinTemplateMetadata(template, builtinMetadataVersion)) {
 					templatesChanged = true;
 				}
 			}

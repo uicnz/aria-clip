@@ -13,6 +13,7 @@ describe('builtin templates', () => {
 		expect(template).toEqual({
 			id: PAGE_SUMMARY_TEMPLATE_ID,
 			name: 'Page Summary',
+			artifactType: 'page-summary',
 			behavior: 'create',
 			noteNameFormat: '{{title}}',
 			path: 'Clips',
@@ -44,21 +45,22 @@ describe('builtin templates', () => {
 			const template = definition.create();
 			return {
 				name: template.name,
+				artifactType: template.artifactType,
 				path: template.path,
 				tags: template.properties.find(property => property.name === 'tags')?.value,
 			};
 		})).toEqual([
-			{ name: 'Page Summary', path: 'Clips', tags: 'clips, summary' },
-			{ name: 'News Brief', path: 'Clips/News', tags: 'clips, news' },
-			{ name: 'Research Brief', path: 'Clips/Research', tags: 'clips, research' },
-			{ name: 'Recipe Card', path: 'Clips/Recipes', tags: 'clips, recipes' },
-			{ name: 'Tutorial Guide', path: 'Clips/Tutorials', tags: 'clips, tutorials' },
-			{ name: 'Video Notes', path: 'Clips/Videos', tags: 'clips, videos' },
-			{ name: 'Product Brief', path: 'Clips/Products', tags: 'clips, products' },
-			{ name: 'Travel Guide', path: 'Clips/Travel', tags: 'clips, travel' },
-			{ name: 'Event Details', path: 'Clips/Events', tags: 'clips, events' },
-			{ name: 'Person Profile', path: 'Clips/People', tags: 'clips, people' },
-			{ name: 'Code Reference', path: 'Clips/Code', tags: 'clips, code' },
+			{ name: 'Page Summary', artifactType: 'page-summary', path: 'Clips', tags: 'clips, summary' },
+			{ name: 'News Brief', artifactType: 'news-brief', path: 'Clips/News', tags: 'clips, news' },
+			{ name: 'Research Brief', artifactType: 'research-brief', path: 'Clips/Research', tags: 'clips, research' },
+			{ name: 'Recipe Card', artifactType: 'recipe-card', path: 'Clips/Recipes', tags: 'clips, recipes' },
+			{ name: 'Tutorial Guide', artifactType: 'tutorial-guide', path: 'Clips/Tutorials', tags: 'clips, tutorials' },
+			{ name: 'Video Notes', artifactType: 'video-notes', path: 'Clips/Videos', tags: 'clips, videos' },
+			{ name: 'Product Brief', artifactType: 'product-brief', path: 'Clips/Products', tags: 'clips, products' },
+			{ name: 'Travel Guide', artifactType: 'travel-guide', path: 'Clips/Travel', tags: 'clips, travel' },
+			{ name: 'Event Details', artifactType: 'event-details', path: 'Clips/Events', tags: 'clips, events' },
+			{ name: 'Person Profile', artifactType: 'person-profile', path: 'Clips/People', tags: 'clips, people' },
+			{ name: 'Code Reference', artifactType: 'code-reference', path: 'Clips/Code', tags: 'clips, code' },
 		]);
 	});
 
@@ -70,6 +72,7 @@ describe('builtin templates', () => {
 			expect(template.id).toBe(definition.id);
 			expect(template.name).toBe(definition.name);
 			expect(template.name).toMatch(/^[A-Z][A-Za-z]* [A-Z][A-Za-z]*$/);
+			expect(template.artifactType).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 			expect(template.behavior).toBe('create');
 			expect(template.noteNameFormat).toBe('{{title}}');
 			expect(template.context).toContain('{{content}}');

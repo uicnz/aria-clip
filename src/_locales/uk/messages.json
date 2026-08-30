@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Додати до існуючої нотатки, в кінець"
 	},
+	"artifact": {
+		"message": "Артефакт"
+	},
 	"autoRunInterpreter": {
 		"message": "Автозапуск"
 	},

@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Hozzáadás egy meglévő jegyzethez, alul"
 	},
+	"artifact": {
+		"message": "Műtermék"
+	},
 	"autoRunInterpreter": {
 		"message": "Automatikus futtatás"
 	},

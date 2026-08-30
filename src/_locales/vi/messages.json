@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Thêm vào ghi chú hiện có, ở cuối"
 	},
+	"artifact": {
+		"message": "Sản phẩm"
+	},
 	"autoRunInterpreter": {
 		"message": "Tự động chạy"
 	},

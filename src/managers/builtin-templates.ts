@@ -58,6 +58,7 @@ export interface BuiltinTemplateDefinition {
 interface StructuredTemplateOptions {
 	id: string;
 	name: string;
+	artifactType: string;
 	path: string;
 	prompt: string;
 	tags: string;
@@ -79,6 +80,7 @@ function createStructuredTemplate(options: StructuredTemplateOptions): Template 
 	return {
 		id: options.id,
 		name: options.name,
+		artifactType: options.artifactType,
 		behavior: 'create',
 		noteNameFormat: '{{title}}',
 		path: options.path,
@@ -93,6 +95,7 @@ export function createPageSummaryTemplate(): Template {
 	return {
 		id: PAGE_SUMMARY_TEMPLATE_ID,
 		name: PAGE_SUMMARY_TEMPLATE_NAME,
+		artifactType: 'page-summary',
 		behavior: 'create',
 		noteNameFormat: '{{title}}',
 		path: 'Clips',
@@ -107,6 +110,7 @@ export function createNewsBriefTemplate(): Template {
 	return createStructuredTemplate({
 		id: NEWS_BRIEF_TEMPLATE_ID,
 		name: 'News Brief',
+		artifactType: 'news-brief',
 		path: 'Clips/News',
 		prompt: NEWS_BRIEF_PROMPT,
 		tags: 'clips, news',
@@ -117,6 +121,7 @@ export function createResearchBriefTemplate(): Template {
 	return createStructuredTemplate({
 		id: RESEARCH_BRIEF_TEMPLATE_ID,
 		name: 'Research Brief',
+		artifactType: 'research-brief',
 		path: 'Clips/Research',
 		prompt: RESEARCH_BRIEF_PROMPT,
 		tags: 'clips, research',
@@ -127,6 +132,7 @@ export function createRecipeCardTemplate(): Template {
 	return createStructuredTemplate({
 		id: RECIPE_CARD_TEMPLATE_ID,
 		name: 'Recipe Card',
+		artifactType: 'recipe-card',
 		path: 'Clips/Recipes',
 		prompt: RECIPE_CARD_PROMPT,
 		tags: 'clips, recipes',
@@ -137,6 +143,7 @@ export function createTutorialGuideTemplate(): Template {
 	return createStructuredTemplate({
 		id: TUTORIAL_GUIDE_TEMPLATE_ID,
 		name: 'Tutorial Guide',
+		artifactType: 'tutorial-guide',
 		path: 'Clips/Tutorials',
 		prompt: TUTORIAL_GUIDE_PROMPT,
 		tags: 'clips, tutorials',
@@ -147,6 +154,7 @@ export function createVideoNotesTemplate(): Template {
 	return createStructuredTemplate({
 		id: VIDEO_NOTES_TEMPLATE_ID,
 		name: 'Video Notes',
+		artifactType: 'video-notes',
 		path: 'Clips/Videos',
 		prompt: VIDEO_NOTES_PROMPT,
 		tags: 'clips, videos',
@@ -157,6 +165,7 @@ export function createProductBriefTemplate(): Template {
 	return createStructuredTemplate({
 		id: PRODUCT_BRIEF_TEMPLATE_ID,
 		name: 'Product Brief',
+		artifactType: 'product-brief',
 		path: 'Clips/Products',
 		prompt: PRODUCT_BRIEF_PROMPT,
 		tags: 'clips, products',
@@ -167,6 +176,7 @@ export function createTravelGuideTemplate(): Template {
 	return createStructuredTemplate({
 		id: TRAVEL_GUIDE_TEMPLATE_ID,
 		name: 'Travel Guide',
+		artifactType: 'travel-guide',
 		path: 'Clips/Travel',
 		prompt: TRAVEL_GUIDE_PROMPT,
 		tags: 'clips, travel',
@@ -177,6 +187,7 @@ export function createEventDetailsTemplate(): Template {
 	return createStructuredTemplate({
 		id: EVENT_DETAILS_TEMPLATE_ID,
 		name: 'Event Details',
+		artifactType: 'event-details',
 		path: 'Clips/Events',
 		prompt: EVENT_DETAILS_PROMPT,
 		tags: 'clips, events',
@@ -187,6 +198,7 @@ export function createPersonProfileTemplate(): Template {
 	return createStructuredTemplate({
 		id: PERSON_PROFILE_TEMPLATE_ID,
 		name: 'Person Profile',
+		artifactType: 'person-profile',
 		path: 'Clips/People',
 		prompt: PERSON_PROFILE_PROMPT,
 		tags: 'clips, people',
@@ -197,6 +209,7 @@ export function createCodeReferenceTemplate(): Template {
 	return createStructuredTemplate({
 		id: CODE_REFERENCE_TEMPLATE_ID,
 		name: 'Code Reference',
+		artifactType: 'code-reference',
 		path: 'Clips/Code',
 		prompt: CODE_REFERENCE_PROMPT,
 		tags: 'clips, code',

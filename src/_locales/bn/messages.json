@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "একটি বিদ্যমান নোটের শেষে যোগ করুন"
 	},
+	"artifact": {
+		"message": "আর্টিফ্যাক্ট"
+	},
 	"autoRunInterpreter": {
 		"message": "স্বয়ংক্রিয়ভাবে চালান"
 	},

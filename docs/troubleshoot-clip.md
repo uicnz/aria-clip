@@ -20,7 +20,7 @@ To bypass Defuddle in Clip use the following methods:
 
 ### No content appears in Aria
 
-If you don't see any content in Aria when you click **Add to Aria**:
+If you don't see any content in Aria when you click **Send to aria**:
 
 - Check for errors in the Aria [[Help and support#Capture console logs|developer console]].
 - Check that your vault name in Clip settings exactly matches your *vault name* in Aria *not the vault path*.

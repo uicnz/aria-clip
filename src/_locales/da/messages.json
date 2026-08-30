@@ -53,6 +53,9 @@
 	"appendToExisting": {
 		"message": "Tilføj til eksisterende note, i slutningen"
 	},
+	"artifact": {
+		"message": "Artefakt"
+	},
 	"autoRunInterpreter": {
 		"message": "Kør automatisk"
 	},
