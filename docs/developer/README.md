@@ -10,3 +10,7 @@ Release runbooks:
 Architecture proposals:
 
 - [RFC 0001: Agent-operable CLI](rfcs/0001-agent-operable-cli.md)
+
+Implementation:
+
+- [CLI architecture and release](cli.md)

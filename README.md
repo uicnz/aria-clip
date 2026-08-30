@@ -17,6 +17,20 @@ In no particular order:
 - [x] Save images locally
 - [x] Translate UI into more languages
 
+## Command line
+
+Build a publishable package and install it locally:
+
+```sh
+bun run package:cli
+bun add --global ./builds/npm/aria-clip-<version>.tgz
+aria-clip https://example.com/article
+```
+
+The bare URL command prints deterministic Markdown without contacting a model
+or writing a file. See the [operator guide](docs/operator/cli.md) and
+[CLI architecture](docs/developer/cli.md).
+
 ## Developers
 
 To build the extension:
@@ -49,7 +63,9 @@ Upload the Firefox ZIP to Mozilla Add-ons as a listed extension owned by the `de
 
 Because the Firefox JavaScript is generated from TypeScript with webpack, Mozilla also requires the matching reviewer source package. The release command creates it separately at `builds/review/aria-clip-<version>-firefox-source.zip`; it is not an end-user distributable.
 
-Use `bun run release -- --skip-notarize` only for local Safari testing, or `bun run release -- --dry-run` to inspect the complete command sequence. The Apple team defaults to `N68C9LUA5B`; override release configuration only when necessary with `ARIA_CLIP_APPLE_TEAM_ID`, `ARIA_CLIP_SIGN_IDENTITY`, `ARIA_CLIP_NOTARY_PROFILE`, or `ARIA_NOTARY_KEYCHAIN`.
+Use `bun run release -- --skip-notarize` only for local Safari testing, or `bun run release -- --dry-run` to inspect the complete command sequence. Signing uses Aria's team `N68C9LUA5B` and `aria-notarytool` profile. The same `ARIA_NOTARY_KEYCHAIN` and `ARIA_NOTARY_BOOTSTRAP_*` variables used by Aria can recover a missing profile.
+
+Release tooling reads those overrides and provider credentials from the canonical `~/.aria/.env` file. It does not search for a repository-level `.env` file.
 
 ### Install the extension locally
 

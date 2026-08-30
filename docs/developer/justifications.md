@@ -64,7 +64,7 @@ Select:
 
 > No, I am not using Remote code
 
-All executable JavaScript, CSS, and fonts are packaged with the extension. The remotely fetched provider catalog, captured website resources, and model responses are processed as data and are not executed as code.
+All executable JavaScript, CSS, fonts, and the validated provider catalog are packaged with the extension. Captured website resources and model responses are processed as data and are not executed as code.
 
 ## Data disclosures
 

@@ -2,11 +2,13 @@
 
 ## Localization
 
-First, add an OpenAI API key in `.env` at the root of the repo:
+Aria Clip reads its one file-backed environment from `~/.aria/.env`. Add the OpenAI API key there:
 
 ```ini
 OPENAI_API_KEY=sk-...
 ```
+
+Repository-level and working-directory `.env` files are not searched. An explicitly injected process variable may override the file for CI.
 
 Scripts can be run using Bun in the root of the repo.
 

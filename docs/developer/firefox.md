@@ -16,7 +16,7 @@ Last source audit: 30 August 2026.
 - Privacy policy: <https://aria.bot/privacy>
 - Version source: [`package.json`](../../package.json)
 - Manifest source: [`src/manifests/firefox.json`](../../src/manifests/firefox.json)
-- Reviewer instructions: [`AMO_BUILD.md`](./amo.md)
+- Reviewer instructions: [`amo.md`](./amo.md)
 
 ## Build both archives
 
@@ -91,7 +91,7 @@ Because the Firefox manifest does not request `nativeMessaging`, **Add to Aria**
 ## Preflight
 
 1. Load the exact Firefox ZIP in a clean profile.
-2. Reproduce it from the reviewer source by following `AMO_BUILD.md`.
+2. Reproduce it from the reviewer source by following `docs/developer/amo.md`.
 3. Confirm the add-on ID, version, minimum versions, and data permissions.
 4. Test capture, templates, file save, clipboard copy, highlights, reader mode, settings, and Interpreter consent and transmission.
 5. Retain the validation report and explain generated warnings if a reviewer asks.

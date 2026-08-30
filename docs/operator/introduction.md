@@ -34,6 +34,7 @@ For local Chromium development, run `bun run dev:chrome`, then load `dist/chrome
 ## Guides
 
 - [Capture](capture.md) — extract a page and understand the panel.
+- [Command line](cli.md) — run the same capture model headlessly or from an agent.
 - [Highlighter](highlighter.md) — preserve passages and page elements.
 - [Interpreter](interpreter.md) — run template prompts through a configured model.
 - [Templates](templates.md) — define reusable capture structures and triggers.

@@ -112,9 +112,9 @@ This is a sizing hint, not a provider tokenizer. The UI marks estimates above 1,
 
 The current provider catalog contains Anthropic, Azure OpenAI, DeepSeek, Google Gemini, Hugging Face, Meta, Moonshot AI, Ollama, OpenAI, OpenRouter, Perplexity, and xAI.
 
-The extension fetches `providers.json` from the project's GitHub repository as configuration data. It does not execute that file as code. Model availability changes independently, so use the provider's model list and exact identifier rather than relying on an old screenshot or example.
+The build packages the repository's `providers.json` catalog with the extension and validates it before use. The browser interface and CLI therefore use the same provider identities, API adapters, endpoints, credential environment names, and suggested models. Model availability still changes independently, so use the linked provider model list and exact identifier rather than relying on an old screenshot or example.
 
-Custom providers use the configured base URL. OpenAI-compatible services commonly expose a `/chat/completions` endpoint, while built-in provider adapters handle the documented provider-specific request shapes.
+Custom providers use the configured base URL. OpenAI-compatible services commonly expose a `/chat/completions` endpoint; the shared interpreter client handles the catalog's provider-specific request and response shapes for every application entry point.
 
 ## Data and credentials
 

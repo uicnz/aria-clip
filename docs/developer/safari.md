@@ -147,6 +147,8 @@ On macOS the release script:
 
 The team, identity, notary profile, and optional keychain can be overridden with the environment variables printed by `bun run release -- --help`.
 
+Store file-backed release variables only in `~/.aria/.env`, the canonical environment used by Aria Clip tooling. Repository and working-directory `.env` files are not searched.
+
 `--skip-notarize` exists for deliberate packaging tests. Do not publish that output as the official direct download.
 
 ## Update

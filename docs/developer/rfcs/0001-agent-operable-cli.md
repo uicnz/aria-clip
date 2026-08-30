@@ -1,9 +1,9 @@
 # RFC 0001: Agent-operable CLI
 
-- Status: Proposed
+- Status: Implemented
 - Date: 30 August 2026
 - Owners: Aria Clip maintainers
-- Target: Next CLI milestone
+- Released in source: 0.3.0
 
 ## Summary
 
@@ -89,7 +89,7 @@ The first release will not:
 - emulate a complete browser;
 - inherit cookies or sessions from an installed browser;
 - execute arbitrary remote page JavaScript;
-- silently fall back to a GUI or URI handler during agent execution;
+- implement or invoke Aria's separate deep-link protocol;
 - expose API keys in arguments, logs, JSON, or process listings;
 - make MCP the primary implementation;
 - guarantee that every website can be extracted through static HTTP.
@@ -498,11 +498,11 @@ Aria delivery:
 - invokes the downstream `aria` command as the canonical noninteractive integration;
 - transmits Behavior, rendered Note name, Folder, Vault, artifact, properties, source, and Markdown;
 - supports create, append, prepend, overwrite, append daily, and prepend daily;
-- fails rather than silently opening a URI when `aria` is unavailable;
-- permits URI delivery only through an explicit `--allow-uri` compatibility option;
+- fails when the installed `aria` does not advertise `clip.capture.v1`;
+- has no deep-link or GUI fallback;
 - returns Aria's stable note identity and resolved destination when available.
 
-`--dry-run` resolves the complete delivery plan but cannot write, invoke `aria`, open a URI, access the clipboard, or contact an Interpreter provider.
+`--dry-run` resolves the complete delivery plan but cannot write, invoke `aria`, access the clipboard, or contact an Interpreter provider.
 
 ## Templates
 
@@ -567,6 +567,14 @@ interface RuntimeServices {
 
 Browser and CLI adapters implement the same interfaces. Prompt processing must not read a module-level browser setting to decide whether a prompt exists.
 
+### Schema and type policy
+
+Zod schemas own every external or persisted shape, including configuration, templates, provider payloads, command inputs, results, errors, events, capabilities, and delivery envelopes. TypeScript types are inferred from those schemas rather than maintained as parallel declarations.
+
+Domain choices use literal unions or enums rather than unconstrained strings. New code must not introduce `any`. `unknown` is permitted only at an unavoidable trust boundary and must be parsed or narrowed immediately. Existing unsafe casts encountered while building the shared pipeline are removed rather than propagated into the CLI.
+
+Symbols and files remain terse within their domain taxonomy. Names expand only when the shorter form is genuinely ambiguous at an integration boundary.
+
 ### Proposed source layout
 
 ```text
@@ -606,7 +614,7 @@ The exact directory names can evolve, but command registration, help metadata, m
 
 ### Runtime and packaging
 
-Bun remains the repository package manager, build runner, and test runner. The published JavaScript CLI uses a standard Node shebang and targets a documented supported Node version so installation does not require Bun at runtime.
+Bun is the canonical package manager, build runner, test runner, and CLI runtime. The installed command uses a Bun shebang. Its emitted JavaScript remains explicitly compatible with Node 24 or later for environments that invoke the bundle through Node; earlier Node releases are unsupported.
 
 The package build must:
 
@@ -696,8 +704,7 @@ The first proper release retains the current core flags where their meaning is s
 - `--template <path>` is accepted as an alias for `--template-file <path>` when the value resolves to a file or directory.
 - `--output <path>`, `--html`, `--vault`, and `--property-types` remain supported.
 - `--open` maps to `--add` with a deprecation notice in human mode.
-- `--uri` maps to the explicit compatibility option and cannot become an implicit fallback.
-- `--silent` applies only to URI compatibility mode.
+- deep-link delivery is intentionally outside this CLI contract.
 
 Compatibility aliases appear in `--help=all`, not the paved-road help.
 
@@ -753,6 +760,7 @@ The RFC is implemented when all of the following are true:
 - Built-ins are available by stable ID and semantic command.
 - Prompt templates either execute interpretation or fail clearly; prompts are never silently deleted.
 - `--json` and `--jsonl` validate against bundled schemas and contain no diagnostic contamination.
+- External and persisted payloads are parsed by their owning Zod schemas, and the CLI introduces no `any` types.
 - Stable errors and exit codes identify every pipeline stage.
 - A dry run cannot contact a provider or perform delivery.
 - File writes are atomic and conflicts are explicit.
