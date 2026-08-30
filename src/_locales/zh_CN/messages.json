@@ -516,6 +516,9 @@
 	"more": {
 		"message": "更多"
 	},
+	"meta": { "message": "元数据" },
+	"prompt": { "message": "提示词" },
+	"source": { "message": "来源" },
 	"newTemplate": {
 		"message": "新建模板"
 	},

@@ -1,6 +1,6 @@
 import { execFile } from 'child_process';
 import { promisify } from 'util';
-import { sanitizeFileName } from './string-utils.js';
+import { sanitizeFilename } from './filename.js';
 import { Template } from '../types/types.js';
 
 const execFileAsync = promisify(execFile);
@@ -42,7 +42,7 @@ async function openViaAriaCli(
 	}
 
 	const normalizedPath = path && !path.endsWith('/') ? path + '/' : path;
-	const formattedNoteName = sanitizeFileName(noteName);
+	const formattedNoteName = sanitizeFilename(noteName);
 	const filePath = normalizedPath + formattedNoteName + '.md';
 
 	if (behavior === 'append-specific' || behavior === 'prepend-specific') {
@@ -90,7 +90,7 @@ async function openViaUri(
 		ariaUrl = `aria://daily?`;
 	} else {
 		const normalizedPath = path && !path.endsWith('/') ? path + '/' : path;
-		const formattedNoteName = sanitizeFileName(noteName);
+		const formattedNoteName = sanitizeFilename(noteName);
 		ariaUrl = `aria://new?file=${encodeURIComponent(normalizedPath + formattedNoteName)}`;
 	}
 

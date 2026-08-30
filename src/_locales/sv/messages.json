@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Mer"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Källa" },
 	"newTemplate": {
 		"message": "Ny mall"
 	},

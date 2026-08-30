@@ -1,4 +1,4 @@
-import { escapeMarkdown } from '../string-utils.js';
+import { formatMarkdownImage } from '../markdown-output.js';
 
 export const image = (str: string, param?: string): string | string[] => {
 	if (!str.trim()) {
@@ -21,7 +21,7 @@ export const image = (str: string, param?: string): string | string[] => {
 				if (typeof value === 'object' && value !== null) {
 					return processObject(value);
 				}
-				return `![${escapeMarkdown(String(value))}](${escapeMarkdown(key)})`;
+				return formatMarkdownImage(key, String(value));
 			}).flat();
 		};
 
@@ -30,14 +30,14 @@ export const image = (str: string, param?: string): string | string[] => {
 				if (typeof item === 'object' && item !== null) {
 					return processObject(item);
 				}
-				return item ? `![${altText}](${escapeMarkdown(String(item))})` : '';
+				return item ? formatMarkdownImage(String(item), altText) : '';
 			}).flat();
 		} else if (typeof data === 'object' && data !== null) {
 			return processObject(data);
 		}
 	} catch (error) {
 		// If parsing fails, treat it as a single URL string
-		return `![${altText}](${escapeMarkdown(str)})`;
+		return formatMarkdownImage(str, altText);
 	}
 
 	return str;

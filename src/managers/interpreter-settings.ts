@@ -233,10 +233,11 @@ async function showProviderModal(provider: Provider, index?: number) {
 	}
 
 	await translatePage();
-	showModal('provider-modal');
-	await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
-	const modal = document.getElementById('provider-modal');
-	if (!modal) return;
+	const modal = await showModal('provider-modal');
+	if (!modal) {
+		console.error('Provider modal did not mount');
+		return;
+	}
 	initializeIcons(modal);
 
 	const titleElement = modal.querySelector('.modal-title');
@@ -456,10 +457,11 @@ async function showModelModal(model: ModelConfig, index?: number) {
 	}
 
 	await translatePage();
-	showModal('model-modal');
-	await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
-	const modal = document.getElementById('model-modal');
-	if (!modal) return;
+	const modal = await showModal('model-modal');
+	if (!modal) {
+		console.error('Model modal did not mount');
+		return;
+	}
 	initializeIcons(modal);
 
 	const titleElement = modal.querySelector('.modal-title');

@@ -4,14 +4,45 @@ import browser from '../utils/browser-polyfill.js';
 import { generalSettings } from '../utils/storage-utils.js';
 import { addPropertyType } from './property-types-manager.js';
 import { getMessage } from '../utils/i18n.js';
+import { BUILTIN_TEMPLATES } from './builtin-templates.js';
 
 export let templates: Template[] = [];
 export let editingTemplateIndex = -1;
 
 const STORAGE_KEY_PREFIX = 'template_';
 const TEMPLATE_LIST_KEY = 'template_list';
+const INSTALLED_BUILTIN_TEMPLATE_IDS_KEY = 'installed_builtin_template_ids';
+const BUILTIN_TEMPLATE_METADATA_VERSION_KEY = 'builtin_template_metadata_version';
+const BUILTIN_TEMPLATE_METADATA_VERSION = 1;
 const CHUNK_SIZE = 8000;
 const SIZE_WARNING_THRESHOLD = 6000;
+
+function migrateBuiltinTemplateMetadata(template: Template): boolean {
+	let changed = false;
+	const author = template.properties.find(property => property.name === 'author');
+	if (author?.value === '{{author}}') {
+		author.value = '{{author|split:", "|wikilink|join}}';
+		changed = true;
+	}
+
+	if (!template.properties.some(property => property.name === 'description')) {
+		const description = {
+			id: `${template.id}-description`,
+			name: 'description',
+			value: '{{description}}',
+			type: 'text',
+		};
+		const tagsIndex = template.properties.findIndex(property => property.name === 'tags');
+		if (tagsIndex === -1) {
+			template.properties.push(description);
+		} else {
+			template.properties.splice(tagsIndex, 0, description);
+		}
+		changed = true;
+	}
+
+	return changed;
+}
 
 export function setEditingTemplateIndex(index: number): void {
 	editingTemplateIndex = index;
@@ -19,7 +50,11 @@ export function setEditingTemplateIndex(index: number): void {
 
 export async function loadTemplates(): Promise<Template[]> {
 	try {
-		const data = await browser.storage.sync.get(['template_list']);
+		const data = await browser.storage.sync.get([
+			TEMPLATE_LIST_KEY,
+			INSTALLED_BUILTIN_TEMPLATE_IDS_KEY,
+			BUILTIN_TEMPLATE_METADATA_VERSION_KEY,
+		]);
 		let templateIds = data.template_list as string[] || [];
 
 		// Filter out any null or undefined values
@@ -48,11 +83,61 @@ export async function loadTemplates(): Promise<Template[]> {
 			templates = loadedTemplates.filter((t: Template | null): t is Template => t !== null);
 		}
 
+		let templatesChanged = false;
 		if (templates.length === 0) {
 			console.log('No valid templates found, creating default template');
 			const defaultTemplate = createDefaultTemplate();
 			templates = [defaultTemplate];
+			templatesChanged = true;
+		}
+
+		const installedBuiltinTemplateIds = Array.isArray(data[INSTALLED_BUILTIN_TEMPLATE_IDS_KEY])
+			? (data[INSTALLED_BUILTIN_TEMPLATE_IDS_KEY] as unknown[]).filter((id): id is string => typeof id === 'string')
+			: [];
+		const installedBuiltinTemplateIdSet = new Set(installedBuiltinTemplateIds);
+		let builtinInstallStateChanged = false;
+
+		for (const builtinTemplate of BUILTIN_TEMPLATES) {
+			if (installedBuiltinTemplateIdSet.has(builtinTemplate.id)) continue;
+
+			const alreadyPresent = templates.some(template =>
+				template.id === builtinTemplate.id || template.name === builtinTemplate.name
+			);
+			if (!alreadyPresent) {
+				templates.push(builtinTemplate.create());
+				templatesChanged = true;
+			}
+
+			installedBuiltinTemplateIdSet.add(builtinTemplate.id);
+			builtinInstallStateChanged = true;
+		}
+
+		const builtinMetadataVersion = typeof data[BUILTIN_TEMPLATE_METADATA_VERSION_KEY] === 'number'
+			? data[BUILTIN_TEMPLATE_METADATA_VERSION_KEY] as number
+			: 0;
+		let builtinMetadataVersionChanged = false;
+		if (builtinMetadataVersion < BUILTIN_TEMPLATE_METADATA_VERSION) {
+			const builtinIds = new Set(BUILTIN_TEMPLATES.map(template => template.id));
+			for (const template of templates) {
+				if (builtinIds.has(template.id) && migrateBuiltinTemplateMetadata(template)) {
+					templatesChanged = true;
+				}
+			}
+			builtinMetadataVersionChanged = true;
+		}
+
+		if (templatesChanged) {
 			await saveTemplateSettings();
+		}
+		if (builtinInstallStateChanged || builtinMetadataVersionChanged) {
+			const builtinState: Record<string, unknown> = {};
+			if (builtinInstallStateChanged) {
+				builtinState[INSTALLED_BUILTIN_TEMPLATE_IDS_KEY] = [...installedBuiltinTemplateIdSet];
+			}
+			if (builtinMetadataVersionChanged) {
+				builtinState[BUILTIN_TEMPLATE_METADATA_VERSION_KEY] = BUILTIN_TEMPLATE_METADATA_VERSION;
+			}
+			await browser.storage.sync.set(builtinState);
 		}
 
 		// After loading templates, update global property types

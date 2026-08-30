@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Viac"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Zdroj" },
 	"newTemplate": {
 		"message": "Nová šablóna"
 	},

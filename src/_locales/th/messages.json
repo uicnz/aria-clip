@@ -516,6 +516,9 @@
 	"more": {
 		"message": "เพิ่มเติม"
 	},
+	"meta": { "message": "เมตา" },
+	"prompt": { "message": "พรอมต์" },
+	"source": { "message": "แหล่งที่มา" },
 	"newTemplate": {
 		"message": "เทมเพลตใหม่"
 	},

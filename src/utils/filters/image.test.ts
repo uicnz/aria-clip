@@ -3,18 +3,18 @@ import { image } from './image.js';
 
 describe('image filter', () => {
 	test('converts string to markdown image', () => {
-		expect(image('image.jpg', 'alt text')).toBe('![alt text](image.jpg)');
+		expect(image('image.jpg', 'alt text')).toBe('![alt text](<image.jpg>)');
 	});
 
 	test('handles URL without alt text', () => {
-		expect(image('image.jpg')).toBe('![](image.jpg)');
+		expect(image('image.jpg')).toBe('![jpg](<image.jpg>)');
 	});
 
 	test('handles array of images', () => {
 		const result = image('["img1.jpg","img2.jpg"]', 'alt');
 		expect(Array.isArray(result)).toBe(true);
-		expect((result as string[])[0]).toBe('![alt](img1.jpg)');
-		expect((result as string[])[1]).toBe('![alt](img2.jpg)');
+		expect((result as string[])[0]).toBe('![alt](<img1.jpg>)');
+		expect((result as string[])[1]).toBe('![alt](<img2.jpg>)');
 	});
 
 	test('handles object with alt text values', () => {
@@ -31,4 +31,3 @@ describe('image filter', () => {
 		expect(result).toContain('image');
 	});
 });
-

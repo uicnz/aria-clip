@@ -516,6 +516,9 @@
 	"more": {
 		"message": "その他"
 	},
+	"meta": { "message": "メタ" },
+	"prompt": { "message": "プロンプト" },
+	"source": { "message": "ソース" },
 	"newTemplate": {
 		"message": "新規テンプレート"
 	},

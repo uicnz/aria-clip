@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Lainnya"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Sumber" },
 	"newTemplate": {
 		"message": "Template baru"
 	},

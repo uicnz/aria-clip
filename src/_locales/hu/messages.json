@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Továbbiak"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Forrás" },
 	"newTemplate": {
 		"message": "Új sablon"
 	},

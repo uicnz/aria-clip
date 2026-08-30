@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Més"
 	},
+	"meta": { "message": "Metadades" },
+	"prompt": { "message": "Indicació" },
+	"source": { "message": "Font" },
 	"newTemplate": {
 		"message": "Nova plantilla"
 	},

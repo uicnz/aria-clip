@@ -454,6 +454,7 @@ export function collectPromptVariables(template: Template | null): PromptVariabl
 	const allInputs = document.querySelectorAll('input, textarea');
 	allInputs.forEach((input) => {
 		if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+			if (input.id === 'prompt-context') return;
 			let inputValue = input.value;
 			while ((match = promptRegex.exec(inputValue)) !== null) {
 				addPrompt(match[1], match[2] || '');
@@ -465,8 +466,10 @@ export function collectPromptVariables(template: Template | null): PromptVariabl
 }
 
 export async function initializeInterpreter(template: Template, variables: { [key: string]: string }, tabId: number, currentUrl: string) {
-	const interpreterContainer = document.getElementById('interpreter');
+	const interpreterContainer = document.getElementById('interpret-operation');
+	const sourceDisclosure = document.getElementById('source-disclosure');
 	const interpretBtn = document.getElementById('interpret-btn');
+	const promptField = document.getElementById('prompt-field') as HTMLTextAreaElement | null;
 	const promptContextTextarea = document.getElementById('prompt-context') as HTMLTextAreaElement;
 	const modelSelect = document.getElementById('model-select') as HTMLSelectElement;
 
@@ -493,15 +496,29 @@ export async function initializeInterpreter(template: Template, variables: { [ke
 	// Hide interpreter if it's disabled or there are no prompt variables
 	if (!generalSettings.interpreterEnabled || promptVariables.length === 0) {
 		if (interpreterContainer) interpreterContainer.style.display = 'none';
+		if (sourceDisclosure) sourceDisclosure.classList.add('hidden');
 		if (interpretBtn) interpretBtn.style.display = 'none';
 		return;
 	}
 
 	if (interpreterContainer) interpreterContainer.style.display = 'flex';
+	if (sourceDisclosure) sourceDisclosure.classList.remove('hidden');
 	if (interpretBtn) interpretBtn.style.display = 'inline-block';
+
+	if (promptField) {
+		const promptTokenCounter = document.getElementById('prompt-token-counter');
+		const promptInputListener = () => {
+			if (promptTokenCounter) {
+				updateTokenCount(promptField.value, promptTokenCounter);
+			}
+		};
+
+		storeListener(promptField, 'input', promptInputListener);
+		promptInputListener();
+	}
 	
 	if (promptContextTextarea) {
-		const tokenCounter = document.getElementById('token-counter');
+		const tokenCounter = document.getElementById('source-token-counter');
 		
 		const inputListener = () => {
 			template.context = promptContextTextarea.value;
@@ -581,7 +598,7 @@ export async function handleInterpreterUI(
 	_currentUrl: string,
 	modelConfig: ModelConfig
 ): Promise<void> {
-	const interpreterContainer = document.getElementById('interpreter');
+	const interpreterContainer = document.getElementById('interpret-operation');
 	const interpretBtn = document.getElementById('interpret-btn') as HTMLButtonElement;
 	const interpreterErrorMessage = document.getElementById('interpreter-error') as HTMLDivElement;
 	const responseTimer = document.getElementById('interpreter-timer') as HTMLSpanElement;
@@ -658,7 +675,14 @@ export async function handleInterpreterUI(
 		interpreterContainer?.classList.add('done');
 		
 		// Update fields with responses
+		const promptField = document.getElementById('prompt-field') as HTMLTextAreaElement | null;
+		const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement | null;
+		const interpretationContainer = document.getElementById('interpretation');
 		replacePromptVariables(promptVariables, promptResponses);
+		if (promptField && noteContentField) {
+			noteContentField.value = replacePromptVariablesInText(promptField.value, promptVariables, promptResponses);
+			interpretationContainer?.classList.remove('hidden');
+		}
 
 		// Update fields with details of the model that was used
 		replaceModelVariables(modelConfig, provider);
@@ -716,6 +740,7 @@ export function replaceModelVariables(modelConfig: ModelConfig, provider: Provid
 	const allInputs = document.querySelectorAll('input, textarea');
 	allInputs.forEach((input) => {
 		if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+			if (input.id === 'prompt-field' || input.id === 'prompt-context') return;
 			input.value = input.value.replace(/{{(modelProvider|modelId|model)(\|[\s\S]*?)?}}/g, (_match, name, filters) => {
 				let value = modelValues[name];
 				if (filters) {
@@ -727,37 +752,42 @@ export function replaceModelVariables(modelConfig: ModelConfig, provider: Provid
 	});
 }
 
+export function replacePromptVariablesInText(
+	text: string,
+	promptVariables: PromptVariable[],
+	promptResponses: any[]
+): string {
+	return text.replace(/{{(?:prompt:)?"([\s\S]*?)"(\|[\s\S]*?)?}}/g, (match, promptText, filters) => {
+		const variable = promptVariables.find(v => v.prompt === promptText);
+		if (!variable) return match;
+
+		const response = promptResponses.find(r => r.key === variable.key);
+		if (!response || response.user_response === undefined) return match;
+
+		let value = response.user_response;
+		if (typeof value === 'object') {
+			try {
+				value = JSON.stringify(value, null, 2);
+			} catch (error) {
+				console.error('Error stringifying object:', error);
+				value = String(value);
+			}
+		}
+
+		if (filters) {
+			value = applyFilters(value, filters.slice(1));
+		}
+		return value;
+	});
+}
+
 // Similar to replaceVariables, but happens after the LLM response is received
 export function replacePromptVariables(promptVariables: PromptVariable[], promptResponses: any[]) {
 	const allInputs = document.querySelectorAll('input, textarea');
 	allInputs.forEach((input) => {
 		if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
-			input.value = input.value.replace(/{{(?:prompt:)?"([\s\S]*?)"(\|[\s\S]*?)?}}/g, (match, promptText, filters) => {
-				const variable = promptVariables.find(v => v.prompt === promptText);
-				if (!variable) return match;
-
-				const response = promptResponses.find(r => r.key === variable.key);
-				if (response && response.user_response !== undefined) {
-					let value = response.user_response;
-					
-					// Handle array or object responses
-					if (typeof value === 'object') {
-						try {
-							value = JSON.stringify(value, null, 2);
-						} catch (error) {
-							console.error('Error stringifying object:', error);
-							value = String(value);
-						}
-					}
-
-					if (filters) {
-						value = applyFilters(value, filters.slice(1));
-					}
-					
-					return value;
-				}
-				return match; // Return original if no match found
-			});
+			if (input.id === 'prompt-field' || input.id === 'prompt-context') return;
+			input.value = replacePromptVariablesInText(input.value, promptVariables, promptResponses);
 		}
 	});
 }

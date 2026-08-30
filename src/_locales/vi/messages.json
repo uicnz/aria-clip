@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Thêm"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Lệnh" },
+	"source": { "message": "Nguồn" },
 	"newTemplate": {
 		"message": "Mẫu mới"
 	},

@@ -8,7 +8,8 @@ import { compileTemplate, SelectorProcessor } from './utils/template-compiler.js
 import { AsyncResolver, RenderContext } from './utils/renderer.js';
 import { applyFilters } from './utils/filters.js';
 import { buildVariables, generateFrontmatter, extractContentBySelector, selectorContentToString, formatPropertyValue } from './utils/shared.js';
-import { sanitizeFileName } from './utils/string-utils.js';
+import { sanitizeFilename } from './utils/filename.js';
+import { normalizeMarkdownOutput } from './utils/markdown-output.js';
 import { Template, Property } from './types/types.js';
 
 // ---------------------------------------------------------------------------
@@ -217,7 +218,7 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 
 	// Compile note name
 	const compiledNoteName = await compile(template.noteNameFormat);
-	const noteName = sanitizeFileName(compiledNoteName) || 'Untitled';
+	const noteName = sanitizeFilename(compiledNoteName);
 
 	// Compile and format each property
 	const compiledProperties: Property[] = await Promise.all(
@@ -247,7 +248,7 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 	const content = await compile(template.noteContentFormat);
 
 	// Assemble full content
-	const fullContent = frontmatter ? frontmatter + content : content;
+	const fullContent = normalizeMarkdownOutput(frontmatter ? frontmatter + content : content);
 
 	return {
 		noteName,

@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Daha fazla"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "İstem" },
+	"source": { "message": "Kaynak" },
 	"newTemplate": {
 		"message": "Yeni şablon"
 	},

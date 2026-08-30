@@ -1,5 +1,7 @@
 import browser from './browser-polyfill.js';
 import { detectBrowser } from './browser-detection.js';
+import { createMarkdownFilename } from './filename.js';
+import { normalizeMarkdownOutput } from './markdown-output.js';
 
 export interface SaveFileOptions {
 	content: string;
@@ -24,8 +26,9 @@ export async function saveFile({
 	onError
 }: SaveFileOptions): Promise<void> {
 	try {
-		if (mimeType === 'text/markdown' && !fileName.toLowerCase().endsWith('.md')) {
-			fileName = `${fileName}.md`;
+		if (mimeType === 'text/markdown') {
+			fileName = createMarkdownFilename(fileName);
+			content = normalizeMarkdownOutput(content);
 		}
 
 		const browserType = await detectBrowser();

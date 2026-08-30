@@ -3,7 +3,8 @@
 // storage-utils, browser globals). All browser-dependent behavior is injected
 // via parameters.
 
-import { sanitizeFileName, getDomain, escapeDoubleQuotes } from './string-utils.js';
+import { getDomain, escapeDoubleQuotes } from './string-utils.js';
+import { sanitizeFilename } from './filename.js';
 import { Property } from '../types/types.js';
 import dayjs from 'dayjs';
 
@@ -39,7 +40,7 @@ export interface BuildVariablesParams {
  */
 export function buildVariables(params: BuildVariablesParams): Record<string, string> {
 	const currentUrl = params.url.replace(/#:~:text=[^&]+(&|$)/, '');
-	const noteName = sanitizeFileName(params.title);
+	const noteName = sanitizeFilename(params.title);
 
 	const timestamp = dayjs().format('YYYY-MM-DDTHH:mm:ssZ');
 	const variables: Record<string, string> = {

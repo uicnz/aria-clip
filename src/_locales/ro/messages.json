@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Mai mult"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Sursă" },
 	"newTemplate": {
 		"message": "Șablon nou"
 	},

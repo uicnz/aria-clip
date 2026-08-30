@@ -1,6 +1,6 @@
 import { ExtractedContent } from '../types/types.js';
 import { createMarkdownContent } from 'defuddle/full';
-import { sanitizeFileName } from './string-utils.js';
+import { sanitizeFilename } from './filename.js';
 import { buildVariables } from './shared.js';
 import browser from './browser-polyfill.js';
 import { debugLog } from './debug.js';
@@ -160,7 +160,7 @@ export async function initializePageContent(
 
 		const highlightsData = collapseGroupsForExport(highlights, c => createMarkdownContent(c, currentUrl));
 
-		const noteName = sanitizeFileName(title);
+		const noteName = sanitizeFilename(title);
 
 		const currentVariables = buildVariables({
 			title,

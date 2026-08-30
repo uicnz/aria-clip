@@ -31,7 +31,7 @@ const toolbarButtonClass =
 
 export function PopupShell({ sidePanel }: PopupShellProps) {
   return (
-    <main className={cn(
+    <main id="popup-shell" className={cn(
       "flex min-h-0 flex-col bg-background text-foreground",
       sidePanel ? "h-dvh w-full" : "h-[570px] w-[344px]"
     )}>
@@ -45,7 +45,7 @@ export function PopupShell({ sidePanel }: PopupShellProps) {
           </NativeSelect>
         </div>
 
-        <div className="popup-actions flex shrink-0 items-center gap-0.5">
+        <div className="header-actions flex shrink-0 items-center gap-0.5">
           <Button
             id="show-variables"
             type="button"
@@ -136,44 +136,80 @@ export function PopupShell({ sidePanel }: PopupShellProps) {
         <AlertDescription />
       </Alert>
 
-      <section className="clip flex min-h-0 flex-1 flex-col">
+      <section id="workspace" className="workspace flex min-h-0 flex-1 flex-col">
         <ScrollArea className="min-h-0 flex-1">
-        <div className="px-3 py-4">
-          <Textarea
-            id="note-name-field"
-            rows={1}
-            data-i18n="noteName"
-            aria-label="Note name"
-            className="min-h-8 rounded-none border-transparent bg-transparent px-0 py-0 text-lg font-medium shadow-none focus-visible:border-transparent focus-visible:ring-0 md:text-lg dark:bg-transparent"
-          />
+          <div id="workspace-content" className="px-3 py-4">
+            <div id="workspace-inputs">
+              <Textarea
+                id="note-name-field"
+                rows={1}
+                data-i18n="noteName"
+                aria-label="Note name"
+                className="min-h-8 rounded-none border-transparent bg-transparent px-0 py-0 text-lg font-medium shadow-none focus-visible:border-transparent focus-visible:ring-0 md:text-lg dark:bg-transparent"
+              />
 
-          <Button
-            type="button"
-            variant="ghost"
-            className="metadata-properties-header group mt-4 h-auto w-full justify-between px-0 py-1 text-sm hover:bg-transparent"
-          >
-            <span data-i18n="properties">Properties</span>
-            <ChevronDownIcon className="size-4 transition-transform group-[.collapsed]:-rotate-90" />
-          </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="metadata-properties-header group mt-4 h-auto w-full justify-between px-0 py-1 text-sm hover:bg-transparent"
+              >
+                <span data-i18n="meta">Meta</span>
+                <ChevronDownIcon className="size-4 transition-transform group-[.collapsed]:-rotate-90" />
+              </Button>
 
-          <div className="metadata-properties mt-1 [&.collapsed]:hidden" />
+              <div className="metadata-properties mt-1 [&.collapsed]:hidden" />
 
-          <Separator className="my-4" />
+              <details id="prompt-disclosure" className="group hidden">
+                <summary
+                  id="prompt-disclosure-summary"
+                  className="flex cursor-pointer list-none items-center justify-between gap-2 py-1 text-sm font-medium [&::-webkit-details-marker]:hidden"
+                >
+                  <span data-i18n="prompt">Prompt</span>
+                  <span className="flex items-center gap-1.5">
+                    <span id="prompt-token-counter" className="token-counter text-xs font-normal text-muted-foreground" />
+                    <ChevronDownIcon className="size-4 -rotate-90 transition-transform group-open:rotate-0" />
+                  </span>
+                </summary>
+                <Textarea
+                  id="prompt-field"
+                  aria-label="Prompt"
+                  rows={6}
+                  className="mt-2 min-h-32 overflow-hidden rounded-none border-transparent bg-transparent px-0 font-mono text-xs/relaxed shadow-none focus-visible:border-transparent focus-visible:ring-0 dark:bg-transparent"
+                />
+              </details>
 
-          <div id="note-content-container">
-            <Textarea
-              id="note-content-field"
-              rows={8}
-              data-i18n="notesAboutPage"
-              aria-label="Notes about page"
-              className="min-h-40 rounded-none border-transparent bg-transparent px-0 py-0 font-mono text-sm leading-relaxed shadow-none focus-visible:border-transparent focus-visible:ring-0 md:text-sm dark:bg-transparent"
-            />
+              <details id="source-disclosure" className="group hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 py-1 text-sm font-medium [&::-webkit-details-marker]:hidden">
+                  <span data-i18n="source">Source</span>
+                  <span className="flex items-center gap-1.5">
+                    <span id="source-token-counter" className="token-counter text-xs font-normal text-muted-foreground" />
+                    <ChevronDownIcon className="size-4 -rotate-90 transition-transform group-open:rotate-0" />
+                  </span>
+                </summary>
+                <Textarea
+                  id="prompt-context"
+                  aria-label="Source"
+                  rows={6}
+                  className="mt-2 min-h-32 overflow-hidden rounded-none border-transparent bg-transparent px-0 font-mono text-xs/relaxed shadow-none focus-visible:border-transparent focus-visible:ring-0 dark:bg-transparent"
+                />
+              </details>
+            </div>
+
+            <Separator id="content-separator" className="my-4" />
+            <div id="interpretation">
+              <Textarea
+                id="note-content-field"
+                rows={8}
+                data-i18n="notesAboutPage"
+                aria-label="Notes about page"
+                className="min-h-40 rounded-none border-transparent bg-transparent px-0 py-0 font-mono text-xs/relaxed shadow-none focus-visible:border-transparent focus-visible:ring-0 dark:bg-transparent"
+              />
+            </div>
           </div>
-        </div>
         </ScrollArea>
 
-        <footer className="clip-footer shrink-0 border-t bg-background p-3">
-          <div className="vault-path-container mb-3 flex gap-2">
+        <footer id="operations" className="operations shrink-0 border-t bg-background p-3">
+          <div className="operation-location mb-3 flex gap-2">
             <div id="vault-container" className="min-w-28" style={{ display: "none" }}>
               <NativeSelect id="vault-select" aria-label="Vault" className="w-full" />
             </div>
@@ -186,9 +222,8 @@ export function PopupShell({ sidePanel }: PopupShellProps) {
             />
           </div>
 
-          <div id="interpreter" className="mb-3 hidden flex-col gap-2">
-            <Textarea id="prompt-context" rows={3} className="min-h-20" />
-            <div className="interpreter-controls flex items-center gap-2">
+          <div id="interpret-operation" className="mb-3 hidden flex-col gap-2">
+            <div className="operation-controls flex items-center gap-2">
               <NativeSelect
                 id="model-select"
                 aria-label="Model"
@@ -200,11 +235,10 @@ export function PopupShell({ sidePanel }: PopupShellProps) {
               </Button>
               <span id="interpreter-timer" className="text-xs text-muted-foreground" style={{ display: "none" }} />
             </div>
-            <div id="token-counter" className="token-counter text-xs text-muted-foreground" />
             <Alert id="interpreter-error" variant="destructive" style={{ display: "none" }} />
           </div>
 
-          <div className="action-buttons flex items-center gap-2" id="action-buttons">
+          <div id="operation-actions" className="operation-actions flex items-center gap-2">
             <div className="relative min-w-0 flex-1">
               <ButtonGroup className="w-full">
                 <Button id="clip-btn" type="button" variant="secondary" className="min-w-0 flex-1" />
@@ -216,11 +250,11 @@ export function PopupShell({ sidePanel }: PopupShellProps) {
                 id="more-dropdown"
                 className="menu absolute right-0 bottom-full z-50 mb-2 hidden min-w-48 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md [&.show]:block"
               >
-                <div className="secondary-actions grid gap-0.5" />
+                <div className="secondary-operations grid gap-0.5" />
               </div>
             </div>
 
-            <div className="share-btn">
+            <div className="operation-share">
               <Button
                 type="button"
                 variant="outline"

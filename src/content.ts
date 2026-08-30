@@ -14,6 +14,7 @@ import { updateSidebarWidth, addResizeHandle, cleanupResizeHandlers } from './ut
 import { parseForClip } from './utils/clip-utils.js';
 import { addRuntimeMessageListener } from './utils/runtime-messaging.js';
 import { initializeExtensionTheme } from './utils/theme-utils.js';
+import { normalizeMarkdownOutput } from './utils/markdown-output.js';
 
 declare global {
 	interface Window {
@@ -163,7 +164,7 @@ declare global {
 
 					// Copy to clipboard
 					const textArea = document.createElement("textarea");
-					textArea.value = markdown;
+					textArea.value = normalizeMarkdownOutput(markdown);
 					document.body.appendChild(textArea);
 					textArea.select();
 					document.execCommand('copy');
@@ -184,10 +185,9 @@ declare global {
 					const defuddled = parseForClip(document);
 					const markdown = createMarkdownContent(defuddled.content, document.URL);
 					const title = defuddled.title || document.title || 'Untitled';
-					const fileName = title.replace(/[/\\?%*:|"<>]/g, '-');
 					await saveFile({
 						content: markdown,
-						fileName,
+						fileName: title,
 						mimeType: 'text/markdown',
 					});
 					sendResponse({ success: true });

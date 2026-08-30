@@ -148,7 +148,8 @@ Converts strings and arrays into [text fragment](https://developer.mozilla.org/e
 
 Converts strings, arrays, or objects into Markdown image syntax.
 
-- For strings: `"image.jpg"|image:"alt text"` returns `![alt text](image.jpg)`.
+- For strings: `"image.jpg"|image:"alt text"` returns `![alt text](<image.jpg>)`.
+- When alt text is omitted, the image extension is used (for example, `![jpg](<image.jpg>)`); sources without an extension use `image`.
 - For arrays: `["image1.jpg","image2.jpg"]|image:"alt text"` returns an array of Markdown image strings with the same alt text for all images.
 - For objects: `{"image1.jpg": "Alt 1", "image2.jpg": "Alt 2"}|image` returns Markdown image strings with alt text from the object keys.
 

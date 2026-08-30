@@ -3,8 +3,8 @@ import { GripVerticalIcon, Trash2Icon } from "lucide-react"
 
 import {
   SidebarMenuAction,
-  SidebarMenuButton,
   SidebarMenuItem,
+  sidebarMenuButtonVariants,
 } from "@/components/ui/sidebar"
 import type { Template } from "@/types/types"
 
@@ -27,10 +27,18 @@ export function renderTemplateList(
     <>
       {templates.map((template, index) => (
         <SidebarMenuItem key={template.id} draggable data-id={template.id} data-index={index}>
-          <SidebarMenuButton type="button" size="sm" isActive={index === activeIndex} onClick={() => onOpen(template)}>
+          <button
+            type="button"
+            data-slot="sidebar-menu-button"
+            data-sidebar="menu-button"
+            data-size="sm"
+            data-active={index === activeIndex ? "true" : undefined}
+            className={sidebarMenuButtonVariants({ size: "sm" })}
+            onClick={() => onOpen(template)}
+          >
             <GripVerticalIcon />
             <span>{template.name}</span>
-          </SidebarMenuButton>
+          </button>
           <SidebarMenuAction type="button" showOnHover aria-label={`Delete ${template.name}`} onClick={() => onRemove(template.id)}>
             <Trash2Icon />
           </SidebarMenuAction>

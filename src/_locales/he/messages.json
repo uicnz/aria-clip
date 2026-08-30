@@ -516,6 +516,9 @@
 	"more": {
 		"message": "עוד"
 	},
+	"meta": { "message": "מטא" },
+	"prompt": { "message": "הנחיה" },
+	"source": { "message": "מקור" },
 	"newTemplate": {
 		"message": "תבנית חדשה"
 	},

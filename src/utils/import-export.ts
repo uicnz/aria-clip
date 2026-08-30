@@ -1,7 +1,7 @@
 import { Template } from '../types/types.js';
 import { templates, saveTemplateSettings, editingTemplateIndex, loadTemplates } from '../managers/template-manager.js';
 import { showTemplateEditor, updateTemplateList } from '../managers/template-ui.js';
-import { sanitizeFileName } from './string-utils.js';
+import { sanitizeFilename } from './filename.js';
 import { generalSettings, loadSettings } from '../utils/storage-utils.js';
 import { addPropertyType, updatePropertyTypesList } from '../managers/property-types-manager.js';
 import { hideModal } from '../utils/modal-utils.js';
@@ -27,8 +27,8 @@ export async function exportTemplate(): Promise<void> {
 	}
 
 	const template = templates[editingTemplateIndex] as Template;
-	const sanitizedName = sanitizeFileName(template.name);
-	const fileName = `${sanitizedName.replace(/\s+/g, '-').toLowerCase()}-clip.json`;
+	const sanitizedName = sanitizeFilename(template.name);
+	const fileName = `${sanitizedName}-clip.json`;
 
 	const isDailyNote = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
 

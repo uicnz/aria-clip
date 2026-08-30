@@ -516,6 +516,9 @@
 	"more": {
 		"message": "បន្ថែម"
 	},
+	"meta": { "message": "មេតា" },
+	"prompt": { "message": "ពាក្យបញ្ជា" },
+	"source": { "message": "ប្រភព" },
 	"newTemplate": {
 		"message": "គំរូថ្មី"
 	},

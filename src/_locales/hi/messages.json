@@ -516,6 +516,9 @@
 	"more": {
 		"message": "More"
 	},
+	"meta": { "message": "मेटा" },
+	"prompt": { "message": "प्रॉम्प्ट" },
+	"source": { "message": "स्रोत" },
 	"newTemplate": {
 		"message": "Naya template"
 	},

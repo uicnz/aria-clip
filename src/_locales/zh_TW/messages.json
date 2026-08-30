@@ -516,6 +516,9 @@
 	"more": {
 		"message": "更多"
 	},
+	"meta": { "message": "中繼資料" },
+	"prompt": { "message": "提示詞" },
+	"source": { "message": "來源" },
 	"newTemplate": {
 		"message": "新範本"
 	},

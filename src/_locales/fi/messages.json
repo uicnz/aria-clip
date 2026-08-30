@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Lisää"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Kehote" },
+	"source": { "message": "Lähde" },
 	"newTemplate": {
 		"message": "Uusi malli"
 	},

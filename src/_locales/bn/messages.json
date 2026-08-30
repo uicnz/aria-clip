@@ -516,6 +516,9 @@
 	"more": {
 		"message": "আরও"
 	},
+	"meta": { "message": "মেটা" },
+	"prompt": { "message": "প্রম্পট" },
+	"source": { "message": "উৎস" },
 	"newTemplate": {
 		"message": "নতুন টেমপ্লেট"
 	},

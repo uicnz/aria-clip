@@ -516,6 +516,9 @@
 	"more": {
 		"message": "더 보기"
 	},
+	"meta": { "message": "메타" },
+	"prompt": { "message": "프롬프트" },
+	"source": { "message": "소스" },
 	"newTemplate": {
 		"message": "새 템플릿"
 	},

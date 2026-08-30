@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Higit pa"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Pinagmulan" },
 	"newTemplate": {
 		"message": "Bagong template"
 	},

@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Περισσότερα"
 	},
+	"meta": { "message": "Μεταδεδομένα" },
+	"prompt": { "message": "Προτροπή" },
+	"source": { "message": "Πηγή" },
 	"newTemplate": {
 		"message": "Νέο πρότυπο"
 	},

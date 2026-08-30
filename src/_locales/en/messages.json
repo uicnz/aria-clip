@@ -352,7 +352,7 @@
 		"message": "General settings"
 	},
 	"getApiKeyHere": {
-		"message": "Get your $1 API key here."
+		"message": "Get an $1 API key."
 	},
 	"help": {
 		"message": "Help"
@@ -516,6 +516,9 @@
 	"more": {
 		"message": "More"
 	},
+	"meta": {
+		"message": "Meta"
+	},
 	"newTemplate": {
 		"message": "New template"
 	},
@@ -637,6 +640,9 @@
 	},
 	"preview": {
 		"message": "Preview"
+	},
+	"prompt": {
+		"message": "Prompt"
 	},
 	"processing": {
 		"message": "processing"
@@ -952,6 +958,9 @@
 	},
 	"sortZA": {
 		"message": "Z to A"
+	},
+	"source": {
+		"message": "Source"
 	},
 	"specificNoteName": {
 		"message": "Specific note name"

@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Mer"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Kilde" },
 	"newTemplate": {
 		"message": "Ny mal"
 	},

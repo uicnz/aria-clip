@@ -516,6 +516,9 @@
 	"more": {
 		"message": "بیشتر"
 	},
+	"meta": { "message": "متا" },
+	"prompt": { "message": "پرامپت" },
+	"source": { "message": "منبع" },
 	"newTemplate": {
 		"message": "قالب جدید"
 	},

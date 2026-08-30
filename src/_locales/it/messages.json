@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Più"
 	},
+	"meta": { "message": "Meta" },
+	"prompt": { "message": "Prompt" },
+	"source": { "message": "Fonte" },
 	"newTemplate": {
 		"message": "Nuovo modello"
 	},

@@ -5,6 +5,7 @@ import { addBrowserClassToHtml, detectBrowser } from '../utils/browser-detection
 import DOMPurify from 'dompurify';
 import { Defuddle } from '../utils/defuddle.js';
 import { createMarkdownContent } from 'defuddle/full';
+import { normalizeMarkdownOutput } from '../utils/markdown-output.js';
 import { ReaderSettings } from '../types/types.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
@@ -1232,7 +1233,7 @@ function createHighlightItem(entries: HighlightEntry[], pageUrl: string): HTMLEl
 	copyIcon.setAttribute('data-lucide', 'copy');
 	copyBtn.appendChild(copyIcon);
 	copyBtn.addEventListener('click', async () => {
-		const markdown = entries.map(e => createMarkdownContent(e.data.content || '', pageUrl)).join('\n\n');
+		const markdown = normalizeMarkdownOutput(entries.map(e => createMarkdownContent(e.data.content || '', pageUrl)).join('\n\n'));
 		await navigator.clipboard.writeText(markdown);
 		copyBtn.classList.add('is-copied');
 		setButtonIcon(copyBtn, 'check');

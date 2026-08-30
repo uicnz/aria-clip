@@ -516,6 +516,9 @@
 	"more": {
 		"message": "Далее"
 	},
+	"meta": { "message": "Мета" },
+	"prompt": { "message": "Промпт" },
+	"source": { "message": "Источник" },
 	"newTemplate": {
 		"message": "Новый шаблон"
 	},

@@ -18,44 +18,6 @@ export function escapeDoubleQuotes(str: string): string {
 	return str.replace(/"/g, '\\"');
 }
 
-export function sanitizeFileName(fileName: string): string {
-	const platform = (navigator as any).userAgentData?.platform || navigator.platform || '';
-	const isWindows = /win/i.test(platform);
-	const isMac = /mac/i.test(platform);
-
-	// First remove Aria-specific characters that should be sanitized across all platforms
-	let sanitized = fileName.replace(/[#|\^\[\]]/g, '');
-
-	if (isWindows) {
-		sanitized = sanitized
-			.replace(/[<>:"\/\\?*\x00-\x1F]/g, '')
-			.replace(/^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i, '_$1$2')
-			.replace(/[\s.]+$/, '');
-	} else if (isMac) {
-		sanitized = sanitized
-			.replace(/[\/:\x00-\x1F]/g, '')
-			.replace(/^\./, '_');
-	} else {
-		// Linux and other systems
-		sanitized = sanitized
-			.replace(/[<>:"\/\\|?*\x00-\x1F]/g, '')
-			.replace(/^\./, '_');
-	}
-
-	// Common operations for all platforms
-	sanitized = sanitized
-		.replace(/^\.+/, '') // Remove leading periods
-		.trim()
-		.slice(0, 245); // Trim to 245 characters, leaving room to append ' 1.md'
-
-	// Ensure the file name is not empty
-	if (sanitized.length === 0) {
-		sanitized = 'Untitled';
-	}
-
-	return sanitized;
-}
-
 export function formatVariables(variables: { [key: string]: string }): string {
 	return Object.entries(variables)
 		.map(([key, value]) => {

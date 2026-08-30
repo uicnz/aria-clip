@@ -18,7 +18,8 @@ import { showVariables, initializeVariablesPanel, updateVariablesPanel } from '.
 import { isBlankPage, isValidUrl, isRestrictedUrl } from '../utils/active-tab-manager.js';
 import { memoizeWithExpiration } from '../utils/memoize.js';
 import { debounce } from '../utils/debounce.js';
-import { sanitizeFileName } from '../utils/string-utils.js';
+import { createMarkdownFilename } from '../utils/filename.js';
+import { normalizeMarkdownOutput } from '../utils/markdown-output.js';
 import { saveFile } from '../utils/file-utils.js';
 import { translatePage, getMessage, setupLanguageAndDirection } from '../utils/i18n.js';
 import { formatPropertyValue } from '../utils/shared.js';
@@ -393,7 +394,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 				setupEventListeners(currentTabId);
 				await initializeUI();
 
-				determineMainAction();
+				configurePrimaryOperation();
 
 				const showMoreActionsButton = document.getElementById('show-variables');
 				if (showMoreActionsButton) {
@@ -504,15 +505,11 @@ function setupEventListeners(tabId: number) {
 					generateFrontmatter(properties),
 					Promise.resolve(noteContentField.value)
 				]).then(([frontmatter, noteContent]) => {
-					const fileContent = frontmatter + noteContent;
+					const fileContent = normalizeMarkdownOutput(frontmatter + noteContent);
 					
 					// Call share directly from the click handler
 					const noteNameField = document.getElementById('note-name-field') as HTMLInputElement;
-					let fileName = noteNameField?.value || 'untitled';
-					fileName = sanitizeFileName(fileName);
-					if (!fileName.toLowerCase().endsWith('.md')) {
-						fileName += '.md';
-					}
+					const fileName = createMarkdownFilename(noteNameField?.value || 'untitled');
 
 					if (navigator.share && navigator.canShare) {
 						const blob = new Blob([fileContent], { type: 'text/markdown;charset=utf-8' });
@@ -554,7 +551,7 @@ function setupEventListeners(tabId: number) {
 			const isSafariBrowser = ['safari', 'mobile-safari', 'ipad-os'].includes(browser);
 			if (!isSafariBrowser || !navigator.share || !navigator.canShare) {
 				shareButtonElements.forEach(button => {
-					const parentElement = button.closest('.share-btn, .menu-item') as HTMLElement;
+					const parentElement = button.closest('.operation-share, .menu-item') as HTMLElement;
 					if (parentElement) {
 						parentElement.style.display = 'none';
 					}
@@ -569,7 +566,7 @@ function setupEventListeners(tabId: number) {
 					}
 				} catch {
 					shareButtonElements.forEach(button => {
-						const parentElement = button.closest('.share-btn, .menu-item') as HTMLElement;
+						const parentElement = button.closest('.operation-share, .menu-item') as HTMLElement;
 						if (parentElement) {
 							parentElement.style.display = 'none';
 						}
@@ -623,12 +620,12 @@ function showError(messageKey: string): void {
 
 function showErrorMessage(message: string): void {
 	const errorMessage = document.querySelector('.error-message') as HTMLElement;
-	const clip = document.querySelector('.clip') as HTMLElement;
+	const workspace = document.getElementById('workspace');
 
-	if (errorMessage && clip) {
+	if (errorMessage && workspace) {
 		errorMessage.textContent = message;
 		errorMessage.style.display = 'flex';
-		clip.style.display = 'none';
+		workspace.style.display = 'none';
 
 		document.body.classList.add('has-error');
 	}
@@ -640,11 +637,11 @@ function triggerClipAria(): void {
 
 function clearError(): void {
 	const errorMessage = document.querySelector('.error-message') as HTMLElement;
-	const clip = document.querySelector('.clip') as HTMLElement;
+	const workspace = document.getElementById('workspace');
 
-	if (errorMessage && clip) {
+	if (errorMessage && workspace) {
 		errorMessage.style.display = 'none';
-		clip.style.display = 'flex';
+		workspace.style.display = 'flex';
 
 		document.body.classList.remove('has-error');
 	}
@@ -820,7 +817,7 @@ function buildTemplateFieldsSkeleton(template: Template | null) {
 	}
 
 	const pathField = document.getElementById('path-name-field') as HTMLInputElement;
-	const pathContainer = document.querySelector('.vault-path-container') as HTMLElement;
+	const pathContainer = document.querySelector('.operation-location') as HTMLElement;
 	if (pathField && pathContainer) {
 		const isDailyNote = template.behavior === 'append-daily' || template.behavior === 'prepend-daily';
 		if (isDailyNote) {
@@ -836,12 +833,34 @@ function buildTemplateFieldsSkeleton(template: Template | null) {
 		noteContentField.setAttribute('data-template-value', template.noteContentFormat || '');
 	}
 
+	const promptField = document.getElementById('prompt-field') as HTMLTextAreaElement | null;
+	if (promptField) {
+		promptField.setAttribute('data-template-value', template.noteContentFormat || '');
+	}
+
+	// Keep a note-content prompt separate from the interpretation it produces.
+	const containsContentPrompt = /{{(?:prompt:)?"[\s\S]*?"(?:\|[\s\S]*?)?}}/.test(template.noteContentFormat || '');
+	const promptDisclosure = document.getElementById('prompt-disclosure') as HTMLDetailsElement | null;
+	const interpretationContainer = document.getElementById('interpretation');
+	if (promptDisclosure) {
+		promptDisclosure.classList.toggle('hidden', !containsContentPrompt);
+		promptDisclosure.open = false;
+	}
+	if (interpretationContainer) {
+		interpretationContainer.classList.toggle('hidden', containsContentPrompt);
+	}
+
 	// Show/hide interpreter section based on template prompt variables
-	const interpreterContainer = document.getElementById('interpreter');
+	const interpreterContainer = document.getElementById('interpret-operation');
 	const interpretBtn = document.getElementById('interpret-btn');
 	const hasPromptVars = generalSettings.interpreterEnabled && collectPromptVariables(template).length > 0;
+	const sourceDisclosure = document.getElementById('source-disclosure') as HTMLDetailsElement | null;
 	if (interpreterContainer) interpreterContainer.style.display = hasPromptVars ? 'flex' : 'none';
 	if (interpretBtn) interpretBtn.style.display = hasPromptVars ? 'inline-block' : 'none';
+	if (sourceDisclosure) {
+		sourceDisclosure.classList.toggle('hidden', !hasPromptVars);
+		sourceDisclosure.open = false;
+	}
 
 	// Populate model dropdown immediately (only needs generalSettings)
 	if (hasPromptVars) {
@@ -915,8 +934,13 @@ async function fillTemplateFieldValues(currentTabId: number, template: Template 
 	}
 
 	const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement;
+	const promptField = document.getElementById('prompt-field') as HTMLTextAreaElement | null;
+	const containsContentPrompt = /{{(?:prompt:)?"[\s\S]*?"(?:\|[\s\S]*?)?}}/.test(template.noteContentFormat || '');
+	if (promptField) {
+		promptField.value = containsContentPrompt ? formattedContent : '';
+	}
 	if (noteContentField) {
-		noteContentField.value = template.noteContentFormat ? formattedContent : '';
+		noteContentField.value = containsContentPrompt ? '' : (template.noteContentFormat ? formattedContent : '');
 	}
 
 	if (generalSettings.interpreterEnabled) {
@@ -1186,6 +1210,7 @@ async function toggleReaderMode(tabId: number) {
 
 export async function copyToClipboard(content: string) {
 	try {
+		content = normalizeMarkdownOutput(content);
 		try {
 			await navigator.clipboard.writeText(content);
 		} catch {
@@ -1234,7 +1259,7 @@ async function handleSaveToDownloads() {
 
 		const noteContentField = document.getElementById('note-content-field') as HTMLTextAreaElement;
 		const frontmatter = await generateFrontmatter(properties);
-		const fileContent = frontmatter + noteContentField.value;
+		const fileContent = normalizeMarkdownOutput(frontmatter + noteContentField.value);
 
 		await saveFile({
 			content: fileContent,
@@ -1257,37 +1282,33 @@ async function handleSaveToDownloads() {
 	}
 }
 
-function determineMainAction() {
-	const mainButton = document.getElementById('clip-btn');
+function configurePrimaryOperation() {
+	const primaryOperationButton = document.getElementById('clip-btn');
 	const moreDropdown = document.getElementById('more-dropdown');
-	const secondaryActions = moreDropdown?.querySelector('.secondary-actions');
-	if (!mainButton || !secondaryActions) return;
+	const secondaryOperations = moreDropdown?.querySelector('.secondary-operations');
+	if (!primaryOperationButton || !secondaryOperations) return;
 
-	// Clear existing secondary actions
-	secondaryActions.textContent = '';
+	secondaryOperations.textContent = '';
 
-	// Set up actions based on saved behavior
+	// Configure operations based on the saved behavior.
 	switch (loadedSettings.saveBehavior) {
 		case 'copyToClipboard':
-			mainButton.textContent = getMessage('copyToClipboard');
-			mainButton.onclick = () => copyContent();
-			// Add direct actions to secondary
-			addSecondaryAction(secondaryActions, 'addToAria', triggerClipAria);
-			addSecondaryAction(secondaryActions, 'saveFile', handleSaveToDownloads);
+			primaryOperationButton.textContent = getMessage('copyToClipboard');
+			primaryOperationButton.onclick = () => copyContent();
+			addSecondaryOperation(secondaryOperations, 'addToAria', triggerClipAria);
+			addSecondaryOperation(secondaryOperations, 'saveFile', handleSaveToDownloads);
 			break;
 		case 'saveFile':
-			mainButton.textContent = getMessage('saveFile');
-			mainButton.onclick = () => handleSaveToDownloads();
-			// Add direct actions to secondary
-			addSecondaryAction(secondaryActions, 'addToAria', triggerClipAria);
-			addSecondaryAction(secondaryActions, 'copyToClipboard', copyContent);
+			primaryOperationButton.textContent = getMessage('saveFile');
+			primaryOperationButton.onclick = () => handleSaveToDownloads();
+			addSecondaryOperation(secondaryOperations, 'addToAria', triggerClipAria);
+			addSecondaryOperation(secondaryOperations, 'copyToClipboard', copyContent);
 			break;
 		default: // 'addToAria'
-			mainButton.textContent = getMessage('addToAria');
-			mainButton.onclick = triggerClipAria;
-			// Add direct actions to secondary
-			addSecondaryAction(secondaryActions, 'copyToClipboard', copyContent);
-			addSecondaryAction(secondaryActions, 'saveFile', handleSaveToDownloads);
+			primaryOperationButton.textContent = getMessage('addToAria');
+			primaryOperationButton.onclick = triggerClipAria;
+			addSecondaryOperation(secondaryOperations, 'copyToClipboard', copyContent);
+			addSecondaryOperation(secondaryOperations, 'saveFile', handleSaveToDownloads);
 	}
 }
 
@@ -1317,7 +1338,7 @@ async function handleClipAria(): Promise<void> {
 		// Gather the rendered capture and every extraction field before crossing the native boundary.
 		const properties = getPropertiesFromDOM();
 		const frontmatter = await generateFrontmatter(properties);
-		const fileContent = frontmatter + noteContentField.value;
+		const fileContent = normalizeMarkdownOutput(frontmatter + noteContentField.value);
 		if (!currentTabId || !latestExtractedData) throw new Error('The current page capture is unavailable.');
 		const tabInfo = await getTabInfo(currentTabId);
 		const browserName = await detectBrowser();
@@ -1388,7 +1409,7 @@ async function handleClipAria(): Promise<void> {
 	}
 }
 
-function addSecondaryAction(container: Element, actionType: string, handler: () => void) {
+function addSecondaryOperation(container: Element, operationType: string, handler: () => void) {
 	const menuItem = document.createElement('button');
 	menuItem.type = 'button';
 	menuItem.className = 'menu-item flex h-7 w-full items-center gap-2 rounded-md px-2 text-left text-xs/relaxed outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground';
@@ -1398,14 +1419,14 @@ function addSecondaryAction(container: Element, actionType: string, handler: () 
 	menuItemIcon.className = 'menu-item-icon flex size-4 items-center justify-center [&_svg]:size-3.5';
 	
 	const iconElement = document.createElement('i');
-	iconElement.setAttribute('data-lucide', getActionIcon(actionType));
+	iconElement.setAttribute('data-lucide', getOperationIcon(operationType));
 	menuItemIcon.appendChild(iconElement);
 	
 	// Create menu item title
 	const menuItemTitle = document.createElement('div');
 	menuItemTitle.className = 'menu-item-title flex-1';
-	menuItemTitle.setAttribute('data-i18n', actionType);
-	menuItemTitle.textContent = getMessage(actionType);
+	menuItemTitle.setAttribute('data-i18n', operationType);
+	menuItemTitle.textContent = getMessage(operationType);
 	
 	// Assemble menu item
 	menuItem.appendChild(menuItemIcon);
@@ -1416,8 +1437,8 @@ function addSecondaryAction(container: Element, actionType: string, handler: () 
 	initializeIcons(menuItem);
 }
 
-function getActionIcon(actionType: string): string {
-	switch (actionType) {
+function getOperationIcon(operationType: string): string {
+	switch (operationType) {
 		case 'copyToClipboard': return 'copy';
 		case 'saveFile': return 'file-down';
 		case 'addToAria': return 'pen-line';
