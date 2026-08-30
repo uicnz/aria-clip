@@ -2,7 +2,7 @@
 
 ## Get started
 
-Install the extension from the source. This won't be distributed publicly.
+Install the extension from source while its public store listings are prepared.
 
 ## Roadmap
 
@@ -30,6 +30,26 @@ This will create one distribution directory with a subdirectory for each browser
 - `dist/chrome/` for the Chromium version
 - `dist/firefox/` for the Firefox version
 - `dist/safari/` for the Safari version
+
+### Build release artifacts
+
+On macOS, one command builds the Chrome Web Store and Mozilla Add-ons packages, then builds, signs, and notarizes the Safari disk image with the same uic.nz team and `aria-notarytool` Keychain profile used by Aria:
+
+```sh
+bun run release
+```
+
+The command runs type checking and tests before producing exactly three release artifacts in `builds/`:
+
+- `aria-clip-<version>-chrome.zip`
+- `aria-clip-<version>-firefox.zip`
+- `aria-clip-<version>-safari.dmg`
+
+Upload the Firefox ZIP to Mozilla Add-ons as a listed extension owned by the `silo@uic.nz` account. Mozilla reviews, signs, hosts, and updates the extension for users. The Safari web ZIP is an intermediate file and is removed after a successful release.
+
+Because the Firefox JavaScript is generated from TypeScript with webpack, Mozilla also requires the matching reviewer source package. The release command creates it separately at `builds/review/aria-clip-<version>-firefox-source.zip`; it is not an end-user distributable.
+
+Use `bun run release -- --skip-notarize` only for local Safari testing, or `bun run release -- --dry-run` to inspect the complete command sequence. The Apple team defaults to `N68C9LUA5B`; override release configuration only when necessary with `ARIA_CLIP_APPLE_TEAM_ID`, `ARIA_CLIP_SIGN_IDENTITY`, `ARIA_CLIP_NOTARY_PROFILE`, or `ARIA_NOTARY_KEYCHAIN`.
 
 ### Install the extension locally
 

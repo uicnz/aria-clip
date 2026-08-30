@@ -1,33 +1,33 @@
-## Scripts
+# Scripts
 
-### Localization
+## Localization
 
 First, add an OpenAI API key in `.env` at the root of the repo:
 
-```
+```ini
 OPENAI_API_KEY=sk-...
 ```
 
 Scripts can be run using Bun in the root of the repo.
 
-#### Update locale
+### Update locale
 
-```
+```sh
 bun run update-locales
 ```
 
 - Checks the English locale file and automatically translates missing strings
 - Reorganizes strings alphabetically
 
-#### Add locale
+### Add locale
 
 ```bash
 bun run add-locale fr
 ```
 
-### Version bump
+## Version bump
 
-```bash
+```sh
 ./scripts/bump-version.sh 1.0.1
 ```
 
@@ -35,9 +35,9 @@ bun run add-locale fr
 - Regenerates Xcode's inherited version setting
 - Browser manifests receive the package version automatically during builds
 
-### Changelog
+## Changelog
 
-```bash
+```sh
 ./scripts/generate-changelog.sh
 ```
 
