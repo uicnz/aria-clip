@@ -15,8 +15,6 @@
 		"./api": "./dist/api.mjs"
 	},
 	"scripts": {
-		"defuddle-dev": "bun run scripts/set-defuddle-dev.ts",
-		"defuddle-prod": "bun run scripts/set-defuddle-prod.ts",
 		"dev:chrome": "webpack --config webpack.config.cjs --watch --env BROWSER=chrome --mode development",
 		"dev:firefox": "webpack --config webpack.config.cjs --watch --env BROWSER=firefox --mode development",
 		"dev:safari": "bun run sync:version && webpack --config webpack.config.cjs --watch --env BROWSER=safari --mode development",
