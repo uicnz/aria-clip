@@ -15,6 +15,7 @@ import { parseForClip } from '../features/clipping/clip-utils.js';
 import { addRuntimeMessageListener } from '../platform/browser/runtime-messaging.js';
 import { initializeExtensionTheme } from '../platform/browser/theme-utils.js';
 import { normalizeMarkdownOutput } from '../core/markdown/markdown-output.js';
+import { enrichPageMetadata } from '../core/clipping/metadata.js';
 
 declare global {
 	interface Window {
@@ -222,6 +223,11 @@ declare global {
 				);
 				const defuddled = await Promise.race([defuddle.parseAsync(), parseTimeout])
 					.catch(() => defuddle.parse());
+				const pageMetadata = enrichPageMetadata(document, document.URL, {
+					author: defuddled.author,
+					published: defuddled.published,
+					description: defuddled.description,
+				});
 				const extractedContent: { [key: string]: string } = {
 					...defuddled.variables,
 				};
@@ -269,9 +275,9 @@ declare global {
 				const cleanedHtml = doc.documentElement.outerHTML;
 
 				const response: ContentResponse = {
-					author: defuddled.author,
+					author: pageMetadata.author,
 					content: defuddled.content,
-					description: defuddled.description,
+					description: pageMetadata.description,
 					domain: getDomain(document.URL),
 					extractedContent: extractedContent,
 					favicon: defuddled.favicon,
@@ -280,7 +286,7 @@ declare global {
 					image: defuddled.image,
 					language: defuddled.language || '',
 					parseTime: defuddled.parseTime,
-					published: defuddled.published,
+					published: pageMetadata.published,
 					schemaOrgData: defuddled.schemaOrgData,
 					selectedHtml: selectedHtml,
 					site: defuddled.site,

@@ -10,6 +10,7 @@ import { applyFilters } from '../features/templates/engine/filters/index.js';
 import { buildVariables, generateFrontmatter, extractContentBySelector, selectorContentToString, formatPropertyValue } from '../core/clipping/shared.js';
 import { sanitizeFilename } from '../core/artifacts/filename.js';
 import { normalizeMarkdownOutput } from '../core/markdown/markdown-output.js';
+import { enrichPageMetadata } from '../core/clipping/metadata.js';
 import { Template, Property } from '../types/types.js';
 
 // ---------------------------------------------------------------------------
@@ -185,6 +186,11 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 	// Cast through unknown: linkedom's Document is structurally compatible but not nominally typed as DOM Document
 	const defuddle = new DefuddleClass(documentElement as unknown as Document, { url });
 	const defuddleResult = defuddle.parse();
+	const pageMetadata = enrichPageMetadata(doc as Document, url, {
+		author: defuddleResult.author,
+		published: defuddleResult.published,
+		description: defuddleResult.description,
+	});
 
 	// Convert to markdown
 	const markdownContent = createMarkdownContent(defuddleResult.content, url);
@@ -192,15 +198,15 @@ export async function clip(options: ClipOptions): Promise<ClipResult> {
 	// Build template variables
 	const variables = buildVariables({
 		title: defuddleResult.title,
-		author: defuddleResult.author,
+		author: pageMetadata.author,
 		content: markdownContent,
 		contentHtml: defuddleResult.content,
 		url,
 		fullHtml: html,
-		description: defuddleResult.description,
+		description: pageMetadata.description,
 		favicon: defuddleResult.favicon,
 		image: defuddleResult.image,
-		published: defuddleResult.published,
+		published: pageMetadata.published,
 		site: defuddleResult.site,
 		language: defuddleResult.language,
 		wordCount: defuddleResult.wordCount,
