@@ -45,16 +45,17 @@ module.exports = (env, argv) => {
 	const mainConfig = {
 		mode: argv.mode,
 		entry: {
-			popup: './src/core/popup.ts',
-			settings: './src/core/settings.ts',
-			highlights: './src/core/highlights.ts',
-			'reader-page': './src/core/reader-view.ts',
-			content: './src/content.ts',
-			background: './src/background.ts',
-			style: './src/style.css',
-			highlighter: './src/highlighter.css',
-			reader: './src/reader.css',
-			'reader-script': './src/reader-script.ts'
+			popup: './src/entrypoints/popup.ts',
+			settings: './src/entrypoints/settings.ts',
+			highlights: './src/entrypoints/highlights.ts',
+			'reader-page': './src/entrypoints/reader-page.ts',
+			content: './src/entrypoints/content.ts',
+			'flatten-shadow-dom': './src/entrypoints/flatten-shadow-dom.ts',
+			background: './src/entrypoints/background.ts',
+			style: './src/styles/app.css',
+			highlighter: './src/styles/highlighter.css',
+			reader: './src/styles/reader.css',
+			'reader-script': './src/entrypoints/reader-script.ts'
 		},
 		output: {
 			path: path.resolve(__dirname, outputDir),
@@ -106,8 +107,9 @@ module.exports = (env, argv) => {
 				},
 				alias: {
 					'@': path.resolve(__dirname, 'src'),
-				'./utils/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
-				'../utils/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
+				'../platform/browser/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
+				'../../platform/browser/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
+				'../../../platform/browser/browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
 				'./browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'),
 				'../browser-polyfill.js$': path.resolve(__dirname, 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js')
 			}
@@ -150,19 +152,18 @@ module.exports = (env, argv) => {
 			new CopyPlugin({
 				patterns: [
 					{
-						from: isFirefox ? "src/manifest.firefox.json" :
-							(isSafari ? "src/manifest.safari.json" : "src/manifest.chrome.json"),
+						from: isFirefox ? "src/manifests/firefox.json" :
+							(isSafari ? "src/manifests/safari.json" : "src/manifests/chrome.json"),
 						to: "manifest.json",
 						transform: buildManifest
 					},
-					{ from: "src/popup.html", to: "popup.html" },
-					{ from: "src/side-panel.html", to: "side-panel.html" },
-					{ from: "src/settings.html", to: "settings.html" },
-					{ from: "src/highlights.html", to: "highlights.html" },
-					{ from: "src/reader.html", to: "reader.html" },
+					{ from: "src/pages/popup.html", to: "popup.html" },
+					{ from: "src/pages/side-panel.html", to: "side-panel.html" },
+					{ from: "src/pages/settings.html", to: "settings.html" },
+					{ from: "src/pages/highlights.html", to: "highlights.html" },
+					{ from: "src/pages/reader.html", to: "reader.html" },
 					{ from: "src/icons", to: "icons" },
 					{ from: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js", to: "browser-polyfill.min.js" },
-					{ from: "src/flatten-shadow-dom.js", to: "flatten-shadow-dom.js" },
 					{
 						from: 'src/_locales',
 						to: '_locales'

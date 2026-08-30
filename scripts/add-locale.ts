@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import I18nAutomation from '../src/utils/i18n-automation.js';
+import I18nAutomation from './i18n-automation.js';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -77,7 +77,7 @@ async function addLocale(locale: string) {
 	console.log(`\n🌍 Adding new locale: ${locale}`);
 	
 	const ROOT_DIR = path.join(__dirname, '..');
-	const I18N_FILE = path.join(ROOT_DIR, 'src/utils/i18n.ts');
+	const I18N_FILE = path.join(ROOT_DIR, 'src/platform/browser/i18n.ts');
 	const LOCALES_DIR = path.join(ROOT_DIR, 'src/_locales');
 
 	// Validate locale format

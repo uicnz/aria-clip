@@ -1,6 +1,0 @@
-@import "./styles/shadcn.css";
-@import "./styles/provider-icons.css";
-
-@source "./*.html";
-@source "./**/*.ts";
-@source "./**/*.tsx";

@@ -1,8 +1,8 @@
 import {
   BookOpenIcon,
+  BracesIcon,
   ChevronDownIcon,
   HighlighterIcon,
-  MoreHorizontalIcon,
   PictureInPicture2Icon,
   RefreshCwIcon,
   SettingsIcon,
@@ -32,7 +32,7 @@ const toolbarButtonClass =
 export function PopupShell({ sidePanel }: PopupShellProps) {
   return (
     <main id="popup-shell" className={cn(
-      "flex min-h-0 flex-col bg-background text-foreground",
+      "relative flex min-h-0 flex-col overflow-hidden bg-background text-foreground",
       sidePanel ? "h-dvh w-full" : "h-[570px] w-[344px]"
     )}>
       <header
@@ -54,8 +54,10 @@ export function PopupShell({ sidePanel }: PopupShellProps) {
             className={toolbarButtonClass}
             data-i18n-title="showPageVariables"
             aria-label="Show page variables"
+            aria-controls="variables-panel"
+            aria-expanded="false"
           >
-            <MoreHorizontalIcon />
+            <BracesIcon />
           </Button>
           <Button
             id="highlighter-mode"
@@ -268,6 +270,31 @@ export function PopupShell({ sidePanel }: PopupShellProps) {
             </div>
           </div>
         </footer>
+      </section>
+
+      <section
+        id="variables-panel"
+        className="absolute inset-0 z-50 hidden min-h-0 grid-rows-[auto_auto_minmax(0,1fr)] bg-background [&.show]:grid"
+        aria-hidden="true"
+        aria-labelledby="variables-panel-title"
+      >
+        <header className="flex items-center justify-between border-b px-3 py-2.5">
+          <h2 id="variables-panel-title" className="text-sm font-semibold" data-i18n="pageVariables">
+            Page variables
+          </h2>
+          <Button id="close-variables" type="button" variant="ghost" size="icon" data-i18n-title="close" aria-label="Close">
+            <XIcon />
+          </Button>
+        </header>
+
+        <div className="px-3 py-3">
+          <Input id="variables-search" type="search" data-i18n="searchVariables" placeholder="Search variables..." autoComplete="off" />
+        </div>
+
+        <ScrollArea className="min-h-0">
+          <div id="variable-list" className="px-3 pb-3" />
+          <p id="variables-status" className="sr-only" aria-live="polite" />
+        </ScrollArea>
       </section>
     </main>
   )

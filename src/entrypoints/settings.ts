@@ -1,0 +1,235 @@
+import { 
+	deleteTemplate,
+	duplicateTemplate,
+	findTemplateById, 
+	getEditingTemplateIndex, 
+	loadTemplates, 
+	saveTemplateSettings, 
+	templates,
+	cleanupTemplateStorage,
+	rebuildTemplateList
+} from '../features/templates/template-manager.js';
+import { updateTemplateList, showTemplateEditor, initializeAddPropertyButton, initializeTemplateValidation } from '../features/templates/template-ui.js';
+import { initializeGeneralSettings } from '../features/settings/general-settings.js';
+import { initializeInterpreterSettings } from '../features/interpreter/interpreter-settings.js';
+import { showSettingsSection, initializeSidebar } from '../features/settings/settings-section-ui.js';
+import { initializeReaderSettings } from '../features/reader/reader-settings.js';
+import { initializeAutoSave } from '../features/templates/auto-save.js';
+import { handleTemplateDrag, initializeDragAndDrop } from '../features/settings/drag-and-drop.js';
+import { exportTemplate, showTemplateImportModal, copyTemplateToClipboard } from '../features/settings/import-export.js';
+import { createIcons } from 'lucide';
+import { icons } from '../icons/icons.js';
+import { updateUrl, getUrlParameters } from '../features/settings/routing.js';
+import { addBrowserClassToHtml } from '../platform/browser/browser-detection.js';
+import { translatePage, getCurrentLanguage, setLanguage, getAvailableLanguages, getMessage, setupLanguageAndDirection } from '../platform/browser/i18n.js';
+import { initializeExtensionTheme } from '../platform/browser/theme-utils.js';
+import { mountSettingsShell } from '../components/settings/settings-shell.js';
+
+void initializeExtensionTheme();
+mountSettingsShell();
+
+declare global {
+	interface Window {
+		cleanupTemplateStorage: () => Promise<void>;
+		rebuildTemplateList: () => Promise<void>;
+	}
+}
+
+window.cleanupTemplateStorage = cleanupTemplateStorage;
+window.rebuildTemplateList = rebuildTemplateList;
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const newTemplateBtn = document.getElementById('new-template-btn') as HTMLButtonElement;
+
+	async function initializeSettings(): Promise<void> {
+		try {
+			await translatePage();
+
+			await initializeGeneralSettings();
+			await initializeReaderSettings();
+			
+			// Initialize interpreter settings with error handling
+			try {
+				await initializeInterpreterSettings();
+			} catch (error) {
+				console.error('Error initializing interpreter settings, continuing with defaults:', error);
+			}
+			
+			// Load templates with error handling
+			let loadedTemplates;
+			try {
+				loadedTemplates = await loadTemplates();
+				updateTemplateList(loadedTemplates);
+			} catch (error) {
+				console.error('Error loading templates:', error);
+				// Continue with empty template list
+				updateTemplateList([]);
+			}
+			initializeTemplateListeners();
+			await handleUrlParameters();
+			initializeSidebar();
+			initializeAutoSave();
+			createIcons({ icons });
+
+			// Initialize language selector
+			const languageSelect = document.getElementById('language-select') as HTMLSelectElement;
+			if (languageSelect) {
+				await initializeLanguageSelector(languageSelect);
+			}
+		} catch (error) {
+			console.error('Error during settings initialization:', error);
+			// Show a basic error message but continue with minimal functionality
+			const errorContainer = document.querySelector('#content');
+			if (errorContainer) {
+				errorContainer.textContent = '';
+
+				const errorDiv = document.createElement('div');
+				errorDiv.style.padding = '20px';
+				errorDiv.style.textAlign = 'center';
+				
+				const heading = document.createElement('h2');
+				heading.textContent = 'Settings error';
+				errorDiv.appendChild(heading);
+				
+				const message = document.createElement('p');
+				message.textContent = 'There was an error loading your settings. This may be due to corrupted data.';
+				errorDiv.appendChild(message);
+				
+				errorContainer.appendChild(errorDiv);
+			}
+			
+			// Try to initialize at least the sidebar for navigation
+			try {
+				initializeSidebar();
+			} catch (sidebarError) {
+				console.error('Failed to initialize sidebar:', sidebarError);
+			}
+		}
+	}
+
+	async function initializeLanguageSelector(languageSelect: HTMLSelectElement): Promise<void> {
+		try {
+			await setupLanguageAndDirection();
+			await translatePage();
+			
+			// Populate language options
+			const languages = getAvailableLanguages();
+			const currentLanguage = await getCurrentLanguage();
+			
+			// Clear existing options
+			languageSelect.textContent = '';
+			
+			// Add language options
+			languages.forEach((lang: { code: string; name: string }) => {
+				const option = document.createElement('option');
+				option.value = lang.code;
+				option.textContent = lang.code === '' ? getMessage('systemDefault') : lang.name;
+				if (lang.code === currentLanguage) {
+					option.selected = true;
+				}
+				languageSelect.appendChild(option);
+			});
+
+			// Add change listener
+			languageSelect.addEventListener('change', async () => {
+				try {
+					await setLanguage(languageSelect.value);
+					window.location.reload(); // Force reload the current page
+				} catch (error) {
+					console.error('Failed to change language:', error);
+				}
+			});
+		} catch (error) {
+			console.error('Failed to initialize language selector:', error);
+		}
+	}
+
+	function initializeTemplateListeners(): void {
+		if (newTemplateBtn) {
+			newTemplateBtn.addEventListener('click', () => {
+				showTemplateEditor(null);
+			});
+		}
+
+		window.addEventListener('aria-template-duplicate', duplicateCurrentTemplate);
+		window.addEventListener('aria-template-delete', deleteCurrentTemplate);
+		window.addEventListener('aria-template-export', () => void exportTemplate());
+		window.addEventListener('aria-template-import', showTemplateImportModal);
+		window.addEventListener('aria-template-copy', copyCurrentTemplateToClipboard);
+	}
+
+	function duplicateCurrentTemplate(): void {
+		const editingTemplateIndex = getEditingTemplateIndex();
+		if (editingTemplateIndex !== -1) {
+			const currentTemplate = templates[editingTemplateIndex];
+			const newTemplate = duplicateTemplate(currentTemplate.id);
+			saveTemplateSettings().then(() => {
+				updateTemplateList();
+				showTemplateEditor(newTemplate);
+				updateUrl('templates', newTemplate.id);
+			}).catch(error => {
+				console.error('Failed to duplicate template:', error);
+				alert(getMessage('failedToDuplicateTemplate'));
+			});
+		}
+	}
+
+	async function deleteCurrentTemplate(): Promise<void> {
+		const editingTemplateIndex = getEditingTemplateIndex();
+		if (editingTemplateIndex !== -1) {
+			const currentTemplate = templates[editingTemplateIndex];
+			if (confirm(getMessage('confirmDeleteTemplate', [currentTemplate.name]))) {
+				const success = await deleteTemplate(currentTemplate.id);
+				if (success) {
+					// Reload templates after deletion
+					await loadTemplates();
+					updateTemplateList();
+					if (templates.length > 0) {
+						showTemplateEditor(templates[0]);
+					} else {
+						showSettingsSection('general');
+					}
+				} else {
+					alert(getMessage('failedToDeleteTemplate'));
+				}
+			}
+		}
+	}
+
+	async function handleUrlParameters(): Promise<void> {
+		const { section, templateId } = getUrlParameters();
+
+		if (section === 'general' || section === 'interpreter' || section === 'properties' || section === 'highlighter' || section === 'reader') {
+			showSettingsSection(section);
+		} else if (templateId) {
+			const template = findTemplateById(templateId);
+			if (template) {
+				showTemplateEditor(template);
+			} else {
+				console.error(`Template with id ${templateId} not found`);
+				showSettingsSection('general');
+			}
+		} else {
+			showSettingsSection('general');
+		}
+	}
+
+	function copyCurrentTemplateToClipboard(): void {
+		const editingTemplateIndex = getEditingTemplateIndex();
+		if (editingTemplateIndex !== -1) {
+			const currentTemplate = templates[editingTemplateIndex];
+			copyTemplateToClipboard(currentTemplate);
+		}
+	}
+
+	const templateForm = document.getElementById('template-settings-form');
+	if (templateForm) {
+		initializeAddPropertyButton();
+		initializeTemplateValidation();
+		initializeDragAndDrop();
+		handleTemplateDrag();
+	}
+
+	await addBrowserClassToHtml();
+	await initializeSettings();
+});

@@ -31,7 +31,7 @@ const polyfillBanner = `
 `.trim();
 
 await esbuild.build({
-	entryPoints: [path.join(root, 'src/cli.ts')],
+	entryPoints: [path.join(root, 'src/cli/index.ts')],
 	bundle: true,
 	platform: 'node',
 	target: 'node18',
@@ -47,7 +47,7 @@ await esbuild.build({
 		'DEBUG_MODE': 'false',
 	},
 	alias: {
-		'webextension-polyfill': path.join(root, 'src/utils/cli-stubs.ts'),
+		'webextension-polyfill': path.join(root, 'src/platform/node/browser-stubs.ts'),
 		'defuddle/full': path.join(defuddleDir, 'index.full.js'),
 		'defuddle': path.join(defuddleDir, 'index.js'),
 	},

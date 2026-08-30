@@ -60,8 +60,8 @@ import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { generalSettings, loadSettings, saveSettings } from "@/utils/storage-utils"
-import { getPresetProviders, type PresetProvider } from "@/managers/interpreter-settings"
+import { generalSettings, loadSettings, saveSettings } from "@/platform/browser/storage-utils"
+import { getPresetProviders, type PresetProvider } from "@/features/interpreter/interpreter-settings"
 
 export function SettingsShell() {
   const requestedSection = new URLSearchParams(window.location.search).get("section")

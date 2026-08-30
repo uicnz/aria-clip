@@ -54,7 +54,6 @@
 		]
 	},
 	"include": [
-		"./**/*",
-		"../src/utils/i18n-automation.ts"
+		"./**/*"
 	]
 }

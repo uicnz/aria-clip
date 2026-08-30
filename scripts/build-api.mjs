@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
 await esbuild.build({
-	entryPoints: [path.join(root, 'src/api.ts')],
+	entryPoints: [path.join(root, 'src/api/index.ts')],
 	bundle: true,
 	platform: 'neutral',
 	format: 'esm',
@@ -20,7 +20,7 @@ await esbuild.build({
 		'DEBUG_MODE': 'false',
 	},
 	alias: {
-		'webextension-polyfill': path.join(root, 'src/utils/cli-stubs.ts'),
+		'webextension-polyfill': path.join(root, 'src/platform/node/browser-stubs.ts'),
 	},
 	logLevel: 'info',
 });
