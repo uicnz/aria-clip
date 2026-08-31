@@ -138,7 +138,7 @@ bun run release
 On macOS the release script:
 
 1. runs type checking and tests;
-2. builds Chrome, Firefox, Safari, and Firefox review source;
+2. builds Chrome, Firefox, Safari, Firefox review source, and the smoke-tested npm package;
 3. archives and exports `Aria Clip (macOS)` with a Developer ID Application identity;
 4. creates and signs `builds/aria-clip-<version>-safari.dmg`;
 5. submits it with the `aria-notarytool` Keychain profile;

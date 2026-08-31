@@ -1,7 +1,7 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'bun:test';
-import { EventSchema, FailureSchema, ResultSchema } from './schema.js';
+import { EventSchema, FailureSchema, ResultSchema, SetupResultSchema } from './schema.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
@@ -72,6 +72,16 @@ describe('CLI process contracts', () => {
 		expect(models).toMatchObject({ code: 0, stderr: '' });
 		expect(JSON.parse(templates.stdout)).toMatchObject({ schemaVersion: '1', templates: expect.any(Array) });
 		expect(JSON.parse(models.stdout)).toMatchObject({ schemaVersion: '1', models: expect.any(Array) });
+	});
+
+	test('reports browser setup without launching in a dry run', async () => {
+		const result = await command(['setup', '--dry-run', '--json']);
+		expect(result).toMatchObject({ code: 0, stderr: '' });
+		const value = SetupResultSchema.parse(JSON.parse(result.stdout));
+		expect(value.browsers.map(browser => browser.id)).toEqual(process.platform === 'darwin'
+			? ['chrome', 'firefox', 'safari']
+			: ['chrome', 'firefox']);
+		expect(value.browsers.every(browser => browser.launched === false)).toBe(true);
 	});
 
 	test('emits independently valid JSONL events with the result as terminal data', async () => {

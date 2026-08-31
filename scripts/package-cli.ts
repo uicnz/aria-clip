@@ -6,6 +6,12 @@ const PackageSchema = z.strictObject({
 	name: z.string(),
 	version: z.string().regex(/^\d+\.\d+\.\d+$/),
 	description: z.string(),
+	keywords: z.array(z.string()),
+	author: z.string(),
+	homepage: z.url(),
+	repository: z.strictObject({ type: z.literal('git'), url: z.string().min(1) }),
+	bugs: z.strictObject({ url: z.url() }),
+	publishConfig: z.strictObject({ access: z.literal('public') }),
 	dependencies: z.record(z.string(), z.string()),
 	engines: z.strictObject({ bun: z.string(), node: z.string() }),
 }).passthrough();
@@ -24,9 +30,15 @@ if (Object.values(dependencies).some(version => version === undefined)) {
 const pkg = {
 	name: source.name,
 	version: source.version,
-	description: 'Capture the web as durable Markdown from Bun or Node 24+.',
+	description: source.description,
+	keywords: source.keywords,
+	author: source.author,
+	homepage: source.homepage,
+	repository: source.repository,
+	bugs: source.bugs,
+	publishConfig: source.publishConfig,
 	type: 'module',
-	bin: { 'aria-clip': './cli.cjs' },
+	bin: { 'aria-clip': './cli.cjs', clip: './cli.cjs' },
 	exports: {
 		'.': './api.mjs',
 		'./api': './api.mjs',
@@ -50,12 +62,12 @@ await chmod(join(stage, 'cli.cjs'), 0o755);
 const file = `aria-clip-${source.version}.tgz`;
 await rm(join(output, file), { force: true });
 const proc = Bun.spawn([
-	'bun', 'pm', 'pack',
-	'--destination', output,
+	'npm', 'pack',
+	'--pack-destination', output,
 	'--ignore-scripts',
-	'--quiet',
+	'--silent',
 ], { cwd: stage, stderr: 'inherit', stdout: 'inherit' });
 const code = await proc.exited;
-if (code !== 0) throw new Error(`bun pm pack failed with exit code ${code}.`);
+if (code !== 0) throw new Error(`npm pack failed with exit code ${code}.`);
 
 console.log(join(output, file));

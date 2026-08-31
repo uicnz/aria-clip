@@ -211,6 +211,15 @@ const commands: Cmd[] = [
 		examples: ['aria-clip config path', 'aria-clip config set default-model openai/gpt-5.6-sol'],
 	},
 	{
+		name: 'setup', group: 'configure', summary: 'Open verified browser installation surfaces.', args: [],
+		opts: [
+			{ flags: '--browser <browser...>', description: 'Target Chrome, Firefox, or Safari.', choices: ['chrome', 'firefox', 'safari'] },
+			{ flags: '--dry-run', description: 'Detect browsers without opening external applications.', default: false },
+			{ flags: '--json', description: 'Write structured browser setup states.' },
+		],
+		examples: ['clip setup', 'clip setup --dry-run --json', 'clip setup --browser firefox'],
+	},
+	{
 		name: 'completions', group: 'discover', summary: 'Generate shell completions.',
 		args: [{ name: 'shell', required: true, description: 'zsh, bash, or fish.' }], opts: [],
 		examples: ['aria-clip completions zsh'],

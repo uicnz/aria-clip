@@ -20,7 +20,8 @@ Check every public URL immediately before submission. The dashboard can reject u
 
 ## Build the package
 
-The complete macOS release produces the Chrome, Firefox, Firefox review-source, and notarized Safari artifacts:
+The complete macOS release produces Chrome, Firefox, Firefox review-source,
+npm, and notarized Safari artifacts:
 
 ```sh
 bun install --frozen-lockfile

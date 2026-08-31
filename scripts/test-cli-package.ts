@@ -2,7 +2,7 @@ import { chmod, mkdtemp, readFile, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { z } from 'zod';
-import { ResultSchema } from '../src/cli/schema.js';
+import { ExpansionSchema, ResultSchema, SetupResultSchema } from '../src/cli/schema.js';
 
 const TextResultSchema = z.strictObject({
 	code: z.number().int(),
@@ -41,7 +41,11 @@ try {
 	const bin = process.platform === 'win32'
 		? join(dir, 'node_modules', '.bin', 'aria-clip.exe')
 		: join(dir, 'node_modules', '.bin', 'aria-clip');
+	const alias = process.platform === 'win32'
+		? join(dir, 'node_modules', '.bin', 'clip.exe')
+		: join(dir, 'node_modules', '.bin', 'clip');
 	if (process.platform !== 'win32') await chmod(bin, 0o755);
+	if (process.platform !== 'win32') await chmod(alias, 0o755);
 
 	const source = await readFile(cli, 'utf8');
 	if (!source.startsWith('#!/usr/bin/env bun\n')) throw new Error('Packaged CLI does not use the Bun shebang.');
@@ -52,6 +56,10 @@ try {
 	if (ok(await run([bin, '--version']), 'version').trim() !== pkg.version) {
 		throw new Error('Packaged CLI version does not match package.json.');
 	}
+	if (ok(await run([alias, '--version']), 'clip alias version').trim() !== pkg.version) {
+		throw new Error('Packaged clip alias version does not match package.json.');
+	}
+	ExpansionSchema.parse(JSON.parse(ok(await run([alias, 'video', '--explain', '--json']), 'clip video alias')));
 	ok(await run([bin, '--help']), 'help');
 	ok(await run([bin, 'help', 'agent']), 'agent help');
 	ok(await run([bin, 'help', 'templates']), 'template help');
@@ -61,6 +69,8 @@ try {
 	JSON.parse(ok(await run([bin, 'schema', 'result', '--json']), 'result schema'));
 	JSON.parse(ok(await run([bin, 'schema', 'capture', '--json']), 'capture schema'));
 	JSON.parse(ok(await run([bin, 'schema', 'capture-ack', '--json']), 'capture acknowledgement schema'));
+	JSON.parse(ok(await run([bin, 'schema', 'setup', '--json']), 'setup schema'));
+	SetupResultSchema.parse(JSON.parse(ok(await run([alias, 'setup', '--dry-run', '--json']), 'setup dry run')));
 
 	const html = join(dir, 'fixture.html');
 	await Bun.write(html, [
@@ -72,6 +82,7 @@ try {
 	].join(''));
 	const args = ['capture', 'https://example.com/package-fixture', '--html', html, '--json'];
 	ResultSchema.parse(JSON.parse(ok(await run([bin, ...args]), 'Bun capture')));
+	ResultSchema.parse(JSON.parse(ok(await run([alias, ...args]), 'clip alias capture')));
 	ResultSchema.parse(JSON.parse(ok(await run(['node', cli, ...args]), 'Node 24 capture')));
 	const home = join(dir, 'aria');
 	const saved = ResultSchema.parse(JSON.parse(ok(await run(

@@ -5,12 +5,12 @@ description: Capture, interpret, inspect, and deliver Markdown with the Aria Cli
 
 # Command line
 
-`aria-clip` is a supported headless interface to the same extraction, template, artifact, and Location semantics used by the extension. Bun is the canonical runtime; the generated bundle also supports Node 24 or later.
+`aria-clip` is a supported headless interface to the same extraction, template, artifact, and Location semantics used by the extension. `clip` is an equal, shorter executable name backed by the same bundle. Bun is the canonical runtime; the generated bundle also supports Node 24 or later.
 
 ## Start safely
 
 ```sh
-aria-clip https://example.com/article
+clip https://example.com/article
 ```
 
 The bare URL form uses **Default**, makes no model request, writes no file, and prints Markdown to standard output.
@@ -19,6 +19,7 @@ The bare URL form uses **Default**, makes no model request, writes no file, and 
 aria-clip https://example.com/article --save
 aria-clip paper https://arxiv.org/html/1706.03762 --json
 aria-clip auto https://example.com --dry-run
+clip video https://www.youtube.com/watch?v=zMvBMfj4cSQ
 ```
 
 `--save` preserves the template's rendered relative `path` beneath `${ARIA_HOME}/vault/` and appends the sanitized artifact filename. `ARIA_HOME` defaults to `~/.aria`. Interpretive commands such as `paper`, `news`, and `video` contact the configured model unless `--dry-run` is present. `auto` may choose an interpretive template when its trigger is unambiguous.
@@ -77,5 +78,21 @@ The default configuration is `~/.aria/clip/config.json`; user templates live in 
 bun run package:cli
 bun add --global ./builds/npm/aria-clip-<version>.tgz
 ```
+
+A clean installation can capture with templates and AI without any browser
+extension. Interpreter transforms require a configured model and its matching
+credential in `~/.aria/.env`.
+
+## Optional browser setup
+
+```sh
+clip setup --dry-run --json
+clip setup
+```
+
+Setup detects supported browsers and opens only a verified public distribution
+surface. Chrome, Firefox, and Safari retain their vendor confirmation screens,
+but the public CLI workflow stays the same. An opened surface is reported as
+`confirmation-required`, never as proof that the extension was installed.
 
 The package contains the generated executable bundle and public API, not repository history.

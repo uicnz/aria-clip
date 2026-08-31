@@ -24,7 +24,7 @@ const DEFAULT_NOTARY_PROFILE = 'aria-notarytool';
 
 function usage(): string {
 	return [
-		'Build Chrome and Firefox store ZIPs plus a signed/notarized Safari DMG.',
+		'Build Chrome, Firefox, npm, reviewer source, and a signed/notarized Safari DMG.',
 		'',
 		'Usage: bun run release [options]',
 		'',
@@ -429,7 +429,7 @@ async function main(): Promise<void> {
 		: await resolveSignIdentity(teamId);
 
 	if (!options.dryRun) {
-		requireTools(['bun', 'codesign', 'diskutil', 'ditto', 'hdiutil', 'security', 'unzip', 'xcodebuild', 'xcrun']);
+		requireTools(['bun', 'codesign', 'diskutil', 'ditto', 'hdiutil', 'npm', 'security', 'unzip', 'xcodebuild', 'xcrun']);
 		if (!options.skipNotarize) await preflightNotary(notaryProfile, teamId);
 		mkdirSync(BUILDS, { recursive: true });
 	}
@@ -448,12 +448,14 @@ async function main(): Promise<void> {
 	await run(['bun', 'run', 'build:firefox'], { dryRun: options.dryRun });
 	await run(['bun', 'run', 'build:safari'], { dryRun: options.dryRun });
 	await run(['bun', 'run', 'build:firefox-source'], { dryRun: options.dryRun });
+	await run(['bun', 'run', options.skipChecks ? 'package:cli' : 'test:package'], { dryRun: options.dryRun });
 
 	const chromePath = join(BUILDS, `aria-clip-${version}-chrome.zip`);
 	const firefoxPath = join(BUILDS, `aria-clip-${version}-firefox.zip`);
 	const firefoxSourcePath = join(BUILDS, 'review', `aria-clip-${version}-firefox-source.zip`);
 	const safariWebPath = join(BUILDS, `aria-clip-${version}-safari.zip`);
 	const safariPath = join(BUILDS, `aria-clip-${version}-safari.dmg`);
+	const npmPath = join(BUILDS, 'npm', `aria-clip-${version}.tgz`);
 
 	if (!options.dryRun) {
 		await verifyWebArchive(chromePath, version);
@@ -461,6 +463,7 @@ async function main(): Promise<void> {
 		if (!existsSync(firefoxSourcePath)) {
 			throw new Error(`Expected Firefox review source was not created: ${firefoxSourcePath}`);
 		}
+		if (!existsSync(npmPath)) throw new Error(`Expected npm package was not created: ${npmPath}`);
 	}
 
 	await packageSafari({
@@ -478,7 +481,7 @@ async function main(): Promise<void> {
 	}
 
 	if (existsSync(safariWebPath)) rmSync(safariWebPath);
-	const artifacts = [chromePath, firefoxPath, safariPath];
+	const artifacts = [chromePath, firefoxPath, safariPath, npmPath];
 	console.log('\nRelease artifacts:');
 	for (const artifact of artifacts) {
 		console.log(`${await sha256(artifact)}  ${basename(artifact)}`);

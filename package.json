@@ -1,17 +1,38 @@
 {
 	"name": "aria-clip",
-	"version": "0.3.0",
+	"version": "0.3.1",
+	"private": true,
 	"type": "module",
-	"description": "Browser clip for Aria.",
+	"description": "Capture the web as durable Markdown with shared browser, CLI, and API semantics.",
 	"bin": {
-		"aria-clip": "./dist/cli.cjs"
+		"aria-clip": "./dist/cli.cjs",
+		"clip": "./dist/cli.cjs"
+	},
+	"keywords": [
+		"aria",
+		"clipper",
+		"markdown",
+		"web-clipping",
+		"web-extension"
+	],
+	"author": "uic.nz",
+	"homepage": "https://docs.aria.bot",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/uicnz/aria-clip.git"
+	},
+	"bugs": {
+		"url": "https://github.com/uicnz/aria-clip/issues"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"files": [
 		"dist/cli.cjs",
 		"dist/api.mjs"
 	],
 	"exports": {
-		".": "./dist/cli.cjs",
+		".": "./dist/api.mjs",
 		"./api": "./dist/api.mjs"
 	},
 	"scripts": {
@@ -28,6 +49,7 @@
 		"build:cli": "bun run scripts/build-cli.ts",
 		"build:api": "bun run scripts/build-api.ts",
 		"package:cli": "bun run build:cli && bun run build:api && bun run scripts/package-cli.ts",
+		"publish:npm": "bun run scripts/publish-npm.ts",
 		"dev": "bun run dev:chrome",
 		"typecheck": "bunx tsc --noEmit && bunx tsc --noEmit -p scripts/tsconfig.json",
 		"test": "bun test --parallel",

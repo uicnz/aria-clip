@@ -37,6 +37,15 @@ bun run add-locale fr
 - Regenerates Xcode's inherited version setting
 - Browser manifests receive the package version automatically during builds
 
+Build every release artifact in a second command:
+
+```sh
+bun run release
+```
+
+The complete release produces Chrome, Firefox, Firefox reviewer source, npm,
+and signed/notarized Safari output from that one version.
+
 ## Changelog
 
 ```sh

@@ -12,6 +12,7 @@ import {
 	FailureSchema,
 	ResultSchema,
 	SchemaNameSchema,
+	SetupResultSchema,
 	type Capability,
 	type Describe,
 	type SchemaName,
@@ -44,6 +45,7 @@ export function schema(name: string): object {
 		template: TemplateSchema,
 		capture: CaptureSchema,
 		'capture-ack': CaptureAckSchema,
+		setup: SetupResultSchema,
 	} as const;
 	return z.toJSONSchema(schemas[key]);
 }
@@ -70,6 +72,7 @@ export async function capabilities(config?: string): Promise<Capability> {
 		delivery: aria.available ? ['stdout', 'file', 'aria'] : ['stdout', 'file'],
 		aria,
 		paths: activePaths,
+		setup: { command: 'setup', browsers: ['chrome', 'firefox', 'safari'] },
 		providers: Object.entries(settings.providers).map(([id, provider]) => ({
 			id,
 			api: provider.api,

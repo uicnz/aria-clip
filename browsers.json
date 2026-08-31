@@ -1,0 +1,80 @@
+{
+	"schemaVersion": "1",
+	"browsers": [
+		{
+			"id": "chrome",
+			"name": "Chrome",
+			"platforms": ["darwin", "linux", "win32"],
+			"detect": {
+				"darwin": {
+					"apps": [
+						"/Applications/Google Chrome.app",
+						"{home}/Applications/Google Chrome.app"
+					],
+					"bins": []
+				},
+				"linux": {
+					"apps": [],
+					"bins": ["google-chrome", "google-chrome-stable"]
+				},
+				"win32": {
+					"apps": [
+						"{programFiles}/Google/Chrome/Application/chrome.exe",
+						"{programFilesX86}/Google/Chrome/Application/chrome.exe",
+						"{localAppData}/Google/Chrome/Application/chrome.exe"
+					],
+					"bins": []
+				}
+			},
+			"route": {
+				"kind": "unpublished",
+				"reason": "The Chrome Web Store item exists but is not yet a verified public listing."
+			}
+		},
+		{
+			"id": "firefox",
+			"name": "Firefox",
+			"platforms": ["darwin", "linux", "win32"],
+			"detect": {
+				"darwin": {
+					"apps": [
+						"/Applications/Firefox.app",
+						"{home}/Applications/Firefox.app"
+					],
+					"bins": []
+				},
+				"linux": {
+					"apps": [],
+					"bins": ["firefox"]
+				},
+				"win32": {
+					"apps": [
+						"{programFiles}/Mozilla Firefox/firefox.exe",
+						"{programFilesX86}/Mozilla Firefox/firefox.exe",
+						"{localAppData}/Mozilla Firefox/firefox.exe"
+					],
+					"bins": []
+				}
+			},
+			"route": {
+				"kind": "unpublished",
+				"reason": "The Mozilla-signed public distribution URL is not yet available."
+			}
+		},
+		{
+			"id": "safari",
+			"name": "Safari",
+			"platforms": ["darwin"],
+			"detect": {
+				"darwin": {
+					"apps": ["/Applications/Safari.app"],
+					"bins": []
+				}
+			},
+			"route": {
+				"kind": "unpublished",
+				"reason": "The signed and notarized Safari containing app is not yet publicly hosted."
+			}
+		}
+	]
+}

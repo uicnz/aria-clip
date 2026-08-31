@@ -21,12 +21,7 @@ echo "Bumping version to $NEW_VERSION"
 echo ""
 
 cd "$ROOT_DIR"
-NEW_VERSION="$NEW_VERSION" bun -e '
-	const packagePath = "package.json";
-	const packageJson = await Bun.file(packagePath).json();
-	packageJson.version = process.env.NEW_VERSION;
-	await Bun.write(packagePath, `${JSON.stringify(packageJson, null, "\t")}\n`);
-'
+bun pm pkg set "version=$NEW_VERSION"
 bun run sync:version
 
 echo ""

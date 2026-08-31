@@ -1,8 +1,23 @@
 # Aria Clip
 
+> This tool is for internal use, We've made URLs public for our convenience.
+
 ## Get started
 
-Install the extension from source while its public store listings are prepared.
+Install the headless CLI with Bun or npm:
+
+```sh
+bun add --global aria-clip
+# or: npm install --global aria-clip
+
+clip https://example.com/article
+clip video https://www.youtube.com/watch?v=zMvBMfj4cSQ
+```
+
+`clip` and `aria-clip` are equal names for the same executable. A clean CLI
+installation can extract, template, interpret, and deliver captures without a
+browser extension. Run `clip setup` later to add the optional browser-native
+workflow when verified public extension listings are available.
 
 ## Roadmap
 
@@ -24,7 +39,7 @@ Build a publishable package and install it locally:
 ```sh
 bun run package:cli
 bun add --global ./builds/npm/aria-clip-<version>.tgz
-aria-clip https://example.com/article
+clip https://example.com/article
 ```
 
 The bare URL command prints deterministic Markdown without contacting a model
@@ -53,15 +68,16 @@ On macOS, one command builds the Chrome Web Store and Mozilla Add-ons packages, 
 bun run release
 ```
 
-The command runs type checking and tests before producing exactly three release artifacts in `builds/`:
+The command runs type checking and tests before producing four release artifacts:
 
 - `aria-clip-<version>-chrome.zip`
 - `aria-clip-<version>-firefox.zip`
 - `aria-clip-<version>-safari.dmg`
+- `npm/aria-clip-<version>.tgz`
 
 Upload the Firefox ZIP to Mozilla Add-ons as a listed extension owned by the `dev@uic.nz` account. Mozilla reviews, signs, hosts, and updates the extension for users. The Safari web ZIP is an intermediate file and is removed after a successful release.
 
-Because the Firefox JavaScript is generated from TypeScript with webpack, Mozilla also requires the matching reviewer source package. The release command creates it separately at `builds/review/aria-clip-<version>-firefox-source.zip`; it is not an end-user distributable.
+Because the Firefox JavaScript is generated from TypeScript with webpack, Mozilla also requires the matching reviewer source package. The release command creates it separately at `builds/review/aria-clip-<version>-firefox-source.zip`; it is not an end-user distributable. The same release also clean-installs and exercises the npm tarball with Bun and Node 24.
 
 Use `bun run release -- --skip-notarize` only for local Safari testing, or `bun run release -- --dry-run` to inspect the complete command sequence. Signing uses Aria's team `N68C9LUA5B` and `aria-notarytool` profile. The same `ARIA_NOTARY_KEYCHAIN` and `ARIA_NOTARY_BOOTSTRAP_*` variables used by Aria can recover a missing profile.
 
@@ -81,12 +97,9 @@ For Firefox:
 2. Click **Load Temporary Add-on**
 3. Navigate to the `dist/firefox` directory and select the `manifest.json` file
 
-If you want to run the extension permanently you can do so with the Nightly or Developer versions of Firefox.
-
-1. Type `about:config` in the URL bar
-2. In the Search box type `xpinstall.signatures.required`
-3. Double-click the preference, or right-click and select "Toggle", to set it to `false`.
-4. Go to `about:addons` > gear icon > **Install Add-on From File…**
+The development build is temporary. A normal permanent installation must come
+from Mozilla Add-ons or a Mozilla-signed XPI. Do not disable Firefox signature
+enforcement as an ordinary installation workflow.
 
 For iOS Simulator testing on macOS:
 

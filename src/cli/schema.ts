@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ArtifactTypeSchema } from '../schemas/artifact.js';
+import { BrowserIdSchema, SetupResultSchema } from '../schemas/browser.js';
 import { CaptureAckSchema, CaptureSchema } from '../schemas/capture.js';
 import { ApiSchema } from '../schemas/model.js';
 import { BehaviorSchema } from '../schemas/template.js';
@@ -34,6 +35,7 @@ export const CommandSchema = z.enum([
 	'templates',
 	'models',
 	'config',
+	'setup',
 	'completions',
 ]);
 
@@ -46,6 +48,7 @@ export const StageSchema = z.enum([
 	'interpret',
 	'deliver',
 	'capability',
+	'setup',
 	'internal',
 ]);
 
@@ -69,6 +72,7 @@ export const CodeSchema = z.enum([
 	'E_DELIVERY_CONFLICT',
 	'E_DELIVERY_FAILED',
 	'E_ARIA_UNAVAILABLE',
+	'E_SETUP_FAILED',
 	'E_CANCELLED',
 	'E_INTERNAL',
 ]);
@@ -242,6 +246,10 @@ export const CapabilitySchema = z.strictObject({
 		config: z.string(),
 		templates: z.string(),
 	}),
+	setup: z.strictObject({
+		command: z.literal('setup'),
+		browsers: z.array(BrowserIdSchema),
+	}),
 	providers: z.array(z.strictObject({
 		id: z.string(),
 		api: ApiSchema,
@@ -261,7 +269,7 @@ export const CapabilitySchema = z.strictObject({
 	})),
 });
 
-export const EffectSchema = z.enum(['network', 'model', 'file', 'aria']);
+export const EffectSchema = z.enum(['network', 'model', 'file', 'aria', 'browser']);
 export const GroupSchema = z.enum(['transform', 'discover', 'configure', 'deliver']);
 
 export const ExpansionSchema = z.strictObject({
@@ -318,9 +326,10 @@ export const SchemaNameSchema = z.enum([
 	'template',
 	'capture',
 	'capture-ack',
+	'setup',
 ]);
 
-export { CaptureAckSchema, CaptureSchema };
+export { CaptureAckSchema, CaptureSchema, SetupResultSchema };
 
 export type Transform = z.infer<typeof TransformSchema>;
 export type CommandName = z.infer<typeof CommandSchema>;

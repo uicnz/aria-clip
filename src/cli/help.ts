@@ -24,13 +24,13 @@ export function topHelp(): string {
 		c.bold('ARIA CLIP'),
 		c.gray('Capture the web as durable Markdown.'),
 		'',
-		section('Usage', '  aria-clip <url> [options]'),
+		section('Usage', '  aria-clip|clip <url> [options]'),
 		'',
 		section('Capture and transform', rows([
 			['aria-clip <url>', 'Capture clean Markdown'],
 			['aria-clip auto <url>', 'Choose an unambiguous template'],
 			['aria-clip paper <url>', 'Create rigorous paper notes'],
-			['aria-clip video <url>', 'Create structured video notes'],
+			['clip video <url>', 'Create structured video notes'],
 			['aria-clip help transforms', 'Show every transformation'],
 		])),
 		'',
@@ -43,7 +43,7 @@ export function topHelp(): string {
 		section('Discover', rows([
 			['help agent', 'Complete agent operating guide'],
 			['templates list', 'List available templates'],
-			['capabilities', 'Show runtime support'],
+			['setup', 'Add browser-native workflows'],
 		])),
 		c.gray('More: aria-clip --help=all'),
 	].join('\n');
@@ -103,10 +103,10 @@ ${COMMANDS.filter(command => command.interpret).map(command => `  ${command.name
 
 Inspect an expansion without executing it:
   aria-clip paper --explain`,
-	delivery: `DELIVERY
+delivery: `DELIVERY
 
   --to stdout   Print the artifact; this is the default
-	  --save         Save under ~/.aria/vault/<template folder>
+  --save         Save under ~/.aria/vault/<template folder>
   --save <path>  Save to an explicit path
   --add          Deliver through the downstream aria CLI
   --dry-run      Resolve the complete plan without mutation
@@ -164,6 +164,15 @@ Private and loopback network targets are denied unless explicitly allowed.`,
 The default command performs no model call and no mutation. Private network
 fetches are denied. Credentials are read from environment or protected config,
 never ordinary command arguments. Use --dry-run before delegated delivery.`,
+	setup: `BROWSER SETUP
+
+  clip setup
+  clip setup --dry-run --json
+  clip setup --browser chrome firefox
+
+Setup detects supported browsers and opens only verified official distribution
+routes. Browser confirmation is always required. An opened route is never
+reported as an installed extension. Headless clipping works without setup.`,
 } as const;
 
 export type HelpTopic = keyof typeof TOPICS;

@@ -10,6 +10,7 @@ const EXIT_BY_STAGE = {
 	interpret: 6,
 	deliver: 7,
 	capability: 8,
+	setup: 8,
 	internal: 10,
 } as const satisfies Record<Stage, ExitCode>;
 
@@ -38,6 +39,7 @@ export const ERROR_DOCS = {
 	E_DELIVERY_CONFLICT: { meaning: 'Delivery would replace an existing target.', recovery: 'Choose another destination or explicitly pass `--overwrite`.' },
 	E_DELIVERY_FAILED: { meaning: 'File or Aria delivery failed.', recovery: 'Check the destination, permissions, and downstream command output.' },
 	E_ARIA_UNAVAILABLE: { meaning: 'Aria capture intake is unavailable.', recovery: 'Install or update Aria after clip.capture.v1 ships, or use `--save`.' },
+	E_SETUP_FAILED: { meaning: 'Browser setup could not open a verified installation surface.', recovery: 'Run `clip setup --dry-run --json`, inspect each browser state, and use only its verified route.' },
 	E_CANCELLED: { meaning: 'The operation was cancelled or timed out.', recovery: 'Retry when ready or raise the relevant timeout.' },
 	E_INTERNAL: { meaning: 'An internal invariant failed.', recovery: 'Run with `--json`, retain the error code, and report a reproducible command.' },
 } as const satisfies Record<ErrorCode, ErrorDoc>;

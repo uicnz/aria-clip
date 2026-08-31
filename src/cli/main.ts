@@ -2,6 +2,7 @@ import { Command, CommanderError, Option } from 'commander';
 import pc from 'picocolors';
 import { z } from 'zod';
 import { collectPrompts } from '../features/templates/engine/prompts.js';
+import { BrowserIdSchema, SetupResultSchema } from '../schemas/browser.js';
 import { RunOptsSchema, UrlSchema } from './args.js';
 import { loadConfig, ModelRefSchema, paths, setDefaultModel } from './config.js';
 import { capabilities, describe, examples, schema } from './discover.js';
@@ -11,6 +12,7 @@ import { allHelp, commandHelp, topHelp, topicHelp } from './help.js';
 import { interpret } from './interpret.js';
 import { ADVANCED_OPTS, COMMANDS, COMMON_OPTS, expand, findCommand, type Cmd, type Opt } from './registry.js';
 import { asFault, run } from './run.js';
+import { setup } from './setup.js';
 import { allTemplates, exportTemplate, importTemplate, loadTemplate } from './templates.js';
 import { PROTOCOL, VERSION } from './version.js';
 
@@ -173,6 +175,28 @@ function discovery(program: Command): void {
 		else process.stdout.write(checks.map(check => `${check.ok ? c.green('ok') : c.yellow('--')}  ${check.name.padEnd(10)} ${c.gray(check.detail)}`).join('\n') + '\n');
 	});
 
+	addCommand(program, 'setup').action(async (_raw: object, active: Command) => {
+		const opts = z.strictObject({
+			browser: z.array(BrowserIdSchema).optional(),
+			dryRun: z.boolean().default(false),
+			json: z.boolean().default(false),
+		}).parse(commandOptions(active));
+		const result = SetupResultSchema.parse(await setup({ browsers: opts.browser, dryRun: opts.dryRun }));
+		if (opts.json) {
+			json(result);
+			return;
+		}
+		const rows = result.browsers.map(browser => {
+			const state = browser.state === 'ready'
+				? c.green(browser.state)
+				: browser.state === 'confirmation-required'
+					? c.yellow(browser.state)
+					: c.gray(browser.state);
+			return `${browser.name.padEnd(8)} ${state}\n  ${c.gray(browser.next)}`;
+		});
+		process.stdout.write(`${c.bold('Browser setup')}\n${rows.join('\n')}\n\n${c.gray('No extension is reported installed until its browser confirmation is complete.')}\n`);
+	});
+
 	const templates = addCommand(program, 'templates');
 	const listTemplates = async (active: Command) => {
 		const opts = z.strictObject({ json: z.boolean().default(false), config: z.string().optional() }).parse(commandOptions(active));
@@ -323,9 +347,9 @@ function discovery(program: Command): void {
 
 	addCommand(program, 'completions', '<shell>').action((shell: string) => {
 		const names = COMMANDS.map(command => command.name).join(' ');
-		if (shell === 'zsh') process.stdout.write(`#compdef aria-clip\n_arguments '1:command:(${names})'\n`);
-		else if (shell === 'bash') process.stdout.write(`complete -W "${names}" aria-clip\n`);
-		else if (shell === 'fish') process.stdout.write(`complete -c aria-clip -f -a "${names}"\n`);
+		if (shell === 'zsh') process.stdout.write(`#compdef aria-clip clip\n_arguments '1:command:(${names})'\n`);
+		else if (shell === 'bash') process.stdout.write(`complete -W "${names}" aria-clip clip\n`);
+		else if (shell === 'fish') process.stdout.write(`complete -c aria-clip -f -a "${names}"\ncomplete -c clip -f -a "${names}"\n`);
 		else fail('E_USAGE', `Unsupported shell ${shell}.`, 'input', { hint: 'Choose zsh, bash, or fish.' });
 	});
 }
