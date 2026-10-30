@@ -34,7 +34,7 @@ All three must be publicly reachable during review.
 
 ### `nativeMessaging`
 
-> Sends a structured capture envelope to the registered nz.uic.aria.clip native host only when the user chooses Add to Aria. It communicates with the Aria desktop integration and not with unrelated native applications.
+> Sends a structured capture envelope to the registered nz.uic.aria.deeplink native host only when the user chooses Add to Aria. It communicates with the Aria desktop integration and not with unrelated native applications.
 
 The current envelope contains source and extraction data, rendered Markdown, template identity, artifact, and rendered properties. It does not currently contain the template Behavior, Folder, or Vault fields.
 

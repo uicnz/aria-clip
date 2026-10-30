@@ -10,7 +10,7 @@ import { getLocalStorage, setLocalStorage, loadSettings, generalSettings, Settin
 import { unescapeValue } from '../shared/text/string-utils.js';
 import { loadTemplates } from '../features/templates/template-manager.js';
 import browser from '../platform/browser/browser-polyfill.js';
-import { addBrowserClassToHtml, detectBrowser } from '../platform/browser/browser-detection.js';
+import { addBrowserClassToHtml, detectBrowser, reachesAria } from '../platform/browser/browser-detection.js';
 import { initializeInterpreter, handleInterpreterUI, collectPromptVariables } from '../features/interpreter/interpreter.js';
 import { adjustNoteNameHeight } from '../shared/dom/ui-utils.js';
 import { debugLog } from '../platform/browser/debug.js';
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 				setupEventListeners(currentTabId);
 				await initializeUI();
 
-				configurePrimaryOperation();
+				configurePrimaryOperation(reachesAria(currentBrowser));
 
 				// Initial content load
 				await refreshFields(currentTabId);
@@ -1303,7 +1303,7 @@ async function handleSaveToDownloads() {
 	}
 }
 
-function configurePrimaryOperation() {
+function configurePrimaryOperation(ariaReachable: boolean) {
 	const primaryOperationButton = document.getElementById('clip-btn');
 	const moreDropdown = document.getElementById('more-dropdown');
 	const secondaryOperations = moreDropdown?.querySelector('.secondary-operations');
@@ -1311,18 +1311,19 @@ function configurePrimaryOperation() {
 
 	secondaryOperations.textContent = '';
 
-	// Configure operations based on the saved behavior.
-	switch (loadedSettings.saveBehavior) {
+	// Configure operations based on the saved behavior. Without a reachable Aria, Save file replaces Add to Aria.
+	const saveBehavior = !ariaReachable && loadedSettings.saveBehavior === 'addToAria' ? 'saveFile' : loadedSettings.saveBehavior;
+	switch (saveBehavior) {
 		case 'copyToClipboard':
 			primaryOperationButton.textContent = getMessage('copyToClipboard');
 			primaryOperationButton.onclick = () => copyContent();
-			addSecondaryOperation(secondaryOperations, 'addToAria', triggerClipAria);
+			if (ariaReachable) addSecondaryOperation(secondaryOperations, 'addToAria', triggerClipAria);
 			addSecondaryOperation(secondaryOperations, 'saveFile', handleSaveToDownloads);
 			break;
 		case 'saveFile':
 			primaryOperationButton.textContent = getMessage('saveFile');
 			primaryOperationButton.onclick = () => handleSaveToDownloads();
-			addSecondaryOperation(secondaryOperations, 'addToAria', triggerClipAria);
+			if (ariaReachable) addSecondaryOperation(secondaryOperations, 'addToAria', triggerClipAria);
 			addSecondaryOperation(secondaryOperations, 'copyToClipboard', copyContent);
 			break;
 		default: // 'addToAria'

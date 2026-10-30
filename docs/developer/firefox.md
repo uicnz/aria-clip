@@ -84,9 +84,9 @@ The current minimum Firefox versions are desktop 142 and Android 142, so the bui
 
 The original 0.1.0 upload passed with zero errors and 49 general warnings. Most were generated-bundle `innerHTML` warnings plus compatibility warnings from the older minimum version and Chrome-only side-panel code in that historical archive.
 
-That report is evidence for that file only. The current manifest now sets Firefox 142 as the minimum and does not request Chrome's `sidePanel` or `nativeMessaging` permissions. Run validation again for every new ZIP and inspect the authored source behind generated-code warnings.
+That report is evidence for that file only. The current manifest now sets Firefox 142 as the minimum and does not request Chrome's `sidePanel` permission. It requests `nativeMessaging` for **Add to Aria**. Run validation again for every new ZIP and inspect the authored source behind generated-code warnings.
 
-Because the Firefox manifest does not request `nativeMessaging`, **Add to Aria** is not a supported Firefox review step in the current package. Test file save and clipboard delivery instead.
+Test **Add to Aria** only on a machine where Aria has registered the `nz.uic.aria.deeplink` native host. Without it, the popup reports that Aria is not installed or needs updating.
 
 ## Preflight
 

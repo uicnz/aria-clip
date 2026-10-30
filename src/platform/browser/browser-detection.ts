@@ -57,6 +57,11 @@ export async function detectBrowser(): Promise<'chrome' | 'firefox' | 'firefox-m
 	}
 }
 
+/** Safari's extension sandbox cannot reach Aria's native DeepLink host, so Add to Aria is not offered there. */
+export function reachesAria(browser: Awaited<ReturnType<typeof detectBrowser>>): boolean {
+	return !['safari', 'mobile-safari', 'ipad-os'].includes(browser);
+}
+
 function isIPad(): boolean {
 	return navigator.userAgent.includes('iPad') ||
 		(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

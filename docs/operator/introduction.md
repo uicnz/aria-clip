@@ -48,6 +48,6 @@ For local Chromium development, run `bun run dev:chrome`, then load `dist/chrome
 
 Extraction and template rendering happen inside the extension. Templates and general settings use browser sync storage; highlights and capture history use local extension storage.
 
-The Interpreter sends its prompt and selected context directly to the provider configured by the user. Where the browser package supports native messaging, **Add to Aria** sends a capture envelope to the local Aria native host only after the user chooses that operation. The current Firefox package supports file and clipboard delivery but does not request native messaging. See [Interpreter](interpreter.md) and the project [privacy policy](https://aria.bot/privacy) before enabling external model processing.
+The Interpreter sends its prompt and selected context directly to the provider configured by the user. Where the browser package supports native messaging, **Add to Aria** sends a capture envelope to the local Aria native host only after the user chooses that operation. Safari supports file and clipboard delivery but cannot reach Aria's native host. See [Interpreter](interpreter.md) and the project [privacy policy](https://aria.bot/privacy) before enabling external model processing.
 
 The source is public at [github.com/uicnz/aria-clip](https://github.com/uicnz/aria-clip).

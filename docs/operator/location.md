@@ -35,15 +35,15 @@ Daily behaviors do not need Note name or Folder because Aria resolves the active
 | --- | --- | --- |
 | Browser **Save file** | No | The browser download chosen by the user or browser settings. |
 | Browser **Copy** | No | The system clipboard. |
-| Browser **Add to Aria** | Yes | The registered `nz.uic.aria.clip` native host. |
+| Browser **Add to Aria** | Yes | Aria's registered `nz.uic.aria.deeplink` native host. Not offered in Safari. |
 | CLI stdout | No | Standard output. |
 | CLI `--save` | Yes | `${ARIA_HOME}/vault/<Folder>/<artifact filename>`. |
 | CLI `--save <path>` | No | The exact explicit filesystem path. |
-| CLI `--add` | Yes | Aria's capability-gated capture intake. |
+| CLI `--add` | Yes | Aria's DeepLink protocol through `aria --deeplink`. |
 
 The browser and CLI now validate the same versioned capture envelope. It carries the complete Location object together with source data, rendered Markdown, artifact identity, properties, template identity, and extracted values.
 
-The receiving Aria build still has to implement that intake. The CLI checks `aria --supports clip.capture.v1` before mutation and returns `E_ARIA_UNAVAILABLE` when the installed Aria does not advertise it. It never falls back to a deep link. The browser route requires a registered native host and is unavailable in the current Firefox package because that manifest does not request `nativeMessaging`.
+Both send it to Aria as a DeepLink `session.start` request. The CLI returns `E_ARIA_UNAVAILABLE` when `aria` is not installed and fails delivery when the installed Aria does not support DeepLink. It never falls back to a URI. The browser route requires Aria's registered native host. Safari cannot reach a native host from its sandbox, so Safari does not offer Add to Aria.
 
 ## Example
 

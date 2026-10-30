@@ -1,15 +1,33 @@
 import browser from '../../platform/browser/browser-polyfill.js';
-import { CaptureAckSchema, CaptureSchema, type Capture } from '../../schemas/capture.js';
+import { CaptureAckSchema, sessionStart, type Capture } from '../../schemas/capture.js';
 
-export const ARIA_CLIP_NATIVE_HOST_NAME = 'nz.uic.aria.clip';
+export const ARIA_CLIP_NATIVE_HOST_NAME = 'nz.uic.aria.deeplink';
+
+export const ARIA_MISSING_MESSAGE = 'Aria is not installed or needs updating.';
 
 export type AriaClipCapture = Capture;
 
+/** Browser errors that mean the DeepLink host is not registered or exited before replying. */
+const MISSING_HOST = [
+	/specified native messaging host not found/i,
+	/native host has exited/i,
+	/no such native application/i,
+];
+
+/** Replace the browser's raw missing-host error with a user-actionable message; keep every other error. */
+export function ariaFailure(error: unknown): unknown {
+	const message = error instanceof Error ? error.message : typeof error === 'string' ? error : '';
+	return MISSING_HOST.some(pattern => pattern.test(message)) ? new Error(ARIA_MISSING_MESSAGE) : error;
+}
+
 export async function deliverCaptureToAria(capture: AriaClipCapture): Promise<void> {
-	const response: unknown = await browser.runtime.sendNativeMessage(ARIA_CLIP_NATIVE_HOST_NAME, {
-		operation: 'capture.deliver',
-		capture: CaptureSchema.parse(capture),
-	});
+	const request = sessionStart(capture);
+	let response: unknown;
+	try {
+		response = await browser.runtime.sendNativeMessage(ARIA_CLIP_NATIVE_HOST_NAME, request);
+	} catch (error) {
+		throw ariaFailure(error);
+	}
 	const ack = CaptureAckSchema.parse(response);
 	if (!ack.ok) throw new Error(`${ack.message} (${ack.code})`);
 }

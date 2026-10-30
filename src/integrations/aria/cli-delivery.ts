@@ -1,9 +1,8 @@
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
-import { CaptureAckSchema, CaptureSchema, type Capture, type CaptureAck } from '../../schemas/capture.js';
+import { CaptureAckSchema, sessionStart, type Capture, type CaptureAck } from '../../schemas/capture.js';
 
 const exec = promisify(execFile);
-const SUPPORT = 'clip.capture.v1';
 
 export interface AriaInfo {
 	installed: boolean;
@@ -31,12 +30,7 @@ async function output(args: string[], run: AriaRun): Promise<string | null> {
 export async function ariaInfo(run: AriaRun = DEFAULT_RUN): Promise<AriaInfo> {
 	const version = await output(['--version'], run);
 	if (!version) return { installed: false, available: false, version: null };
-	const supported = await output(['--supports', SUPPORT], run);
-	return {
-		installed: true,
-		available: supported?.toLowerCase() === 'true',
-		version,
-	};
+	return { installed: true, available: true, version };
 }
 
 /** Retained as a small compatibility helper for callers that only need a version. */
@@ -44,23 +38,39 @@ export async function ariaVersion(): Promise<string | null> {
 	return (await ariaInfo()).version;
 }
 
+/** One native-messaging frame: a 4-byte little-endian byte length followed by UTF-8 JSON. */
+export function frame(message: object): Buffer {
+	const body = Buffer.from(JSON.stringify(message), 'utf8');
+	const header = Buffer.alloc(4);
+	header.writeUInt32LE(body.length, 0);
+	return Buffer.concat([header, body]);
+}
+
+/** Read the first complete frame, or null when the stream ended before one arrived. */
+export function unframe(bytes: Buffer): unknown {
+	if (bytes.length < 4) return null;
+	const length = bytes.readUInt32LE(0);
+	if (bytes.length < 4 + length) return null;
+	return JSON.parse(bytes.subarray(4, 4 + length).toString('utf8'));
+}
+
 function ingest(capture: Capture, timeout: number, run: AriaRun): Promise<CaptureAck> {
 	return new Promise((resolve, reject) => {
-		const child = spawn(run.bin, [...run.args, 'clip', 'add', '--input', '-', '--json'], {
+		const child = spawn(run.bin, [...run.args, '--deeplink'], {
 			stdio: ['pipe', 'pipe', 'pipe'],
 		});
-		let stdout = '';
+		const stdout: Buffer[] = [];
 		let stderr = '';
 		let settled = false;
 		const timer = setTimeout(() => {
 			child.kill();
-			reject(new Error(`Aria intake timed out after ${timeout}ms.`));
+			reject(new Error(`Aria DeepLink timed out after ${timeout}ms.`));
 		}, timeout);
 
-		child.stdout.setEncoding('utf8');
 		child.stderr.setEncoding('utf8');
-		child.stdout.on('data', (chunk: string) => { stdout += chunk; });
+		child.stdout.on('data', (chunk: Buffer) => { stdout.push(chunk); });
 		child.stderr.on('data', (chunk: string) => { stderr += chunk; });
+		child.stdin.on('error', () => undefined);
 		child.once('error', (error) => {
 			if (settled) return;
 			settled = true;
@@ -72,21 +82,23 @@ function ingest(capture: Capture, timeout: number, run: AriaRun): Promise<Captur
 			settled = true;
 			clearTimeout(timer);
 			if (code !== 0) {
-				reject(new Error(stderr.trim() || `Aria intake exited with status ${code ?? 'unknown'}.`));
+				reject(new Error(stderr.trim() || `Aria DeepLink exited with status ${code ?? 'unknown'}.`));
 				return;
 			}
 			try {
-				resolve(CaptureAckSchema.parse(JSON.parse(stdout)));
+				const reply = unframe(Buffer.concat(stdout));
+				if (reply === null) throw new Error('no reply frame');
+				resolve(CaptureAckSchema.parse(reply));
 			} catch (error) {
-				reject(new Error(`Aria returned an invalid capture acknowledgement: ${error instanceof Error ? error.message : 'unknown error'}`));
+				reject(new Error(`Aria returned an invalid DeepLink reply: ${error instanceof Error ? error.message : 'unknown error'}`));
 			}
 		});
 
-		child.stdin.end(`${JSON.stringify(CaptureSchema.parse(capture))}\n`);
+		child.stdin.end(frame(sessionStart(capture)));
 	});
 }
 
-/** Deliver a versioned capture envelope through Aria's capability-gated intake. */
+/** Deliver a versioned capture envelope through `aria --deeplink` as a `session.start` request. */
 export async function sendAria(capture: Capture, timeout: number, run: AriaRun = DEFAULT_RUN): Promise<Extract<CaptureAck, { ok: true }>> {
 	const ack = await ingest(capture, timeout, run);
 	if (!ack.ok) throw new Error(`${ack.message} (${ack.code})`);

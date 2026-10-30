@@ -51,7 +51,7 @@ The footer contains the selected output operation and its alternatives:
 
 The default primary operation is configured under **Settings → General → Save behavior**. The split menu exposes the other operations.
 
-The current Firefox manifest does not request `nativeMessaging`, so Add to Aria is not a supported Firefox delivery path in the current package. Use file or clipboard delivery there.
+Safari cannot reach Aria's native host from its sandbox, so Safari does not offer Add to Aria and defaults to **Save file**.
 
 See [Location](location.md) before relying on a template's Behavior, Folder, or Vault fields; those fields are not applied equally by every operation.
 

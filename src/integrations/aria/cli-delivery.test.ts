@@ -17,7 +17,7 @@ afterEach(async () => {
 });
 
 describe('Aria intake', () => {
-	test('discovers the versioned capability without launching Aria', async () => {
+	test('reports an installed Aria as available from its version alone', async () => {
 		await expect(ariaInfo(run)).resolves.toEqual({
 			installed: true,
 			available: true,
@@ -25,7 +25,7 @@ describe('Aria intake', () => {
 		});
 	});
 
-	test('transmits the complete capture and parses its stable acknowledgement', async () => {
+	test('frames the complete capture as session.start and parses the DeepLink reply', async () => {
 		const root = await mkdtemp(join(tmpdir(), 'aria-clip-fake-'));
 		dirs.push(root);
 		const record = join(root, 'capture.json');
@@ -39,8 +39,8 @@ describe('Aria intake', () => {
 		expect(ack).toEqual({
 			schemaVersion: '1',
 			ok: true,
-			identity: `note:${input.captureId}`,
-			destination: 'Research/Clips/Papers/complete.md',
+			sessionId: `session:${input.captureId}`,
+			filepath: 'Research/Clips/Papers/complete.md',
 		});
 		expect(stored.location).toEqual(input.location);
 		expect(stored.capture.renderedMarkdown).toBe('# Complete\n');
@@ -57,5 +57,10 @@ describe('Aria intake', () => {
 		await sendAria(input, 5_000, run);
 		const stored = JSON.parse(await readFile(record, 'utf8'));
 		expect(stored.location.behavior).toBe(behavior);
+	});
+
+	test('fails when the installed aria does not speak DeepLink', async () => {
+		const legacy: AriaRun = { bin: process.execPath, args: [fake, 'legacy'] };
+		await expect(sendAria(capture(), 5_000, legacy)).rejects.toThrow(/exited with status 2/);
 	});
 });

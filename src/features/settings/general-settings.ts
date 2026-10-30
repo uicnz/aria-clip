@@ -1,6 +1,6 @@
 import { getCommands } from '../../platform/browser/hotkeys.js';
 import { generalSettings, loadSettings, saveSettings, setLocalStorage, getLocalStorage } from '../../platform/browser/storage-utils.js';
-import { detectBrowser } from '../../platform/browser/browser-detection.js';
+import { detectBrowser, reachesAria } from '../../platform/browser/browser-detection.js';
 import { createDefaultTemplate, getTemplates, saveTemplateSettings } from '../templates/template-manager.js';
 import { updateTemplateList, showTemplateEditor } from '../templates/template-ui.js';
 import { exportAllSettings, importAllSettings } from './import-export.js';
@@ -186,7 +186,7 @@ export function initializeGeneralSettings(): void {
 		initializeExportImportAllSettingsButtons();
 		initializeHighlighterSettings();
 		initializeExportHighlightsButton();
-		initializeSaveBehaviorDropdown();
+		await initializeSaveBehaviorDropdown();
 		await initializeUsageChart();
 
 		// Initialize feedback modal close button
@@ -283,11 +283,18 @@ function initializeResetDefaultTemplateButton(): void {
 	}
 }
 
-function initializeSaveBehaviorDropdown(): void {
+async function initializeSaveBehaviorDropdown(): Promise<void> {
     const dropdown = document.getElementById('save-behavior-dropdown') as HTMLSelectElement;
     if (!dropdown) return;
 
-    dropdown.value = generalSettings.saveBehavior;
+    // Safari cannot reach Aria, so Add to Aria is not offered and Save file is the default there.
+    const ariaReachable = reachesAria(await detectBrowser());
+    const ariaOption = dropdown.querySelector<HTMLOptionElement>('option[value="addToAria"]');
+    if (ariaOption && !ariaReachable) {
+        ariaOption.hidden = true;
+        ariaOption.disabled = true;
+    }
+    dropdown.value = !ariaReachable && generalSettings.saveBehavior === 'addToAria' ? 'saveFile' : generalSettings.saveBehavior;
     dropdown.addEventListener('change', () => {
         const newValue = dropdown.value as 'addToAria' | 'copyToClipboard' | 'saveFile';
         saveSettings({ saveBehavior: newValue });

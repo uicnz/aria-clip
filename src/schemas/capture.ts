@@ -77,8 +77,8 @@ export const CaptureAckSchema = z.discriminatedUnion('ok', [
 	z.strictObject({
 		schemaVersion: z.literal('1'),
 		ok: z.literal(true),
-		identity: z.string().min(1),
-		destination: z.string().min(1),
+		sessionId: z.string().min(1),
+		filepath: z.string().min(1),
 	}),
 	z.strictObject({
 		schemaVersion: z.literal('1'),
@@ -92,3 +92,8 @@ export const CaptureAckSchema = z.discriminatedUnion('ok', [
 export type Location = z.infer<typeof LocationSchema>;
 export type Capture = z.infer<typeof CaptureSchema>;
 export type CaptureAck = z.infer<typeof CaptureAckSchema>;
+
+/** The one DeepLink request both the browser host and `aria --deeplink` receive. */
+export function sessionStart(capture: Capture): { operation: 'session.start'; capture: Capture } {
+	return { operation: 'session.start', capture: CaptureSchema.parse(capture) };
+}

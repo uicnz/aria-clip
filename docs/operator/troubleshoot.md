@@ -38,7 +38,7 @@ That is current behavior, not a save-dialog failure. Browser downloads use the r
 
 ## Add to Aria fails
 
-**Add to Aria** requires the native host named `nz.uic.aria.clip`. If the host is absent, unreachable, or rejects the envelope, Aria Clip reports the native messaging error.
+**Add to Aria** requires Aria's DeepLink native host, `nz.uic.aria.deeplink`. If the browser reports the host is missing or exited, Aria Clip shows "Aria is not installed or needs updating." If Aria rejects the envelope, Aria Clip reports Aria's message. Safari does not offer Add to Aria.
 
 Use **Save file** or **Copy to clipboard** as a fallback. Those operations do not require Aria.
 

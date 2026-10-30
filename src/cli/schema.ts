@@ -149,8 +149,8 @@ const DeliverySchema = z.strictObject({
 	path: z.string().optional(),
 	hash: z.string().regex(/^sha256:[a-f0-9]{64}$/).optional(),
 	behavior: BehaviorSchema.optional(),
-	identity: z.string().optional(),
-	destination: z.string().optional(),
+	sessionId: z.string().optional(),
+	filepath: z.string().optional(),
 	result: z.string().optional(),
 });
 

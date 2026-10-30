@@ -101,7 +101,7 @@ async function execute(name: CommandName, url: string | undefined, raw: object):
 	} else if (result.delivery.requested === 'file') {
 		process.stderr.write(`${c.green('Saved')} ${result.delivery.path}\n`);
 	} else {
-		process.stderr.write(`${c.green('Added to Aria')} ${result.delivery.identity ?? ''}${result.delivery.destination ? ` → ${result.delivery.destination}` : ''}\n`);
+		process.stderr.write(`${c.green('Added to Aria')} ${result.delivery.sessionId ?? ''}${result.delivery.filepath ? ` → ${result.delivery.filepath}` : ''}\n`);
 	}
 }
 

@@ -92,11 +92,11 @@ export async function deliver(input: DeliveryInput): Promise<Result['delivery']>
 	if (!aria.available) {
 		fail('E_ARIA_UNAVAILABLE',
 			aria.installed
-				? 'Aria does not advertise clip.capture.v1 intake.'
+				? 'This Aria does not support DeepLink.'
 				: 'The downstream aria command is not available.',
 			'capability', {
 				hint: aria.installed
-					? 'Update Aria after capture intake ships, or use --save in the meantime.'
+					? 'Update to an Aria with DeepLink support, or use --save in the meantime.'
 					: 'Install Aria or use --save.',
 				exit: 8,
 			});
@@ -108,8 +108,8 @@ export async function deliver(input: DeliveryInput): Promise<Result['delivery']>
 			requested,
 			performed: true,
 			behavior: location.behavior,
-			identity: ack.identity,
-			destination: ack.destination,
+			sessionId: ack.sessionId,
+			filepath: ack.filepath,
 		};
 	} catch (error) {
 		fail('E_DELIVERY_FAILED', error instanceof Error ? error.message : 'Aria capture delivery failed.', 'deliver', {

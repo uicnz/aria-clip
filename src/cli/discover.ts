@@ -84,7 +84,7 @@ export async function capabilities(config?: string): Promise<Capability> {
 			...(aria.available ? [] : [{
 				feature: 'aria' as const,
 				reason: aria.installed
-					? 'Aria is installed but does not advertise clip.capture.v1 intake.'
+					? 'Aria is installed but does not support DeepLink.'
 					: 'The downstream aria executable is not on PATH.',
 			}]),
 			...(settings.models.length > 0 ? [] : [{ feature: 'interpreter' as const, reason: 'No Interpreter model is configured.' }]),
