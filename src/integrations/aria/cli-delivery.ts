@@ -81,13 +81,12 @@ function ingest(capture: Capture, timeout: number, run: AriaRun): Promise<Captur
 			if (settled) return;
 			settled = true;
 			clearTimeout(timer);
-			if (code !== 0) {
-				reject(new Error(stderr.trim() || `Aria DeepLink exited with status ${code ?? 'unknown'}.`));
-				return;
-			}
 			try {
 				const reply = unframe(Buffer.concat(stdout));
-				if (reply === null) throw new Error('no reply frame');
+				if (reply === null) {
+					if (code !== 0) throw new Error(stderr.trim() || `Aria DeepLink exited with status ${code ?? 'unknown'}.`);
+					throw new Error('no reply frame');
+				}
 				resolve(CaptureAckSchema.parse(reply));
 			} catch (error) {
 				reject(new Error(`Aria returned an invalid DeepLink reply: ${error instanceof Error ? error.message : 'unknown error'}`));

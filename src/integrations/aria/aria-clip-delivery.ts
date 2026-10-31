@@ -3,14 +3,14 @@ import { CaptureAckSchema, sessionStart, type Capture } from '../../schemas/capt
 
 export const ARIA_CLIP_NATIVE_HOST_NAME = 'nz.uic.aria.deeplink';
 
-export const ARIA_MISSING_MESSAGE = 'Aria is not installed or needs updating.';
+export const ARIA_MISSING_MESSAGE = 'Aria’s browser connection is not registered. Install or repair the Aria integration.';
 
 export type AriaClipCapture = Capture;
 
-/** Browser errors that mean the DeepLink host is not registered or exited before replying. */
+/** Browser errors that mean the DeepLink host is not registered. */
 const MISSING_HOST = [
 	/specified native messaging host not found/i,
-	/native host has exited/i,
+	/can't find native messaging host/i,
 	/no such native application/i,
 ];
 

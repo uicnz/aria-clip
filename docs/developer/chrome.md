@@ -13,6 +13,7 @@ Last source audit: 30 August 2026.
 - Privacy policy: <https://aria.bot/privacy>
 - Version source: [`package.json`](../../package.json)
 - Manifest source: [`src/manifests/chrome.json`](../../src/manifests/chrome.json)
+- The manifest pins the store public key, so unpacked builds retain extension ID `domljlnekkjgagdpeaafaoojdkkhfgff` across releases. Keep one installed copy; rebuild its existing directory and use **Reload** rather than loading another copy. Aria and Clip version numbers are independent of this stable browser identity.
 - Artwork: [`assets/chrome`](../../assets/chrome)
 - Review answers: [`justifications.md`](justifications.md)
 

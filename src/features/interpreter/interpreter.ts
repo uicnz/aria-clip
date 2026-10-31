@@ -8,6 +8,7 @@ import { debugLog } from '../../platform/browser/debug.js';
 import { getMessage } from '../../platform/browser/i18n.js';
 import { updateTokenCount } from './token-counter.js';
 import { complete } from '../../core/interpreter/client.js';
+import { ensureInterpreterDataConsent, InterpreterDataConsentError } from './firefox-data-consent.js';
 
 const RATE_LIMIT_RESET_TIME = 60000; // 1 minute in milliseconds
 let lastRequestTime = 0;
@@ -21,7 +22,13 @@ interface PromptResponse {
 	user_response: string;
 }
 
-export async function sendToLLM(promptContext: string, _content: string, promptVariables: PromptVariable[], model: ModelConfig): Promise<{ promptResponses: PromptResponse[] }> {
+export async function sendToLLM(
+	promptContext: string,
+	_content: string,
+	promptVariables: PromptVariable[],
+	model: ModelConfig,
+	requestDataConsent = false,
+): Promise<{ promptResponses: PromptResponse[] }> {
 	debugLog('Interpreter', 'Sending request to LLM...');
 
 	const provider = generalSettings.providers.find(item => item.id === model.providerId);
@@ -29,6 +36,7 @@ export async function sendToLLM(promptContext: string, _content: string, promptV
 	if (provider.apiKeyRequired && !provider.apiKey) {
 		throw new Error(`API key is not set for provider ${provider.name}`);
 	}
+	await ensureInterpreterDataConsent(requestDataConsent);
 
 	const now = Date.now();
 	if (now - lastRequestTime < RATE_LIMIT_RESET_TIME) {
@@ -308,14 +316,14 @@ export async function initializeInterpreter(template: Template, variables: { [ke
 
 	if (template) {
 		// Only add click listener if auto-run is disabled
-		if (interpretBtn && !generalSettings.interpreterAutoRun) {
+		if (interpretBtn) {
 			const clickListener = async () => {
 				const selectedModelId = modelSelect.value;
 				const modelConfig = generalSettings.models.find(m => m.id === selectedModelId);
 				if (!modelConfig) {
 					throw new Error(`Model configuration not found for ${selectedModelId}`);
 				}
-				await handleInterpreterUI(template, variables, tabId, currentUrl, modelConfig);
+				await handleInterpreterUI(template, variables, tabId, currentUrl, modelConfig, true);
 			};
 			storeListener(interpretBtn, 'click', clickListener);
 		}
@@ -360,7 +368,8 @@ export async function handleInterpreterUI(
 	variables: { [key: string]: string },
 	_tabId: number,
 	_currentUrl: string,
-	modelConfig: ModelConfig
+	modelConfig: ModelConfig,
+	requestDataConsent = false,
 ): Promise<void> {
 	const interpreterContainer = document.getElementById('interpret-operation');
 	const interpretBtn = document.getElementById('interpret-btn') as HTMLButtonElement;
@@ -420,7 +429,7 @@ export async function handleInterpreterUI(
 			responseTimer.textContent = formatDuration(elapsedTime);
 		}, 10);
 
-		const { promptResponses } = await sendToLLM(contextToUse, contentToProcess, promptVariables, modelConfig);
+		const { promptResponses } = await sendToLLM(contextToUse, contentToProcess, promptVariables, modelConfig, requestDataConsent);
 		debugLog('Interpreter', 'LLM response:', { promptResponses });
 
 		// Stop the timer and update UI
@@ -468,7 +477,7 @@ export async function handleInterpreterUI(
 		interpretBtn.textContent = getMessage('error');
 		interpretBtn.classList.remove('processing');
 		interpretBtn.classList.add('error');
-		interpretBtn.disabled = true;
+		interpretBtn.disabled = !(error instanceof InterpreterDataConsentError);
 
 		// Add error class to interpreter container
 		interpreterContainer?.classList.add('error');

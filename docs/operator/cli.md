@@ -59,7 +59,7 @@ aria-clip <url> --add --dry-run         # resolve without mutation
 aria-clip <url> --add                   # capability-gated Aria intake
 ```
 
-Bare `--save` honors the template's vault-relative `path` (shown as Folder) beneath `${ARIA_HOME}/vault/`. It does not infer a folder from the command or artifact. An explicit `--save <path>` remains an exact filesystem override. File writes are atomic and refuse an existing target unless `--overwrite` is explicit. `--add` requires an installed Aria that advertises `clip.capture.v1`; until the receiving Aria release includes that intake, it fails clearly and suggests `--save`. Deep-link delivery is not part of the Add to Aria contract.
+Bare `--save` honors the template's vault-relative `path` (shown as Folder) beneath `${ARIA_HOME}/vault/`. It does not infer a folder from the command or artifact. An explicit `--save <path>` remains an exact filesystem override. File writes are atomic and refuse an existing target unless `--overwrite` is explicit. `--add` requires an installed Aria with DeepLink support; it sends the capture to `aria --deeplink` and fails clearly, suggesting `--save`, when Aria is missing or does not support DeepLink. URI delivery is not part of the Add to Aria contract.
 
 Use `--trace <path>` for a redacted execution trace. It omits page HTML, prompt bodies, provider payloads, URL credentials, query strings, and fragments. A dry run does not write a trace.
 
@@ -76,7 +76,7 @@ The default configuration is `~/.aria/clip/config.json`; user templates live in 
 
 ```sh
 bun run package:cli
-bun add --global ./builds/npm/aria-clip-<version>.tgz
+bun add --global ./builds/npm/uicnz-aria-clip-<version>.tgz
 ```
 
 A clean installation can capture with templates and AI without any browser

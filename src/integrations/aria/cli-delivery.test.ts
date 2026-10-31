@@ -13,6 +13,7 @@ const run: AriaRun = { bin: process.execPath, args: [fake] };
 
 afterEach(async () => {
 	delete process.env.ARIA_CLIP_FAKE_RECORD;
+	delete process.env.ARIA_CLIP_FAKE_FAILURE;
 	await Promise.all(dirs.splice(0).map(path => rm(path, { recursive: true, force: true })));
 });
 
@@ -62,5 +63,10 @@ describe('Aria intake', () => {
 	test('fails when the installed aria does not speak DeepLink', async () => {
 		const legacy: AriaRun = { bin: process.execPath, args: [fake, 'legacy'] };
 		await expect(sendAria(capture(), 5_000, legacy)).rejects.toThrow(/exited with status 2/);
+	});
+
+	test('preserves the structured failure returned by a host that exits unsuccessfully', async () => {
+		process.env.ARIA_CLIP_FAKE_FAILURE = '1';
+		await expect(sendAria(capture(), 5_000, run)).rejects.toThrow('The clip Session could not be shown. (internalError)');
 	});
 });

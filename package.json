@@ -1,6 +1,6 @@
 {
-	"name": "aria-clip",
-	"version": "0.3.1",
+	"name": "@uicnz/aria-clip",
+	"version": "0.3.3",
 	"private": true,
 	"type": "module",
 	"description": "Capture the web as durable Markdown with shared browser, CLI, and API semantics.",
@@ -25,7 +25,8 @@
 		"url": "https://github.com/uicnz/aria-clip/issues"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
 	},
 	"files": [
 		"dist/cli.cjs",

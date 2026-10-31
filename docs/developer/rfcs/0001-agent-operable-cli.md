@@ -498,9 +498,9 @@ Aria delivery:
 - invokes the downstream `aria` command as the canonical noninteractive integration;
 - transmits Behavior, rendered Note name, Folder, Vault, artifact, properties, source, and Markdown;
 - supports create, append, prepend, overwrite, append daily, and prepend daily;
-- fails when the installed `aria` does not advertise `clip.capture.v1`;
-- has no deep-link or GUI fallback;
-- returns Aria's stable note identity and resolved destination when available.
+- sends a DeepLink `session.start` request to `aria --deeplink` and fails when the installed `aria` does not support it;
+- has no URI or GUI fallback;
+- returns Aria's `sessionId` and written `filepath` when available.
 
 `--dry-run` resolves the complete delivery plan but cannot write, invoke `aria`, access the clipboard, or contact an Interpreter provider.
 
@@ -627,9 +627,9 @@ The package build must:
 Supported installation:
 
 ```sh
-npm install --global aria-clip
+npm install --global @uicnz/aria-clip
 # or
-bun install --global aria-clip
+bun install --global @uicnz/aria-clip
 ```
 
 GitHub releases may add compiled standalone binaries after the package path is stable. Standalone artifacts must pass the same protocol and behavior suites.

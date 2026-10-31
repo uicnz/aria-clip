@@ -38,16 +38,17 @@ Do not add an unvalidated external payload. Parse `unknown` at its trust boundar
 
 ## Add to Aria contract
 
-Aria Clip emits `CaptureSchema` version 1. It includes complete source, extraction, rendering, properties, resources, and Location data. The browser sends it to native host `nz.uic.aria.clip`. The CLI uses a noninteractive process contract:
+Aria Clip emits `CaptureSchema` version 1. It includes complete source, extraction, rendering, properties, resources, and Location data. Both projections speak Aria's DeepLink protocol with the same request:
 
 ```text
-aria --supports clip.capture.v1
-aria clip add --input - --json
+{ operation: "session.start", capture: <CaptureSchema version 1>, cwd?: string }
 ```
 
-The second command receives one capture envelope on stdin and must return one `CaptureAckSchema` document on stdout. A positive acknowledgement provides stable `identity` and resolved `destination`; a negative acknowledgement provides `code`, `message`, and `retryable`.
+The browser sends it to native host `nz.uic.aria.deeplink`. The CLI runs `aria --version` to detect an installed Aria, then spawns `aria --deeplink` with no other arguments and speaks native-messaging framing on stdio: it writes one frame (a 4-byte little-endian byte length followed by UTF-8 JSON) and reads one reply frame from stdout.
 
-This is the consumer contract prepared for the incoming Aria implementation. Until Aria advertises the capability, `--add` returns `E_ARIA_UNAVAILABLE` without mutation. Do not add a silent URI or GUI fallback. The Aria deep-link protocol is outside this RFC and outside the CLI intake architecture.
+The reply is one `CaptureAckSchema` document. A positive reply provides `sessionId` and `filepath`; a negative reply provides `code`, `message`, and `retryable`.
+
+Without an installed `aria`, `--add` returns `E_ARIA_UNAVAILABLE` without mutation. An `aria` without DeepLink support exits non-zero, and `--add` returns `E_DELIVERY_FAILED`. Do not add a silent URI or GUI fallback.
 
 ## Browser setup contract
 
@@ -86,7 +87,7 @@ bun run package:cli
 Output:
 
 ```text
-builds/npm/aria-clip-<version>.tgz
+builds/npm/uicnz-aria-clip-<version>.tgz
 ```
 
 The archive contains only the staged package files selected by `scripts/package-cli.ts`. It does not contain `.git`, source history, browser builds, credentials, or local configuration.

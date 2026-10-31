@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import { z } from 'zod';
 
 const PackageSchema = z.strictObject({
-	name: z.string(),
+	name: z.string().regex(/^@[a-z0-9][a-z0-9-]*\/[a-z0-9][a-z0-9-]*$/),
 	version: z.string().regex(/^\d+\.\d+\.\d+$/),
 	description: z.string(),
 	keywords: z.array(z.string()),
@@ -11,7 +11,10 @@ const PackageSchema = z.strictObject({
 	homepage: z.url(),
 	repository: z.strictObject({ type: z.literal('git'), url: z.string().min(1) }),
 	bugs: z.strictObject({ url: z.url() }),
-	publishConfig: z.strictObject({ access: z.literal('public') }),
+	publishConfig: z.strictObject({
+		access: z.literal('public'),
+		registry: z.literal('https://registry.npmjs.org/'),
+	}),
 	dependencies: z.record(z.string(), z.string()),
 	engines: z.strictObject({ bun: z.string(), node: z.string() }),
 }).passthrough();
@@ -59,8 +62,11 @@ await Promise.all([
 await Bun.write(join(stage, 'package.json'), `${JSON.stringify(pkg, null, 2)}\n`);
 await chmod(join(stage, 'cli.cjs'), 0o755);
 
-const file = `aria-clip-${source.version}.tgz`;
-await rm(join(output, file), { force: true });
+const file = `${source.name.slice(1).replace('/', '-')}-${source.version}.tgz`;
+await Promise.all([
+	rm(join(output, file), { force: true }),
+	rm(join(output, `aria-clip-${source.version}.tgz`), { force: true }),
+]);
 const proc = Bun.spawn([
 	'npm', 'pack',
 	'--pack-destination', output,

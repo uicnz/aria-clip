@@ -13,6 +13,10 @@ if (args.join(' ') !== '--deeplink') process.exit(2);
 const request = unframe(Buffer.from(await new Response(Bun.stdin.stream()).arrayBuffer()));
 if (!request || typeof request !== 'object' || !('operation' in request) || request.operation !== 'session.start' || !('capture' in request)) process.exit(3);
 const capture = CaptureSchema.parse(request.capture);
+if (process.env.ARIA_CLIP_FAKE_FAILURE) {
+	process.stdout.write(frame({ schemaVersion: '1', ok: false, code: 'internalError', message: 'The clip Session could not be shown.', retryable: false }));
+	process.exit(1);
+}
 const record = process.env.ARIA_CLIP_FAKE_RECORD;
 if (record) await writeFile(record, `${JSON.stringify(capture, null, 2)}\n`);
 process.stdout.write(frame({

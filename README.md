@@ -7,8 +7,8 @@
 Install the headless CLI with Bun or npm:
 
 ```sh
-bun add --global aria-clip
-# or: npm install --global aria-clip
+bun add --global @uicnz/aria-clip
+# or: npm install --global @uicnz/aria-clip
 
 clip https://example.com/article
 clip video https://www.youtube.com/watch?v=zMvBMfj4cSQ
@@ -38,7 +38,7 @@ Build a publishable package and install it locally:
 
 ```sh
 bun run package:cli
-bun add --global ./builds/npm/aria-clip-<version>.tgz
+bun add --global ./builds/npm/uicnz-aria-clip-<version>.tgz
 clip https://example.com/article
 ```
 
@@ -73,7 +73,7 @@ The command runs type checking and tests before producing four release artifacts
 - `aria-clip-<version>-chrome.zip`
 - `aria-clip-<version>-firefox.zip`
 - `aria-clip-<version>-safari.dmg`
-- `npm/aria-clip-<version>.tgz`
+- `npm/uicnz-aria-clip-<version>.tgz`
 
 Upload the Firefox ZIP to Mozilla Add-ons as a listed extension owned by the `dev@uic.nz` account. Mozilla reviews, signs, hosts, and updates the extension for users. The Safari web ZIP is an intermediate file and is removed after a successful release.
 

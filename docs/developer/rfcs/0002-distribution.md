@@ -10,7 +10,7 @@ Aria Clip ships one headless product through npm and offers one optional setup
 workflow for its browser projections.
 
 ```sh
-bun add --global aria-clip
+bun add --global @uicnz/aria-clip
 clip video <url>
 clip setup
 ```
@@ -116,9 +116,9 @@ binary names resolve to the same generated JavaScript:
 Bun is the primary runtime. The bundle also supports Node 24 or later. Source
 remains TypeScript; JavaScript exists only in generated package output.
 
-Publication uses the tarball produced from the version in `package.json` and
-must pass the package smoke suite before `npm publish`. npm authentication and
-ownership are external release prerequisites, not repository configuration.
+Publication uses the organization-scoped name and version in `package.json`
+and must pass the package smoke suite before `npm publish`. npm authentication
+and organization membership are external release prerequisites.
 
 ## Verification
 
@@ -145,7 +145,8 @@ Version 0.3.0 implements the contract with:
 - `clip setup`, `--browser`, `--dry-run`, and `--json`;
 - shared CLI discovery, help, schemas, capabilities, completions, and errors;
 - clean-package smoke coverage with Bun and Node 24;
-- a gated `publish:npm` command that publishes only the staged tarball.
+- a gated `publish:npm` command that verifies `uicnz` organization membership
+  and publishes only the staged tarball.
 
 At implementation time, Chrome, Firefox, and Safari are deliberately recorded
 as `unpublished`: none has a verified public installation destination yet.

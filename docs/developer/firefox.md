@@ -51,19 +51,11 @@ Answer **Yes**. Aria Clip is authored in TypeScript and bundled and minified wit
 
 Upload the source ZIP whose version exactly matches the Firefox ZIP. See Mozilla's [source-code submission requirements](https://extensionworkshop.com/documentation/publish/source-code-submission/).
 
-## Data declaration blocker
+## Interpreter data consent
 
-The current Firefox source manifest declares:
+Interpreter is optional. It can send website content, the page address, and the selected provider credential to the provider the user configured. The Firefox manifest declares `websiteContent`, `browsingActivity`, and `authenticationInfo` as optional data collection, with `required: ["none"]`.
 
-```json
-"data_collection_permissions": {
-  "required": ["none"]
-}
-```
-
-That declaration does **not** match the current Interpreter behavior. When a user interprets, the extension transmits website context and prompts to the configured provider and sends the provider credential in the request. Mozilla defines transmission as data handled outside the add-on or local browser, even when the destination is selected by the user.
-
-Do not submit the next Firefox version with `required: ["none"]` unless Interpreter transmission is removed or disabled in that build. Before submission, implement and test the correct Mozilla consent model. At minimum, review `websiteContent` and `authenticationInfo`; also review `browsingActivity` and any other category that can be present in user-selected source context. If transmission is optional, the code must request optional data permissions before sending it; changing the manifest text alone is not a complete consent implementation.
+An explicit Interpreter action requests that consent before any provider request. Automatic Interpreter runs check for existing consent and refuse to transmit until the user opts in through the explicit action. Keep the data declaration, runtime gate, privacy policy, and reviewer notes aligned whenever Interpreter behavior changes.
 
 The current minimum Firefox versions are desktop 142 and Android 142, so the built-in data-consent system is available. Use Mozilla's [current consent guide](https://extensionworkshop.com/documentation/develop/firefox-builtin-data-consent/) as the specification.
 
@@ -78,7 +70,7 @@ The current minimum Firefox versions are desktop 142 and Android 142, so the bui
 7. Select the actually supported platforms.
 8. Answer **Yes** to the source-code question and upload the matching source ZIP.
 9. Complete listing, privacy, support, license, screenshots, release notes, and reviewer notes.
-10. Submit only after the data declaration blocker above is resolved.
+10. Confirm Interpreter's optional data consent is correctly described before submitting.
 
 ## Validator warnings
 
@@ -86,7 +78,7 @@ The original 0.1.0 upload passed with zero errors and 49 general warnings. Most 
 
 That report is evidence for that file only. The current manifest now sets Firefox 142 as the minimum and does not request Chrome's `sidePanel` permission. It requests `nativeMessaging` for **Add to Aria**. Run validation again for every new ZIP and inspect the authored source behind generated-code warnings.
 
-Test **Add to Aria** only on a machine where Aria has registered the `nz.uic.aria.deeplink` native host. Without it, the popup reports that Aria is not installed or needs updating.
+Test **Add to Aria** only on a machine where Aria has registered the `nz.uic.aria.deeplink` native host. Without it, the popup reports that the browser connection needs registration. Aria and Aria Clip versions are independent; delivery depends on the protocol and required capture fields.
 
 ## Preflight
 

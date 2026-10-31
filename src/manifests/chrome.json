@@ -1,5 +1,6 @@
 {
 	"manifest_version": 3,
+	"key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqEQ0sLEJNCqmd+oxAH7zgTBW47x+6ngCgt4lepkovzjuiB/DfeYn7BYUIjFYKwK6ygx0YmFgdmstmjq9P9aGs+5dNeswGcwyaPFclCd1lRxZoVaaLXqMD3xpgma5E9/030ljyWWKnGZlx+x1TFEqr7/WJyRb0/RODlMZ08quAo4w+nuaxb8+GYiygbxn95kmkqk3nSvLbRsP6n2jlKMzazaG3MRTEv1pJeq1QqgIkXcaoa+OazbHN6MKlMJem08ZjDoCt2c9O2xZkZLw+pOObHdjAwfq6j13W2TznvX9BfL2JtKt3bsYIhSFA/WyXYYIL0Aj58YPopkUBmJvyIJ82wIDAQAB",
 	"default_locale": "en",
 	"name": "Aria Clip",
 	"homepage_url": "https://aria.bot/",

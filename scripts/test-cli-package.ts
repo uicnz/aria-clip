@@ -11,10 +11,14 @@ const TextResultSchema = z.strictObject({
 });
 
 const root = resolve(import.meta.dir, '..');
-const pkg = z.strictObject({ version: z.string() }).passthrough().parse(
+const pkg = z.strictObject({
+	name: z.string().regex(/^@[a-z0-9][a-z0-9-]*\/[a-z0-9][a-z0-9-]*$/),
+	version: z.string(),
+}).passthrough().parse(
 	await Bun.file(join(root, 'package.json')).json(),
 );
-const archive = join(root, 'builds', 'npm', `aria-clip-${pkg.version}.tgz`);
+const file = `${pkg.name.slice(1).replace('/', '-')}-${pkg.version}.tgz`;
+const archive = join(root, 'builds', 'npm', file);
 const dir = await mkdtemp(join(tmpdir(), 'aria-clip-package-'));
 
 async function run(command: string[], cwd = dir, env: NodeJS.ProcessEnv = process.env) {
@@ -36,7 +40,7 @@ try {
 	await Bun.write(join(dir, 'package.json'), '{"private":true}\n');
 	ok(await run(['bun', 'add', archive, '--ignore-scripts']), 'clean package installation');
 
-	const packageDir = join(dir, 'node_modules', 'aria-clip');
+	const packageDir = join(dir, 'node_modules', ...pkg.name.split('/'));
 	const cli = join(packageDir, 'cli.cjs');
 	const bin = process.platform === 'win32'
 		? join(dir, 'node_modules', '.bin', 'aria-clip.exe')

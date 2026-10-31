@@ -1,6 +1,7 @@
 import { existsSync, mkdtempSync, mkdirSync, readdirSync, rmSync, statSync, symlinkSync } from 'node:fs';
 import { homedir, platform, tmpdir } from 'node:os';
 import { basename, join, resolve, sep } from 'node:path';
+import { z } from 'zod';
 import { loadEnv } from '../src/platform/node/env.js';
 
 type Options = {
@@ -114,12 +115,11 @@ async function capture(command: string[]): Promise<CommandResult> {
 	return { stdout, stderr, exitCode };
 }
 
-async function readVersion(): Promise<string> {
-	const packageJson = (await Bun.file(join(ROOT, 'package.json')).json()) as { version?: unknown };
-	if (typeof packageJson.version !== 'string' || !/^\d+\.\d+\.\d+$/.test(packageJson.version)) {
-		throw new Error(`package.json version must use numeric X.Y.Z format: ${String(packageJson.version)}`);
-	}
-	return packageJson.version;
+async function readPackage(): Promise<{ name: string; version: string }> {
+	return z.strictObject({
+		name: z.string().regex(/^@[a-z0-9][a-z0-9-]*\/[a-z0-9][a-z0-9-]*$/),
+		version: z.string().regex(/^\d+\.\d+\.\d+$/),
+	}).passthrough().parse(await Bun.file(join(ROOT, 'package.json')).json());
 }
 
 function requireTools(tools: string[]): void {
@@ -421,7 +421,8 @@ async function main(): Promise<void> {
 		throw new Error('The complete release requires macOS because Safari packaging uses Xcode and Apple signing.');
 	}
 
-	const version = await readVersion();
+	const pkg = await readPackage();
+	const version = pkg.version;
 	const teamId = DEFAULT_TEAM_ID;
 	const notaryProfile = DEFAULT_NOTARY_PROFILE;
 	const signIdentity = options.dryRun
@@ -455,7 +456,8 @@ async function main(): Promise<void> {
 	const firefoxSourcePath = join(BUILDS, 'review', `aria-clip-${version}-firefox-source.zip`);
 	const safariWebPath = join(BUILDS, `aria-clip-${version}-safari.zip`);
 	const safariPath = join(BUILDS, `aria-clip-${version}-safari.dmg`);
-	const npmPath = join(BUILDS, 'npm', `aria-clip-${version}.tgz`);
+	const npmFile = `${pkg.name.slice(1).replace('/', '-')}-${version}.tgz`;
+	const npmPath = join(BUILDS, 'npm', npmFile);
 
 	if (!options.dryRun) {
 		await verifyWebArchive(chromePath, version);

@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "aria-clip",
+      "name": "@uicnz/aria-clip",
       "dependencies": {
         "@base-ui/react": "^1.7.0",
         "@fontsource-variable/roboto": "^5.3.0",
