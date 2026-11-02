@@ -1,4 +1,4 @@
-import { readdirSync, statSync, unlinkSync } from 'node:fs';
+import { readdirSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import CopyPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
@@ -30,10 +30,10 @@ const pkg = PackageSchema.parse(data);
 const root = import.meta.dir;
 
 function clean(dir: string): void {
-	for (const name of readdirSync(dir)) {
-		const path = join(dir, name);
-		if (statSync(path).isDirectory()) clean(path);
-		else if (name === '.DS_Store') unlinkSync(path);
+	for (const entry of readdirSync(dir, { withFileTypes: true })) {
+		const path = join(dir, entry.name);
+		if (entry.isDirectory()) clean(path);
+		else if (entry.name === '.DS_Store') rmSync(path, { force: true });
 	}
 }
 
@@ -189,6 +189,7 @@ export default function config(env: Env = {}, args: Args = {}): Configuration[] 
 				? [new ZipPlugin({
 					path: resolve(root, 'builds'),
 					filename: `aria-clip-${pkg.version}-${target}.zip`,
+					exclude: /(^|[\\/])\.DS_Store$/,
 				})]
 				: []),
 		],

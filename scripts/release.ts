@@ -268,9 +268,12 @@ function exportOptions(teamId: string): string {
 	].join('\n');
 }
 
-function filesBelow(root: string, relative = ''): string[] {
+export function filesBelow(root: string, relative = ''): string[] {
 	const directory = join(root, relative);
 	return readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+		// Finder may recreate this after webpack's cleanup. It is never a
+		// required extension resource, even when absent from the Xcode bundle.
+		if (entry.name === '.DS_Store') return [];
 		const path = join(relative, entry.name);
 		return entry.isDirectory() ? filesBelow(root, path) : [path];
 	});
